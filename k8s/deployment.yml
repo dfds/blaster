@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: blaster
+  namespace: $(kubernetes-namespace)
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blaster
+  template:
+    metadata:
+      labels:
+        app: blaster
+    spec:
+      containers:
+      - name: container
+        image: 579478677147.dkr.ecr.eu-central-1.amazonaws.com/ded/blaster:$(Build.BuildId)
+        ports:
+        - containerPort: 80
+          name: web
+        # env:
+        #   - name:  CONNECTIONSTRING
+        #     valueFrom:
+        #       secretKeyRef:
+        #         name:  connection
+        #         key:  connectionstring
+        # resources:
+        #   requests:
+        #     cpu: "20m"
+        #     memory: "100M"
+        #   limits:
+        #     cpu: "20m"
+        #     memory: "55M"

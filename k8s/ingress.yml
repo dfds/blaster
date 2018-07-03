@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: blaster
+  namespace: $(kubernetes-namespace)
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.frontend.rule.type: PathPrefixStrip
+spec:
+  rules:
+  - http:
+      # host: app.ded.dfds.com
+      paths:
+      # - path: /$(environment)-blaster
+      - path: /blaster
+        backend:
+          serviceName: blaster
+          servicePort: external
