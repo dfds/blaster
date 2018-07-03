@@ -1,0 +1,28 @@
+name: $(Build.BuildId)
+queue: Hosted Linux Preview
+trigger:
+- master
+steps:
+
+- bash: |
+   pip install setuptools
+   pip install awscli
+   export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY)
+   chmod +x ./pipeline.sh
+   ./pipeline.sh $(Build.BuildId)
+  displayName: Pipeline Bash Script
+  enabled: true
+
+- task: PublishTestResults@2
+  displayName: Publish Test Results
+  inputs:
+    testRunner: VSTest
+    testResultsFiles: testresult.trx
+    searchFolder: '$(System.DefaultWorkingDirectory)/src'
+  condition: succeededOrFailed()
+
+- task: PublishBuildArtifacts@1
+  displayName: "Publish Artifact: manifests"
+  inputs:
+    PathtoPublish: k8s
+    ArtifactName: manifests
