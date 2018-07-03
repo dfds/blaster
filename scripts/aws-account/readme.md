@@ -53,7 +53,7 @@ Partially inspired by Emii Khaos' articles:
 
 ## Example usage
 
-```
+```shell
 export AWS_ACCESS_KEY_ID = "AWS_KEY_ID_FOR_MASTER_SERVICE_ACCOUNT"
 export AWS_SECRET_ACCESS_KEY = "AWS_SECRET_ACCESS_KEY_FOR_MASTER_SERVICE_ACCOUNT"
 ./account.sh plan PassengerBooking NonProd
