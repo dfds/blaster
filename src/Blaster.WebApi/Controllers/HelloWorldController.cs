@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Blaster.WebApi.Controllers
 {
@@ -8,7 +9,14 @@ namespace Blaster.WebApi.Controllers
     {
         public ActionResult Get()
         {
-            return Ok("hello world");
+            var message = Environment.GetEnvironmentVariable("blaster_message");
+
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                message = "hello world";
+            }
+
+            return Ok(message);
         }
     }
 }
