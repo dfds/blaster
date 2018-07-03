@@ -14,16 +14,13 @@ namespace Blaster.Tests
         {
             var webHostBuilder = new WebHostBuilder().UseStartup<Startup>();
             var server = new TestServer(webHostBuilder);
-
             var client = server.CreateClient();
 
             var response = await client.GetAsync("/");
 
-            var result = response.StatusCode;
-
             Assert.Equal(
                 expected: HttpStatusCode.OK,
-                actual: result
+                actual: response.StatusCode
             );
         }
 
@@ -32,16 +29,13 @@ namespace Blaster.Tests
         {
             var webHostBuilder = new WebHostBuilder().UseStartup<Startup>();
             var server = new TestServer(webHostBuilder);
-
             var client = server.CreateClient();
 
             var response = await client.GetAsync("/");
 
-            var result = await response.Content.ReadAsStringAsync();
-
             Assert.Equal(
                 expected: "hello world",
-                actual: result
+                actual: await response.Content.ReadAsStringAsync()
             );
         }
     }
