@@ -9,7 +9,7 @@ steps:
    pip install awscli
    export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY)
    chmod +x ./pipeline.sh
-   ./pipeline.sh $(Build.BuildId)
+   ./pipeline.sh $(Build.BuildId) $(System.DefaultWorkingDirectory)
   displayName: Pipeline Bash Script
   enabled: true
 
