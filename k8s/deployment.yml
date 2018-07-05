@@ -22,6 +22,8 @@ spec:
         env:
           - name:  blaster_message
             value: banana
+          - name: blaster_apikey
+            value: $(blaster_apikey)
 
           # - name:  CONNECTIONSTRING
           #   valueFrom:
