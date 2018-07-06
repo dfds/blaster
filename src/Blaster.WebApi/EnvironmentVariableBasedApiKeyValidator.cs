@@ -12,7 +12,7 @@ namespace Blaster.WebApi
             var isValid = apiKeys
                 .Split(',', StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => x.Trim())
-                .Any(x => x == apiKeys);
+                .Any(x => x == apiKey);
 
             return Task.FromResult(isValid);
         }
