@@ -25,7 +25,7 @@ namespace Blaster.WebApi
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddTransient<IApiKeyValidator, ApiKeyValidator>();
+            services.AddTransient<IApiKeyValidator, EnvironmentVariableBasedApiKeyValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

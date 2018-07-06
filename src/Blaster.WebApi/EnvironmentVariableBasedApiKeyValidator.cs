@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Blaster.WebApi
 {
-    public class ApiKeyValidator : IApiKeyValidator
+    public class EnvironmentVariableBasedApiKeyValidator : IApiKeyValidator
     {
         public Task<bool> IsValid(string apiKey)
         {
             var apiKeys = Environment.GetEnvironmentVariable("blaster_apikey") ?? "";
-            var isValid = apiKeys.Contains(apiKey);
+            var isValid = apiKeys
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.Trim())
+                .Any(x => x == apiKeys);
 
             return Task.FromResult(isValid);
         }
