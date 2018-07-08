@@ -19,10 +19,6 @@ namespace Blaster.WebApi.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            //var config = KubernetesClientConfiguration.InClusterConfig();
-            //var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
-            //IKubernetes client = new Kubernetes(config);
-
             List<string> results = new List<string>();
 
             try

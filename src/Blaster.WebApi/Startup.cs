@@ -23,11 +23,11 @@ namespace Blaster.WebApi
             services
                 .AddMvc(options =>
                 {
-                    //options.Filters.Add<ApiKeyFilter>();
+                    options.Filters.Add<ApiKeyFilter>();
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            //services.AddTransient<IApiKeyValidator, EnvironmentVariableBasedApiKeyValidator>();
+            services.AddTransient<IApiKeyValidator, EnvironmentVariableBasedApiKeyValidator>();
             
             
             services.AddTransient<IKubernetes>(k => new Kubernetes(kubeConfig));
