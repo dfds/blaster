@@ -17,13 +17,13 @@ namespace Blaster.WebApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<IActionResult> Get()
         {
             List<string> results = new List<string>();
 
             try
             {
-                var namespaceList = _client.ListNamespace();
+                var namespaceList = await _client.ListNamespaceAsync();
 
                 foreach (var item in namespaceList.Items)
                 {
@@ -35,8 +35,9 @@ namespace Blaster.WebApi.Controllers
                 Console.WriteLine(e);
                 return StatusCode(500);
             }
+            
 
-            return results;
+            return Ok(results);
         }
     }
 }
