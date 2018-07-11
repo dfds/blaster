@@ -8,8 +8,16 @@ metadata:
     traefik.frontend.rule.type: PathPrefixStrip
 spec:
   rules:
-  - http:
-      # host: app.ded.dfds.com
+  - host: tools.dfds.cloud
+    http:
+      paths:
+      # - path: /$(environment)-blaster
+      - path: /blaster
+        backend:
+          serviceName: blaster
+          servicePort: external
+  - host: app.dfds.cloud
+    http:
       paths:
       # - path: /$(environment)-blaster
       - path: /blaster
