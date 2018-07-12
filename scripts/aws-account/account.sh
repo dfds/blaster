@@ -26,15 +26,15 @@ AWS_SUB_S3_BUCKET="dfds${AWS_ACCOUNT_NAME//-}state"
 
 echo -e "\n\n${out_lyellow}Create new sub account under master account${out_reset}\n"
 pushd ./master > /dev/null
-terraform init -backend-config "bucket=${AWS_MASTER_S3_BUCKET}" -backend-config "key=accounts/master/${AWS_ACCOUNT_NAME}.tfstate"
+terraform init -backend-config "bucket=${AWS_MASTER_S3_BUCKET}" -backend-config "key=accounts/${AWS_ACCOUNT_NAME}.tfstate"
 terraform ${TERRAFORM_VERB} -var "account_name=${AWS_ACCOUNT_NAME}" $4
 AWS_ACCOUNT_ID=$(terraform output account_id)
-#debug rm -rf ./.terraform # remove local TerraForm state files
+rm -rf ./.terraform # remove local TerraForm state files
 popd > /dev/null
 
 
 echo -e "\n\n${out_lyellow}Waiting a bit for account to finish provisioning${out_reset}\n"
-#debug sleep 30
+sleep 30
 
 
 echo -e "\n\n${out_lyellow}Assume the OrgRole in the new sub account${out_reset}\n"
@@ -61,14 +61,14 @@ echo -e "\n\n${out_lyellow}Configure new sub account${out_reset}\n"
 # Terraform currently uses key and secret directly, instead of assuming role itself. Not sure if desirable.
 pushd ./sub > /dev/null
 AWS_ACCESS_KEY_ID=${AWS_ASSUMED_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_ASSUMED_SECRET_ACCESS_KEY} AWS_SESSION_TOKEN=${AWS_ASSUMED_SESSION_TOKEN} \
-    terraform init -backend-config "bucket=${AWS_SUB_S3_BUCKET}" -backend-config "key=accounts/sub/${AWS_ACCOUNT_NAME}.tfstate"
+    terraform init -backend-config "bucket=${AWS_SUB_S3_BUCKET}" -backend-config "key=account/${AWS_ACCOUNT_NAME}.tfstate"
 AWS_ACCESS_KEY_ID=${AWS_ASSUMED_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_ASSUMED_SECRET_ACCESS_KEY} AWS_SESSION_TOKEN=${AWS_ASSUMED_SESSION_TOKEN} \
     terraform $TERRAFORM_VERB -var "account_name=${AWS_ACCOUNT_NAME}" -var "account_id=${AWS_ACCOUNT_ID}" $4
 AWS_DEPLOY_KEY=$(AWS_ACCESS_KEY_ID=${AWS_ASSUMED_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_ASSUMED_SECRET_ACCESS_KEY} AWS_SESSION_TOKEN=${AWS_ASSUMED_SESSION_TOKEN} \
     terraform output deploy_key)
 AWS_DEPLOY_SECRET=$(AWS_ACCESS_KEY_ID=${AWS_ASSUMED_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_ASSUMED_SECRET_ACCESS_KEY} AWS_SESSION_TOKEN=${AWS_ASSUMED_SESSION_TOKEN} \
     terraform output deploy_secret)
-#debug rm -rf ./.terraform # remove local TerraForm state files
+rm -rf ./.terraform # remove local TerraForm state files
 popd > /dev/null
 
 
