@@ -72,3 +72,28 @@ resource "aws_iam_role_policy_attachment" "dfds_admin" {
 
 // Developer, DevOps, ReadOnly
 
+// --------------------------------------------------
+// Create users
+// --------------------------------------------------
+
+// Create deployment user
+resource "aws_iam_user" "deploy_user" {
+  name = "deploy"
+}
+
+resource "aws_iam_user_policy_attachment" "deploy_user_policy" {
+  user       = "${aws_iam_user.deploy_user.name}"
+  policy_arn = "${var.administrator_default_arn}"
+}
+
+resource "aws_iam_access_key" "deploy_user_key" {
+  user = "${aws_iam_user.deploy_user.name}"
+}
+
+output "deploy_key" {
+  value = "${aws_iam_access_key.deploy_user_key.id}"
+}
+
+output "deploy_secret" {
+  value = "${aws_iam_access_key.deploy_user_key.secret}"
+}

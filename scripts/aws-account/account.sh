@@ -28,13 +28,13 @@ echo -e "\n\n${out_lyellow}Create new sub account under master account${out_rese
 pushd ./master > /dev/null
 terraform init -backend-config "bucket=${AWS_MASTER_S3_BUCKET}" -backend-config "key=accounts/master/${AWS_ACCOUNT_NAME}.tfstate"
 terraform ${TERRAFORM_VERB} -var "account_name=${AWS_ACCOUNT_NAME}" $4
-AWS_ACCOUNT_ID=$(terraform output account_id) # passengerbooking-nonprod: 722758927968
-rm -rf ./.terraform # remove local TerraForm state files
+AWS_ACCOUNT_ID=$(terraform output account_id)
+#debug rm -rf ./.terraform # remove local TerraForm state files
 popd > /dev/null
 
 
 echo -e "\n\n${out_lyellow}Waiting a bit for account to finish provisioning${out_reset}\n"
-sleep 30
+#debug sleep 30
 
 
 echo -e "\n\n${out_lyellow}Assume the OrgRole in the new sub account${out_reset}\n"
@@ -47,6 +47,7 @@ AWS_ASSUMED_CREDS=( $(aws sts assume-role \
 AWS_ASSUMED_ACCESS_KEY_ID=${AWS_ASSUMED_CREDS[0]}
 AWS_ASSUMED_SECRET_ACCESS_KEY=${AWS_ASSUMED_CREDS[1]}
 AWS_ASSUMED_SESSION_TOKEN=${AWS_ASSUMED_CREDS[2]}
+echo -e "\n${out_lcyan}Access key ID for assumed role in ${AWS_ACCOUNT_ID} is: ${AWS_ASSUMED_ACCESS_KEY_ID}${out_reset}\n"
 
 
 echo -e "\n\n${out_lyellow}Create S3 bucket for state files in the new sub account${out_reset}\n"
@@ -63,7 +64,11 @@ AWS_ACCESS_KEY_ID=${AWS_ASSUMED_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_ASSUM
     terraform init -backend-config "bucket=${AWS_SUB_S3_BUCKET}" -backend-config "key=accounts/sub/${AWS_ACCOUNT_NAME}.tfstate"
 AWS_ACCESS_KEY_ID=${AWS_ASSUMED_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_ASSUMED_SECRET_ACCESS_KEY} AWS_SESSION_TOKEN=${AWS_ASSUMED_SESSION_TOKEN} \
     terraform $TERRAFORM_VERB -var "account_name=${AWS_ACCOUNT_NAME}" -var "account_id=${AWS_ACCOUNT_ID}" $4
-rm -rf ./.terraform # remove local TerraForm state files
+AWS_DEPLOY_KEY=$(AWS_ACCESS_KEY_ID=${AWS_ASSUMED_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_ASSUMED_SECRET_ACCESS_KEY} AWS_SESSION_TOKEN=${AWS_ASSUMED_SESSION_TOKEN} \
+    terraform output deploy_key)
+AWS_DEPLOY_SECRET=$(AWS_ACCESS_KEY_ID=${AWS_ASSUMED_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_ASSUMED_SECRET_ACCESS_KEY} AWS_SESSION_TOKEN=${AWS_ASSUMED_SESSION_TOKEN} \
+    terraform output deploy_secret)
+#debug rm -rf ./.terraform # remove local TerraForm state files
 popd > /dev/null
 
 
@@ -71,6 +76,13 @@ echo -e "\n\n${out_lred}You need to manually update tax settings under 'My Accou
   Country:                  Denmark
   Tax registration number:  DK14194711
   Business Legal Name:      DFDS A/S
+${out_reset}\n"
+
+
+echo -e "\n\n${out_lcyan}The following service account has been created for deploying in ${PROJECT_NAME}-${ENVIRONMENT}:\n
+  User:                     deploy
+  Access key ID:            ${AWS_DEPLOY_KEY}
+  Secret access key:        ${AWS_DEPLOY_SECRET}
 ${out_reset}\n"
 
 
