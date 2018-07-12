@@ -1,0 +1,21 @@
+﻿kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: blaster-namespace-viewer
+rules:
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["get", "watch", "list"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: blaster-namespace-viewer-binding
+subjects:
+- kind: ServiceAccount
+  name: default # Name is case sensitive. Using default only for demo purposes, the deployment should use its own serviceaccount
+  namespace: $(kubernetes-namespace)
+roleRef:
+  kind: ClusterRole
+  name: blaster-namespace-viewer
+  apiGroup: rbac.authorization.k8s.io

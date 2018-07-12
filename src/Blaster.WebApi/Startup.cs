@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using k8s;
 
 namespace Blaster.WebApi
 {
     public class Startup
     {
+        public static KubernetesClientConfiguration kubeConfig;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -25,7 +20,17 @@ namespace Blaster.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services
+                .AddMvc(options =>
+                {
+                    options.Filters.Add<ApiKeyFilter>();
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddTransient<IApiKeyValidator, EnvironmentVariableBasedApiKeyValidator>();
+            
+            
+            services.AddTransient<IKubernetes>(k => new Kubernetes(kubeConfig));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,10 +39,12 @@ namespace Blaster.WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                kubeConfig = KubernetesClientConfiguration.BuildConfigFromConfigFile();
             }
             else
             {
                 app.UseHsts();
+                kubeConfig = KubernetesClientConfiguration.InClusterConfig();
             }
 
             app.UseHttpsRedirection();
