@@ -58,19 +58,44 @@ resource "aws_cloudtrail" "audit" {
 // --------------------------------------------------
 
 // Create ADFS-Admin role
-resource "aws_iam_role" "dfds_admin" {
+resource "aws_iam_role" "adfs_admin" {
   name               = "ADFS-Admin"
   assume_role_policy = "${data.aws_iam_policy_document.dfds_adfs_assume.json}"
   provider           = "aws.dfds"
 }
 
-resource "aws_iam_role_policy_attachment" "dfds_admin" {
-  role       = "${aws_iam_role.dfds_admin.name}"
-  policy_arn = "${var.administrator_default_arn}"
+resource "aws_iam_role_policy_attachment" "adfs_admin_policy_admin" {
+  role       = "${aws_iam_role.adfs_admin.name}"
+  policy_arn = "${var.admin_arn}"
   provider   = "aws.dfds"
 }
 
-// Developer, DevOps, ReadOnly
+// Create ADFS-ReadOnly role
+resource "aws_iam_role" "adfs_readonly" {
+  name               = "ADFS-ReadOnly"
+  assume_role_policy = "${data.aws_iam_policy_document.dfds_adfs_assume.json}"
+  provider           = "aws.dfds"
+}
+
+resource "aws_iam_role_policy_attachment" "dfds_readonly_viewonly" {
+  role       = "${aws_iam_role.adfs_readonly.name}"
+  policy_arn = "${var.viewonly_arn}"
+  provider   = "aws.dfds"
+}
+
+resource "aws_iam_role_policy_attachment" "adfs_readonly_policy_cloudwatch_read" {
+  role       = "${aws_iam_role.adfs_readonly.name}"
+  policy_arn = "${var.cloudwatch_read_arn}"
+  provider   = "aws.dfds"
+}
+
+resource "aws_iam_role_policy_attachment" "adfs_readonly_policy_lambda_read" {
+  role       = "${aws_iam_role.adfs_readonly.name}"
+  policy_arn = "${var.lambda_read_arn}"
+  provider   = "aws.dfds"
+}
+
+// Developer, DevOps
 
 // --------------------------------------------------
 // Create users
@@ -83,7 +108,7 @@ resource "aws_iam_user" "deploy_user" {
 
 resource "aws_iam_user_policy_attachment" "deploy_user_policy" {
   user       = "${aws_iam_user.deploy_user.name}"
-  policy_arn = "${var.administrator_default_arn}"
+  policy_arn = "${var.admin_arn}"
 }
 
 resource "aws_iam_access_key" "deploy_user_key" {

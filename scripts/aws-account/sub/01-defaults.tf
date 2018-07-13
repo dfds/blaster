@@ -6,8 +6,20 @@ variable "cloudtrail_bucket" {
   default = "dfds-audit"
 }
 
-variable "administrator_default_arn" {
+variable "admin_arn" {
   default = "arn:aws:iam::aws:policy/AdministratorAccess"
+}
+
+variable "viewonly_arn" {
+  default = "arn:aws:iam::aws:policy/job-function/ViewOnlyAccess"
+}
+
+variable "cloudwatch_read_arn" {
+  default = "arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess"
+}
+
+variable "lambda_read_arn" {
+  default = "arn:aws:iam::aws:policy/AWSLambdaReadOnlyAccess"
 }
 
 variable "developer_default_arn" {
