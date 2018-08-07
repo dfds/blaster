@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Blaster.WebApi.Controllers;
+using Blaster.WebApi.Features.Namespaces;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +11,6 @@ namespace Blaster.WebApi
 {
     public class Startup
     {
-        public static KubernetesClientConfiguration kubeConfig;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -29,8 +30,18 @@ namespace Blaster.WebApi
 
             services.AddTransient<IApiKeyValidator, EnvironmentVariableBasedApiKeyValidator>();
             
-            
-            services.AddTransient<IKubernetes>(k => new Kubernetes(kubeConfig));
+            services.AddTransient<IKubernetes>(serviceProvider =>
+            {
+                var env = serviceProvider.GetService<IHostingEnvironment>();
+
+                var config = env.IsDevelopment()
+                    ? KubernetesClientConfiguration.BuildConfigFromConfigFile()
+                    : KubernetesClientConfiguration.InClusterConfig();
+
+                return new Kubernetes(config);
+            });
+
+            services.AddTransient<INamespaceRepository, NamespaceRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,12 +50,10 @@ namespace Blaster.WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                kubeConfig = KubernetesClientConfiguration.BuildConfigFromConfigFile();
             }
             else
             {
                 app.UseHsts();
-                kubeConfig = KubernetesClientConfiguration.InClusterConfig();
             }
 
             app.UseHttpsRedirection();
