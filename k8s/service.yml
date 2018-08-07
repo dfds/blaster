@@ -6,7 +6,7 @@ metadata:
   name: blaster
   namespace: $(kubernetes-namespace)
   annotations:
-    scrape-metrics: 'true'
+    prometheus.io/scrape: 'true'
 spec:
   ports:
   - name: external
