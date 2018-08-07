@@ -15,11 +15,21 @@ namespace Blaster.WebApi.Features.Namespaces
             _namespaceRepository = namespaceRepository;
         }
 
-        public async Task<ActionResult<Namespace[]>> Get()
+        public async Task<ActionResult<NamespaceListResponse>> Get()
         {
             var list = await _namespaceRepository.GetAll();
-            return list.ToArray();
+            return new NamespaceListResponse(list.ToArray());
         }
+    }
+
+    public class NamespaceListResponse
+    {
+        public NamespaceListResponse(Namespace[] items)
+        {
+            Items = items;
+        }
+
+        public Namespace[] Items { get; }
     }
 
     #region old code

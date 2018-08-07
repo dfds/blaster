@@ -16,7 +16,7 @@ namespace Blaster.Tests
             var sut = new NamespaceController(new StubNamespaceRepository(emptyNamespaceList));
             var result = await sut.Get();
             
-            Assert.Empty(result.Value);
+            Assert.Empty(result.Value.Items);
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace Blaster.Tests
             var sut = new NamespaceController(new StubNamespaceRepository(expectedNamespaces));
             var result = await sut.Get();
             
-            Assert.Equal(expectedNamespaces, result.Value);
+            Assert.Equal(expectedNamespaces, result.Value.Items);
         }
     }
 
