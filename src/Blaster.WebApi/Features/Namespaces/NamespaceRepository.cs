@@ -2,23 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using k8s;
 
 namespace Blaster.WebApi.Features.Namespaces
 {
     public class NamespaceRepository : INamespaceRepository
     {
-        public Task<IEnumerable<Namespace>> GetAll()
+        private readonly IKubernetes _client;
+
+        public NamespaceRepository(IKubernetes client)
         {
-            throw new Exception();
+            _client = client;
+        }
 
-            var list = new[]
-            {
-                new Namespace(),
-                new Namespace(),
-                new Namespace(),
-            };
+        public async Task<IEnumerable<Namespace>> GetAll()
+        {
+            var namespaces = await _client.ListNamespaceAsync();
 
-            return Task.FromResult(list.AsEnumerable());
+            return namespaces
+                .Items
+                .Select(x => new Namespace(
+                    name: x.Metadata.Name,
+                    createdDate: x.Metadata.CreationTimestamp.GetValueOrDefault(DateTime.MinValue)
+                ));
         }
     }
 }
