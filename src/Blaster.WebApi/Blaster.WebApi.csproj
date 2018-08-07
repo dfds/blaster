@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="kubernetesclient" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="2.1.0" />
   </ItemGroup>
 
 </Project>

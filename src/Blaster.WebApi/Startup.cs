@@ -1,11 +1,11 @@
-﻿using Blaster.WebApi.Controllers;
-using Blaster.WebApi.Features.Namespaces;
+﻿using Blaster.WebApi.Features.Namespaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using k8s;
+using Prometheus;
 
 namespace Blaster.WebApi
 {
@@ -56,7 +56,7 @@ namespace Blaster.WebApi
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            app.UseMetricServer();
             app.UseMvc();
         }
     }
