@@ -11,8 +11,11 @@ namespace Blaster.WebApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IHostingEnvironment _env;
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
+            _env = env;
             Configuration = configuration;
         }
 
@@ -21,20 +24,11 @@ namespace Blaster.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-                .AddMvc(options =>
-                {
-                    options.Filters.Add<ApiKeyFilter>();
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            services.AddTransient<IApiKeyValidator, EnvironmentVariableBasedApiKeyValidator>();
+            services.AddMvc(_env);
             
             services.AddTransient<IKubernetes>(serviceProvider =>
             {
-                var env = serviceProvider.GetService<IHostingEnvironment>();
-
-                var config = env.IsDevelopment()
+                var config = _env.IsDevelopment()
                     ? KubernetesClientConfiguration.BuildConfigFromConfigFile()
                     : KubernetesClientConfiguration.InClusterConfig();
 
@@ -58,6 +52,26 @@ namespace Blaster.WebApi
 
             app.UseMetricServer();
             app.UseMvc();
+        }
+    }
+
+    public static class MvcConfigurationExtensions
+    {
+        public static IServiceCollection AddMvc(this IServiceCollection services, IHostingEnvironment env)
+        {
+            services
+                .AddMvc(options =>
+                {
+                    if (!env.IsDevelopment())
+                    {
+                        options.Filters.Add<ApiKeyFilter>();
+                    }
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddTransient<IApiKeyValidator, EnvironmentVariableBasedApiKeyValidator>();
+
+            return services;
         }
     }
 }
