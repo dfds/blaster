@@ -1,0 +1,52 @@
+﻿@model Blaster.WebApi.Features.Dashboards.DashboardListViewModel
+
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+}
+
+<section class="section">
+    <div class="container">
+
+        <div class="level">
+            <div class="level-left">
+                <div class="level-item">
+                    <h1 class="title">Dashboards</h1>
+                </div>
+            </div>
+            <div class="level-right">
+                <button type="button" class="button is-primary">Add</button>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <table class="table is-fullwidth is-striped is-hoverable">
+            <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @*@foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.Team</td>
+                        <td>@item.Name</td>
+                        <td>
+                            <div class="buttons is-right">
+                                <button type="button" class="button is-small ">Edit</button>
+                                <button type="button" class="button is-small is-danger">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                }*@
+            </tbody>
+        </table>
+    </div>
+</section>

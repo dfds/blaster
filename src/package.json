@@ -1,0 +1,12 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo \"hello from build\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}
