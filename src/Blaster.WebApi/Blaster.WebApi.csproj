@@ -23,8 +23,8 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
-  <Target Name="RunNPM" AfterTargets="Build">
-    <Exec Command="npm run build" />
+  <Target Name="RunNPM" AfterTargets="Build" Condition="'$(NCrunch)' != '1'">
+    <Exec Command="npm run build" WorkingDirectory="$(SolutionDir)"/>
   </Target>
 
 </Project>
