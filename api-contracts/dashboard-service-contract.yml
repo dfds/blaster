@@ -46,6 +46,9 @@ definitions:
         type: string
       name:
         type: string
+      lastModified:
+        type: string
+        format: date-time
         
   dashboard-details:
     type: object
@@ -56,5 +59,8 @@ definitions:
         type: string
       name:
         type: string
+      lastModified:
+        type: string
+        format: date-time
       content:
         type: string
