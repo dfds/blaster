@@ -1,0 +1,60 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Dashboard Service
+basePath: /api
+paths:
+  /dashboards:
+    get:
+      summary: Returns all available dashboards
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/dashboard-list"
+  /dashboards/{id}:
+    get:
+      summary: Returns a single dashboard
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/dashboard-details"
+            
+definitions:
+  dashboard-list:
+    type: object
+    properties:
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/dashboard-list-item'
+      totalCount:
+        type: integer
+      
+  dashboard-list-item:
+    type: object
+    properties:
+      id:
+        type: string
+      team:
+        type: string
+      name:
+        type: string
+        
+  dashboard-details:
+    type: object
+    properties:
+      id:
+        type: string
+      team:
+        type: string
+      name:
+        type: string
+      content:
+        type: string
