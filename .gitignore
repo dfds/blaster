@@ -417,3 +417,6 @@ ASALocalRun/
 
 
 # End of https://www.gitignore.io/api/visualstudio,visualstudiocode,node
+
+# Project specifics
+wwwroot/
