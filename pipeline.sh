@@ -14,6 +14,7 @@ readonly BUILD_SOURCES_DIRECTORY=${2:-${PWD}}
 
 restore_dependencies() {
     echo "Restoring dependencies"
+    npm install
     dotnet restore Blaster.sln
 }
 

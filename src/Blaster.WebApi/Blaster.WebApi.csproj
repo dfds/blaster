@@ -23,8 +23,12 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
+  <Target Name="RunNPMInstall" AfterTargets="Restore" Condition="'$(NCrunch)' != '1'">
+    <Exec Command="npm install" WorkingDirectory="$(SolutionDir)"/>
+  </Target>
+
   <Target Name="RunNPM" AfterTargets="Build" Condition="'$(NCrunch)' != '1'">
-    <Exec Command="npm run build" WorkingDirectory="$(SolutionDir)"/>
+    <Exec Command="npm run build" WorkingDirectory="$(SolutionDir)" />
   </Target>
 
 </Project>
