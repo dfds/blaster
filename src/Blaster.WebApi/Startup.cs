@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Blaster.WebApi.Features.Dashboards;
 using Blaster.WebApi.Features.Namespaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,6 +39,7 @@ namespace Blaster.WebApi
             });
 
             services.AddTransient<INamespaceRepository, NamespaceRepository>();
+            services.AddTransient<IDashboardRepository, DashboardRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

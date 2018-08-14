@@ -1,52 +1,111 @@
 ﻿@model Blaster.WebApi.Features.Dashboards.DashboardListViewModel
 
+@section Header 
+{
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+}
+
 @section Scripts
 {
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script src="dashboard.bundle.js"></script>
 }
 
-<section class="section">
-    <div class="container">
+<div id="app" v-cloak>
 
-        <div class="level">
-            <div class="level-left">
-                <div class="level-item">
-                    <h1 class="title">Dashboards</h1>
+    <section class="section">
+        <div class="container">
+
+            <div class="level">
+                <div class="level-left">
+                    <div class="level-item">
+                        <h1 id="lala" class="title">Dashboards</h1>
+                    </div>
+                </div>
+                <div class="level-right">
+                    <button type="button" class="button is-primary">Add</button>
                 </div>
             </div>
-            <div class="level-right">
-                <button type="button" class="button is-primary">Add</button>
-            </div>
+
         </div>
+    </section>
 
-    </div>
-</section>
-
-<section class="section">
-    <div class="container">
-        <table class="table is-fullwidth is-striped is-hoverable">
-            <thead>
-                <tr>
-                    <th>Team</th>
-                    <th>Name</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @*@foreach (var item in Model.Items)
-                {
+    <section class="section">
+        <div class="container">
+            <table class="table is-fullwidth is-striped is-hoverable">
+                <thead>
                     <tr>
-                        <td>@item.Team</td>
-                        <td>@item.Name</td>
+                        <th>Team</th>
+                        <th>Name</th>
+                        <th>Last Modified</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in items">
+                        <td>{{item.team}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.lastModified}}</td>
                         <td>
                             <div class="buttons is-right">
-                                <button type="button" class="button is-small ">Edit</button>
+                                <button type="button" class="button is-small" v-on:click="openEditor(item)">Edit</button>
                                 <button type="button" class="button is-small is-danger">Delete</button>
                             </div>
                         </td>
                     </tr>
-                }*@
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+
+
+<script id="editor-template" type="text/x-jsrender">
+<div id="dashboard-editor" class="modal is-active">
+    <div class="modal-background" data-behavior="close"></div>
+    <div class="modal-card">
+
+        <header class="modal-card-head">
+            <p class="modal-card-title">Edit dashboard</p>
+            <button class="delete" aria-label="close" data-behavior="close"></button>
+        </header>
+
+        <div class="modal-card-body">
+            <div class="form">
+                <div class="field">
+                <label class="label">Team</label>
+                <div class="control">
+                    <input class="input" type="text" placeholder="Enter team name that owns the dashboard" data-property="team" value="{{team}}">
+                </div>
+                </div>
+
+                <div class="field">
+                <label class="label">Name</label>
+                <div class="control">
+                    <input class="input" type="text" placeholder="Enter name of the dashboard" data-property="name" value="{{name}}">
+                </div>
+                </div>
+
+                <div class="field">
+                <label class="label">Configuration</label>
+                <div class="control">
+                    <textarea class="textarea" rows="10" placeholder="Paste dashboard configuration json here..." data-property="content">{{content}}</textarea>
+                </div>
+                </div>
+
+                <div class="field">
+                    <div class="control has-text-centered">
+                        <button class="button is-success" data-behavior="save">Save</button>
+                        <button class="button is-white" aria-label="close" data-behavior="close">Cancel</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
-</section>
+</div>
+</script>
