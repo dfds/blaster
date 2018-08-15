@@ -3,18 +3,52 @@ info:
   version: 1.0.0
   title: Dashboard Service
 basePath: /api
+tags:
+  - name: reads
+    description: All the read operations
+  - name: writes
+    description: All the write operations
 paths:
   /dashboards:
     get:
       summary: Returns all available dashboards
+      tags:
+        - reads
       responses:
         200:
           description: OK
           schema:
             $ref: "#/definitions/dashboard-list"
+    post:
+      summary: Creates a new dashboard
+      tags:
+        - writes
+      consumes: 
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: body
+          in: body
+          required: true
+          description: Dashboard that needs to be stored
+          schema:
+            $ref: "#/definitions/dashboard-input"
+      responses:
+        201:
+          description: Created - stored a new dashboard
+          schema:
+            $ref: '#/definitions/dashboard-details'
+          headers:
+            location:
+              type: string
+              description: A URI to a location when the dashboard can be retrieved
+
   /dashboards/{id}:
     get:
       summary: Returns a single dashboard
+      tags:
+        - reads
       parameters:
       - name: "id"
         in: "path"
@@ -25,8 +59,65 @@ paths:
           description: OK
           schema:
             $ref: "#/definitions/dashboard-details"
+    put:
+      summary: Creates or updates a specific dashboard
+      description: Will update an existing dashboard. If the dashboard does not exist it will be created.
+      tags:
+        - writes
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: string
+        description: Id of the dashboard
+      - name: body
+        in: body
+        required: true
+        description: Dashboard information that needs to be stored
+        schema:
+          $ref: "#/definitions/dashboard-input-with-id"
+      responses:
+        201:
+          description: Created - stored a new dashboard
+          schema:
+            $ref: '#/definitions/dashboard-details'
+          headers:
+            location:
+              type: string
+              description: A URI to a location when the dashboard can be retrieved
+        200:
+          description: OK - updated the dashboard
+          schema:
+            $ref: '#/definitions/dashboard-details'
+    delete:
+      summary: Deletes a dashboard
+      tags:
+        - writes
+      produces:
+        - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: string
+        description: Id of the dashboard
+      responses:
+        200:
+          description: OK - dashboard deleted
+        404:
+          description: Not Found
             
 definitions:
+  dashboard-id:
+    type: object
+    properties:
+      id: 
+        type: string
+    
   dashboard-list:
     type: object
     properties:
@@ -38,29 +129,38 @@ definitions:
         type: integer
       
   dashboard-list-item:
-    type: object
-    properties:
-      id:
-        type: string
-      team:
-        type: string
-      name:
-        type: string
-      lastModified:
-        type: string
-        format: date-time
+    allOf:
+      - $ref: "#/definitions/dashboard-id"
+      - type: object
+        properties:
+          team:
+            type: string
+          name:
+            type: string
+          lastModified:
+            type: string
+            format: date-time
         
   dashboard-details:
+    allOf:
+      - $ref: "#/definitions/dashboard-id"
+      - $ref: "#/definitions/dashboard-list-item"
+      - type: object
+        properties:
+          content:
+            type: string
+        
+  dashboard-input:
     type: object
     properties:
-      id:
+      name:
         type: string
       team:
         type: string
-      name:
-        type: string
-      lastModified:
-        type: string
-        format: date-time
       content:
         type: string
+
+  dashboard-input-with-id:
+    allOf:
+      - $ref: "#/definitions/dashboard-id"
+      - $ref: "#/definitions/dashboard-input"

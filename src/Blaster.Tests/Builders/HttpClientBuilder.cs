@@ -36,6 +36,11 @@ namespace Blaster.Tests.Builders
             return this;
         }
 
+        public HttpClientBuilder WithService<TService>(TService serviceInstance)
+        {
+            return WithService(typeof(TService), serviceInstance);
+        }
+
         public HttpClient Build()
         {
             var webHostBuilder = new WebHostBuilder()

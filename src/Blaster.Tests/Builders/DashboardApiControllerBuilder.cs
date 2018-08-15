@@ -5,22 +5,22 @@ namespace Blaster.Tests.Builders
 {
     public class DashboardApiControllerBuilder
     {
-        private IDashboardRepository _dashboardRepository;
+        private IDashboardService _dashboardService;
 
         public DashboardApiControllerBuilder()
         {
-            _dashboardRepository = Dummy.Of<IDashboardRepository>();
+            _dashboardService = Dummy.Of<IDashboardService>();
         }
 
-        public DashboardApiControllerBuilder WithDashboardRepository(IDashboardRepository dashboardRepository)
+        public DashboardApiControllerBuilder WithDashboardService(IDashboardService dashboardService)
         {
-            _dashboardRepository = dashboardRepository;
+            _dashboardService = dashboardService;
             return this;
         }
 
         public DashboardApiController Build()
         {
-            return new DashboardApiController(_dashboardRepository);
+            return new DashboardApiController(_dashboardService);
         }
     }
 }

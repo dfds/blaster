@@ -1,6 +1,7 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Blaster.WebApi.Features.Dashboards.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Blaster.WebApi.Features.Dashboards
 {
@@ -8,37 +9,68 @@ namespace Blaster.WebApi.Features.Dashboards
     [ApiController]
     public class DashboardApiController : ControllerBase
     {
-        private readonly IDashboardRepository _dashboardRepository;
+        private readonly IDashboardService _dashboardService;
 
-        public DashboardApiController(IDashboardRepository dashboardRepository)
+        public DashboardApiController(IDashboardService dashboardService)
         {
-            _dashboardRepository = dashboardRepository;
+            _dashboardService = dashboardService;
         }
 
-        [Route("")]
-        public async Task<ActionResult<DashboardListResponse>> Get()
+        [HttpGet("", Name = "GetAll")]
+        public async Task<ActionResult<DashboardListResponse>> GetAll()
         {
-            var dashboards = await _dashboardRepository.GetAll();
-            var items = dashboards.ToArray();
+            var dashboards = await _dashboardService.GetAll();
 
-            return new DashboardListResponse
+            return dashboards ?? new DashboardListResponse
             {
-                Items = items,
-                TotalCount = items.Length,
+                Items = new DashboardListItem[0],
+                TotalCount = 0
             };
         }
 
-        [Route("{id}")]
-        public async Task<ActionResult<DashboardDetailItem>> Get(string id)
+        [HttpGet("{id}", Name = "GetSingleDashboard")]
+        public async Task<ActionResult<DashboardDetailItem>> GetById(string id)
         {
-            var item = await _dashboardRepository.Get(id);
+            var dashboard = await _dashboardService.Get(id);
 
-            if (item != null)
+            if (dashboard != null)
             {
-                return new ActionResult<DashboardDetailItem>(item);
+                return new ActionResult<DashboardDetailItem>(dashboard);
             }
 
             return new ActionResult<DashboardDetailItem>(NotFound());
+        }
+
+        [HttpPost("", Name = "CreateSingleDashboard")]
+        public async Task<CreatedAtRouteResult<DashboardDetailItem>> Post([FromBody] DashboardInput input)
+        {
+            var dashboard = await _dashboardService.Create(input);
+
+            return new CreatedAtRouteResult<DashboardDetailItem>(
+                routeName: "GetSingleDashboard",
+                routeValues: new {id = dashboard.Id},
+                value: dashboard
+            );
+        }
+    }
+
+    public class CreatedAtRouteResult<T> : IConvertToActionResult
+    {
+        private readonly string _routeName;
+        private readonly object _routeValues;
+
+        public CreatedAtRouteResult(string routeName, object routeValues, T value)
+        {
+            _routeName = routeName;
+            _routeValues = routeValues;
+            Value = value;
+        }
+
+        public T Value { get; }
+
+        public IActionResult Convert()
+        {
+            return new CreatedAtRouteResult(_routeName, _routeValues, Value);
         }
     }
 }

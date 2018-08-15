@@ -22,10 +22,21 @@ const app = new Vue({
             };
 
             const editor = new DashboardEditor();
-            editor
-                .open(item)
+            editor.open(item)
                 .then(item => {
-                    this.items.push(item);
+                    return jq.ajax({
+                        type: "POST",
+                        url: "api/dashboards",
+                        dataType: "application/json",
+                        data: item
+                    });
+                })
+                .then(data => {
+                    console.log("SUCCESS!!: " + JSON.stringify(data));
+                    return data;
+                })
+                .catch(info => {
+                    console.log("OHNO!! " + JSON.stringify(info));
                 });
         },
         openEditor: function(item) {

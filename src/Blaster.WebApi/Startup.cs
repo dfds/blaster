@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using Blaster.WebApi.Features.Dashboards;
 using Blaster.WebApi.Features.Namespaces;
 using Microsoft.AspNetCore.Builder;
@@ -39,7 +40,13 @@ namespace Blaster.WebApi
             });
 
             services.AddTransient<INamespaceRepository, NamespaceRepository>();
-            services.AddTransient<IDashboardRepository, DashboardRepository>();
+            services.AddSingleton<HttpClient>();
+            services.AddTransient<IJsonSerializer, JsonSerializer>();
+            services.AddTransient<IDashboardService, DashboardService>();
+            services.AddSingleton<ExternalDashboardServiceSettings>(serviceProvider => new ExternalDashboardServiceSettings
+            {
+                ServiceEndpoint = Configuration["BLASTER_DASHBOARD_SERVICE_URL"]
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

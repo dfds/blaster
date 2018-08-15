@@ -81,7 +81,7 @@ namespace Blaster.Tests
     //            .Setup(x => x.ListNamespaceWithHttpMessagesAsync(null, null, null, null, null, null, null, null, null, null, It.IsAny<CancellationToken>()))
     //            .ReturnsAsync(new HttpOperationResponse<V1NamespaceList> { Body = namespaceList, Request = req, Response = res });
 
-    //        var results = await _namespacesController.Get();
+    //        var results = await _namespacesController.GetAll();
 
     //        var t1 = Assert.IsType<OkObjectResult>(results);
     //        var t2 = Assert.IsType<List<string>>(t1.Value);
@@ -105,7 +105,7 @@ namespace Blaster.Tests
 
     //        V1NamespaceList ls = new V1NamespaceList { ApiVersion = "V1", Items = items, Kind = "NamespaceList", Metadata = It.IsAny<V1ListMeta>() };
     //        _kubernetesClient.Setup(x => x.ListNamespaceWithHttpMessagesAsync(null, null, null, null, null, null, null, null, null, null, It.IsAny<CancellationToken>())).ReturnsAsync(new HttpOperationResponse<V1NamespaceList> { Body = ls, Request = req, Response = res });
-    //        var results = await _namespacesController.Get();
+    //        var results = await _namespacesController.GetAll();
 
     //        var t1 = Assert.IsType<OkObjectResult>(results);
     //        var t2 = Assert.IsType<List<string>>(t1.Value);
@@ -129,7 +129,7 @@ namespace Blaster.Tests
 
     //        V1NamespaceList ls = new V1NamespaceList { ApiVersion = "V1", Items = items, Kind = "NamespaceList", Metadata = It.IsAny<V1ListMeta>() };
     //        _kubernetesClient.Setup(x => x.ListNamespaceWithHttpMessagesAsync(null, null, null, null, null, null, null, null, null, null, It.IsAny<CancellationToken>())).ReturnsAsync(new HttpOperationResponse<V1NamespaceList> { Body = ls, Request = req, Response = res });
-    //        var results = await _namespacesController.Get();
+    //        var results = await _namespacesController.GetAll();
 
     //        var t1 = Assert.IsType<OkObjectResult>(results);
 
@@ -141,7 +141,7 @@ namespace Blaster.Tests
     //    {
     //        V1NamespaceList ls = new V1NamespaceList { ApiVersion = "V1", Items = It.IsAny<IList<V1Namespace>>(), Kind = "NamespaceList", Metadata = It.IsAny<V1ListMeta>() };
     //        _kubernetesClient.Setup(x => x.ListNamespaceWithHttpMessagesAsync(null, null, null, null, null, null, null, null, null, null, It.IsAny<CancellationToken>())).ReturnsAsync(new HttpOperationResponse<V1NamespaceList>());
-    //        var results = await _namespacesController.Get();
+    //        var results = await _namespacesController.GetAll();
 
     //        //var t1 = Assert.IsType<ActionResult<IEnumerable<string>>>(results);
     //        var t1 = Assert.IsType<StatusCodeResult>(results);

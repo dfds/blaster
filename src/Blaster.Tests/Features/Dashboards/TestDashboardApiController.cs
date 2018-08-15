@@ -1,10 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Blaster.Tests.Builders;
+using Blaster.Tests.Helpers;
 using Blaster.Tests.TestDoubles;
+using Blaster.WebApi.Features.Dashboards;
+using Blaster.WebApi.Features.Dashboards.Models;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
-namespace Blaster.Tests
+namespace Blaster.Tests.Features.Dashboards
 {
     public class TestDashboardApiController
     {
@@ -12,7 +15,7 @@ namespace Blaster.Tests
         public async Task get_returns_expected_when_no_dashboards_are_available()
         {
             var sut = new DashboardApiControllerBuilder().Build();
-            var result = await sut.Get();
+            var result = await sut.GetAll();
 
             Assert.Empty(result.Value.Items);
         }
@@ -27,10 +30,10 @@ namespace Blaster.Tests
             };
 
             var sut = new DashboardApiControllerBuilder()
-                .WithDashboardRepository(new StubDashboardRepository(listResult: expectedDashboards))
+                .WithDashboardService(new StubDashboardService(listResult: expectedDashboards))
                 .Build();
 
-            var result = await sut.Get();
+            var result = await sut.GetAll();
 
             Assert.Equal(
                 expected: expectedDashboards,
@@ -44,7 +47,7 @@ namespace Blaster.Tests
             var sut = new DashboardApiControllerBuilder().Build();
 
             var nonExistingId = "foo";
-            var result = await sut.Get(nonExistingId);
+            var result = await sut.GetById(nonExistingId);
 
             Assert.IsType<NotFoundResult>(result.Result);
         }
@@ -55,12 +58,39 @@ namespace Blaster.Tests
             var expected = new DashboardDetailItemBuilder().Build();
 
             var sut = new DashboardApiControllerBuilder()
-                .WithDashboardRepository(new StubDashboardRepository(singleResult: expected))
+                .WithDashboardService(new StubDashboardService(singleResult: expected))
                 .Build();
 
-            var result = await sut.Get(expected.Id);
+            var result = await sut.GetById(expected.Id);
 
-            Assert.Equal(result.Value, expected);
+            Assert.Equal(expected, result.Value);
+        }
+
+        [Fact]
+        public async Task post_returns_expected()
+        {
+            var expected = new DashboardDetailItemBuilder().Build();
+
+            var sut = new DashboardApiControllerBuilder()
+                .WithDashboardService(new StubDashboardService(singleResult:expected))
+                .Build();
+
+            var result = await sut.Post(new DashboardInput
+            {
+                Team = expected.Team,
+                Name = expected.Name,
+                Content = expected.Content
+            });
+            
+            Assert.Equal(
+                expected: expected,
+                actual: result.Value,
+                comparer: new PropertiesComparer<DashboardDetailItem>(
+                        x => x.Team,
+                        x => x.Name,
+                        x => x.Content
+                    )
+            );
         }
     }
 }

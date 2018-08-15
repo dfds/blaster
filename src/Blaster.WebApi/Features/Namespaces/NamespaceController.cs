@@ -46,7 +46,7 @@ namespace Blaster.WebApi.Features.Namespaces
     //    }
 
     //    [HttpGet]
-    //    public async Task<IActionResult> Get()
+    //    public async Task<IActionResult> GetAll()
     //    {
     //        var results = new List<string>();
 

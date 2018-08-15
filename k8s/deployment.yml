@@ -24,6 +24,8 @@ spec:
             value: banana
           - name: blaster_apikey
             value: $(blaster_apikey)
+          - name: BLASTER_DASHBOARD_SERVICE_URL
+            value: http://dash
 
           # - name:  CONNECTIONSTRING
           #   valueFrom:
