@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Blaster.WebApi
@@ -14,6 +15,11 @@ namespace Blaster.WebApi
 
         public async void OnAuthorization(AuthorizationFilterContext context)
         {
+            if (!context.HttpContext.Request.Path.StartsWithSegments("/api", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return;
+            }
+
             if (context.HttpContext.Request.Headers.TryGetValue("x-dfds-apikey", out var value))
             {
                 var isValid = await _apiKeyValidator.IsValid(value.ToString());

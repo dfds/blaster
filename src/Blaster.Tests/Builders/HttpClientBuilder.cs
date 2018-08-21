@@ -11,15 +11,16 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Blaster.Tests.Builders
 {
-    public class HttpClientBuilder
+    public class HttpClientBuilder : IDisposable
     {
+        private readonly LinkedList<IDisposable> _disposables = new LinkedList<IDisposable>();
         private readonly Dictionary<Type, ServiceDescriptor> _serviceDescriptors = new Dictionary<Type, ServiceDescriptor>();
         private string _apiKey;
 
         public HttpClientBuilder()
         {
             _apiKey = "123";
-            WithService(typeof(IApiKeyValidator), new StubApiKeyValidator(isValid: true));
+            WithService<IApiKeyValidator>(new StubApiKeyValidator(isValid: true));
         }
 
         public HttpClientBuilder WithApiKey(string apiKey)
@@ -41,9 +42,9 @@ namespace Blaster.Tests.Builders
             return WithService(typeof(TService), serviceInstance);
         }
 
-        public HttpClient Build()
+        private IWebHostBuilder CreateWebHostBuilder()
         {
-            var webHostBuilder = new WebHostBuilder()
+            return new WebHostBuilder()
                 .UseStartup<Startup>()
                 .ConfigureTestServices(services =>
                 {
@@ -52,16 +53,48 @@ namespace Blaster.Tests.Builders
                         .ToList()
                         .ForEach(serviceOverride => services.Replace(serviceOverride));
                 });
+        }
 
-            var server = new TestServer(webHostBuilder);
-            var client = server.CreateClient();
+        private List<Action<HttpClient>> CreateCustomizations()
+        {
+            var customizations = new List<Action<HttpClient>>();
 
             if (!string.IsNullOrWhiteSpace(_apiKey))
             {
-                client.DefaultRequestHeaders.Add("x-dfds-apikey", _apiKey);
+                customizations.Add(x =>
+                {
+                    x.DefaultRequestHeaders.Add("x-dfds-apikey", _apiKey);
+                });
             }
 
+            customizations.Add(x =>
+            {
+                x.Timeout = TimeSpan.FromMinutes(1);
+            });
+
+            return customizations;
+        }
+
+        public HttpClient Build()
+        {
+            var webHostBuilder = CreateWebHostBuilder();
+            var testServer = new TestServer(webHostBuilder);
+            _disposables.AddLast(testServer);
+
+            var customizations = CreateCustomizations();
+            var client = testServer.CreateClient();
+            customizations.ForEach(x => x(client));
+            _disposables.AddLast(client);
+
             return client;
+        }
+
+        public void Dispose()
+        {
+            foreach (var instance in _disposables.Reverse())
+            {
+                instance.Dispose();
+            }
         }
     }
 }

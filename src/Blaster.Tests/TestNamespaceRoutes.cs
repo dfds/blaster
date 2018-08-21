@@ -12,16 +12,19 @@ namespace Blaster.Tests
         [Fact]
         public async Task get_returns_expected_status_code()
         {
-            var client = new HttpClientBuilder()
-                .WithService(typeof(INamespaceRepository), new StubNamespaceRepository())
-                .Build();
+            using (var clientBuilder = new HttpClientBuilder())
+            {
+                var client = clientBuilder
+                    .WithService<INamespaceRepository>(new StubNamespaceRepository())
+                    .Build();
 
-            var response = await client.GetAsync("/api/namespaces");
+                var response = await client.GetAsync("/api/namespaces");
 
-            Assert.Equal(
-                expected: HttpStatusCode.OK,
-                actual: response.StatusCode
-            );
+                Assert.Equal(
+                    expected: HttpStatusCode.OK,
+                    actual: response.StatusCode
+                );
+            }
         }
     }
 }
