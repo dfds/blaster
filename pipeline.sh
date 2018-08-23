@@ -21,12 +21,12 @@ restore_dependencies() {
 run_tests() {
     echo "Running tests..."
     dotnet build -c Release Blaster.sln
-    npm run build
     dotnet test --logger:"trx;LogFileName=testresult.trx" --results-directory "../" Blaster.Tests/Blaster.Tests.csproj
 }
 
 publish_binaries() {
     echo "Publishing binaries..."
+    npm run build
     dotnet publish -c Release -o ${BUILD_SOURCES_DIRECTORY}/output Blaster.WebApi/Blaster.WebApi.csproj
 }
 
