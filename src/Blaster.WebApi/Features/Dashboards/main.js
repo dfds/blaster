@@ -1,6 +1,7 @@
 import moment from "moment";
 import jq from "jquery";
 import DashboardEditor from "./dashboard-editor.js";
+import AlertDialog from "./alert-dialog.js";
 import "./styles.scss";
 
 const app = new Vue({
@@ -27,15 +28,21 @@ const app = new Vue({
                     return jq.ajax({
                         type: "POST",
                         url: "api/dashboards",
-                        dataType: "application/json",
-                        data: item
+                        dataType: "json",
+                        contentType: "application/json",
+                        data: JSON.stringify(item) 
                     });
                 })
                 .then(data => {
-                    console.log("SUCCESS!!: " + JSON.stringify(data));
-                    return data;
+                    app.items.push({
+                        id: data.id,
+                        team: data.team,
+                        name: data.name,
+                        lastModified: data.lastModified
+                    });
                 })
                 .catch(info => {
+                    console.log("item: " + JSON.stringify(item));
                     console.log("OHNO!! " + JSON.stringify(info));
                 });
         },
@@ -62,7 +69,33 @@ jq.ready
     .then(() => jq.getJSON("api/dashboards"))
     .then(data => {
         data.items.forEach(item => {
-            item.lastModified = moment(item.lastModified).calendar();
             app.items.push(item);
         });
+    })
+    .catch(info => {
+        const dialog = new AlertDialog();
+
+        dialog
+            .open({
+                message: `Server returned: ${info.status} - ${info.statusText}`
+            })
+            .then(element => {
+                setTimeout(function(){
+                    dialog.close(element);
+                }, 3000);
+            });
     });
+
+// jq.ready
+//     .then(() => {
+//         setInterval(() => {
+//             jq(".format-as-relative-time").each(() => {
+//                 const time = jq(this).data("timestamp");
+//                 if (time) {
+//                     const text = moment(time).fromNow();
+//                     jq(this).text(text);
+//                     console.log(text);
+//                 }
+//             });
+//         }, 1000);
+//     });

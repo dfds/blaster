@@ -12,9 +12,10 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/namespaces",
+      "launchUrl": "dashboards",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "BLASTER_DASHBOARD_SERVICE_URL": "http://localhost:3000"
       }
     },
     "IIS Express Production": {
