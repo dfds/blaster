@@ -36,8 +36,8 @@
     <Exec Command="npm install" WorkingDirectory="$(SolutionDir)" />
   </Target> -->
 
-  <Target Name="RunNPM" AfterTargets="Build" Condition="'$(NCrunch)' != '1'">
+  <!-- <Target Name="RunNPM" AfterTargets="Build" Condition="'$(NCrunch)' != '1'">
     <Exec Command="npm run build" WorkingDirectory="$(SolutionDir)" />
-  </Target>
+  </Target> -->
 
 </Project>

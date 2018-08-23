@@ -1,5 +1,5 @@
 import jq from "jquery";
-import Mustache from "Mustache";
+import Mustache from "mustache";
 
 export default class AlertDialog {
     createMarkupFor(dataItem) {

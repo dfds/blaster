@@ -21,6 +21,7 @@ restore_dependencies() {
 run_tests() {
     echo "Running tests..."
     dotnet build -c Release Blaster.sln
+    npm run build
     dotnet test --logger:"trx;LogFileName=testresult.trx" --results-directory "../" Blaster.Tests/Blaster.Tests.csproj
 }
 
