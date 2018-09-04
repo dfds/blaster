@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Blaster.Tests.Builders;
 using Blaster.Tests.TestDoubles;
+using Blaster.WebApi;
 using Blaster.WebApi.Features.Namespaces;
 using Xunit;
 
@@ -16,6 +17,7 @@ namespace Blaster.Tests
             {
                 var client = clientBuilder
                     .WithService<INamespaceRepository>(new StubNamespaceRepository())
+                    .WithService<IApiKeyValidator>(new StubApiKeyValidator(isValid:true))
                     .Build();
 
                 var response = await client.GetAsync("/api/namespaces");

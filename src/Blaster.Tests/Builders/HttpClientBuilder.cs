@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using Blaster.Tests.TestDoubles;
 using Blaster.WebApi;
 using Microsoft.AspNetCore.Hosting;
@@ -61,15 +62,16 @@ namespace Blaster.Tests.Builders
 
             if (!string.IsNullOrWhiteSpace(_apiKey))
             {
-                customizations.Add(x =>
+                customizations.Add(client =>
                 {
-                    x.DefaultRequestHeaders.Add("x-dfds-apikey", _apiKey);
+                    client.DefaultRequestHeaders.Add("x-dfds-apikey", _apiKey);
                 });
             }
 
-            customizations.Add(x =>
+            customizations.Add(client =>
             {
-                x.Timeout = TimeSpan.FromMinutes(1);
+                client.Timeout = TimeSpan.FromMinutes(1);
+                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", "lala");
             });
 
             return customizations;

@@ -33,4 +33,17 @@ namespace Blaster.WebApi
             context.Result = new StatusCodeResult(403);
         }
     }
+
+    public class SetApiKeyFilter : IActionFilter
+    {
+        public void OnActionExecuting(ActionExecutingContext context)
+        {
+
+        }
+
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+
+        }
+    }
 }
