@@ -4,7 +4,7 @@
     "anonymousAuthentication": true,
     "iisExpress": {
       "applicationUrl": "http://localhost:33677",
-      "sslPort": 0
+      "sslPort": 5001
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",
@@ -29,7 +29,7 @@
     "Blaster.WebApi": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/namespaces",
+      "launchUrl": "api/values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
