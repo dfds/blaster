@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading.Tasks;
 using Blaster.WebApi.Features.Dashboards;
 using Blaster.WebApi.Features.Namespaces;
 using Microsoft.AspNetCore.Builder;
@@ -49,6 +50,8 @@ namespace Blaster.WebApi
             {
                 ServiceEndpoint = Configuration["BLASTER_DASHBOARD_SERVICE_URL"]
             });
+
+            services.AddTransient<ForwardedHeaderBasePath>();
 
             ConfigureMvc(services);
             ConfigureAuthentication(services);
@@ -111,25 +114,37 @@ namespace Blaster.WebApi
                 app.UseHsts();
             }
 
-            app.Use((context, next) =>
-            {
-                if (context.Request.Headers.TryGetValue("X-Forwarded-Prefix", out var prefix))
-                {
-                    //context.Request.Path = prefix + context.Request.Path;
-                    context.Request.PathBase = new PathString(prefix);
-                }
-                if (context.Request.Headers.TryGetValue("X-Forwarded-Proto", out var protocol))
-                {
-                    context.Request.Scheme = protocol;
-                }
-
-                return next();
-            });
-
+            app.UseForwardedHeadersAsBasePath();
             app.UseMetricServer();
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseMvc();
+        }
+    }
+
+    public class ForwardedHeaderBasePath : IMiddleware
+    {
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        {
+            if (context.Request.Headers.TryGetValue("X-Forwarded-Prefix", out var prefix))
+            {
+                //context.Request.Path = prefix + context.Request.Path;
+                context.Request.PathBase = new PathString(prefix);
+            }
+            if (context.Request.Headers.TryGetValue("X-Forwarded-Proto", out var protocol))
+            {
+                context.Request.Scheme = protocol;
+            }
+
+            await next(context);
+        }
+    }
+
+    public static class ForwardedHeadersAsBasePathExtensions
+    {
+        public static IApplicationBuilder UseForwardedHeadersAsBasePath(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<ForwardedHeaderBasePath>();
         }
     }
 }
