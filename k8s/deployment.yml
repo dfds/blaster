@@ -26,12 +26,15 @@ spec:
             value: $(blaster_apikey)
           - name: BLASTER_DASHBOARD_SERVICE_URL
             value: http://dash
+          - name: BLASTER_COGNITO_POOL_ID
+            value: $(BLASTER_COGNITO_POOL_ID)
+          - name: BLASTER_COGNITO_REGION
+            value: $(BLASTER_COGNITO_REGION)
+          - name: BLASTER_COGNITO_CLIENT_ID
+            value: $(BLASTER_COGNITO_CLIENT_ID)
+          - name: BLASTER_COGNITO_CLIENT_SECRET
+            value: $(BLASTER_COGNITO_CLIENT_SECRET)
 
-          # - name:  CONNECTIONSTRING
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name:  connection
-          #       key:  connectionstring
         # resources:
         #   requests:
         #     cpu: "20m"
