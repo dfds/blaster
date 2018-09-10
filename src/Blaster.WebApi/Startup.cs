@@ -10,6 +10,7 @@ using k8s;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Prometheus;
@@ -109,6 +110,21 @@ namespace Blaster.WebApi
             {
                 app.UseHsts();
             }
+
+            app.Use((context, next) =>
+            {
+                if (context.Request.Headers.TryGetValue("X-Forwarded-Prefix", out var prefix))
+                {
+                    //context.Request.Path = prefix + context.Request.Path;
+                    context.Request.PathBase = new PathString(prefix);
+                }
+                if (context.Request.Headers.TryGetValue("X-Forwarded-Proto", out var protocol))
+                {
+                    context.Request.Scheme = protocol;
+                }
+
+                return next();
+            });
 
             app.UseMetricServer();
             app.UseStaticFiles();
