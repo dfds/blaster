@@ -1,54 +1,74 @@
 const webpack = require("webpack");
 const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
     entry: {
-        dashboard: "./Blaster.WebApi/Features/Dashboards/main.js"
+        dashboard: "./Blaster.WebApi/Features/Dashboards/main.js",
+        teams: "./Blaster.WebApi/Features/Teams/main.js"
     },
     output: {
         path: path.resolve(__dirname, "Blaster.WebApi", "wwwroot"),
         filename: "[name].bundle.js"
     },
+    resolve: {
+        alias: {
+            vue: 'vue/dist/vue.js'
+        },
+        extensions: [".js", ".scss"]
+    },
     devtool: 'source-map',
+    plugins: [
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: "[name].css",
+            // chunkFilename: "[id].css"
+        })
+    ],
     module: {
-        rules: [
-            {
+        rules: [{
                 test: /\.js$/,
                 loader: 'babel-loader',
                 exclude: /node_modules/
             },
+            // {
+            //     test: /\.css$/,
+            //     use: [{
+            //             loader: "style-loader"
+            //         },
+            //         {
+            //             loader: "css-loader",
+            //             options: {
+            //                 sourceMap: true
+            //             }
+            //         }
+            //     ]
+            // },
             {
-                test: /\.css$/,
+                test: /\.(sa|sc|c)ss$/,
                 use: [
-                    {
-                        loader: "style-loader"
-                    },
-                    {
-                        loader: "css-loader",
-                        options: {
-                            sourceMap: true
-                        }
-                    }
+                    MiniCssExtractPlugin.loader,
+                    // "style-loader",
+                    "css-loader",
+                    "sass-loader",
                 ]
-            },
-            {
-                test: /\.s(c|a)ss$/,
-                use: [
-                    {
-                        loader: "style-loader"
-                    },
-                    {
-                        loader: "css-loader",
-                        options: {
-                            sourceMap: true
-                        }
-                    },
-                    {
-                        loader: "sass-loader",
-                        options: {
-                            sourceMap: true
-                        }
-                    }]
+                // use: [{
+                //         loader: "style-loader"
+                //     },
+                //     {
+                //         loader: "css-loader",
+                //         options: {
+                //             sourceMap: true
+                //         }
+                //     },
+                //     {
+                //         loader: "sass-loader",
+                //         options: {
+                //             sourceMap: true
+                //         }
+                //     }
+                // ]
             }
         ]
     }

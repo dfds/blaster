@@ -1,0 +1,95 @@
+﻿@section header
+{
+    <link rel="stylesheet" href="teams.css" />
+}
+@section Scripts
+{
+    <script src="teams.bundle.js"></script>
+}
+
+<div id="teams-app" v-cloak>
+
+    <section class="section">
+        <div class="container">
+            <div class="level">
+                <div class="level-left">
+                    <div class="level-item">
+                        <h1 class="title">Teams</h1>
+                    </div>
+                </div>
+                <div class="level-right">
+                    <div class="level-item">
+                        <button type="button" class="button is-primary" v-on:click="newTeam()">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="container">
+            <table class="table is-fullwidth is-hoverable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Members</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in items" v-bind:data-id="item.id">
+                        <td>{{item.name}}</td>
+                        <td>{{item.department}}</td>
+                        <td>{{item.members}}</td>
+                        <td>
+                            <div class="buttons is-right">
+                                <button type="button" class="button is-small is-primary">Join</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+
+<script id="editor-template" type="text/x-mustache">
+    <div id="team-editor" class="modal is-active">
+        <div class="modal-background" data-behavior="close"></div>
+        <div class="modal-card">
+
+            <header class="modal-card-head">
+                <p class="modal-card-title">Add team</p>
+                <button class="delete" aria-label="close" data-behavior="close"></button>
+            </header>
+
+            <div class="modal-card-body">
+                <div class="form">
+                    <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Enter team name" data-property="name" value="{{name}}">
+                    </div>
+                    </div>
+
+                    <div class="field">
+                    <label class="label">Department</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Enter department number" data-property="department" value="{{department}}">
+                    </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control has-text-centered">
+                            <button class="button is-success" data-behavior="save">Save</button>
+                            <button class="button is-white" aria-label="close" data-behavior="close">Cancel</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

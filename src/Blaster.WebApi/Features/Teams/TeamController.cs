@@ -7,7 +7,7 @@ namespace Blaster.WebApi.Features.Teams
     {
         public IActionResult Index()
         {
-            return Ok("lala");
+            return View();
         }
     }
 }

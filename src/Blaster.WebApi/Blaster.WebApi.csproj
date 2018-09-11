@@ -25,6 +25,10 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Update="Features\Teams\index.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Features\_ViewStart.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
