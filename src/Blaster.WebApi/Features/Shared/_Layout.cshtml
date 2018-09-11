@@ -10,6 +10,41 @@
 </head>
 <body>
 
+<header>
+    <div class="container has-text-right has-text-weight-light">
+        Welcome, @(User.Identity.Name ?? "Stranger!")
+    </div>
+
+    <br />
+
+    <div class="container">
+        <nav class="navbar is-transparent">
+            <div class="navbar-brand">
+                <div class="navbar-item">
+                    <span class="title is-1">Blaster</span>
+                </div>
+            </div>
+            <div class="navbar-menu">
+                <div class="navbar-start"></div>
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <a href="/teams" class="button is-outlined is-rounded">Teams</a>
+                    </div>
+                    <div class="navbar-item">
+                        <a href="/namespaces" class="button is-outlined is-rounded" disabled>Namespaces</a>
+                    </div>
+                    <div class="navbar-item">
+                        <a href="/dashboards" class="button is-outlined is-rounded" disabled>Dashboards</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <br />
+
+</header>
+
 @RenderBody()
 
 @RenderSection("Scripts", required: false)
