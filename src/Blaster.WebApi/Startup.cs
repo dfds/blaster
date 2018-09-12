@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Dashboards;
 using Blaster.WebApi.Features.Namespaces;
+using Blaster.WebApi.Features.System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +51,8 @@ namespace Blaster.WebApi
             {
                 ServiceEndpoint = Configuration["BLASTER_DASHBOARD_SERVICE_URL"]
             });
+
+            services.AddTransient<ICognitoService, CognitoService>();
 
             services.AddTransient<ForwardedHeaderBasePath>();
 

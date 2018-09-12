@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using Blaster.Tests.Builders;
+using Blaster.WebApi.Features.System;
 using Xunit;
 
 namespace Blaster.Tests.Features.System
@@ -12,7 +13,9 @@ namespace Blaster.Tests.Features.System
         {
             using (var clientBuilder = new HttpClientBuilder())
             {
-                var client = clientBuilder.Build();
+                var client = clientBuilder
+                    .WithService<ICognitoService>(new StubCognitoService())
+                    .Build();
 
                 var response = await client.GetAsync("/system/health");
                 
@@ -21,6 +24,14 @@ namespace Blaster.Tests.Features.System
                     actual: response.StatusCode
                 );
             }
+        }
+    }
+
+    public class StubCognitoService : ICognitoService
+    {
+        public Task<string> SayHello()
+        {
+            return Task.FromResult("foo");
         }
     }
 }
