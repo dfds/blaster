@@ -10,8 +10,14 @@ steps:
    export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY)
    chmod +x ./pipeline.sh
    ./pipeline.sh $(Build.BuildId) $(System.DefaultWorkingDirectory)
-  displayName: Pipeline Bash Script
+  displayName: Blaster pipeline Bash Script
   enabled: true
+
+- bash: |
+   export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY)
+   chmod +x ./cognito-api-pipeline.sh
+   ./cognito-api-pipeline.sh $(Build.BuildId) $(System.DefaultWorkingDirectory)
+  displayName: Cognito pipeline Bash Script
 
 - task: PublishTestResults@2
   displayName: Publish Test Results
