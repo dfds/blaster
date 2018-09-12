@@ -14,7 +14,7 @@ spec:
         app: blaster
     spec:
       containers:
-      - name: container
+      - name: blaster
         image: 579478677147.dkr.ecr.eu-central-1.amazonaws.com/ded/blaster:$(Build.BuildId)
         ports:
         - containerPort: 80
@@ -36,7 +36,7 @@ spec:
             value: $(BLASTER_COGNITO_CLIENT_SECRET)
           - name: BLASTER_COGNITO_API_URL
             value: http://localhost:5000
-      - name: container
+      - name: cognito
         image: 579478677147.dkr.ecr.eu-central-1.amazonaws.com/ded/cognito-api:$(Build.BuildId)
         ports:
         - containerPort: 5000
