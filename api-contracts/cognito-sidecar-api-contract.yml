@@ -1,0 +1,12 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Cognito sidecar API
+basePath: /
+paths:
+  /sayhello:
+    get:
+      summary: Returns hello world
+      responses:
+        200:
+          description: OK
