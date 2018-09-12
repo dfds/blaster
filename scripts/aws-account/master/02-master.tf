@@ -20,3 +20,7 @@ resource "aws_organizations_account" "dfds" {
 output "account_id" {
   value = "${aws_organizations_account.dfds.id}"
 }
+
+output "email" {
+  value = "${aws_organizations_account.dfds.email}"
+}

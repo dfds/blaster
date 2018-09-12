@@ -29,6 +29,7 @@ pushd ./master > /dev/null
 terraform init -backend-config "bucket=${AWS_MASTER_S3_BUCKET}" -backend-config "key=accounts/${AWS_ACCOUNT_NAME}.tfstate"
 terraform ${TERRAFORM_VERB} -var "account_name=${AWS_ACCOUNT_NAME}" $4
 AWS_ACCOUNT_ID=$(terraform output account_id)
+AWS_EMAIL=$(terraform output email)
 rm -rf ./.terraform # remove local TerraForm state files
 popd > /dev/null
 
@@ -88,4 +89,9 @@ ${out_reset}\n"
 
 echo -e "\n\n${out_lyellow}Now run the following PowerShell script to create required AD groups:${out_reset}\n"
 echo ".\Create-ADGroups.ps1 -ProjectName ${PROJECT_NAME} -Environment ${ENVIRONMENT} -AWSAccountNo ${AWS_ACCOUNT_ID} (-TeamGroup 'Team AD Group')"
+echo -e "\n"
+
+
+echo -e "\n\n${out_lyellow}Now run the following Exchange PowerShell command to add the mail address to our shared mailbox:${out_reset}\n"
+echo "[PS] C:\>Get-Mailbox -IgnoreDefaultScope \"CN=IT BuildSource DevEx,OU=Shared Mailboxes,OU=IT,OU=DFDS AS,DC=dk,DC=dfds,DC=root\" | Set-Mailbox -IgnoreDefaultScope -EmailAddresses @{add=\"${AWS_EMAIL}\"}"
 echo -e "\n"
