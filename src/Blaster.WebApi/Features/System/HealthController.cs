@@ -53,7 +53,7 @@ namespace Blaster.WebApi.Features.System
 
         public async Task<string> SayHello()
         {
-            var response = await _client.GetAsync($"{_cognitoApiUrl}/sayhello");
+            var response = await _client.GetAsync($"{_cognitoApiUrl}/system/health");
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadAsStringAsync();
