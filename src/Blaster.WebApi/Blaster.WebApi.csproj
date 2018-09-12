@@ -35,9 +35,9 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
+  <!-- <ItemGroup>
     <Folder Include="wwwroot\" />
-  </ItemGroup>
+  </ItemGroup> -->
 
   <!-- <Target Name="RunNPMInstall" AfterTargets="Restore" Condition="'$(NCrunch)' != '1'">
     <Exec Command="npm install" WorkingDirectory="$(SolutionDir)" />
