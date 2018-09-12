@@ -14,7 +14,7 @@ spec:
         app: blaster
     spec:
       containers:
-      - name: container
+      - name: blaster
         image: 579478677147.dkr.ecr.eu-central-1.amazonaws.com/ded/blaster:$(Build.BuildId)
         ports:
         - containerPort: 80
@@ -26,12 +26,20 @@ spec:
             value: $(blaster_apikey)
           - name: BLASTER_DASHBOARD_SERVICE_URL
             value: http://dash
-
-          # - name:  CONNECTIONSTRING
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name:  connection
-          #       key:  connectionstring
+          - name: BLASTER_COGNITO_POOL_ID
+            value: $(BLASTER_COGNITO_POOL_ID)
+          - name: BLASTER_COGNITO_REGION
+            value: $(BLASTER_COGNITO_REGION)
+          - name: BLASTER_COGNITO_CLIENT_ID
+            value: $(BLASTER_COGNITO_CLIENT_ID)
+          - name: BLASTER_COGNITO_CLIENT_SECRET
+            value: $(BLASTER_COGNITO_CLIENT_SECRET)
+          - name: BLASTER_COGNITO_API_URL
+            value: http://localhost:5000
+      - name: cognito
+        image: 579478677147.dkr.ecr.eu-central-1.amazonaws.com/ded/cognito-api:$(Build.BuildId)
+        ports:
+        - containerPort: 5000
         # resources:
         #   requests:
         #     cpu: "20m"

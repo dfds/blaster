@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using Blaster.WebApi.Features.Dashboards.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
@@ -17,6 +19,7 @@ namespace Blaster.WebApi.Features.Dashboards
         }
 
         [HttpGet("", Name = "GetAll")]
+        [Authorize]
         public async Task<ActionResult<DashboardListResponse>> GetAll()
         {
             var dashboards = await _dashboardService.GetAll();

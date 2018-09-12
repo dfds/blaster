@@ -1,0 +1,12 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Cognito sidecar API
+basePath: /
+paths:
+  /system/health:
+    get:
+      summary: Shallow healthcheck
+      responses:
+        200:
+          description: OK

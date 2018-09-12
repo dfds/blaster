@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blaster.WebApi.Controllers
@@ -17,6 +18,12 @@ namespace Blaster.WebApi.Controllers
             }
 
             return Ok(message);
+        }
+
+        [Route("api/values")]
+        public ActionResult HelloWorld2()
+        {
+            return Ok("hejhej");
         }
     }
 }

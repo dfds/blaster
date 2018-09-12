@@ -8,33 +8,31 @@ set -eu -o pipefail
 
 # build parameters
 readonly REGION=${AWS_DEFAULT_REGION:-"eu-central-1"}
-readonly IMAGE_NAME='blaster'
+readonly IMAGE_NAME='cognito-api'
 readonly BUILD_NUMBER=${1:-"N/A"}
 readonly BUILD_SOURCES_DIRECTORY=${2:-${PWD}}
 
 restore_dependencies() {
     echo "Restoring dependencies"
-    npm install
-    dotnet restore Blaster.sln
+    dotnet restore Cognito.sln
 }
 
 run_tests() {
     echo "Running tests..."
-    dotnet build -c Release Blaster.sln
-    dotnet test --logger:"trx;LogFileName=testresult.trx" --results-directory "../" Blaster.Tests/Blaster.Tests.csproj
+    dotnet build -c Release Cognito.sln
+    dotnet test --logger:"trx;LogFileName=testresult.trx" --results-directory "../" Cognito.Tests/Cognito.Tests.csproj
 }
 
 publish_binaries() {
     echo "Publishing binaries..."
-    npm run build
-    dotnet publish -c Release -o ${BUILD_SOURCES_DIRECTORY}/output Blaster.WebApi/Blaster.WebApi.csproj
+    dotnet publish -c Release -o ${BUILD_SOURCES_DIRECTORY}/output Cognito.WebApi/Cognito.WebApi.csproj
 }
 
 
 build_container_image() {
     echo "Building container image..."
     
-    docker build -t ${IMAGE_NAME} .
+    docker build -t ${IMAGE_NAME} --file Dockerfile.Cognito .
 }
 
 push_container_image() {
@@ -50,16 +48,6 @@ push_container_image() {
     echo "Pushing container image to ECR..."
     docker push ${image_name}
 }
-
-if ! which aws >/dev/null ; then
-    echo 'Installing AWS'
-    curl -fsSO https://bootstrap.pypa.io/get-pip.py
-    python3 get-pip.py
-    pip -q install awscli --upgrade
-    aws --version
-else
-    echo "Yay, AWS already installed :-)";
-fi
 
 cd ./src
 

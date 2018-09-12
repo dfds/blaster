@@ -1,13 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using Blaster.WebApi.Features.Dashboards;
 using Blaster.WebApi.Features.Namespaces;
+using Blaster.WebApi.Features.System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using k8s;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Prometheus;
 
@@ -25,11 +31,8 @@ namespace Blaster.WebApi
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(_env);
-            
             services.AddTransient<IKubernetes>(serviceProvider =>
             {
                 var config = _env.IsDevelopment()
@@ -39,6 +42,7 @@ namespace Blaster.WebApi
                 return new Kubernetes(config);
             });
 
+            services.AddTransient<IApiKeyValidator, EnvironmentVariableBasedApiKeyValidator>();
             services.AddTransient<INamespaceRepository, NamespaceRepository>();
             services.AddSingleton<HttpClient>();
             services.AddTransient<IJsonSerializer, JsonSerializer>();
@@ -47,9 +51,61 @@ namespace Blaster.WebApi
             {
                 ServiceEndpoint = Configuration["BLASTER_DASHBOARD_SERVICE_URL"]
             });
+
+            services.AddTransient<ICognitoService, CognitoService>();
+
+            services.AddTransient<ForwardedHeaderBasePath>();
+
+            ConfigureMvc(services);
+            ConfigureAuthentication(services);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        protected virtual void ConfigureMvc(IServiceCollection services)
+        {
+            services
+                .AddMvc(options =>
+                {
+                    if (!_env.IsDevelopment())
+                    {
+                        var policy = new AuthorizationPolicyBuilder()
+                            .RequireAuthenticatedUser()
+                            .Build();
+
+                        options.Filters.Add(new AuthorizeFilter(policy));
+                    }
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.Configure<RazorViewEngineOptions>(options =>
+            {
+                options.ViewLocationExpanders.Add(new FeatureLocationExpander());
+            });
+        }
+
+        protected virtual void ConfigureAuthentication(IServiceCollection services)
+        {
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                })
+                .AddCookie()
+                .AddOpenIdConnect(options =>
+                {
+                    var poolId = Configuration["BLASTER_COGNITO_POOL_ID"];
+                    var region = Configuration["BLASTER_COGNITO_REGION"];
+                    var clientId = Configuration["BLASTER_COGNITO_CLIENT_ID"];
+                    var clientSecret = Configuration["BLASTER_COGNITO_CLIENT_SECRET"];
+
+                    options.ResponseType = "code";
+                    options.MetadataAddress = $"https://cognito-idp.{region}.amazonaws.com/{poolId}/.well-known/openid-configuration";
+                    options.ClientId = clientId;
+                    options.ClientSecret = clientSecret;
+                });
+        }
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -61,52 +117,37 @@ namespace Blaster.WebApi
                 app.UseHsts();
             }
 
+            app.UseForwardedHeadersAsBasePath();
             app.UseMetricServer();
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseMvc();
         }
     }
 
-    public static class MvcConfigurationExtensions
+    public class ForwardedHeaderBasePath : IMiddleware
     {
-        public static IServiceCollection AddMvc(this IServiceCollection services, IHostingEnvironment env)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            services
-                .AddMvc(options =>
-                {
-                    if (!env.IsDevelopment())
-                    {
-                        options.Filters.Add<ApiKeyFilter>();
-                    }
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            services.Configure<RazorViewEngineOptions>(options =>
+            if (context.Request.Headers.TryGetValue("X-Forwarded-Prefix", out var prefix))
             {
-                options.ViewLocationExpanders.Add(new FeatureLocationExpander());
-            });
+                //context.Request.Path = prefix + context.Request.Path;
+                context.Request.PathBase = new PathString(prefix);
+            }
+            if (context.Request.Headers.TryGetValue("X-Forwarded-Proto", out var protocol))
+            {
+                context.Request.Scheme = protocol;
+            }
 
-            services.AddTransient<IApiKeyValidator, EnvironmentVariableBasedApiKeyValidator>();
-
-            return services;
+            await next(context);
         }
     }
 
-    public class FeatureLocationExpander : IViewLocationExpander
+    public static class ForwardedHeadersAsBasePathExtensions
     {
-        public void PopulateValues(ViewLocationExpanderContext context)
+        public static IApplicationBuilder UseForwardedHeadersAsBasePath(this IApplicationBuilder builder)
         {
-
-        }
-
-        public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
-        {
-            return new[]
-            {
-                "/Features/{1}/{0}.cshtml",
-                "/Features/{1}s/{0}.cshtml",
-                "/Features/Shared/{0}.cshtml"
-            };
+            return builder.UseMiddleware<ForwardedHeaderBasePath>();
         }
     }
 }

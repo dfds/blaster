@@ -1,131 +1,173 @@
 ﻿using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Blaster.Tests.Builders;
 using Blaster.Tests.TestDoubles;
+using Blaster.WebApi;
 using Blaster.WebApi.Features.Dashboards;
 using Xunit;
 
 namespace Blaster.Tests.Features.Dashboards
 {
-    public class TestDashboardRoutes
-    {
-        [Fact]
-        public async Task get_returns_expected_status_code()
-        {
-            using (var clientBuilder = new HttpClientBuilder())
-            {
-                var client = clientBuilder
-                    .WithService<IDashboardService>(new StubDashboardService())
-                    .Build();
+    //public class TestDashboardRoutes
+    //{
+    //    [Fact]
+    //    public async Task get_returns_expected_status_code()
+    //    {
+    //        using (var clientBuilder = new HttpClientBuilder())
+    //        {
+    //            var client = clientBuilder
+    //                .WithService<IDashboardService>(new StubDashboardService())
+    //                .Build();
 
-                var response = await client.GetAsync("/api/dashboards");
+    //            var response = await client.GetAsync("/api/dashboards");
 
-                Assert.Equal(
-                    expected: HttpStatusCode.OK,
-                    actual: response.StatusCode
-                );
-            }
-        }
+    //            Assert.Equal(
+    //                expected: HttpStatusCode.OK,
+    //                actual: response.StatusCode
+    //            );
+    //        }
+    //    }
 
-        [Fact]
-        public async Task get_website_does_not_require_apikey()
-        {
-            using (var clientBuilder = new HttpClientBuilder())
-            {
-                var client = clientBuilder
-                    .WithApiKey(null)
-                    .Build();
+    //    [Fact]
+    //    public async Task get_by_id_returns_expected_status_code_when_dashboards_are_available()
+    //    {
+    //        using (var clientBuilder = new HttpClientBuilder())
+    //        {
+    //            var stubDashboard = new DashboardDetailItemBuilder().Build();
 
-                var response = await client.GetAsync("/dashboards");
+    //            var client = clientBuilder
+    //                .WithService<IDashboardService>(new StubDashboardService(singleResult: stubDashboard))
+    //                .Build();
 
-                Assert.Equal(
-                    expected: HttpStatusCode.OK,
-                    actual: response.StatusCode
-                );
-            }
-        }
+    //            var response = await client.GetAsync($"/api/dashboards/{stubDashboard.Id}");
 
-        [Fact]
-        public async Task get_by_id_returns_expected_status_code_when_dashboards_are_available()
-        {
-            using (var clientBuilder = new HttpClientBuilder())
-            {
-                var stubDashboard = new DashboardDetailItemBuilder().Build();
+    //            Assert.Equal(
+    //                expected: HttpStatusCode.OK,
+    //                actual: response.StatusCode
+    //            );
+    //        }
+    //    }
 
-                var client = clientBuilder
-                    .WithService<IDashboardService>(new StubDashboardService(singleResult: stubDashboard))
-                    .Build();
+    //    [Fact]
+    //    public async Task get_by_id_returns_expected_status_code_when_dashboard_is_NOT_available()
+    //    {
+    //        using (var clientBuilder = new HttpClientBuilder())
+    //        {
+    //            var client = clientBuilder
+    //                .WithService<IDashboardService>(new StubDashboardService())
+    //                .Build();
 
-                var response = await client.GetAsync($"/api/dashboards/{stubDashboard.Id}");
+    //            var nonExistingId = "foo";
+    //            var response = await client.GetAsync($"/api/dashboards/{nonExistingId}");
 
-                Assert.Equal(
-                    expected: HttpStatusCode.OK,
-                    actual: response.StatusCode
-                );
-            }
-        }
+    //            Assert.Equal(
+    //                expected: HttpStatusCode.NotFound,
+    //                actual: response.StatusCode
+    //            );
+    //        }
+    //    }
 
-        [Fact]
-        public async Task get_by_id_returns_expected_status_code_when_dashboard_is_NOT_available()
-        {
-            using (var clientBuilder = new HttpClientBuilder())
-            {
-                var client = clientBuilder
-                    .WithService<IDashboardService>(new StubDashboardService())
-                    .Build();
+    //    [Fact]
+    //    public async Task post_returns_expected_status_code()
+    //    {
+    //        using (var clientBuilder = new HttpClientBuilder())
+    //        {
+    //            var dummyDashboard = new DashboardDetailItemBuilder().Build();
 
-                var nonExistingId = "foo";
-                var response = await client.GetAsync($"/api/dashboards/{nonExistingId}");
+    //            var client = clientBuilder
+    //                .WithService<IDashboardService>(new StubDashboardService(singleResult: dummyDashboard))
+    //                .Build();
 
-                Assert.Equal(
-                    expected: HttpStatusCode.NotFound,
-                    actual: response.StatusCode
-                );
-            }
-        }
+    //            var dummyRequestBody = new StringContent("{}", Encoding.UTF8, "application/json");
+    //            var response = await client.PostAsync("/api/dashboards", dummyRequestBody);
 
-        [Fact]
-        public async Task post_returns_expected_status_code()
-        {
-            using (var clientBuilder = new HttpClientBuilder())
-            {
-                var dummyDashboard = new DashboardDetailItemBuilder().Build();
+    //            Assert.Equal(
+    //                expected: HttpStatusCode.Created,
+    //                actual: response.StatusCode
+    //            );
+    //        }
+    //    }
 
-                var client = clientBuilder
-                    .WithService<IDashboardService>(new StubDashboardService(singleResult: dummyDashboard))
-                    .Build();
+    //    [Fact]
+    //    public async Task post_returns_expected_location_header()
+    //    {
+    //        using (var clientBuilder = new HttpClientBuilder())
+    //        {
+    //            var stubDashboard = new DashboardDetailItemBuilder().Build();
 
-                var dummyRequestBody = new StringContent("{}", Encoding.UTF8, "application/json");
-                var response = await client.PostAsync("/api/dashboards", dummyRequestBody);
+    //            var client = clientBuilder
+    //                .WithService<IDashboardService>(new StubDashboardService(singleResult: stubDashboard))
+    //                .Build();
 
-                Assert.Equal(
-                    expected: HttpStatusCode.Created,
-                    actual: response.StatusCode
-                );
-            }
-        }
+    //            var dummyRequestBody = new StringContent("{}", Encoding.UTF8, "application/json");
+    //            var response = await client.PostAsync("/api/dashboards", dummyRequestBody);
 
-        [Fact]
-        public async Task post_returns_expected_location_header()
-        {
-            using (var clientBuilder = new HttpClientBuilder())
-            {
-                var stubDashboard = new DashboardDetailItemBuilder().Build();
+    //            Assert.EndsWith(
+    //                expectedEndString: $"/api/dashboards/{stubDashboard.Id}",
+    //                actualString: string.Join("", response.Headers.Location.Segments)
+    //            );
+    //        }
+    //    }
 
-                var client = clientBuilder
-                    .WithService<IDashboardService>(new StubDashboardService(singleResult: stubDashboard))
-                    .Build();
+    //    [Fact]
+    //    public async Task get_website_does_not_require_apikey()
+    //    {
+    //        using (var clientBuilder = new HttpClientBuilder())
+    //        {
+    //            var client = clientBuilder
+    //                .WithApiKey(null)
+    //                .Build();
 
-                var dummyRequestBody = new StringContent("{}", Encoding.UTF8, "application/json");
-                var response = await client.PostAsync("/api/dashboards", dummyRequestBody);
+    //            var response = await client.GetAsync("/dashboards");
 
-                Assert.EndsWith(
-                    expectedEndString: $"/api/dashboards/{stubDashboard.Id}",
-                    actualString: string.Join("", response.Headers.Location.Segments)
-                );
-            }
-        }
-    }
+    //            Assert.Equal(
+    //                expected: HttpStatusCode.OK,
+    //                actual: response.StatusCode
+    //            );
+    //        }
+    //    }
+
+    //    [Fact]
+    //    public async Task unauthorized_get_returns_expected_status_code()
+    //    {
+    //        using (var clientBuilder = new HttpClientBuilder())
+    //        {
+    //            var client = clientBuilder
+    //                .WithService<IDashboardService>(new StubDashboardService())
+    //                .WithService<IApiKeyValidator>(new StubApiKeyValidator(isValid: false))
+    //                .WithApiKey(null)
+    //                .Build();
+
+    //            var response = await client.GetAsync("/api/dashboards");
+
+    //            Assert.Equal(
+    //                expected: HttpStatusCode.Unauthorized,
+    //                actual: response.StatusCode
+    //            );
+    //        }
+    //    }
+
+    //    [Fact]
+    //    public async Task authorized_get_returns_expected_status_code()
+    //    {
+    //        using (var clientBuilder = new HttpClientBuilder())
+    //        {
+    //            var client = clientBuilder
+    //                .WithService<IDashboardService>(new StubDashboardService())
+    //                .WithService<IApiKeyValidator>(new StubApiKeyValidator(isValid: true))
+    //                .WithApiKey("dummy-key")
+    //                .Build();
+
+    //            var response = await client.GetAsync("/api/dashboards");
+
+    //            Assert.Equal(
+    //                expected: HttpStatusCode.OK,
+    //                actual: response.StatusCode
+    //            );
+    //        }
+    //    }
+    //}
 }
