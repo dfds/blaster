@@ -420,4 +420,5 @@ ASALocalRun/
 
 # Project specifics
 wwwroot/
-my-stuff/
+output/
+.vscode/
