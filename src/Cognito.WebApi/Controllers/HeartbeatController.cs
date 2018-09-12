@@ -2,14 +2,15 @@
 
 namespace Cognito.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("system")]
     [ApiController]
-    public class HeartbeatController : ControllerBase
+    public class HealthController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<string> Get(int id)
+        [HttpGet("health")]
+        
+        public ActionResult<string> Get()
         {
-            return "Cognito WebApi says hello";
+            return "Cognito WebApi says this is fine";
         }
     }
 }

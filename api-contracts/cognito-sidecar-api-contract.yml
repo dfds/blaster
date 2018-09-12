@@ -4,9 +4,9 @@ info:
   title: Cognito sidecar API
 basePath: /
 paths:
-  /sayhello:
+  /system/health:
     get:
-      summary: Returns hello world
+      summary: Shallow healthcheck
       responses:
         200:
           description: OK
