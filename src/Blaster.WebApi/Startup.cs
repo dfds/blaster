@@ -103,6 +103,10 @@ namespace Blaster.WebApi
                     options.MetadataAddress = $"https://cognito-idp.{region}.amazonaws.com/{poolId}/.well-known/openid-configuration";
                     options.ClientId = clientId;
                     options.ClientSecret = clientSecret;
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                    {
+                        NameClaimType = "name"
+                    };
                 });
         }
 
