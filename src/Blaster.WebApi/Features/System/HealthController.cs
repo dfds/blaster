@@ -1,5 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
+using Blaster.WebApi.Features.Dashboards;
+using Blaster.WebApi.Features.Teams;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +32,7 @@ namespace Blaster.WebApi.Features.System
     public interface ICognitoService
     {
         Task<string> SayHello();
+        Task<TeamListResponse> GetAll();
     }
 
     public class CognitoService : ICognitoService
@@ -37,9 +40,10 @@ namespace Blaster.WebApi.Features.System
         private const string CognitoApiUrlKey = "BLASTER_COGNITO_API_URL";
 
         private readonly HttpClient _client;
+        private readonly IJsonSerializer _serializer;
         private readonly string _cognitoApiUrl;
 
-        public CognitoService(IConfiguration configuration, HttpClient client)
+        public CognitoService(IConfiguration configuration, HttpClient client, IJsonSerializer serializer)
         {
             _cognitoApiUrl = configuration[CognitoApiUrlKey];
 
@@ -49,6 +53,7 @@ namespace Blaster.WebApi.Features.System
             }
 
             _client = client;
+            _serializer = serializer;
         }
 
         public async Task<string> SayHello()
@@ -57,6 +62,14 @@ namespace Blaster.WebApi.Features.System
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task<TeamListResponse> GetAll()
+        {
+            var response = await _client.GetAsync($"{_cognitoApiUrl}/api/teams");
+            var content = await response.Content.ReadAsStringAsync();
+
+            return _serializer.Deserialize<TeamListResponse>(content);
         }
     }
 }

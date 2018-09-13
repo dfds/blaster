@@ -30,19 +30,20 @@ const app = new Vue({
 });
 
 function getTeams() {
-    return {
-        items: [{
-                name: "Team Foo",
-                department: "lala",
-                members: "foo, bar, baz, qux"
-            },
-            {
-                name: "Team Bar",
-                department: "asdfg",
-                members: "1 2 3 4 5 6 7 8 9"
-            }
-        ]
-    };
+    return jq.getJSON("api/teams");
+    // return {
+    //     items: [{
+    //             name: "Team Foo",
+    //             department: "lala",
+    //             members: "foo, bar, baz, qux"
+    //         },
+    //         {
+    //             name: "Team Bar",
+    //             department: "asdfg",
+    //             members: "1 2 3 4 5 6 7 8 9"
+    //         }
+    //     ]
+    // };
 }
 
 jq.ready
