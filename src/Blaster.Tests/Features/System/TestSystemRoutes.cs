@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using Blaster.Tests.Builders;
+using Blaster.Tests.TestDoubles;
 using Blaster.WebApi.Features.System;
-using Blaster.WebApi.Features.Teams;
 using Xunit;
 using NotImplementedException = System.NotImplementedException;
 
@@ -48,14 +48,6 @@ namespace Blaster.Tests.Features.System
             return Task.FromResult(new TeamListResponse
             {
                 Items = _teams,
-            });
-        }
-
-        public Task<AwsConsoleLinkResponse> GetAwsConsoleLink(string idToken)
-        {
-            return Task.FromResult(new AwsConsoleLinkResponse
-            {
-                AbsoluteUrl = "https://aws.link"
             });
         }
     }

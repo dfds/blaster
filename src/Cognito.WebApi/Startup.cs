@@ -22,6 +22,9 @@ namespace Cognito.WebApi
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddTransient<IAwsConsoleLinkBuilder, AwsConsoleLinkBuilder>();
+            var variables = new Variables();
+            variables.Validate();
+            services.AddSingleton<IVariables>(variables);
         }
 
 

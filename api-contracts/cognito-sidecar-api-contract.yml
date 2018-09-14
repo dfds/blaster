@@ -1,14 +1,20 @@
-
 swagger: "2.0"
 info:
   version: 1.0.0
   title: Cognito sidecar API
 basePath: /
+tags: 
+  - name: System
+    description: System and healt check endpoints
+  - name: Teams
+    description: Access to teams
+  - name: AWS
+    description: AWS related endpoints
 paths:
   /system/health:
     get:
       tags:
-      - "system"
+      - System
       summary: Shallow healthcheck
       responses:
         200:
@@ -16,8 +22,8 @@ paths:
   /aws/console:
     get:
       tags:
-      - "aws"
-      summary: "Construct a link for AWS Console"
+      - AWS
+      summary: Construct a link for AWS Console
       parameters:
       - in: query
         name: idToken
@@ -25,12 +31,98 @@ paths:
         description: The numbers of items to return
       responses:
         200:
-          description: "successful operation"
+          description: OK - Successful operation
           schema:
+<<<<<<< HEAD
             $ref: "#/definitions/AWSConsoleLinkResponse"
 definitions:
   AWSConsoleLinkResponse:
+=======
+            $ref: "#/definitions/AWSConsoleLink"
+  /api/teams:
+    get:
+      summary: Returns list of available teams
+      tags:
+        - Teams
+      produces: 
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/team-list"
+    post:
+      summary: Creates a new team
+      tags:
+        - Teams
+      consumes: 
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: body
+          in: body
+          required: true
+          description: Team that needs to be stored
+          schema:
+            $ref: "#/definitions/team-input"
+      responses:
+        201:
+          description: Created - stored a new team
+          schema:
+            $ref: "#/definitions/team"
+          headers:
+            location:
+              type: string
+              description: A URI to a location when the team can be retrieved
+            
+  /api/teams/{id}:
+    get:
+      summary: Returns a single team
+      tags:
+        - Teams
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/team"
+
+definitions:
+  team-list:
+    type: object
+    properties:
+      items:
+        type: array
+        items:
+          $ref: "#/definitions/team"
+  team:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      department:
+        type: string
+      members:
+        type: string
+  team-input:
+    type: object
+    properties:
+      name: 
+        type: string
+      department:
+        type: string
+          
+  AWSConsoleLink:
+>>>>>>> 53b7765361938509b2b935c80e45329ecddde75f
     type: "object"
     properties:
       absoluteUrl:
         type: "string"
+        

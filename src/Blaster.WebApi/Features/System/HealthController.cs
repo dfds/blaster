@@ -1,10 +1,6 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
-using Blaster.WebApi.Features.Dashboards;
-using Blaster.WebApi.Features.Teams;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using NotImplementedException = System.NotImplementedException;
 
 namespace Blaster.WebApi.Features.System
@@ -34,7 +30,6 @@ namespace Blaster.WebApi.Features.System
     {
         Task<string> SayHello();
         Task<TeamListResponse> GetAll();
-        Task<AwsConsoleLinkResponse> GetAwsConsoleLink(string idToken);
     }
 
     public class CognitoService : ICognitoService
@@ -73,13 +68,5 @@ namespace Blaster.WebApi.Features.System
 
             return _serializer.Deserialize<TeamListResponse>(content);
         }
-
-        public async Task<AwsConsoleLinkResponse> GetAwsConsoleLink(string idToken)
-        {
-            var response = await _client.GetAsync($"{_cognitoApiUrl}/aws/console?idToken={idToken}");
-            var content = await response.Content.ReadAsStringAsync();
-
-            return _serializer.Deserialize<AwsConsoleLinkResponse>(content);
-        }
     }
-}
+ }
