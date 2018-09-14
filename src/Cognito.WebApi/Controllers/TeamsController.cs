@@ -31,5 +31,22 @@ namespace Cognito.WebApi.Controllers
 
             return teams;
         }
+
+        [HttpGet("{id}")]
+        public ActionResult<Team> GetTeam(string id)
+        {
+            var team = new Team
+            {
+                Name = "Awesome",
+                Members = new List<User>
+                {
+                    new User {Email = "kilin@dfds.com"},
+                    new User {Email = "notme@dfds.com"}
+                }
+            };
+
+
+            return team;
+        }
     }
 }
