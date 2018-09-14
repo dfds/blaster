@@ -28,27 +28,4 @@ namespace Blaster.Tests.Features.System
             }
         }
     }
-
-    public class StubCognitoService : ICognitoService
-    {
-        private readonly TeamListItem[] _teams;
-
-        public StubCognitoService(params TeamListItem[] teams)
-        {
-            _teams = teams;
-        }
-
-        public Task<string> SayHello()
-        {
-            return Task.FromResult("foo");
-        }
-
-        public Task<TeamListResponse> GetAll()
-        {
-            return Task.FromResult(new TeamListResponse
-            {
-                Items = _teams,
-            });
-        }
-    }
 }

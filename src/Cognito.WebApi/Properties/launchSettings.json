@@ -23,7 +23,12 @@
       "launchUrl": "api/values",
       "applicationUrl": "https://localhost:6001;http://localhost:6000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AWS_COGNITO_ACCESS_KEY": "1",
+        "AWS_COGNITO_SECRET_ACCESS_KEY": "2",
+        "AWS_COGNITO_IDENTITY_POOL_ID_KEY": "3",
+        "AWS_COGNITO_USER_POOL_PROVIDER_KEY": "4"
+
       }
     }
   }

@@ -67,7 +67,7 @@ namespace Blaster.WebApi
             services
                 .AddMvc(options =>
                 {
-                    if (!_env.IsDevelopment())
+                    //if (!_env.IsDevelopment())
                     {
                         var policy = new AuthorizationPolicyBuilder()
                             .RequireAuthenticatedUser()
@@ -109,6 +109,7 @@ namespace Blaster.WebApi
                     {
                         NameClaimType = "name"
                     };
+                    options.SaveTokens = true;
                 });
         }
 

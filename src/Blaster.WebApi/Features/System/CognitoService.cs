@@ -1,7 +1,9 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Dashboards;
+using Blaster.WebApi.Features.System.Models;
 using Microsoft.Extensions.Configuration;
+using NotImplementedException = System.NotImplementedException;
 
 namespace Blaster.WebApi.Features.System
 {
@@ -32,6 +34,14 @@ namespace Blaster.WebApi.Features.System
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task<AwsConsoleLinkResponse> GetAwsConsoleLink(string idToken)
+        {
+            var response = await _client.GetAsync($"{_cognitoApiUrl}/aws/console?idToken={idToken}");
+            var content = await response.Content.ReadAsStringAsync();
+
+            return _serializer.Deserialize<AwsConsoleLinkResponse>(content);
         }
     }
 }

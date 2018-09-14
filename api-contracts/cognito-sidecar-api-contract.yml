@@ -33,12 +33,7 @@ paths:
         200:
           description: OK - Successful operation
           schema:
-<<<<<<< HEAD
             $ref: "#/definitions/AWSConsoleLinkResponse"
-definitions:
-  AWSConsoleLinkResponse:
-=======
-            $ref: "#/definitions/AWSConsoleLink"
   /api/teams:
     get:
       summary: Returns list of available teams
@@ -119,8 +114,7 @@ definitions:
       department:
         type: string
           
-  AWSConsoleLink:
->>>>>>> 53b7765361938509b2b935c80e45329ecddde75f
+  AWSConsoleLinkResponse:
     type: "object"
     properties:
       absoluteUrl:

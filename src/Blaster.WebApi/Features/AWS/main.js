@@ -1,6 +1,6 @@
 import jq from "jquery";
 import Vue from "vue";
-import "./styles"
+import "./styles";
 
 const app = new Vue({
     el: "#aws-app",

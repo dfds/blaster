@@ -40,6 +40,15 @@ spec:
         image: 579478677147.dkr.ecr.eu-central-1.amazonaws.com/ded/cognito-api:$(Build.BuildId)
         ports:
         - containerPort: 5000
+        env:
+          - name:  AWS_COGNITO_ACCESS_KEY
+            value: banana
+          - name:  AWS_COGNITO_SECRET_ACCESS_KEY
+            value: banana
+          - name: AWS_COGNITO_IDENTITY_POOL_ID_KEY
+            value: banana
+          - name: AWS_COGNITO_USER_POOL_PROVIDER_KEY
+            value: banana
         # resources:
         #   requests:
         #     cpu: "20m"
