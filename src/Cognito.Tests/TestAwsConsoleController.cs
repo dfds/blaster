@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cognito.WebApi.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
