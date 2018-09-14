@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Blaster.WebApi.Features.Dashboards;
 using Blaster.WebApi.Features.Namespaces;
 using Blaster.WebApi.Features.System;
+using Blaster.WebApi.Features.Teams;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -53,6 +54,7 @@ namespace Blaster.WebApi
             });
 
             services.AddTransient<ICognitoService, CognitoService>();
+            services.AddTransient<ITeamService, TeamService>();
 
             services.AddTransient<ForwardedHeaderBasePath>();
 

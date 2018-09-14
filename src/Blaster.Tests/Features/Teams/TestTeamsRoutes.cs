@@ -1,8 +1,9 @@
 ﻿using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Blaster.Tests.Builders;
-using Blaster.Tests.Features.System;
-using Blaster.Tests.Helpers;
+using Blaster.Tests.TestDoubles;
 using Blaster.WebApi.Features.System;
 using Blaster.WebApi.Features.Teams;
 using Xunit;
@@ -19,7 +20,7 @@ namespace Blaster.Tests.Features.Teams
                 var client = clientBuilder.Build();
 
                 var response = await client.GetAsync("/teams");
-                
+
                 Assert.Equal(
                     expected: HttpStatusCode.OK,
                     actual: response.StatusCode
@@ -33,95 +34,98 @@ namespace Blaster.Tests.Features.Teams
             using (var clientBuilder = new HttpClientBuilder())
             {
                 var client = clientBuilder
-                    .WithService<ICognitoService>(new StubCognitoService())
+                    .WithService<ITeamService>(new StubTeamService())
                     .Build();
 
                 var response = await client.GetAsync("/api/teams");
-                
+
                 Assert.Equal(
                     expected: HttpStatusCode.OK,
                     actual: response.StatusCode
                 );
             }
         }
-    }
-
-    public class TestTeamApiController
-    {
-        [Fact]
-        public async Task returns_expected_when_no_teams_are_available()
-        {
-            var sut = new TeamApiControllerBuilder().Build();
-            var result = await sut.GetAll();
-
-            Assert.Empty(result.Value.Items);
-        }
 
         [Fact]
-        public async Task returns_expected_when_single_team_is_available()
+        public async Task post_team_through_api_returns_expected_status_code()
         {
-            var expected = new TeamListItemBuilder().Build();
-
-            var sut = new TeamApiControllerBuilder()
-                .WithCognitoService(new StubCognitoService(expected))
-                .Build();
-
-            var result = await sut.GetAll();
-
-            Assert.Equal(
-                expected: new[] {expected},
-                actual: result.Value.Items
-            );
-        }
-
-        [Fact]
-        public async Task returns_expected_when_multiple_team_are_available()
-        {
-            var expected = new[]
+            using (var clientBuilder = new HttpClientBuilder())
             {
-                new TeamListItemBuilder().Build(),
-                new TeamListItemBuilder().Build(),
-            };
+                var stubTeam = new TeamListItemBuilder().Build();
 
-            var sut = new TeamApiControllerBuilder()
-                .WithCognitoService(new StubCognitoService(expected))
-                .Build();
+                var client = clientBuilder
+                    .WithService<ITeamService>(new StubTeamService(stubTeam))
+                    .Build();
 
-            var result = await sut.GetAll();
+                var dummyContent = "{ }";
 
-            Assert.Equal(
-                expected: expected,
-                actual: result.Value.Items
-            );
-        }
-    }
+                var response = await client.PostAsync("/api/teams", new StringContent(dummyContent, Encoding.UTF8, "application/json"));
 
-    public class TeamListItemBuilder
-    {
-        public TeamListItem Build()
-        {
-            return new TeamListItem();
-        }
-    }
-
-    public class TeamApiControllerBuilder
-    {
-        private ICognitoService _cognitoService;
-
-        public TeamApiControllerBuilder()
-        {
-            _cognitoService = Dummy.Of<ICognitoService>();
+                Assert.Equal(
+                    expected: HttpStatusCode.Created,
+                    actual: response.StatusCode
+                );
+            }
         }
 
-        public TeamApiControllerBuilder WithCognitoService(ICognitoService cognitoService)
+        [Fact]
+        public async Task post_team_through_api_returns_expected_location_header()
         {
-            _cognitoService = cognitoService;
-            return this;
+            using (var clientBuilder = new HttpClientBuilder())
+            {
+                var stubTeam = new TeamListItemBuilder().Build();
+
+                var client = clientBuilder
+                    .WithService<ITeamService>(new StubTeamService(stubTeam))
+                    .Build();
+
+                var dummyContent = "{ }";
+
+                var response = await client.PostAsync("/api/teams", new StringContent(dummyContent, Encoding.UTF8, "application/json"));
+
+                Assert.EndsWith(
+                    expectedEndString: $"/api/teams/{stubTeam.Id}",
+                    actualString: string.Join("", response.Headers.Location.Segments)
+                );
+            }
         }
 
-        public TeamApiController Build()
+        [Fact]
+        public async Task get_single_team_returns_expected_status_code_when_no_teams_are_available()
         {
-            return new TeamApiController(_cognitoService);
+            using (var clientBuilder = new HttpClientBuilder())
+            {
+                var client = clientBuilder
+                    .WithService<ITeamService>(new StubTeamService())
+                    .Build();
+
+                var response = await client.GetAsync("/api/teams/1");
+
+                Assert.Equal(
+                    expected: HttpStatusCode.NotFound,
+                    actual: response.StatusCode
+                );
+            }
+        }
+
+        [Fact]
+        public async Task get_single_team_returns_expected_status_code_when_team_is_available()
+        {
+            using (var clientBuilder = new HttpClientBuilder())
+            {
+                var stubTeam = new TeamListItemBuilder().Build();
+
+                var client = clientBuilder
+                    .WithService<ITeamService>(new StubTeamService(stubTeam))
+                    .Build();
+
+                var response = await client.GetAsync($"/api/teams/{stubTeam.Id}");
+
+                Assert.Equal(
+                    expected: HttpStatusCode.OK,
+                    actual: response.StatusCode
+                );
+            }
         }
     }
 }
