@@ -20,7 +20,7 @@ restore_dependencies() {
 run_tests() {
     echo "Running tests..."
     dotnet build -c Release Cognito.sln
-    dotnet test --logger:"trx;LogFileName=testresult.trx" --results-directory "../" Cognito.Tests/Cognito.Tests.csproj
+    dotnet test --logger:"trx;LogFileName=testresults-cognito.trx" --results-directory "../" Cognito.Tests/Cognito.Tests.csproj
 }
 
 publish_binaries() {
@@ -52,7 +52,7 @@ push_container_image() {
 cd ./src
 
 restore_dependencies
-# run_tests
+run_tests
 publish_binaries
 
 cd ..

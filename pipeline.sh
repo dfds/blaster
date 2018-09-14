@@ -64,7 +64,7 @@ fi
 cd ./src
 
 restore_dependencies
-# run_tests
+run_tests
 publish_binaries
 
 cd ..
