@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Cognito.WebApi.Controllers;
+using Moq;
 using Xunit;
 
 namespace Cognito.Tests
@@ -10,6 +12,9 @@ namespace Cognito.Tests
         public async Task get_console_link_returns_url()
         {
             var consoleBuilder = new Moq.Mock<IAwsConsoleLinkBuilder>();
+
+            consoleBuilder.Setup(c => c.GenerateUriForConsole(It.IsAny<string>()))
+                .Returns(Task.FromResult(new Uri("")));
 
             var sut = new AwsConsoleController(consoleBuilder.Object);
             var tokenId = "myFancyToken";
