@@ -65,7 +65,7 @@ paths:
         201:
           description: Created - stored a new team
           schema:
-            $ref: "#/definitions/team-list-item"
+            $ref: "#/definitions/team"
           headers:
             location:
               type: string
@@ -85,7 +85,7 @@ paths:
         200:
           description: OK
           schema:
-            $ref: "#/definitions/team-list-item"
+            $ref: "#/definitions/team"
 
 definitions:
   team-list:
@@ -94,8 +94,8 @@ definitions:
       items:
         type: array
         items:
-          $ref: "#/definitions/team-list-item"
-  team-list-item:
+          $ref: "#/definitions/team"
+  team:
     type: object
     properties:
       id:
