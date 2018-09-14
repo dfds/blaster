@@ -37,6 +37,11 @@ namespace Blaster.WebApi.Features.Teams
         }
     }
 
+    public class AwsConsoleLinkResponse
+    {
+        public string AbsoluteUrl { get; set; }
+    }
+
     public class TeamListResponse
     {
         public TeamListItem[] Items { get; set; }
