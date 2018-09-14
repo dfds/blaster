@@ -34,7 +34,7 @@ namespace Blaster.Tests.Features.Dashboards
                 .Build();
 
             var result = await sut.GetAll();
-
+            
             Assert.Equal(
                 expected: expectedDashboards,
                 actual: result.Value.Items
