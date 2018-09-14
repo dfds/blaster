@@ -14,7 +14,7 @@ namespace Cognito.Tests
             var consoleBuilder = new Moq.Mock<IAwsConsoleLinkBuilder>();
 
             consoleBuilder.Setup(c => c.GenerateUriForConsole(It.IsAny<string>()))
-                .Returns(Task.FromResult(new Uri("")));
+                .Returns(Task.FromResult(new Uri("http://bogus")));
 
             var sut = new AwsConsoleController(consoleBuilder.Object);
             var tokenId = "myFancyToken";
