@@ -4,23 +4,51 @@ using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Cognito.WebApi
 {
-    public class Variables
+    public class Variables : IVariables
     {
-        private const string AwsAccessKeyEnvironmentVariable = "aws-cognito-access-key";
-        private const string AwsCognitoSecretAccessKey = "aws-cognito-secret-access-key";
-        public string AwsAccessKey { get; }
-        public string AwsSecretAccessKey { get; }
+        private const string AwsCognitoAccessAccessKeyIdentifier = "AWS_COGNITO_ACCESS_KEY";
+        public string AwsCognitoAccessAccessKey { get; }
+
+        private const string AwsCognitoSecretAccessKeyIdentifier = "AWS_COGNITO_SECRET_ACCESS_KEY";
+        public string AwsCognitoSecretAccessKey { get; }
+
+
+        private const string AwsCognitoIdentityPoolIdKeyIdentifier = "AWS_COGNITO_IDENTITY_POOL_I_KEY";
+        public string AwsCognitoIdentityPoolIdKey { get; }
+
+        private const string AwsCognitoUserPoolProviderKeyIdentifier = "AWS_COGNITO_USER_POOL_PROVIDER_KEY";
+        public string AwsCognitoUserPoolProviderKey { get; }
+
 
         public Variables()
         {
-            AwsAccessKey = Environment.GetEnvironmentVariable(AwsAccessKeyEnvironmentVariable);
-            AwsSecretAccessKey = Environment.GetEnvironmentVariable(AwsCognitoSecretAccessKey);
+            AwsCognitoAccessAccessKey = Environment.GetEnvironmentVariable(AwsCognitoAccessAccessKeyIdentifier);
+            AwsCognitoSecretAccessKey = Environment.GetEnvironmentVariable(AwsCognitoSecretAccessKeyIdentifier);
+
+            AwsCognitoIdentityPoolIdKey = Environment.GetEnvironmentVariable(AwsCognitoIdentityPoolIdKeyIdentifier);
+            AwsCognitoUserPoolProviderKey = Environment.GetEnvironmentVariable(AwsCognitoUserPoolProviderKeyIdentifier);
         }
 
         public void Validate()
         {
             var errors = new List<string>();
-            if(errors.Any() == false) {return;}
+            if (string.IsNullOrWhiteSpace(AwsCognitoAccessAccessKey)) { errors.Add(createVariableNotSetString(AwsCognitoAccessAccessKeyIdentifier)); }
+            if (string.IsNullOrWhiteSpace(AwsCognitoSecretAccessKey)) { errors.Add(createVariableNotSetString(AwsCognitoSecretAccessKeyIdentifier)); }
+
+            
+            if (string.IsNullOrWhiteSpace(AwsCognitoIdentityPoolIdKey)) { errors.Add(createVariableNotSetString(AwsCognitoIdentityPoolIdKeyIdentifier)); }
+            if (string.IsNullOrWhiteSpace(AwsCognitoUserPoolProviderKey)) { errors.Add(createVariableNotSetString(AwsCognitoUserPoolProviderKeyIdentifier)); }
+
+
+            if (errors.Any() == false) { return; }
+
+            var errorMessage = Environment.NewLine + string.Join(Environment.NewLine, errors);
+            throw new Exception(errorMessage);
+        }
+
+        private string createVariableNotSetString(string variableName)
+        {
+            return $"\tEnvironment variable '{variableName}' not set";
         }
     }
 }
