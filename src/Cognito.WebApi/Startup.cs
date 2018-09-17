@@ -46,7 +46,7 @@ namespace Cognito.WebApi
                 return new CognitoClient(
                     vars.AwsCognitoAccessAccessKey,
                     vars.AwsCognitoSecretAccessKey,
-                    vars.AwsCognitoUserPoolName);
+                    vars.AwsCognitoUserPoolId);
             });
         }
 

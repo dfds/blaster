@@ -15,14 +15,18 @@ namespace Cognito.WebApi
         private readonly string _userPoolId;
 
 
-        public CognitoClient(string accessKey, string secretKey, string poolName)
+        public CognitoClient(
+            string accessKey, 
+            string secretKey, 
+            string userPoolId
+            )
         {
             var awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
             _identityProviderClient =
                 new AmazonCognitoIdentityProviderClient(awsCredentials, RegionEndpoint.EUCentral1);
 
 
-            _userPoolId = CreateUserPoolAsync(poolName).Result;
+            _userPoolId = userPoolId;
         }
 
 
@@ -86,6 +90,7 @@ namespace Cognito.WebApi
             return response.UserPool.Id;
         }
 
+        
         public async Task<GroupType> GetGroupAsync(string groupName)
         {
             var getGroupRequest = new GetGroupRequest
