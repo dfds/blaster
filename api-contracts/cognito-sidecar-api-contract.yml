@@ -10,6 +10,11 @@ tags:
     description: Access to teams
   - name: AWS
     description: AWS related endpoints
+consumes: 
+  - "application/json"
+produces:
+  - "application/json"
+
 paths:
   /system/health:
     get:
@@ -39,8 +44,6 @@ paths:
       summary: Returns list of available teams
       tags:
         - Teams
-      produces: 
-        - application/json
       responses:
         200:
           description: OK
@@ -50,10 +53,6 @@ paths:
       summary: Creates a new team
       tags:
         - Teams
-      consumes: 
-        - "application/json"
-      produces:
-        - "application/json"
       parameters:
         - name: body
           in: body
