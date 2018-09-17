@@ -15,7 +15,7 @@ namespace Cognito.WebApi
         private const string AwsCognitoUserPoolIdIdentifier = "AWS_COGNITO_USER_POOL_ID";
         public string AwsCognitoUserPoolId { get; }
 
-        private const string AwsCognitoIdentityPoolIdKeyIdentifier = "AWS_COGNITO_IDENTITY_POOL_I_KEY";
+        private const string AwsCognitoIdentityPoolIdKeyIdentifier = "AWS_COGNITO_IDENTITY_POOL_ID_KEY";
         public string AwsCognitoIdentityPoolIdKey { get; }
 
         private const string AwsCognitoUserPoolProviderKeyIdentifier = "AWS_COGNITO_USER_POOL_PROVIDER_KEY";
