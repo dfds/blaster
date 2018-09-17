@@ -45,6 +45,8 @@ spec:
             value: banana
           - name:  AWS_COGNITO_SECRET_ACCESS_KEY
             value: banana
+          - name:  AWS_COGNITO_USER_POOL_ID
+            value: banana
           - name: AWS_COGNITO_IDENTITY_POOL_ID_KEY
             value: banana
           - name: AWS_COGNITO_USER_POOL_PROVIDER_KEY
