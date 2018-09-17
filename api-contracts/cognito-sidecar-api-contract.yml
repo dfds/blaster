@@ -102,8 +102,8 @@ paths:
           schema:
             type: object
             properties:
-              id:
-                type: string
+              userId:
+                type: string                
       responses:
         200:
           description: OK - user has joined the team
