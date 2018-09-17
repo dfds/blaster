@@ -22,19 +22,33 @@ namespace Cognito.WebApi
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddTransient<IAwsConsoleLinkBuilder, AwsConsoleLinkBuilder>();
-            var variables = new Variables();
-            variables.Validate();
-            services.AddSingleton<IVariables>(variables);
-            
             // Register the Swagger generator, defining 1 or more Swagger documents
             var apiVersion = "v1";
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(apiVersion, new Info { Title = "Cognito API", Version = apiVersion });
             });
+            
+            ConfigureDependencyInjectionContainer(services);
         }
 
+        public void ConfigureDependencyInjectionContainer(IServiceCollection services)
+        {
+            
+            services.AddTransient<IAwsConsoleLinkBuilder, AwsConsoleLinkBuilder>();
+            var variables = new Variables();
+            variables.Validate();
+            services.AddSingleton<IVariables>(variables);
+
+            services.AddTransient<CognitoClient>((s) =>
+            {
+                var vars = s.GetRequiredService<IVariables>();
+                return new CognitoClient(
+                    vars.AwsCognitoAccessAccessKey,
+                    vars.AwsCognitoSecretAccessKey,
+                    vars.AwsCognitoUserPoolName);
+            });
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -52,6 +66,11 @@ namespace Cognito.WebApi
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cognito API");
+            });
+            
+            app.UseExceptionHandler(new ExceptionHandlerOptions 
+            {
+                ExceptionHandler = new JsonExceptionMiddleware().Invoke
             });
             
             app.UseMvc();
