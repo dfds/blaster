@@ -15,7 +15,7 @@ namespace Cognito.WebApi.Controllers
             _awsConsoleLinkBuilder = awsConsoleLinkBuilder;
         }
 
-        [Route("aws/console")]
+        [HttpGet("aws/console")]
         public async Task<ActionResult<AWSConsoleLinkResponse>> ConstructLink([FromQuery] string idToken)
         {
             var consoleLink = await _awsConsoleLinkBuilder.GenerateUriForConsole(idToken);
