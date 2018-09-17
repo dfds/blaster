@@ -84,6 +84,35 @@ paths:
           description: OK
           schema:
             $ref: "#/definitions/team"
+  /api/teams/{id}/members:
+    post:
+      summary: Lets a user join a team
+      tags:
+        - Teams
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id of the team that the user wants to join
+          type: string
+        - name: body
+          in: body
+          required: true
+          description: Id of user that wants to join the team
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+      responses:
+        200:
+          description: OK - user has joined the team
+          schema:
+            $ref: '#/definitions/user'
+        409:
+          description: Conflict - user alread part of the team
+          schema:
+            $ref: '#/definitions/user'
 
 definitions:
   team-list:
