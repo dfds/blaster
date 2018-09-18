@@ -64,5 +64,25 @@ namespace Blaster.WebApi.Features.Teams
 
             return _serializer.Deserialize<TeamListItem>(content);
         }
+
+        public async Task<User> JoinTeam(string teamId, string userId)
+        {
+            var content = new StringContent(
+                content: _serializer.Serialize(new { UserId = userId }),
+                encoding: Encoding.UTF8,
+                mediaType: "application/json"
+            );
+
+            var response = await _client.PostAsync($"/api/teams/{teamId}/members", content);
+
+            if (response.StatusCode == HttpStatusCode.Conflict)
+            {
+                throw new AlreadyJoinedException();
+            }
+
+            var recievedContent = await response.Content.ReadAsStringAsync();
+
+            return _serializer.Deserialize<User>(recievedContent);
+        }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Blaster.Tests.Builders;
 using Blaster.Tests.TestDoubles;
+using Blaster.WebApi.Features.Teams;
 using Blaster.WebApi.Features.Teams.Models;
+using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
 namespace Blaster.Tests.Features.Teams
@@ -23,7 +25,7 @@ namespace Blaster.Tests.Features.Teams
             var expected = new TeamListItemBuilder().Build();
 
             var sut = new TeamApiControllerBuilder()
-                .WithTeamService(new StubTeamService(expected))
+                .WithTeamService(new StubTeamService(teams: expected))
                 .Build();
 
             var result = await sut.GetAll();
@@ -44,7 +46,7 @@ namespace Blaster.Tests.Features.Teams
             };
 
             var sut = new TeamApiControllerBuilder()
-                .WithTeamService(new StubTeamService(expected))
+                .WithTeamService(new StubTeamService(teams: expected))
                 .Build();
 
             var result = await sut.GetAll();
@@ -61,7 +63,7 @@ namespace Blaster.Tests.Features.Teams
             var expected = new TeamListItemBuilder().Build();
 
             var sut = new TeamApiControllerBuilder()
-                .WithTeamService(new StubTeamService(expected))
+                .WithTeamService(new StubTeamService(teams: expected))
                 .Build();
 
             var dummyInput = new TeamInput();
@@ -80,7 +82,7 @@ namespace Blaster.Tests.Features.Teams
             var expected = new TeamListItemBuilder().Build();
 
             var sut = new TeamApiControllerBuilder()
-                .WithTeamService(new StubTeamService(expected))
+                .WithTeamService(new StubTeamService(teams: expected))
                 .Build();
 
             var result = await sut.GetById(expected.Id);
@@ -89,6 +91,34 @@ namespace Blaster.Tests.Features.Teams
                 expected: expected,
                 actual: result.Value
             );
+        }
+
+        [Fact]
+        public async Task returns_expected_when_user_joins_a_team()
+        {
+            var expected = new UserBuilder().Build();
+
+            var sut = new TeamApiControllerBuilder()
+                .WithTeamService(new StubTeamService(user: expected))
+                .Build();
+
+            var stubTeamId = "foo";
+
+            var result = await sut.JoinTeam(stubTeamId, new JoinTeamInput { UserId = expected.Id });
+
+            Assert.Equal(expected, result.Value);
+        }
+
+        [Fact]
+        public async Task returns_expected_when_user_joins_a_team_and_user_has_already_joined()
+        {
+            var sut = new TeamApiControllerBuilder()
+                .WithTeamService(new ErroneousTeamService(new AlreadyJoinedException()))
+                .Build();
+
+            var result = await sut.JoinTeam("foo", new JoinTeamInput {UserId = "bar"});
+            
+            Assert.Null(result.Value);
         }
     }
 }

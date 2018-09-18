@@ -1,7 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Blaster.Tests.Features.Teams;
-using Blaster.WebApi.Features.System;
 using Blaster.WebApi.Features.Teams;
 using Blaster.WebApi.Features.Teams.Models;
 
@@ -9,10 +7,12 @@ namespace Blaster.Tests.TestDoubles
 {
     public class StubTeamService : ITeamService
     {
+        private readonly User _user;
         private readonly TeamListItem[] _teams;
 
-        public StubTeamService(params TeamListItem[] teams)
+        public StubTeamService(User user = null, params TeamListItem[] teams)
         {
+            _user = user;
             _teams = teams;
         }
 
@@ -32,6 +32,11 @@ namespace Blaster.Tests.TestDoubles
         public Task<TeamListItem> GetById(string id)
         {
             return Task.FromResult(_teams.FirstOrDefault());
+        }
+
+        public Task<User> JoinTeam(string teamId, string userId)
+        {
+            return Task.FromResult(_user);
         }
     }
 }

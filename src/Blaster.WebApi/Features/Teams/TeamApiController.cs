@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Blaster.WebApi.Features.Dashboards;
 using Blaster.WebApi.Features.Teams.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -52,5 +53,49 @@ namespace Blaster.WebApi.Features.Teams
                 value: team
             );
         }
+
+        [HttpPost("{id}/members", Name = "JoinTeam")]
+        public async Task<ActionResult<User>> JoinTeam([FromRoute] string id, [FromBody] JoinTeamInput input)
+        {
+            if (string.IsNullOrWhiteSpace(input.UserId))
+            {
+                return new ActionResult<User>(BadRequest());
+            }
+
+            try
+            {
+                var user = await _teamService.JoinTeam(
+                    teamId: id,
+                    userId: input.UserId
+                );
+
+                return new ActionResult<User>(user);
+            }
+            catch (AlreadyJoinedException)
+            {
+                return new ActionResult<User>(Conflict(new
+                {
+                    Message = "User is already part of the team"
+                }));
+            }
+        }
     }
+
+    public class AlreadyJoinedException : Exception
+    {
+
+    }
+
+    public class JoinTeamInput
+    {
+        public string UserId { get; set; }
+    }
+
+    public class User
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+    }
+
 }
