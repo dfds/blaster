@@ -57,7 +57,6 @@ namespace Cognito.WebApi
                 app.UseDeveloperExceptionPage();
             else
                 app.UseHsts();
-
             
             app.UseSwagger();
 

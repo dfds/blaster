@@ -13,6 +13,9 @@
     <PackageReference Include="AWSSDK.Extensions.CognitoAuthentication" Version="0.9.4" />
     <PackageReference Include="AWSSDK.SecurityToken" Version="3.3.4.15" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
+    <PackageReference Include="Serilog.Formatting.Compact" Version="1.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
   </ItemGroup>
 
