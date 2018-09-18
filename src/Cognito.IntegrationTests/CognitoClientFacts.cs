@@ -13,7 +13,7 @@ namespace Cognito.IntegrationTests
         [Fact]
         public async Task CreateGroup()
         {
-            var client = CreateClient();
+            var client = await CreateClient();
 
 
             try
@@ -30,7 +30,7 @@ namespace Cognito.IntegrationTests
         [Fact]
         public async Task CreateUser()
         {
-            var client = CreateClient();
+            var client = await CreateClient();
 
             try
             {
@@ -46,7 +46,7 @@ namespace Cognito.IntegrationTests
         [Fact]
         public async Task AddUserToGroup()
         {
-            var client = CreateClient();
+            var client = await CreateClient();
 
             try
             {
@@ -69,7 +69,7 @@ namespace Cognito.IntegrationTests
         public async Task ListOneGroup()
         {
             // Arrange
-            var client = CreateClient();
+            var client = await CreateClient();
 
             try
             {
@@ -93,7 +93,7 @@ namespace Cognito.IntegrationTests
         public async Task ListSixtyOneGroups()
         {
             // Arrange
-            var client = CreateClient();
+            var client = await CreateClient();
 
             try
             {
@@ -123,7 +123,7 @@ namespace Cognito.IntegrationTests
         public async Task GetAGroupThatDoesNotExist()
         {
             // Arrange
-            var client = CreateClient();
+            var client = await CreateClient();
 
             try
             {
@@ -145,17 +145,27 @@ namespace Cognito.IntegrationTests
         }
 
 
-        public CognitoClient CreateClient()
+        public async Task<CognitoClient> CreateClient()
         {
             var accessKey = Environment.GetEnvironmentVariable("AWS_accessKey");
             var secretKey = Environment.GetEnvironmentVariable("AWS_secretKey");
+
             var client = new CognitoClient(
                 accessKey,
                 secretKey,
-                CreateName()
+                null
             );
 
+            var userPollId = await client.CreateUserPoolAsync(CreateName());
 
+
+            client = new CognitoClient(
+                accessKey,
+                secretKey,
+                userPollId
+            );
+            
+            
             return client;
         }
     }
