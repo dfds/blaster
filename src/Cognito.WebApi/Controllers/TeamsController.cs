@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cognito.WebApi.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -41,16 +42,17 @@ namespace Cognito.WebApi.Controllers
 
         
         [HttpGet("{id}")]
-        public ActionResult<Team> GetTeam(string id)
+        public async Task<ActionResult<Team>> GetTeam(string id)
         {
+            var group = await _cognitoClient.GetGroupAsync(id);
+            var usersInGroup = await _cognitoClient.ListUsersInGroupAsync(id);
             var team = new Team
             {
-                Name = "Awesome",
-                Members = new List<User>
-                {
-                    new User {Email = "kilin@dfds.com"},
-                    new User {Email = "notme@dfds.com"}
-                }
+                Name = group.GroupName,
+                Members = usersInGroup
+                    .Select(u => 
+                        new User {Id = u.Username}
+                    ).ToList()
             };
 
 
@@ -71,9 +73,7 @@ namespace Cognito.WebApi.Controllers
 
             await _cognitoClient.CreateGroupAsync(createTeam.Name);
             
-            //             return CreatedAtRoute("Get", new {id = createTeam.Name}, createTeam);
-
-            return CreatedAtAction("GetTeam", new {id = createTeam.Name}, createTeam);
+            return CreatedAtAction(nameof(GetTeam), new {id = createTeam.Name}, createTeam);
         }
     }
 }

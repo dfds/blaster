@@ -16,10 +16,10 @@ namespace Cognito.WebApi
 
 
         public CognitoClient(
-            string accessKey, 
-            string secretKey, 
+            string accessKey,
+            string secretKey,
             string userPoolId
-            )
+        )
         {
             var awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
             _identityProviderClient =
@@ -90,7 +90,7 @@ namespace Cognito.WebApi
             return response.UserPool.Id;
         }
 
-        
+
         public async Task<GroupType> GetGroupAsync(string groupName)
         {
             var getGroupRequest = new GetGroupRequest
@@ -103,7 +103,6 @@ namespace Cognito.WebApi
             {
                 var getGroupResponse = await _identityProviderClient.GetGroupAsync(getGroupRequest);
 
-
                 return getGroupResponse.Group;
             }
             catch (ResourceNotFoundException)
@@ -111,8 +110,20 @@ namespace Cognito.WebApi
                 return null;
             }
         }
-        
-        
+
+        public async Task<List<UserType>> ListUsersInGroupAsync(string groupName)
+        {
+            var listUsersInGroupRequest = new ListUsersInGroupRequest
+            {
+                GroupName = groupName,
+                UserPoolId = _userPoolId
+            };
+            var usersInGroupResponse = await _identityProviderClient.ListUsersInGroupAsync(listUsersInGroupRequest);
+
+            
+            return usersInGroupResponse.Users;
+        }
+
         public async Task<IEnumerable<string>> ListGroupsAsync()
         {
             var groupNames = new List<string>();
