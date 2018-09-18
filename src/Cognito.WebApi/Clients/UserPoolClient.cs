@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,15 +6,15 @@ using Amazon.CognitoIdentityProvider;
 using Amazon.CognitoIdentityProvider.Model;
 using Amazon.Runtime;
 
-namespace Cognito.WebApi
+namespace Cognito.WebApi.Model
 {
-    public class CognitoClient
+    public class UserPoolClient
     {
         private readonly AmazonCognitoIdentityProviderClient _identityProviderClient;
         private readonly string _userPoolId;
 
 
-        public CognitoClient(
+        public UserPoolClient(
             string accessKey,
             string secretKey,
             string userPoolId
@@ -28,8 +27,7 @@ namespace Cognito.WebApi
 
             _userPoolId = userPoolId;
         }
-
-
+        
         public async Task AddUserToGroup(
             string username,
             string groupName
@@ -68,29 +66,7 @@ namespace Cognito.WebApi
             await _identityProviderClient.CreateGroupAsync(createGroupRequest);
         }
 
-
-        public async Task DeleteUserPoolAsync()
-        {
-            var deleteUserPoolRequest = new DeleteUserPoolRequest();
-            deleteUserPoolRequest.UserPoolId = _userPoolId;
-            await _identityProviderClient.DeleteUserPoolAsync(deleteUserPoolRequest);
-        }
-
-
-        public async Task<string> CreateUserPoolAsync(string poolName)
-        {
-            var createUserPoolRequest = new CreateUserPoolRequest
-            {
-                PoolName = poolName
-            };
-
-            var response = await _identityProviderClient.CreateUserPoolAsync(createUserPoolRequest);
-
-
-            return response.UserPool.Id;
-        }
-
-
+        
         public async Task<GroupType> GetGroupAsync(string groupName)
         {
             var getGroupRequest = new GetGroupRequest
@@ -123,7 +99,7 @@ namespace Cognito.WebApi
             
             return usersInGroupResponse.Users;
         }
-
+        
         public async Task<IEnumerable<string>> ListGroupsAsync()
         {
             var groupNames = new List<string>();

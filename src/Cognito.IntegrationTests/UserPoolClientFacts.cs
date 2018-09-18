@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Shouldly;
 using Xunit;
 using Cognito.WebApi;
+using Cognito.WebApi.Model;
 
 namespace Cognito.IntegrationTests
 {
@@ -18,8 +19,10 @@ namespace Cognito.IntegrationTests
 
             try
             {
+                var userPoolClient = CreateUserPoolClient(client.UserPoolId);
+
                 var groupName = CreateName();
-                await client.CreateGroupAsync(groupName);
+                await userPoolClient.CreateGroupAsync(groupName);
             }
             finally
             {
@@ -34,8 +37,10 @@ namespace Cognito.IntegrationTests
 
             try
             {
+                var userPoolClient = CreateUserPoolClient(client.UserPoolId);
+
                 var userName = CreateName();
-                await client.CreateUser(userName);
+                await userPoolClient.CreateUser(userName);
             }
             finally
             {
@@ -50,13 +55,15 @@ namespace Cognito.IntegrationTests
 
             try
             {
+                var userPoolClient = CreateUserPoolClient(client.UserPoolId);
+
                 var userName = CreateName();
-                await client.CreateUser(userName);
+                await userPoolClient.CreateUser(userName);
 
                 var groupName = CreateName();
-                await client.CreateGroupAsync(groupName);
+                await userPoolClient.CreateGroupAsync(groupName);
 
-                await client.AddUserToGroup(userName, groupName);
+                await userPoolClient.AddUserToGroup(userName, groupName);
             }
             finally
             {
@@ -73,11 +80,13 @@ namespace Cognito.IntegrationTests
 
             try
             {
+                var userPoolClient = CreateUserPoolClient(client.UserPoolId);
+
                 var groupName = CreateName();
-                await client.CreateGroupAsync(groupName);
+                await userPoolClient.CreateGroupAsync(groupName);
 
                 // Act
-                var groupsResult = await client.ListGroupsAsync();
+                var groupsResult = await userPoolClient.ListGroupsAsync();
 
                 // Assert
                 Assert.Equal(groupName, groupsResult.Single());
@@ -90,24 +99,26 @@ namespace Cognito.IntegrationTests
 
 
         [Fact]
-        public async Task ListSixtyOneGroups()
+        public async Task ListTwentyFiveGroups()
         {
             // Arrange
             var client = await CreateClient();
 
             try
             {
+                var userPoolClient = CreateUserPoolClient(client.UserPoolId);
+
                 var groups = new List<string>();
-                for (var i = 0; i < 62; i++)
+                for (var i = 0; i < 25; i++)
                 {
                     var groupName = CreateName();
-                    await client.CreateGroupAsync(groupName);
+                    await userPoolClient.CreateGroupAsync(groupName);
 
                     groups.Add(groupName);
                 }
 
                 // Act
-                var groupsResult = await client.ListGroupsAsync();
+                var groupsResult = await userPoolClient.ListGroupsAsync();
 
                 // Assert
                 groupsResult.ShouldBe(groups);
@@ -127,8 +138,9 @@ namespace Cognito.IntegrationTests
 
             try
             {
+                var userPoolClient = CreateUserPoolClient(client.UserPoolId);
                 var groupName = CreateName();
-                var group = await client.GetGroupAsync(groupName);
+                var group = await userPoolClient.GetGroupAsync(groupName);
 
                 group.ShouldBeNull();
             }
@@ -144,7 +156,23 @@ namespace Cognito.IntegrationTests
             return DateTime.Now.ToString("yyyy-MM-dd-THH-mm") + "_" + Guid.NewGuid().ToString().Substring(0, 8);
         }
 
+        public UserPoolClient CreateUserPoolClient(string userPoolId)
+        {
+            var accessKey = Environment.GetEnvironmentVariable("AWS_accessKey");
+            var secretKey = Environment.GetEnvironmentVariable("AWS_secretKey");
 
+            var userPoolClient = new UserPoolClient(
+                accessKey,
+                secretKey,
+                userPoolId
+            );
+
+
+            return userPoolClient;
+        }
+
+        
+        
         public async Task<CognitoClient> CreateClient()
         {
             var accessKey = Environment.GetEnvironmentVariable("AWS_accessKey");

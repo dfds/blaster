@@ -1,4 +1,5 @@
 ﻿using Cognito.WebApi.Controllers;
+using Cognito.WebApi.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -26,24 +27,25 @@ namespace Cognito.WebApi
             var apiVersion = "v1";
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc(apiVersion, new Info { Title = "Cognito API", Version = apiVersion });
+                c.SwaggerDoc(apiVersion, new Info {Title = "Cognito API", Version = apiVersion});
             });
-            
+
             ConfigureDependencyInjectionContainer(services);
         }
 
         public void ConfigureDependencyInjectionContainer(IServiceCollection services)
         {
-            
             services.AddTransient<IAwsConsoleLinkBuilder, AwsConsoleLinkBuilder>();
             var variables = new Variables();
             variables.Validate();
             services.AddSingleton<IVariables>(variables);
 
-            services.AddTransient<CognitoClient>((s) =>
+            services.AddTransient<UserPoolClient>((s) =>
             {
                 var vars = s.GetRequiredService<IVariables>();
-                return new CognitoClient(
+
+
+                return new UserPoolClient(
                     vars.AwsCognitoAccessAccessKey,
                     vars.AwsCognitoSecretAccessKey,
                     vars.AwsCognitoUserPoolId);
@@ -57,21 +59,18 @@ namespace Cognito.WebApi
                 app.UseDeveloperExceptionPage();
             else
                 app.UseHsts();
-            
+
             app.UseSwagger();
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
             // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cognito API");
-            });
-            
-            app.UseExceptionHandler(new ExceptionHandlerOptions 
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cognito API"); });
+
+            app.UseExceptionHandler(new ExceptionHandlerOptions
             {
                 ExceptionHandler = new JsonExceptionMiddleware().Invoke
             });
-            
+
             app.UseMvc();
         }
     }

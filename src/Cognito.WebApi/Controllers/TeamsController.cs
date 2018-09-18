@@ -10,11 +10,11 @@ namespace Cognito.WebApi.Controllers
     [ApiController]
     public class TeamsController : ControllerBase
     {
-        private readonly CognitoClient _cognitoClient;
+        private readonly UserPoolClient _userPoolClient;
 
-        public TeamsController(CognitoClient cognitoClient)
+        public TeamsController(UserPoolClient userPoolClient)
         {
-            _cognitoClient = cognitoClient;
+            _userPoolClient = userPoolClient;
         }
         [HttpGet]
         public ActionResult<List<Team>> GetTeams()
@@ -44,8 +44,8 @@ namespace Cognito.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Team>> GetTeam(string id)
         {
-            var group = await _cognitoClient.GetGroupAsync(id);
-            var usersInGroup = await _cognitoClient.ListUsersInGroupAsync(id);
+            var group = await _userPoolClient.GetGroupAsync(id);
+            var usersInGroup = await _userPoolClient.ListUsersInGroupAsync(id);
             var team = new Team
             {
                 Name = group.GroupName,
@@ -65,13 +65,13 @@ namespace Cognito.WebApi.Controllers
         [ProducesResponseType(409)]
         public async Task<ActionResult> CreateTeam([FromBody] CreateTeam createTeam)
         {
-            var existingTeam = await _cognitoClient.GetGroupAsync(createTeam.Name);
+            var existingTeam = await _userPoolClient.GetGroupAsync(createTeam.Name);
             if (existingTeam != null)
             {
                 return Conflict(new {teamName = $"a team with the name {createTeam.Name} already exists"});
             }
 
-            await _cognitoClient.CreateGroupAsync(createTeam.Name);
+            await _userPoolClient.CreateGroupAsync(createTeam.Name);
             
             return CreatedAtAction(nameof(GetTeam), new {id = createTeam.Name}, createTeam);
         }
