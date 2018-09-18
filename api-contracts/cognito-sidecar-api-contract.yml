@@ -112,7 +112,11 @@ paths:
         409:
           description: Conflict - user alread part of the team
           schema:
-            $ref: '#/definitions/user'
+            type: object
+            properties:
+              message:
+                type: string
+                example: User is already part of the team
 
 definitions:
   team-list:
