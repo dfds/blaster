@@ -27,7 +27,7 @@ namespace Cognito.WebApi.Model
 
             _userPoolId = userPoolId;
         }
-        
+
         public async Task AddUserToGroup(
             string username,
             string groupName
@@ -66,7 +66,7 @@ namespace Cognito.WebApi.Model
             await _identityProviderClient.CreateGroupAsync(createGroupRequest);
         }
 
-        
+
         public async Task<GroupType> GetGroupAsync(string groupName)
         {
             var getGroupRequest = new GetGroupRequest
@@ -89,17 +89,28 @@ namespace Cognito.WebApi.Model
 
         public async Task<List<UserType>> ListUsersInGroupAsync(string groupName)
         {
-            var listUsersInGroupRequest = new ListUsersInGroupRequest
-            {
-                GroupName = groupName,
-                UserPoolId = _userPoolId
-            };
-            var usersInGroupResponse = await _identityProviderClient.ListUsersInGroupAsync(listUsersInGroupRequest);
+            string nextToken = null;
+            var users = new List<UserType>();
 
-            
-            return usersInGroupResponse.Users;
+            do
+            {
+                var listUsersInGroupRequest = new ListUsersInGroupRequest
+                {
+                    GroupName = groupName,
+                    UserPoolId = _userPoolId,
+                    NextToken = nextToken
+                };
+
+                var usersInGroupResponse = await _identityProviderClient.ListUsersInGroupAsync(listUsersInGroupRequest);
+                nextToken = usersInGroupResponse.NextToken;
+                
+                users.AddRange(usersInGroupResponse.Users);
+            } while (nextToken != null);
+
+
+            return users;
         }
-        
+
         public async Task<IEnumerable<string>> ListGroupsAsync()
         {
             var groupNames = new List<string>();

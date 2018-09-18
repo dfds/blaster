@@ -76,6 +76,51 @@ namespace Cognito.IntegrationTests
 
 
         [Fact]
+        public async Task ListSixtyOneUsersInAGroup()
+        {
+            // Arrange
+            var client = await CreateClient();
+            var userPollId = await client.CreateUserPoolAsync(CreateName());
+
+            try
+            {
+                var userPoolClient = CreateUserPoolClient(userPollId);
+
+                
+                var groupName = CreateName();
+                await userPoolClient.CreateGroupAsync(groupName);
+                var users = new List<string>();
+                for (var i = 0; i < 26; i++)
+                {
+                    var userName = CreateName();
+
+                    users.Add(userName);
+
+                    await userPoolClient.CreateUser(userName);
+                    await userPoolClient.AddUserToGroup(userName, groupName);
+
+
+                }
+
+                // Act
+                var usersInGroup = await userPoolClient.ListUsersInGroupAsync(groupName);
+
+
+                // Assert
+                usersInGroup
+                    .Select(u => u.Username)
+                    .OrderBy(u => u)
+                    .ToList()
+                    .ShouldBe(users.OrderBy(g => g));
+
+            }
+            finally
+            {
+                await client.DeleteUserPoolAsync(userPollId);
+            }
+        }
+
+        [Fact]
         public async Task ListOneGroup()
         {
             // Arrange
