@@ -15,18 +15,19 @@ namespace Cognito.IntegrationTests
         public async Task CreateGroup()
         {
             var client = await CreateClient();
+            var userPollId = await client.CreateUserPoolAsync(CreateName());
 
 
             try
             {
-                var userPoolClient = CreateUserPoolClient(client.UserPoolId);
+                var userPoolClient = CreateUserPoolClient(userPollId);
 
                 var groupName = CreateName();
                 await userPoolClient.CreateGroupAsync(groupName);
             }
             finally
             {
-                await client.DeleteUserPoolAsync();
+                await client.DeleteUserPoolAsync(userPollId);
             }
         }
 
@@ -34,17 +35,18 @@ namespace Cognito.IntegrationTests
         public async Task CreateUser()
         {
             var client = await CreateClient();
+            var userPollId = await client.CreateUserPoolAsync(CreateName());
 
             try
             {
-                var userPoolClient = CreateUserPoolClient(client.UserPoolId);
+                var userPoolClient = CreateUserPoolClient(userPollId);
 
                 var userName = CreateName();
                 await userPoolClient.CreateUser(userName);
             }
             finally
             {
-                await client.DeleteUserPoolAsync();
+                await client.DeleteUserPoolAsync(userPollId);
             }
         }
 
@@ -52,10 +54,11 @@ namespace Cognito.IntegrationTests
         public async Task AddUserToGroup()
         {
             var client = await CreateClient();
+            var userPollId = await client.CreateUserPoolAsync(CreateName());
 
             try
             {
-                var userPoolClient = CreateUserPoolClient(client.UserPoolId);
+                var userPoolClient = CreateUserPoolClient(userPollId);
 
                 var userName = CreateName();
                 await userPoolClient.CreateUser(userName);
@@ -67,7 +70,7 @@ namespace Cognito.IntegrationTests
             }
             finally
             {
-                await client.DeleteUserPoolAsync();
+                await client.DeleteUserPoolAsync(userPollId);
             }
         }
 
@@ -77,10 +80,11 @@ namespace Cognito.IntegrationTests
         {
             // Arrange
             var client = await CreateClient();
+            var userPollId = await client.CreateUserPoolAsync(CreateName());
 
             try
             {
-                var userPoolClient = CreateUserPoolClient(client.UserPoolId);
+                var userPoolClient = CreateUserPoolClient(userPollId);
 
                 var groupName = CreateName();
                 await userPoolClient.CreateGroupAsync(groupName);
@@ -93,7 +97,7 @@ namespace Cognito.IntegrationTests
             }
             finally
             {
-                await client.DeleteUserPoolAsync();
+                await client.DeleteUserPoolAsync(userPollId);
             }
         }
 
@@ -103,10 +107,11 @@ namespace Cognito.IntegrationTests
         {
             // Arrange
             var client = await CreateClient();
+            var userPollId = await client.CreateUserPoolAsync(CreateName());
 
             try
             {
-                var userPoolClient = CreateUserPoolClient(client.UserPoolId);
+                var userPoolClient = CreateUserPoolClient(userPollId);
 
                 var groups = new List<string>();
                 for (var i = 0; i < 25; i++)
@@ -121,11 +126,11 @@ namespace Cognito.IntegrationTests
                 var groupsResult = await userPoolClient.ListGroupsAsync();
 
                 // Assert
-                groupsResult.ShouldBe(groups);
+                groupsResult.OrderBy(g => g).ShouldBe(groups.OrderBy(g => g));
             }
             finally
             {
-                await client.DeleteUserPoolAsync();
+                await client.DeleteUserPoolAsync(userPollId);
             }
         }
 
@@ -135,10 +140,11 @@ namespace Cognito.IntegrationTests
         {
             // Arrange
             var client = await CreateClient();
+            var userPollId = await client.CreateUserPoolAsync(CreateName());
 
             try
             {
-                var userPoolClient = CreateUserPoolClient(client.UserPoolId);
+                var userPoolClient = CreateUserPoolClient(userPollId);
                 var groupName = CreateName();
                 var group = await userPoolClient.GetGroupAsync(groupName);
 
@@ -146,7 +152,7 @@ namespace Cognito.IntegrationTests
             }
             finally
             {
-                await client.DeleteUserPoolAsync();
+                await client.DeleteUserPoolAsync(userPollId);
             }
         }
 
@@ -180,19 +186,9 @@ namespace Cognito.IntegrationTests
 
             var client = new CognitoClient(
                 accessKey,
-                secretKey,
-                null
+                secretKey
             );
 
-            var userPollId = await client.CreateUserPoolAsync(CreateName());
-
-
-            client = new CognitoClient(
-                accessKey,
-                secretKey,
-                userPollId
-            );
-            
             
             return client;
         }

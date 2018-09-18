@@ -26,7 +26,10 @@ namespace Cognito.WebApi
 
         public async Task DeleteUserPoolAsync(string userPoolId)
         {
-            var deleteUserPoolRequest = new DeleteUserPoolRequest();
+            var deleteUserPoolRequest = new DeleteUserPoolRequest
+            {
+                UserPoolId = userPoolId
+            };
             await _identityProviderClient.DeleteUserPoolAsync(deleteUserPoolRequest);
         }
 
