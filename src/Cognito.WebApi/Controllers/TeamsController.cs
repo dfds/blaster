@@ -34,19 +34,12 @@ namespace Cognito.WebApi.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Team>> GetTeam(string id)
+        public async Task<ActionResult<Team>> GetTeam(
+            string teamId,
+            string departmentId
+        )
         {
-            var group = await _userPoolClient.GetGroupAsync(id);
-            var usersInGroup = await _userPoolClient.ListUsersInGroupAsync(id);
-            var team = new Team
-            {
-                Name = group.GroupName,
-                Members = usersInGroup
-                    .Select(u =>
-                        new User {Id = u.Username}
-                    ).ToList()
-            };
-
+            var team = await _teamsService.GetTeam(teamId, departmentId);
 
             return team;
         }
@@ -57,23 +50,19 @@ namespace Cognito.WebApi.Controllers
         [ProducesResponseType(409)]
         public async Task<ActionResult> CreateTeam([FromBody] CreateTeam createTeam)
         {
-            var validationErrors = new List<string>();
-            if (validationErrors.Any())
-            {
-                return UnprocessableEntity("");
-            }
 
-            
-            
-            var existingTeam = await _userPoolClient.GetGroupAsync(createTeam.Name);
-            if (existingTeam != null)
-            {
-                return Conflict(new {teamName = $"a team with the name {createTeam.Name} already exists"});
-            }
 
-            await _userPoolClient.CreateGroupAsync(createTeam.Name);
+            var result = await _teamsService.CreateTeam(createTeam);
 
-            return CreatedAtAction(nameof(GetTeam), new {id = createTeam.Name}, createTeam);
+
+            return result.Reduce<ActionResult>(
+                team => CreatedAtAction(nameof(GetTeam), new {id = team.Id}, createTeam),
+                failure =>
+                {
+                    // TODO return 
+                    return Conflict(failure.Message);
+                }
+            );
         }
     }
 }

@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cognito.WebApi.Failures;
 using Cognito.WebApi.Model;
 
 namespace Cognito.WebApi.Services
@@ -38,14 +40,19 @@ namespace Cognito.WebApi.Services
             return await GetTeam(groupName);
         }
 
-        private async Task<Team> GetTeam(string groupName)
+        
+        private async Task<Team> GetTeam(string id)
         {
-            var group = await _userPoolClient.GetGroupAsync(groupName);
-            var usersInGroup = await _userPoolClient.ListUsersInGroupAsync(groupName);
+            var usersInGroup = await _userPoolClient.ListUsersInGroupAsync(id);
 
+            var teamNameAndDepartment = id.Split(new [] {"_D_"}, StringSplitOptions.None);
+            var departmentName = 1 < teamNameAndDepartment.Length ? teamNameAndDepartment[1] : null;
+            
             var team = new Team
             {
-                Name = group.GroupName,
+                Id = id,
+                Name = teamNameAndDepartment[0],
+                Department = departmentName,
                 Members = usersInGroup
                     .Select(u =>
                         new User {Id = u.Username}
@@ -57,11 +64,35 @@ namespace Cognito.WebApi.Services
         }
 
 
-        public async Task CreateTeam(CreateTeam createTeam)
+        public async Task<Result<Team,IFailure>> CreateTeam(CreateTeam createTeam)
         {
+            var validationErrors = new List<string>();
+
+            if (validationErrors.Any())
+            {
+                return new Result<Team, IFailure>(new ValidationFailed());
+            }
+
             var groupName = $"{createTeam.Name}_D_{createTeam.DepartmentName}";
 
+            
+            var existingTeam = await _userPoolClient.GetGroupAsync(groupName);
+            if (existingTeam != null)
+            {
+                return new Result<Team, IFailure>(new Conflict($"a team with the name {createTeam.Name} already exists"));
+            }
+
             await _userPoolClient.CreateGroupAsync(groupName);
+
+            var team = new Team
+            {
+                Id = groupName,
+                Name = createTeam.Name,
+                Department = createTeam.DepartmentName
+            };
+            
+            
+            return new Result<Team, IFailure>(team);
         }
     }
 }
