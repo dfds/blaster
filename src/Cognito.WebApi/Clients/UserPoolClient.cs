@@ -87,6 +87,7 @@ namespace Cognito.WebApi.Model
             }
         }
 
+        
         public async Task<List<UserType>> ListUsersInGroupAsync(string groupName)
         {
             string nextToken = null;
@@ -111,6 +112,7 @@ namespace Cognito.WebApi.Model
             return users;
         }
 
+        
         public async Task<IEnumerable<string>> ListGroupsAsync()
         {
             var groupNames = new List<string>();

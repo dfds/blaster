@@ -1,5 +1,6 @@
 ﻿using Cognito.WebApi.Controllers;
 using Cognito.WebApi.Model;
+using Cognito.WebApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +51,8 @@ namespace Cognito.WebApi
                     vars.AwsCognitoSecretAccessKey,
                     vars.AwsCognitoUserPoolId);
             });
+
+            services.AddTransient<TeamsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

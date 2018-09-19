@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cognito.WebApi.Model;
+using Cognito.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cognito.WebApi.Controllers
@@ -11,36 +12,27 @@ namespace Cognito.WebApi.Controllers
     public class TeamsController : ControllerBase
     {
         private readonly UserPoolClient _userPoolClient;
+        private readonly TeamsService _teamsService;
 
-        public TeamsController(UserPoolClient userPoolClient)
+        public TeamsController(
+            UserPoolClient userPoolClient,
+            TeamsService teamsService
+        )
         {
             _userPoolClient = userPoolClient;
+            _teamsService = teamsService;
         }
+
         [HttpGet]
-        public ActionResult<List<Team>> GetTeams()
+        public async Task<ActionResult<List<Team>>> GetAllTeams()
         {
-            var teams = new List<Team>
-            {
-                new Team
-                {
-                    Name = "Awesome",
-                    Members = new List<User>
-                    {
-                        new User {Email = "kilin@dfds.com"},
-                        new User {Email = "notme@dfds.com"}
-                    }
-                },
-                new Team
-                {
-                    Name = "Nobody is home"
-                }
-            };
+            var teams = await _teamsService.GetAllTeams();
 
 
             return teams;
         }
 
-        
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Team>> GetTeam(string id)
         {
@@ -50,7 +42,7 @@ namespace Cognito.WebApi.Controllers
             {
                 Name = group.GroupName,
                 Members = usersInGroup
-                    .Select(u => 
+                    .Select(u =>
                         new User {Id = u.Username}
                     ).ToList()
             };
@@ -59,12 +51,20 @@ namespace Cognito.WebApi.Controllers
             return team;
         }
 
-        
+
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(string))]
         [ProducesResponseType(409)]
         public async Task<ActionResult> CreateTeam([FromBody] CreateTeam createTeam)
         {
+            var validationErrors = new List<string>();
+            if (validationErrors.Any())
+            {
+                return UnprocessableEntity("");
+            }
+
+            
+            
             var existingTeam = await _userPoolClient.GetGroupAsync(createTeam.Name);
             if (existingTeam != null)
             {
@@ -72,7 +72,7 @@ namespace Cognito.WebApi.Controllers
             }
 
             await _userPoolClient.CreateGroupAsync(createTeam.Name);
-            
+
             return CreatedAtAction(nameof(GetTeam), new {id = createTeam.Name}, createTeam);
         }
     }
