@@ -74,14 +74,14 @@ namespace Cognito.WebApi.Controllers
         }
     }
 
-    class CredentialsPayload
+    public class CredentialsPayload
     {
         public string SessionId { get; set; }
         public string SessionKey { get; set; }
         public string SessionToken { get; set; }
     }
 
-    class Token
+    public class Token
     {
         public string SigninToken { get; set; }
     }

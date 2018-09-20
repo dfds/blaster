@@ -14,17 +14,18 @@ namespace Cognito.WebApi.Controllers
 {
     public class AwsConsoleLinkService : IAwsConsoleLinkBuilder
     {
-        /// <summary>Adds a login to be used for authenticated requests.</summary>
-        /// <param name="providerName">The provider name for the login (i.e. graph.facebook.com)</param>
-        /// <param name="token">The token provided by the identity provider.</param>
+        /// <summary>Creates a AWS console login uri</summary>
+        /// <param name="identityToken">The token provided by the identity provider.</param>
         public async Task<Uri> GenerateUriForConsole(string identityToken)
         {
             var identityPoolId = "eu-central-1:07c2b8e5-42a1-4791-a006-ea4e14611de8";
             var providerName = "cognito-idp.eu-central-1.amazonaws.com/eu-central-1_y2kIM3LEL";
+            var roleArn = "arn:aws:iam::528563840976:role/Hest";
             
             var credentialsPayload = await AssumeRole(
                 identityPoolId,
                 providerName,
+                roleArn,
                 identityToken
             );
 
@@ -39,7 +40,8 @@ namespace Cognito.WebApi.Controllers
         
         public async Task<CredentialsPayload> AssumeRole(
             string identityPoolId, 
-            string providerName, 
+            string providerName,
+            string roleArn,
             string identityToken
         )
         {
@@ -58,8 +60,9 @@ namespace Cognito.WebApi.Controllers
             var securityTokenServiceClient = new AmazonSecurityTokenServiceClient(cognitoAwsCredentials);
             var assumedRole = await securityTokenServiceClient.AssumeRoleAsync(new AssumeRoleRequest
                 {
-                    RoleArn = "arn:aws:iam::528563840976:role/Hest",
+                    RoleArn = roleArn,
                     RoleSessionName = "AssumeRoleSession"
+                    
                 }
             );
 
