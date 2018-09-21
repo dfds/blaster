@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Cognito.WebApi.Failures;
 using Cognito.WebApi.Model;
 using Cognito.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,18 +11,16 @@ namespace Cognito.WebApi.Controllers
     [ApiController]
     public class TeamsController : ControllerBase
     {
-        private readonly UserPoolClient _userPoolClient;
         private readonly TeamsService _teamsService;
 
         public TeamsController(
-            UserPoolClient userPoolClient,
             TeamsService teamsService
         )
         {
-            _userPoolClient = userPoolClient;
             _teamsService = teamsService;
         }
 
+        
         [HttpGet]
         public async Task<ActionResult<List<Team>>> GetAllTeams()
         {
@@ -47,11 +45,11 @@ namespace Cognito.WebApi.Controllers
 
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(string))]
+        [ProducesResponseType(400)]
         [ProducesResponseType(409)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult> CreateTeam([FromBody] CreateTeam createTeam)
         {
-
-
             var result = await _teamsService.CreateTeam(createTeam);
 
 
@@ -59,8 +57,17 @@ namespace Cognito.WebApi.Controllers
                 team => CreatedAtAction(nameof(GetTeam), new {id = team.Id}, createTeam),
                 failure =>
                 {
-                    // TODO return 
-                    return Conflict(failure.Message);
+                    if (failure.GetType() == typeof(Conflict))
+                    {
+                        return Conflict(failure.Message);
+                    }
+
+                    if (failure.GetType() == typeof(ValidationFailed))
+                    {
+                        return BadRequest(failure.Message);
+                    }
+
+                    return StatusCode(500, failure.Message);
                 }
             );
         }
