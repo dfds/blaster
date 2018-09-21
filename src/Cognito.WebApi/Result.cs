@@ -23,13 +23,13 @@ namespace Cognito.WebApi
             Action<TFailureResult> failureFunction
         )
         {
-            if (_successResult != null)
+            if (_failureResult != null)
             {
-                successFunction(_successResult);
+                failureFunction(_failureResult);
+
                 return;
             }
-
-            failureFunction(_failureResult);
+            successFunction(_successResult);
         }
         
         
@@ -37,8 +37,8 @@ namespace Cognito.WebApi
             Func<TSuccessResult, TOutput> successFunction,
             Func<TFailureResult, TOutput> failureFunction
         )
-            => _successResult != null ?
-                successFunction(_successResult) :
-                failureFunction(_failureResult);
+            => _failureResult != null ?
+                failureFunction(_failureResult) :
+                successFunction(_successResult);
     }
 }
