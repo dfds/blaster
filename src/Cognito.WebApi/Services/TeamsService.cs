@@ -67,11 +67,11 @@ namespace Cognito.WebApi.Services
 
         public async Task<Result<Team, IFailure>> CreateTeam(CreateTeam createTeam)
         {
-            var validationErrors = new List<string>();
-//         TODO Add validation
-            if (validationErrors.Any())
+            if (string.IsNullOrWhiteSpace(createTeam.Name))
             {
-                return new Result<Team, IFailure>(new ValidationFailed());
+                var validationFailed = new ValidationFailed();
+                validationFailed.Add(nameof(createTeam.Name), "can not be empty");
+                return new Result<Team, IFailure>(validationFailed);
             }
 
             var groupName = $"{createTeam.Name}_D_{createTeam.DepartmentName}";
