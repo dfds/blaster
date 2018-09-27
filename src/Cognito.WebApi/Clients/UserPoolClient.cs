@@ -45,20 +45,18 @@ namespace Cognito.WebApi.Model
             {
                 await _identityProviderClient.AdminAddUserToGroupAsync(userToGroupRequest);
             }
-            catch (ResourceNotFoundException exception)
+            catch (ResourceNotFoundException exception) when (exception.Message == "Group not found.")
             {
-                string message;
-                if (exception.Message == "Group not found.")
-                {
-                    message = $"the group {groupName} does not exist";
-                    return new Result<Nothing, NotFound>(new NotFound(message));
-                    
-                }
-                message = $"the user {username} does not exist";
-                return new Result<Nothing, NotFound>(new NotFound(message));                
+                var message = $"the group '{groupName}' does not exist";
+                return new Result<Nothing, NotFound>(new NotFound(message));
             }
-            
-            
+            catch (UserNotFoundException exception) when (exception.Message == "User does not exist.")
+            {
+                var message = $"the user '{username}' does not exist";
+                return new Result<Nothing, NotFound>(new NotFound(message));
+            }
+
+
             return new Result<Nothing, NotFound>(new Nothing());
         }
 
