@@ -51,11 +51,21 @@ namespace Cognito.WebApi
 
 
                 return new UserPoolClient(
-                    vars.AwsCognitoAccessAccessKey,
+                    vars.AwsCognitoAccessKey,
                     vars.AwsCognitoSecretAccessKey,
                     vars.AwsCognitoUserPoolId);
             });
 
+            services.AddTransient<CognitoClient>(s =>
+            {
+                var vars = s.GetService<IVariables>();
+                
+                return new CognitoClient(
+                    vars.AwsCognitoAccessKey,
+                    vars.AwsCognitoSecretAccessKey
+                );
+            });
+            
             services.AddTransient<TeamsService>();
         }
 

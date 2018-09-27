@@ -20,10 +20,17 @@ paths:
     get:
       tags:
       - System
-      summary: Shallow healthcheck
+      summary: Healthcheck
       responses:
         200:
           description: OK
+      parameters:
+      - name: deep
+        in: query
+        required: false
+        type: boolean
+        description: Test external dependencies 
+
   /aws/console:
     get:
       tags:
