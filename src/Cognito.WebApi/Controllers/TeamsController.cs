@@ -22,12 +22,12 @@ namespace Cognito.WebApi.Controllers
 
         
         [HttpGet]
-        public async Task<ActionResult<List<Team>>> GetAllTeams()
+        public async Task<ActionResult<TeamList>> GetAllTeams()
         {
             var teams = await _teamsService.GetAllTeams();
 
 
-            return teams;
+            return new TeamList{Items = teams};
         }
 
 
