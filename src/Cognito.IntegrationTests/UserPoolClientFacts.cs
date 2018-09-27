@@ -9,12 +9,12 @@ using Cognito.WebApi.Model;
 
 namespace Cognito.IntegrationTests
 {
-    public class CognitoClientFacts
+    public class UserPoolClientFacts
     {
         [Fact]
         public async Task CreateGroup()
         {
-            var client = await CreateClient();
+            var client = CognitoClientFactory.CreateFromGetEnvironmentVariables();
             var userPollId = await client.CreateUserPoolAsync(CreateName());
 
 
@@ -34,7 +34,7 @@ namespace Cognito.IntegrationTests
         [Fact]
         public async Task CreateUser()
         {
-            var client = await CreateClient();
+            var client = CognitoClientFactory.CreateFromGetEnvironmentVariables();
             var userPollId = await client.CreateUserPoolAsync(CreateName());
 
             try
@@ -53,7 +53,7 @@ namespace Cognito.IntegrationTests
         [Fact]
         public async Task AddUserToGroup()
         {
-            var client = await CreateClient();
+            var client = CognitoClientFactory.CreateFromGetEnvironmentVariables();
             var userPollId = await client.CreateUserPoolAsync(CreateName());
 
             try
@@ -73,12 +73,12 @@ namespace Cognito.IntegrationTests
                 await client.DeleteUserPoolAsync(userPollId);
             }
         }
-        
-        
+
+
         [Fact]
         public async Task AddUserToGroupThatDoesNotExist()
         {
-            var client = await CreateClient();
+            var client = CognitoClientFactory.CreateFromGetEnvironmentVariables();
             var userPollId = await client.CreateUserPoolAsync(CreateName());
 
             try
@@ -101,7 +101,7 @@ namespace Cognito.IntegrationTests
         [Fact]
         public async Task AddUserToGroupTwice()
         {
-            var client = await CreateClient();
+            var client = CognitoClientFactory.CreateFromGetEnvironmentVariables();
             var userPollId = await client.CreateUserPoolAsync(CreateName());
 
             try
@@ -128,14 +128,14 @@ namespace Cognito.IntegrationTests
         public async Task ListSixtyOneUsersInAGroup()
         {
             // Arrange
-            var client = await CreateClient();
+            var client = CognitoClientFactory.CreateFromGetEnvironmentVariables();
             var userPollId = await client.CreateUserPoolAsync(CreateName());
 
             try
             {
                 var userPoolClient = CreateUserPoolClient(userPollId);
 
-                
+
                 var groupName = CreateName();
                 await userPoolClient.CreateGroupAsync(groupName);
                 var users = new List<string>();
@@ -173,7 +173,7 @@ namespace Cognito.IntegrationTests
         public async Task ListOneGroup()
         {
             // Arrange
-            var client = await CreateClient();
+            var client = CognitoClientFactory.CreateFromGetEnvironmentVariables();
             var userPollId = await client.CreateUserPoolAsync(CreateName());
 
             try
@@ -200,7 +200,7 @@ namespace Cognito.IntegrationTests
         public async Task ListTwentyFiveGroups()
         {
             // Arrange
-            var client = await CreateClient();
+            var client = CognitoClientFactory.CreateFromGetEnvironmentVariables();
             var userPollId = await client.CreateUserPoolAsync(CreateName());
 
             try
@@ -233,7 +233,7 @@ namespace Cognito.IntegrationTests
         public async Task GetAGroupThatDoesNotExist()
         {
             // Arrange
-            var client = await CreateClient();
+            var client = CognitoClientFactory.CreateFromGetEnvironmentVariables();
             var userPollId = await client.CreateUserPoolAsync(CreateName());
 
             try
@@ -269,22 +269,6 @@ namespace Cognito.IntegrationTests
 
 
             return userPoolClient;
-        }
-
-        
-        
-        public async Task<CognitoClient> CreateClient()
-        {
-            var accessKey = Environment.GetEnvironmentVariable("AWS_accessKey");
-            var secretKey = Environment.GetEnvironmentVariable("AWS_secretKey");
-
-            var client = new CognitoClient(
-                accessKey,
-                secretKey
-            );
-
-            
-            return client;
         }
     }
 }

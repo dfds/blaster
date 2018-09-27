@@ -21,8 +21,23 @@ namespace Cognito.WebApi
             var awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
             _identityProviderClient =
                 new AmazonCognitoIdentityProviderClient(awsCredentials, RegionEndpoint.EUCentral1);
+            
         }
 
+        public async Task<bool> IsAlive()
+        {
+            try
+            {
+                var listUserPoolsRequest = new ListUserPoolsRequest{MaxResults = 1};
+                await _identityProviderClient.ListUserPoolsAsync(listUserPoolsRequest);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         public async Task DeleteUserPoolAsync(string userPoolId)
         {
