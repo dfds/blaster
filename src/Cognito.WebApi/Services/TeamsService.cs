@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Threading.Tasks;
+using Amazon.CognitoIdentityProvider.Model;
 using Cognito.WebApi.Failures;
 using Cognito.WebApi.Model;
 
@@ -55,8 +56,7 @@ namespace Cognito.WebApi.Services
                 Name = teamNameAndDepartment[0],
                 Department = departmentName,
                 Members = usersInGroup
-                    .Select(u =>
-                        new User {Id = u.Username}
+                    .Select(u => CreateUserFromUserType(u)
                     ).ToList()
             };
 
@@ -64,6 +64,16 @@ namespace Cognito.WebApi.Services
             return team;
         }
 
+        public User CreateUserFromUserType(UserType userType)
+        {
+            var user = new User();
+            user.Id = userType.Username;
+            user.Name= userType.Attributes?.FirstOrDefault(a => a.Name == "name")?.Value;
+            user.Email = userType.Attributes?.FirstOrDefault(a => a.Name == "email")?.Value;
+
+
+            return user;
+        }
 
         public async Task<Result<Team, IFailure>> CreateTeam(CreateTeam createTeam)
         {
