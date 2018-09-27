@@ -15,6 +15,8 @@ namespace Cognito.WebApi.Controllers
         }
 
         [HttpGet("health")]
+        [ProducesResponseType(200, Type = typeof(string))]
+        [ProducesResponseType(504, Type = typeof(string))]
         public async Task<ActionResult<string>> Get(bool deep)
         {
             const string allISWell="Cognito WebApi says this is fine";
