@@ -73,7 +73,56 @@ namespace Cognito.IntegrationTests
                 await client.DeleteUserPoolAsync(userPollId);
             }
         }
+        
+        
+        [Fact]
+        public async Task AddUserToGroupThatDoesNotExist()
+        {
+            var client = await CreateClient();
+            var userPollId = await client.CreateUserPoolAsync(CreateName());
 
+            try
+            {
+                var userPoolClient = CreateUserPoolClient(userPollId);
+
+                var userName = CreateName();
+                await userPoolClient.CreateUser(userName);
+
+                var groupName = CreateName();
+
+                await userPoolClient.AddUserToGroup(userName, groupName);
+            }
+            finally
+            {
+                await client.DeleteUserPoolAsync(userPollId);
+            }
+        }
+
+        [Fact]
+        public async Task AddUserToGroupTwice()
+        {
+            var client = await CreateClient();
+            var userPollId = await client.CreateUserPoolAsync(CreateName());
+
+            try
+            {
+                var userPoolClient = CreateUserPoolClient(userPollId);
+
+                var userName = CreateName();
+                await userPoolClient.CreateUser(userName);
+
+                var groupName = CreateName();
+                await userPoolClient.CreateGroupAsync(groupName);
+
+                await userPoolClient.AddUserToGroup(userName, groupName);
+                await userPoolClient.AddUserToGroup(userName, groupName);
+
+            }
+            finally
+            {
+                await client.DeleteUserPoolAsync(userPollId);
+            }
+        }
 
         [Fact]
         public async Task ListSixtyOneUsersInAGroup()

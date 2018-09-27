@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Threading.Tasks;
 using Cognito.WebApi.Failures;
@@ -25,8 +26,8 @@ namespace Cognito.WebApi.Services
 
 
             var teams = (await Task.WhenAll(getTeamsTask)).ToList();
-           
-            
+
+
             return teams;
         }
 
@@ -40,14 +41,14 @@ namespace Cognito.WebApi.Services
             return await GetTeam(groupName);
         }
 
-        
+
         private async Task<Team> GetTeam(string id)
         {
             var usersInGroup = await _userPoolClient.ListUsersInGroupAsync(id);
 
-            var teamNameAndDepartment = id.Split(new [] {"_D_"}, StringSplitOptions.None);
+            var teamNameAndDepartment = id.Split(new[] {"_D_"}, StringSplitOptions.None);
             var departmentName = 1 < teamNameAndDepartment.Length ? teamNameAndDepartment[1] : null;
-            
+
             var team = new Team
             {
                 Id = id,
@@ -64,10 +65,10 @@ namespace Cognito.WebApi.Services
         }
 
 
-        public async Task<Result<Team,IFailure>> CreateTeam(CreateTeam createTeam)
+        public async Task<Result<Team, IFailure>> CreateTeam(CreateTeam createTeam)
         {
             var validationErrors = new List<string>();
-
+//         TODO Add validation
             if (validationErrors.Any())
             {
                 return new Result<Team, IFailure>(new ValidationFailed());
@@ -75,11 +76,12 @@ namespace Cognito.WebApi.Services
 
             var groupName = $"{createTeam.Name}_D_{createTeam.DepartmentName}";
 
-            
+
             var existingTeam = await _userPoolClient.GetGroupAsync(groupName);
             if (existingTeam != null)
             {
-                return new Result<Team, IFailure>(new Conflict($"a team with the name {createTeam.Name} already exists"));
+                return new Result<Team, IFailure>(
+                    new Conflict($"a team with the name {createTeam.Name} already exists"));
             }
 
             await _userPoolClient.CreateGroupAsync(groupName);
@@ -90,9 +92,15 @@ namespace Cognito.WebApi.Services
                 Name = createTeam.Name,
                 Department = createTeam.DepartmentName
             };
-            
-            
+
+
             return new Result<Team, IFailure>(team);
+        }
+
+
+        public async Task<Result<Nothing, NotFound>> JoinTeam(string teamId, string userId)
+        {
+           return await _userPoolClient.AddUserToGroup(teamId, userId);
         }
     }
 }

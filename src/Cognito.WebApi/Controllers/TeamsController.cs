@@ -71,5 +71,11 @@ namespace Cognito.WebApi.Controllers
                 }
             );
         }
+
+        [HttpPost("{id}/members")]
+        public async Task JoinTeam(string id, [FromBody] JoinTeam joinTeam)
+        {
+            await _teamsService.JoinTeam(id, joinTeam.UserId);
+        }
     }
 }

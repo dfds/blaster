@@ -1,4 +1,5 @@
 using System;
+using Cognito.WebApi.Failures;
 
 namespace Cognito.WebApi
 {
@@ -11,8 +12,8 @@ namespace Cognito.WebApi
         {
             _successResult = successResult;
         }
-
-        public Result(TFailureResult failureResult)
+        // static void Foo<T>(T a, RequireClass<T> ignore = null) where T : class { } // 3
+        public Result(TFailureResult failureResult) 
         {
             _failureResult = failureResult;
         }
@@ -31,7 +32,6 @@ namespace Cognito.WebApi
             }
             successFunction(_successResult);
         }
-        
         
         public TOutput Reduce<TOutput>(
             Func<TSuccessResult, TOutput> successFunction,

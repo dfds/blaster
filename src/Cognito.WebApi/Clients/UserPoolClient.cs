@@ -5,6 +5,7 @@ using Amazon;
 using Amazon.CognitoIdentityProvider;
 using Amazon.CognitoIdentityProvider.Model;
 using Amazon.Runtime;
+using Cognito.WebApi.Failures;
 
 namespace Cognito.WebApi.Model
 {
@@ -28,9 +29,9 @@ namespace Cognito.WebApi.Model
             _userPoolId = userPoolId;
         }
 
-        public async Task AddUserToGroup(
-            string username,
-            string groupName
+        public async Task<Result<Nothing, NotFound>> AddUserToGroup(
+            string groupName,
+            string username
         )
         {
             var userToGroupRequest = new AdminAddUserToGroupRequest
@@ -40,8 +41,25 @@ namespace Cognito.WebApi.Model
                 UserPoolId = _userPoolId
             };
 
-
-            await _identityProviderClient.AdminAddUserToGroupAsync(userToGroupRequest);
+            try
+            {
+                await _identityProviderClient.AdminAddUserToGroupAsync(userToGroupRequest);
+            }
+            catch (ResourceNotFoundException exception)
+            {
+                string message;
+                if (exception.Message == "Group not found.")
+                {
+                    message = $"the group {groupName} does not exist";
+                    return new Result<Nothing, NotFound>(new NotFound(message));
+                    
+                }
+                message = $"the user {username} does not exist";
+                return new Result<Nothing, NotFound>(new NotFound(message));                
+            }
+            
+            
+            return new Result<Nothing, NotFound>(new Nothing());
         }
 
 
@@ -87,7 +105,7 @@ namespace Cognito.WebApi.Model
             }
         }
 
-        
+
         public async Task<List<UserType>> ListUsersInGroupAsync(string groupName)
         {
             string nextToken = null;
@@ -104,7 +122,7 @@ namespace Cognito.WebApi.Model
 
                 var usersInGroupResponse = await _identityProviderClient.ListUsersInGroupAsync(listUsersInGroupRequest);
                 nextToken = usersInGroupResponse.NextToken;
-                
+
                 users.AddRange(usersInGroupResponse.Users);
             } while (nextToken != null);
 
@@ -112,7 +130,7 @@ namespace Cognito.WebApi.Model
             return users;
         }
 
-        
+
         public async Task<IEnumerable<string>> ListGroupsAsync()
         {
             var groupNames = new List<string>();
