@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Blaster.WebApi.Features.Dashboards;
 using Blaster.WebApi.Features.Namespaces;
 using Blaster.WebApi.Features.System;
+using Blaster.WebApi.Features.Teams;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -53,6 +54,7 @@ namespace Blaster.WebApi
             });
 
             services.AddTransient<ICognitoService, CognitoService>();
+            services.AddTransient<ITeamService, TeamService>();
 
             services.AddTransient<ForwardedHeaderBasePath>();
 
@@ -65,7 +67,7 @@ namespace Blaster.WebApi
             services
                 .AddMvc(options =>
                 {
-                    if (!_env.IsDevelopment())
+                    //if (!_env.IsDevelopment())
                     {
                         var policy = new AuthorizationPolicyBuilder()
                             .RequireAuthenticatedUser()
@@ -103,6 +105,11 @@ namespace Blaster.WebApi
                     options.MetadataAddress = $"https://cognito-idp.{region}.amazonaws.com/{poolId}/.well-known/openid-configuration";
                     options.ClientId = clientId;
                     options.ClientSecret = clientSecret;
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                    {
+                        NameClaimType = "name"
+                    };
+                    options.SaveTokens = true;
                 });
         }
 

@@ -1,8 +1,10 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using Blaster.Tests.Builders;
+using Blaster.Tests.TestDoubles;
 using Blaster.WebApi.Features.System;
 using Xunit;
+using NotImplementedException = System.NotImplementedException;
 
 namespace Blaster.Tests.Features.System
 {
@@ -24,14 +26,6 @@ namespace Blaster.Tests.Features.System
                     actual: response.StatusCode
                 );
             }
-        }
-    }
-
-    public class StubCognitoService : ICognitoService
-    {
-        public Task<string> SayHello()
-        {
-            return Task.FromResult("foo");
         }
     }
 }

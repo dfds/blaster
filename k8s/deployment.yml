@@ -40,10 +40,14 @@ spec:
         image: 579478677147.dkr.ecr.eu-central-1.amazonaws.com/ded/cognito-api:$(Build.BuildId)
         ports:
         - containerPort: 5000
-        # resources:
-        #   requests:
-        #     cpu: "20m"
-        #     memory: "100M"
-        #   limits:
-        #     cpu: "20m"
-        #     memory: "55M"
+        env:
+          - name:  AWS_COGNITO_ACCESS_KEY
+            value: $(AWS_COGNITO_ACCESS_KEY)
+          - name:  AWS_COGNITO_SECRET_ACCESS_KEY
+            value: $(AWS_COGNITO_SECRET_ACCESS_KEY)
+          - name:  AWS_COGNITO_USER_POOL_ID
+            value: $(BLASTER_COGNITO_POOL_ID)
+          - name: AWS_COGNITO_LOGIN_PROVIDER_NAME
+            value: $(AWS_COGNITO_LOGIN_PROVIDER_NAME)
+          - name: AWS_COGNITO_IDENTITY_POOL_ID
+            value: $(AWS_COGNITO_IDENTITY_POOL_ID)

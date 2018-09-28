@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cognito.WebApi.Controllers
 {
@@ -6,11 +7,27 @@ namespace Cognito.WebApi.Controllers
     [ApiController]
     public class HealthController : ControllerBase
     {
-        [HttpGet("health")]
-        
-        public ActionResult<string> Get()
+        private readonly CognitoClient _cognitoClient;
+
+        public HealthController(CognitoClient cognitoClient)
         {
-            return "Cognito WebApi says this is fine";
+            _cognitoClient = cognitoClient;
+        }
+
+        [HttpGet("health")]
+        [ProducesResponseType(200, Type = typeof(string))]
+        [ProducesResponseType(504, Type = typeof(string))]
+        public async Task<ActionResult<string>> Get(bool deep)
+        {
+            const string allISWell="Cognito WebApi says this is fine";
+            if (deep == false)
+            {
+                return allISWell;
+            }
+
+            var cognitoIsAlive = await _cognitoClient.IsAlive();
+
+            return cognitoIsAlive ? Ok(allISWell): StatusCode(504, "No connection to AWS cognito can be made");
         }
     }
 }

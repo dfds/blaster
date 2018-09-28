@@ -20,10 +20,18 @@ steps:
   displayName: Cognito pipeline Bash Script
 
 - task: PublishTestResults@2
-  displayName: Publish Test Results
+  displayName: Publish Test Results - Blaster
   inputs:
     testRunner: VSTest
     testResultsFiles: testresult.trx
+    searchFolder: '$(System.DefaultWorkingDirectory)/src'
+  condition: succeededOrFailed()
+
+- task: PublishTestResults@2
+  displayName: Publish Test Results - Cognito API
+  inputs:
+    testRunner: VSTest
+    testResultsFiles: testresults-cognito.trx
     searchFolder: '$(System.DefaultWorkingDirectory)/src'
   condition: succeededOrFailed()
 
