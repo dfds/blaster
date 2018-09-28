@@ -1,6 +1,6 @@
 namespace Blaster.WebApi.Features.Teams.Models
 {
-    public class User
+    public class Member
     {
         public string Id { get; set; }
         

@@ -7,12 +7,12 @@ namespace Blaster.Tests.TestDoubles
 {
     public class StubTeamService : ITeamService
     {
-        private readonly User _user;
+        private readonly Member _member;
         private readonly TeamListItem[] _teams;
 
-        public StubTeamService(User user = null, params TeamListItem[] teams)
+        public StubTeamService(Member member = null, params TeamListItem[] teams)
         {
-            _user = user;
+            _member = member;
             _teams = teams;
         }
 
@@ -34,9 +34,9 @@ namespace Blaster.Tests.TestDoubles
             return Task.FromResult(_teams.FirstOrDefault());
         }
 
-        public Task<User> JoinTeam(string teamId, string userId)
+        public Task<Member> JoinTeam(string teamId, string userId)
         {
-            return Task.FromResult(_user);
+            return Task.FromResult(_member);
         }
     }
 }

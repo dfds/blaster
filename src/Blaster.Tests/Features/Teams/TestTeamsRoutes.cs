@@ -139,7 +139,7 @@ namespace Blaster.Tests.Features.Teams
                 var dummyUser = new UserBuilder().Build();
 
                 var client = clientBuilder
-                    .WithService<ITeamService>(new StubTeamService(user: dummyUser))
+                    .WithService<ITeamService>(new StubTeamService(member: dummyUser))
                     .Build();
 
                 var dummyContent = new JsonContent(new {UserId = 1});
@@ -240,7 +240,7 @@ namespace Blaster.Tests.Features.Teams
             throw _error;
         }
 
-        public Task<User> JoinTeam(string teamId, string userId)
+        public Task<Member> JoinTeam(string teamId, string userId)
         {
             throw _error;
         }
@@ -277,9 +277,9 @@ namespace Blaster.Tests.Features.Teams
             return this;
         }
 
-        public User Build()
+        public Member Build()
         {
-            return new User
+            return new Member
             {
                 Id = _id,
                 Name = _name,

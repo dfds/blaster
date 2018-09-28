@@ -55,11 +55,11 @@ namespace Blaster.WebApi.Features.Teams
         }
 
         [HttpPost("{id}/members", Name = "JoinTeam")]
-        public async Task<ActionResult<User>> JoinTeam([FromRoute] string id, [FromBody] JoinTeamInput input)
+        public async Task<ActionResult<Member>> JoinTeam([FromRoute] string id, [FromBody] JoinTeamInput input)
         {
             if (string.IsNullOrWhiteSpace(input.UserId))
             {
-                return new ActionResult<User>(BadRequest());
+                return new ActionResult<Member>(BadRequest());
             }
 
             try
@@ -69,11 +69,11 @@ namespace Blaster.WebApi.Features.Teams
                     userId: input.UserId
                 );
 
-                return new ActionResult<User>(user);
+                return new ActionResult<Member>(user);
             }
             catch (AlreadyJoinedException)
             {
-                return new ActionResult<User>(Conflict(new
+                return new ActionResult<Member>(Conflict(new
                 {
                     Message = "User is already part of the team"
                 }));

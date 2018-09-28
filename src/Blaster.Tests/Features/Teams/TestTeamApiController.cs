@@ -99,7 +99,7 @@ namespace Blaster.Tests.Features.Teams
             var expected = new UserBuilder().Build();
 
             var sut = new TeamApiControllerBuilder()
-                .WithTeamService(new StubTeamService(user: expected))
+                .WithTeamService(new StubTeamService(member: expected))
                 .Build();
 
             var stubTeamId = "foo";

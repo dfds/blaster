@@ -65,7 +65,7 @@ namespace Blaster.WebApi.Features.Teams
             return _serializer.Deserialize<TeamListItem>(content);
         }
 
-        public async Task<User> JoinTeam(string teamId, string userId)
+        public async Task<Member> JoinTeam(string teamId, string userId)
         {
             var content = new StringContent(
                 content: _serializer.Serialize(new { UserId = userId }),
@@ -82,7 +82,7 @@ namespace Blaster.WebApi.Features.Teams
 
             var recievedContent = await response.Content.ReadAsStringAsync();
 
-            return _serializer.Deserialize<User>(recievedContent);
+            return _serializer.Deserialize<Member>(recievedContent);
         }
     }
 }
