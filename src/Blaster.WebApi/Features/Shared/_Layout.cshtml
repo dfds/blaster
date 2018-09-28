@@ -1,9 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Hosting
 @inject IHostingEnvironment Env;
 @{
+    var usernameClaim = User.Claims.FirstOrDefault(x => x.Type == "cognito:username");
+    var username = usernameClaim != null ? usernameClaim.Value : "1";
+
     var currentUser = new
     {
-        Id = "1",
+        Id = @username,
         Name = Env.IsDevelopment()
             ? "John Doe"
             : User.Identity.Name
