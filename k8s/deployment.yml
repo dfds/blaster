@@ -47,7 +47,7 @@ spec:
             value: $(AWS_COGNITO_SECRET_ACCESS_KEY)
           - name:  AWS_COGNITO_USER_POOL_ID
             value: $(BLASTER_COGNITO_POOL_ID)
-          - name: AWS_COGNITO_IDENTITY_POOL_ID_KEY
-            value: banana
-          - name: AWS_COGNITO_USER_POOL_PROVIDER_KEY
-            value: banana
+          - name: AWS_COGNITO_LOGIN_PROVIDER_NAME
+            value: $(AWS_COGNITO_LOGIN_PROVIDER_NAME)
+          - name: AWS_COGNITO_IDENTITY_POOL_ID
+            value: $(AWS_COGNITO_IDENTITY_POOL_ID)

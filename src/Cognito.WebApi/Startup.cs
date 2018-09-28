@@ -40,7 +40,19 @@ namespace Cognito.WebApi
 
         public void ConfigureDependencyInjectionContainer(IServiceCollection services)
         {
-            services.AddTransient<IAwsConsoleLinkBuilder, AwsConsoleLinkBuilder>();
+            services.AddTransient<IAwsConsoleLinkBuilder>(s =>
+            {
+                var vars = s.GetRequiredService<IVariables>();
+
+                var awsConsoleLinkBuilder = new AwsConsoleLinkBuilder(
+                    vars.AwsCognitoIdentityPoolId,
+                    vars.AwsCognitoLoginProviderName
+                );
+
+                return awsConsoleLinkBuilder;
+            });
+            
+            
             var variables = new Variables();
             variables.Validate();
             services.AddSingleton<IVariables>(variables);

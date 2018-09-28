@@ -15,24 +15,20 @@ namespace Cognito.WebApi
         private const string AwsCognitoUserPoolIdIdentifier = "AWS_COGNITO_USER_POOL_ID";
         public string AwsCognitoUserPoolId { get; }
 
-        private const string AwsCognitoIdentityPoolIdKeyIdentifier = "AWS_COGNITO_IDENTITY_POOL_ID_KEY";
-        public string AwsCognitoIdentityPoolIdKey { get; }
+        private const string AwsCognitoLoginProviderNameIdentifier = "AWS_COGNITO_LOGIN_PROVIDER_NAME";
+        public string AwsCognitoLoginProviderName { get; }
 
-        private const string AwsCognitoUserPoolProviderKeyIdentifier = "AWS_COGNITO_USER_POOL_PROVIDER_KEY";
-        public string AwsCognitoUserPoolProviderKey { get; }
-        
+        private const string AwsCognitoIdentityPoolIdIdentifier = "AWS_COGNITO_IDENTITY_POOL_ID";
+        public string AwsCognitoIdentityPoolId { get; }
        
-
-
         public Variables()
         {
             AwsCognitoAccessKey = Environment.GetEnvironmentVariable(AwsCognitoAccessKeyIdentifier);
             AwsCognitoSecretAccessKey = Environment.GetEnvironmentVariable(AwsCognitoSecretAccessKeyIdentifier);
             AwsCognitoUserPoolId = Environment.GetEnvironmentVariable(AwsCognitoUserPoolIdIdentifier);
 
-
-            AwsCognitoIdentityPoolIdKey = Environment.GetEnvironmentVariable(AwsCognitoIdentityPoolIdKeyIdentifier);
-            AwsCognitoUserPoolProviderKey = Environment.GetEnvironmentVariable(AwsCognitoUserPoolProviderKeyIdentifier);
+            AwsCognitoLoginProviderName = Environment.GetEnvironmentVariable(AwsCognitoLoginProviderNameIdentifier);
+            AwsCognitoIdentityPoolId = Environment.GetEnvironmentVariable(AwsCognitoIdentityPoolIdIdentifier);
         }
 
         public void Validate()
@@ -42,10 +38,8 @@ namespace Cognito.WebApi
             if (string.IsNullOrWhiteSpace(AwsCognitoSecretAccessKey)) { errors.Add(createVariableNotSetString(AwsCognitoSecretAccessKeyIdentifier)); }
             if (string.IsNullOrWhiteSpace(AwsCognitoUserPoolId)) { errors.Add(createVariableNotSetString(AwsCognitoUserPoolIdIdentifier)); }
 
-            
-            if (string.IsNullOrWhiteSpace(AwsCognitoIdentityPoolIdKey)) { errors.Add(createVariableNotSetString(AwsCognitoIdentityPoolIdKeyIdentifier)); }
-            if (string.IsNullOrWhiteSpace(AwsCognitoUserPoolProviderKey)) { errors.Add(createVariableNotSetString(AwsCognitoUserPoolProviderKeyIdentifier)); }
-
+            if (string.IsNullOrWhiteSpace(AwsCognitoLoginProviderName)) { errors.Add(createVariableNotSetString(AwsCognitoLoginProviderNameIdentifier)); }
+            if (string.IsNullOrWhiteSpace(AwsCognitoIdentityPoolId)) { errors.Add(createVariableNotSetString(AwsCognitoIdentityPoolIdIdentifier)); }
 
             if (errors.Any() == false) { return; }
 

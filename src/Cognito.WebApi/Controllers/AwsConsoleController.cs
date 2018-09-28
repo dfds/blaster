@@ -31,6 +31,7 @@ namespace Cognito.WebApi.Controllers
 
     public class AWSConsoleLinkResponse
     {
+
         public AWSConsoleLinkResponse(string absoluteUrl)
         {
             AbsoluteUrl = absoluteUrl;

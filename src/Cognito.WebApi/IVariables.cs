@@ -4,9 +4,11 @@ namespace Cognito.WebApi
     {
         string AwsCognitoAccessKey { get; }
         string AwsCognitoSecretAccessKey { get; }
-        string AwsCognitoIdentityPoolIdKey { get; }
-        string AwsCognitoUserPoolProviderKey { get; }
         string AwsCognitoUserPoolId { get; }
+        
+        string AwsCognitoLoginProviderName { get; }
+        string AwsCognitoIdentityPoolId { get; }
+        
         void Validate();
     }
 }

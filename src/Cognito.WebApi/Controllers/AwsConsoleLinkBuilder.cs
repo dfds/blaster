@@ -14,18 +14,43 @@ namespace Cognito.WebApi.Controllers
 {
     public class AwsConsoleLinkBuilder : IAwsConsoleLinkBuilder
     {
+        private readonly string _identityPoolId;
+        private readonly string _loginProviderName;
+
+        public AwsConsoleLinkBuilder(
+            string identityPoolId,
+            string loginProviderName
+        )
+        {
+            _identityPoolId = identityPoolId;
+            _loginProviderName = loginProviderName;
+        }
+        
+        
         /// <summary>Creates a AWS console login uri</summary>
         /// <param name="identityToken">The token provided by the identity provider.</param>
         public async Task<Uri> GenerateUriForConsole(string identityToken)
         {
-            var identityPoolId = "eu-central-1:07c2b8e5-42a1-4791-a006-ea4e14611de8";
-            var providerName = "cognito-idp.eu-central-1.amazonaws.com/eu-central-1_y2kIM3LEL";
-            var roleArn = "arn:aws:iam::528563840976:role/Cognito_BlasterAuth_Role";
+            var roleToAssumeArn = "arn:aws:iam::528563840976:role/Cognito_BlasterAuth_Role";
 
+            return await GenerateUriForConsole(
+                identityToken,
+                roleToAssumeArn
+            );
+        }
+
+        /// <summary>Creates a AWS console login uri</summary>
+        /// <param name="identityToken">The token provided by the identity provider.</param>
+        /// <param name="roleToAssumeArn">The arn of the role the result url will give access to</param>
+        public async Task<Uri> GenerateUriForConsole(
+            string identityToken,
+            string roleToAssumeArn
+        )
+        {
             var credentialsPayload = await AssumeRole(
-                identityPoolId,
-                providerName,
-                roleArn,
+                _identityPoolId,
+                _loginProviderName,
+                roleToAssumeArn,
                 identityToken
             );
 
@@ -40,8 +65,8 @@ namespace Cognito.WebApi.Controllers
 
         public async Task<CredentialsPayload> AssumeRole(
             string identityPoolId,
-            string providerName,
-            string roleArn,
+            string loginProviderName,
+            string roleToAssumeArn,
             string identityToken
         )
         {
@@ -53,14 +78,15 @@ namespace Cognito.WebApi.Controllers
             );
 
             cognitoAwsCredentials.AddLogin(
-                providerName,
+                loginProviderName,
                 identityToken
             );
 
             var securityTokenServiceClient = new AmazonSecurityTokenServiceClient(cognitoAwsCredentials);
-            var assumedRole = await securityTokenServiceClient.AssumeRoleAsync(new AssumeRoleRequest
+            var assumedRole = await securityTokenServiceClient.AssumeRoleAsync(
+                new AssumeRoleRequest
                 {
-                    RoleArn = roleArn,
+                    RoleArn = roleToAssumeArn,
                     RoleSessionName = "AssumeRoleSession"
                 }
             );
