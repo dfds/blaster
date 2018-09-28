@@ -1,53 +1,72 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Hosting
+@inject IHostingEnvironment Env;
+@{
+    var currentUser = new
+    {
+        Id = "1",
+        Name = Env.IsDevelopment()
+            ? "John Doe"
+            : User.Identity.Name
+    };
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Blaster</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
     @RenderSection("Header", required: false)
 </head>
 <body>
 
-<header>
-    <div class="container has-text-right has-text-weight-light">
-        Welcome, @(User.Identity.Name ?? "Stranger!")
-    </div>
+    <header>
+        <div class="container has-text-right has-text-weight-light">
+            Welcome, @currentUser.Name
+        </div>
 
-    <br />
+        <br />
 
-    <div class="container">
-        <nav class="navbar is-transparent">
-            <div class="navbar-brand">
-                <div class="navbar-item">
-                    <span class="title is-1">Blaster</span>
-                </div>
-            </div>
-            <div class="navbar-menu">
-                <div class="navbar-start"></div>
-                <div class="navbar-end">
+        <div class="container">
+            <nav class="navbar is-transparent">
+                <div class="navbar-brand">
                     <div class="navbar-item">
-                        <a href="/teams" class="button is-outlined is-rounded">Teams</a>
-                    </div>
-                    <div class="navbar-item">
-                        <a href="/namespaces" class="button is-outlined is-rounded" disabled>Namespaces</a>
-                    </div>
-                    <div class="navbar-item">
-                        <a href="/dashboards" class="button is-outlined is-rounded" disabled>Dashboards</a>
+                        <span class="title is-1">Blaster</span>
                     </div>
                 </div>
-            </div>
-        </nav>
-    </div>
+                <div class="navbar-menu">
+                    <div class="navbar-start"></div>
+                    <div class="navbar-end">
+                        <div class="navbar-item">
+                            <a href="/teams" class="button is-outlined is-rounded">Teams</a>
+                        </div>
+                        <div class="navbar-item">
+                            <a href="/namespaces" class="button is-outlined is-rounded" disabled>Namespaces</a>
+                        </div>
+                        <div class="navbar-item">
+                            <a href="/dashboards" class="button is-outlined is-rounded" disabled>Dashboards</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
 
-    <br />
+        <br />
 
-</header>
+    </header>
 
-@RenderBody()
+    @RenderBody()
 
-@RenderSection("Scripts", required: false)
+    <script>
+    window.basePath = "@Context.Request.PathBase";
+    window.currentUser = {
+        id: "@currentUser.Id",
+        name: "@currentUser.Name"
+    };
+    </script>
+
+    @RenderSection("Scripts", required: false)
 
 </body>
 </html>
