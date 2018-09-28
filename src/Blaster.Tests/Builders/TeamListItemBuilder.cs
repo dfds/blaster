@@ -12,7 +12,7 @@ namespace Blaster.Tests.Builders
                 Id = "1",
                 Name = "team foo",
                 Department = "department foo",
-                Members = new User[0]
+                Members = new Member[0]
             };
         }
     }
