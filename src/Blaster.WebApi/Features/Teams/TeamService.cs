@@ -73,7 +73,7 @@ namespace Blaster.WebApi.Features.Teams
                 mediaType: "application/json"
             );
 
-            var response = await _client.PostAsync($"/api/teams/{teamId}/members", content);
+            var response = await _client.PostAsync($"{_baseUrl}/api/teams/{teamId}/members", content);
 
             if (response.StatusCode == HttpStatusCode.Conflict)
             {
