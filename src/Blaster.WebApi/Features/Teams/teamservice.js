@@ -1,19 +1,28 @@
-import jq from "jquery";
-
-const baseUrl = "api/teams"
+import HttpClient from "httpclient";
+import { currentUser } from "userservice";
 
 export default class TeamService {
+    constructor() {
+        this.client = new HttpClient();
+        this.baseUrl = "api/teams";
+
+        this.getAll = this.getAll.bind(this);
+        this.add = this.add.bind(this);
+    }
+
     getAll() {
-        return jq.getJSON(baseUrl);
+        return this.client.get(this.baseUrl);
     }
 
     add (team) {
-        return jq.ajax({
-            type: "POST",
-            url: baseUrl,
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(team)
-        });
-    }    
+        return this.client.post(this.baseUrl, team);
+    }
+
+    join(teamId) {
+        const payload = {
+            userId: currentUser.id
+        };
+
+        return this.client.post(`/api/teams/${teamId}/members`, payload);
+    }
 }

@@ -1,44 +1,27 @@
 import jq from "jquery";
-import Vue from "vue";
-import Editor from "./team-editor";
 import TeamService from "./teamservice";
+import AlertDialog from "./alert-dialog";
+import app from "./app";
 import "./styles"
 
 const teamService = new TeamService();
 
-const app = new Vue({
-    el: "#teams-app",
-    data: {
-        items: []
-    },
-    methods: {
-        newTeam: function() {
-            const item = {
-                name: "",
-                department: ""
-            };
-
-            const editor = new Editor();
-            editor
-                .open(item)
-                .then(data => teamService.add(data))
-                .then(data => {
-                    app.items.push({
-                        id: data.id,
-                        name: data.name,
-                        department: data.department,
-                        members: data.members
-                    });
-                })
-                .catch(info => {
-                    console.log("ERROR: " + JSON.stringify(info));
-                });
-        }
-    }
-});
-
 jq.ready
     .then(() => teamService.getAll())
     .then(data => {
-        data.items.forEach(item => app.items.push(item));
-    });
+        const items = data.items || [];
+        items.forEach(item => app.items.push(item));
+    })
+    .catch(info => {
+        if (info.status != 200) {
+            const dialog = AlertDialog.open({
+                template: document.getElementById("error-dialog-template"),
+                container: document.getElementById("global-dialog-container"),
+                data: {
+                    title: "Error!",
+                    message: `Could not retrieve list of teams. Server returned (${info.status}) ${info.statusText}.`
+                }
+            });
+        }
+    })
+    .done(() => app.initializing = false);

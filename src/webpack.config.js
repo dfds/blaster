@@ -14,7 +14,9 @@ module.exports = {
     },
     resolve: {
         alias: {
-            vue: 'vue/dist/vue.js'
+            vue: 'vue/dist/vue.js',
+            httpclient$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/httpclient.js"),
+            userservice$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/userservice.js"),
         },
         extensions: [".js", ".scss"]
     },
@@ -33,43 +35,23 @@ module.exports = {
                 loader: 'babel-loader',
                 exclude: /node_modules/
             },
-            // {
-            //     test: /\.css$/,
-            //     use: [{
-            //             loader: "style-loader"
-            //         },
-            //         {
-            //             loader: "css-loader",
-            //             options: {
-            //                 sourceMap: true
-            //             }
-            //         }
-            //     ]
-            // },
             {
                 test: /\.(sa|sc|c)ss$/,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    // "style-loader",
                     "css-loader",
                     "sass-loader",
                 ]
-                // use: [{
-                //         loader: "style-loader"
-                //     },
-                //     {
-                //         loader: "css-loader",
-                //         options: {
-                //             sourceMap: true
-                //         }
-                //     },
-                //     {
-                //         loader: "sass-loader",
-                //         options: {
-                //             sourceMap: true
-                //         }
-                //     }
-                // ]
+            },
+            {
+                test: /\.(jpe?g|png|gif|svg|eot|woff|ttf|svg|woff2)$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[ext]',
+                        outputPath: 'fonts/'
+                    }
+                }]                
             }
         ]
     }
