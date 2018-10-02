@@ -54,7 +54,7 @@ namespace Cognito.WebApi.Controllers
 
 
             return result.Reduce<ActionResult>(
-                team => CreatedAtAction(nameof(GetTeam), new {id = team.Id}, createTeam),
+                team => CreatedAtAction(nameof(GetTeam), new {id = team.Id}, team),
                 failure =>
                 {
                     if (failure.GetType() == typeof(Conflict))
