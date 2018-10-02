@@ -50,7 +50,7 @@ namespace Blaster.WebApi.Features.Teams
             var response = await _client.PostAsync($"{_baseUrl}/api/teams", content);
             if (response.StatusCode != HttpStatusCode.Created)
             {
-                throw new Exception("Error! Team was not created in external service.");
+                throw new Exception($"Error! Team was not created in external service. Service returned ({response.StatusCode} - {response.ReasonPhrase})");
             }
 
             var receivedContent = await response.Content.ReadAsStringAsync();
