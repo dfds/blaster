@@ -84,7 +84,7 @@ namespace Cognito.WebApi.Services
                 return new Result<Team, IFailure>(validationFailed);
             }
 
-            var groupName = $"{createTeam.Name}_D_{createTeam.DepartmentName}";
+            var groupName = $"{createTeam.Name}_D_{createTeam.Department}";
 
 
             var existingTeam = await _userPoolClient.GetGroupAsync(groupName);
@@ -100,9 +100,9 @@ namespace Cognito.WebApi.Services
             {
                 Id = groupName,
                 Name = createTeam.Name,
-                Department = createTeam.DepartmentName
+                Department = createTeam.Department,
+                Members = new List<User>()
             };
-
 
             return new Result<Team, IFailure>(team);
         }
