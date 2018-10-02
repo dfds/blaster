@@ -74,15 +74,36 @@ namespace Blaster.WebApi.Features.Teams
             );
 
             var response = await _client.PostAsync($"{_baseUrl}/api/teams/{teamId}/members", content);
+            var responseBody = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode == HttpStatusCode.Conflict)
             {
                 throw new AlreadyJoinedException();
             }
 
-            var recievedContent = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new ServerReturnedUnexpectedResponseException($"{response.StatusCode:D} - {response.ReasonPhrase}", responseBody);
+            }
 
-            return _serializer.Deserialize<Member>(recievedContent);
+            var member = _serializer.Deserialize<Member>(responseBody);
+            if (member == null)
+            {
+                throw new Exception("Error, unable to deserialize response body into team member instance. Reponse body was: " + responseBody);
+            }
+
+            return member;
         }
+    }
+
+    public class ServerReturnedUnexpectedResponseException : Exception
+    {
+        public ServerReturnedUnexpectedResponseException(string message, string responseBody)
+            : base(message)
+        {
+            ResponseBody = responseBody;
+        }
+
+        public string ResponseBody { get; }
     }
 }
