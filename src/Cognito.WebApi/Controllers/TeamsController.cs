@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cognito.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/teams")]
     [ApiController]
     public class TeamsController : ControllerBase
     {
