@@ -43,7 +43,7 @@ namespace Cognito.WebApi.Controllers
 
 
         [HttpPost]
-        [ProducesResponseType(201, Type = typeof(string))]
+        [ProducesResponseType(201, Type = typeof(Team))]
         [ProducesResponseType(400)]
         [ProducesResponseType(409)]
         [ProducesResponseType(500)]
@@ -53,7 +53,11 @@ namespace Cognito.WebApi.Controllers
 
 
             return result.Reduce<ActionResult>(
-                team => CreatedAtAction(nameof(GetTeam), new {id = team.Id}, team),
+                team => CreatedAtAction(
+                    nameof(GetTeam), 
+                    new {team.Id},
+                    team
+                ),
                 failure =>
                 {
                     if (failure.GetType() == typeof(Conflict))
