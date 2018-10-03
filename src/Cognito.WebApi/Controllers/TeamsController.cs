@@ -33,11 +33,10 @@ namespace Cognito.WebApi.Controllers
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Team>> GetTeam(
-            string teamId,
-            string departmentId
+            string id
         )
         {
-            var team = await _teamsService.GetTeam(teamId, departmentId);
+            var team = await _teamsService.GetTeam(id);
 
             return team;
         }

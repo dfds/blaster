@@ -32,18 +32,7 @@ namespace Cognito.WebApi.Services
             return teams;
         }
 
-        public async Task<Team> GetTeam(
-            string teamId,
-            string departmentId
-        )
-        {
-            var groupName = $"{teamId}_D_{departmentId}";
-
-            return await GetTeam(groupName);
-        }
-
-
-        private async Task<Team> GetTeam(string id)
+        public async Task<Team> GetTeam(string id)
         {
             var usersInGroup = await _userPoolClient.ListUsersInGroupAsync(id);
 
