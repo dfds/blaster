@@ -45,7 +45,7 @@ namespace Cognito.IntegrationTests
                 var userPoolClient = CreateUserPoolClient(userPollId);
 
                 var userName = CreateName();
-                await userPoolClient.CreateUser(userName);
+                await userPoolClient.CreateUserAsync(userName);
             }
             finally
             {
@@ -89,7 +89,7 @@ namespace Cognito.IntegrationTests
                 var userPoolClient = CreateUserPoolClient(userPollId);
 
                 var userName = CreateName();
-                await userPoolClient.CreateUser(userName);
+                await userPoolClient.CreateUserAsync(userName);
                 
                 
                 var result = await userPoolClient.GetUserAttributes(userName);
@@ -121,7 +121,7 @@ namespace Cognito.IntegrationTests
                 var userPoolClient = CreateUserPoolClient(userPollId);
 
                 var userName = CreateName();
-                await userPoolClient.CreateUser(userName);
+                await userPoolClient.CreateUserAsync(userName);
 
                 var groupName = CreateName();
                 await userPoolClient.CreateGroupAsync(groupName);
@@ -146,7 +146,7 @@ namespace Cognito.IntegrationTests
                 var userPoolClient = CreateUserPoolClient(userPollId);
 
                 var userName = CreateName();
-                await userPoolClient.CreateUser(userName);
+                await userPoolClient.CreateUserAsync(userName);
 
                 var groupName = CreateName();
 
@@ -169,7 +169,7 @@ namespace Cognito.IntegrationTests
                 var userPoolClient = CreateUserPoolClient(userPollId);
 
                 var userName = CreateName();
-                await userPoolClient.CreateUser(userName);
+                await userPoolClient.CreateUserAsync(userName);
 
                 var groupName = CreateName();
                 await userPoolClient.CreateGroupAsync(groupName);
@@ -204,7 +204,7 @@ namespace Cognito.IntegrationTests
 
                     users.Add(userName);
 
-                    await userPoolClient.CreateUser(userName);
+                    await userPoolClient.CreateUserAsync(userName);
                     await userPoolClient.AddUserToGroup(userName, groupName);
                 }
 

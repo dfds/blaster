@@ -81,7 +81,7 @@ namespace Cognito.WebApi.Model
         }
 
 
-        public async Task CreateUser(string userName)
+        public async Task CreateUserAsync(string userName)
         {
             var createUserRequest = new AdminCreateUserRequest
             {
