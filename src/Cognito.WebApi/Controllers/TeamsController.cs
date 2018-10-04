@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Cognito.WebApi.Failures;
 using Cognito.WebApi.Model;
@@ -51,7 +52,6 @@ namespace Cognito.WebApi.Controllers
         {
             var result = await _teamsService.CreateTeam(createTeam);
 
-
             return result.Reduce<ActionResult>(
                 team => CreatedAtAction(
                     nameof(GetTeam), 
@@ -76,7 +76,12 @@ namespace Cognito.WebApi.Controllers
         }
 
         [HttpPost("{id}/members")]
-        public async Task<ActionResult> JoinTeam(string id, [FromBody] JoinTeam joinTeam)
+        [ProducesResponseType(200, Type = typeof(User))]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult> JoinTeam(
+            string id, 
+            [FromBody] JoinTeam joinTeam
+        )
         {
           var result =  await _teamsService.JoinTeam(
               id, 
