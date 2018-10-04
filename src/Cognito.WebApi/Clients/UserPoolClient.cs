@@ -61,7 +61,7 @@ namespace Cognito.WebApi.Model
         }
 
         
-        public async Task<Result<List<AttributeType>, NotFound>> GetUserAttributes(string userName)
+        public async Task<Result<List<AttributeType>, NotFound>> GetUserAttributesAsync(string userName)
         {
             var getUserRequest = new AdminGetUserRequest
             {

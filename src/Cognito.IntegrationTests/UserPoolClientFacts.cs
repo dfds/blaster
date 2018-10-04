@@ -64,7 +64,7 @@ namespace Cognito.IntegrationTests
                 var userPoolClient = CreateUserPoolClient(userPollId);
 
                 var userName = CreateName();
-                var result = await userPoolClient.GetUserAttributes(userName);
+                var result = await userPoolClient.GetUserAttributesAsync(userName);
 
                 result.Handle(
                     success => throw new Exception("This function should not succeed"),
@@ -92,7 +92,7 @@ namespace Cognito.IntegrationTests
                 await userPoolClient.CreateUserAsync(userName);
                 
                 
-                var result = await userPoolClient.GetUserAttributes(userName);
+                var result = await userPoolClient.GetUserAttributesAsync(userName);
 
                 result.Handle(
                     success => { },
