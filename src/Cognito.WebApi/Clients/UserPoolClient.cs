@@ -60,6 +60,26 @@ namespace Cognito.WebApi.Model
             return new Result<Nothing, NotFound>(new Nothing());
         }
 
+        
+        public async Task<Result<List<AttributeType>, NotFound>> GetUserAttributes(string userName)
+        {
+            var getUserRequest = new AdminGetUserRequest
+            {
+                Username = userName,
+                UserPoolId = _userPoolId
+            };
+            try
+            {
+                var getUserResponse = await _identityProviderClient.AdminGetUserAsync(getUserRequest);
+                return new Result<List<AttributeType>, NotFound>(getUserResponse.UserAttributes);
+            }
+            catch (UserNotFoundException exception) when (exception.Message == "User does not exist.")
+            {
+                var message = $"the user '{userName}' does not exist";
+                return new Result<List<AttributeType>, NotFound>(new NotFound(message));
+            }
+        }
+
 
         public async Task CreateUser(string userName)
         {
@@ -67,7 +87,7 @@ namespace Cognito.WebApi.Model
             {
                 UserPoolId = _userPoolId,
                 Username = userName,
-                MessageAction = MessageActionType.SUPPRESS,
+                MessageAction = MessageActionType.SUPPRESS
                 //    UserAttributes = new List<AttributeType> {new AttributeType {Name = "shoe-color", Value = "brown"}}
             };
 

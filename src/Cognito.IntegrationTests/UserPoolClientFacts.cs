@@ -9,6 +9,9 @@ using Cognito.WebApi.Model;
 
 namespace Cognito.IntegrationTests
 {
+    /// <summary>
+    /// Method names should be read as "User pool client can {method name}"
+    /// </summary>
     public class UserPoolClientFacts
     {
         [Fact]
@@ -50,6 +53,63 @@ namespace Cognito.IntegrationTests
             }
         }
 
+        [Fact]
+        public async Task GetUserAttributesForAUserThatDoesNotExist()
+        {
+            var client = CognitoClientFactory.CreateFromGetEnvironmentVariables();
+            var userPollId = await client.CreateUserPoolAsync(CreateName());
+
+            try
+            {
+                var userPoolClient = CreateUserPoolClient(userPollId);
+
+                var userName = CreateName();
+                var result = await userPoolClient.GetUserAttributes(userName);
+
+                result.Handle(
+                    success => throw new Exception("This function should not succeed"),
+                    notFound => { notFound.Message.ShouldBe($"the user '{userName}' does not exist"); }
+                );
+            }
+            finally
+            {
+                await client.DeleteUserPoolAsync(userPollId);
+            }
+        }
+
+        
+        [Fact]
+        public async Task GetUserAttributesForAUser()
+        {
+            var client = CognitoClientFactory.CreateFromGetEnvironmentVariables();
+            var userPollId = await client.CreateUserPoolAsync(CreateName());
+
+            try
+            {
+                var userPoolClient = CreateUserPoolClient(userPollId);
+
+                var userName = CreateName();
+                await userPoolClient.CreateUser(userName);
+                
+                
+                var result = await userPoolClient.GetUserAttributes(userName);
+
+                result.Handle(
+                    success => { },
+                    notFound =>
+                        {
+                            throw new Exception("This function should not succeed");
+                        }
+                    );
+                        
+            }
+            finally
+            {
+                await client.DeleteUserPoolAsync(userPollId);
+            }
+        }
+        
+        
         [Fact]
         public async Task AddUserToGroup()
         {
@@ -116,7 +176,6 @@ namespace Cognito.IntegrationTests
 
                 await userPoolClient.AddUserToGroup(userName, groupName);
                 await userPoolClient.AddUserToGroup(userName, groupName);
-
             }
             finally
             {
@@ -147,8 +206,6 @@ namespace Cognito.IntegrationTests
 
                     await userPoolClient.CreateUser(userName);
                     await userPoolClient.AddUserToGroup(userName, groupName);
-
-
                 }
 
                 // Act
@@ -161,7 +218,6 @@ namespace Cognito.IntegrationTests
                     .OrderBy(u => u)
                     .ToList()
                     .ShouldBe(users.OrderBy(g => g));
-
             }
             finally
             {

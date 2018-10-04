@@ -12,7 +12,7 @@ namespace Cognito.WebApi
         {
             _successResult = successResult;
         }
-        // static void Foo<T>(T a, RequireClass<T> ignore = null) where T : class { } // 3
+
         public Result(TFailureResult failureResult) 
         {
             _failureResult = failureResult;
