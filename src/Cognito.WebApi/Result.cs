@@ -33,6 +33,7 @@ namespace Cognito.WebApi
             successFunction(_successResult);
         }
         
+              
         public TOutput Reduce<TOutput>(
             Func<TSuccessResult, TOutput> successFunction,
             Func<TFailureResult, TOutput> failureFunction

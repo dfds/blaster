@@ -21,14 +21,14 @@ namespace Cognito.WebApi.Controllers
             _teamsService = teamsService;
         }
 
-        
+
         [HttpGet]
         public async Task<ActionResult<TeamList>> GetAllTeams()
         {
             var teams = await _teamsService.GetAllTeams();
 
 
-            return new TeamList{Items = teams};
+            return new TeamList {Items = teams};
         }
 
 
@@ -54,7 +54,7 @@ namespace Cognito.WebApi.Controllers
 
             return result.Reduce<ActionResult>(
                 team => CreatedAtAction(
-                    nameof(GetTeam), 
+                    nameof(GetTeam),
                     new {team.Id},
                     team
                 ),
@@ -79,19 +79,19 @@ namespace Cognito.WebApi.Controllers
         [ProducesResponseType(200, Type = typeof(User))]
         [ProducesResponseType(404)]
         public async Task<ActionResult> JoinTeam(
-            string id, 
+            string id,
             [FromBody] JoinTeam joinTeam
         )
         {
-          var result =  await _teamsService.JoinTeam(
-              id, 
-              joinTeam.UserId
-          );
+            var joinTeamResult = await _teamsService.JoinTeam(
+                id,
+                joinTeam.UserId
+            );
 
 
-            return result.Reduce<ActionResult>(
-                s => Ok(),
-                netFound => NotFound(netFound.Message)
+            return joinTeamResult.Reduce<ActionResult>(
+                user => Ok(user),
+                notFound => NotFound(notFound.Message)
             );
         }
     }

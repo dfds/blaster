@@ -53,16 +53,39 @@ namespace Cognito.WebApi.Services
             return team;
         }
 
-        public User CreateUserFromUserType(UserType userType)
+
+        public User CreateUserFromUserAndAttributes(
+            string username,
+            List<AttributeType> attributes
+        )
         {
             var user = new User();
-            user.Id = userType.Username;
-            user.Name= userType.Attributes?.FirstOrDefault(a => a.Name == "name")?.Value;
-            user.Email = userType.Attributes?.FirstOrDefault(a => a.Name == "email")?.Value;
+            user.Id = username;
+
+            if (attributes == null)
+            {
+                return user;
+            }
+
+            user.Name = attributes.FirstOrDefault(a => a.Name == "name")?.Value;
+            user.Email = attributes.FirstOrDefault(a => a.Name == "email")?.Value;
 
 
             return user;
         }
+
+
+        public User CreateUserFromUserType(UserType userType)
+        {
+            var user = CreateUserFromUserAndAttributes(
+                userType.Username,
+                userType.Attributes
+            );
+
+
+            return user;
+        }
+
 
         public async Task<Result<Team, IFailure>> CreateTeam(CreateTeam createTeam)
         {
@@ -97,9 +120,36 @@ namespace Cognito.WebApi.Services
         }
 
 
-        public async Task<Result<Nothing, NotFound>> JoinTeam(string teamId, string userId)
+        public async Task<Result<User, NotFound>> JoinTeam(
+            string teamId, 
+            string userId
+        )
         {
-           return await _userPoolClient.AddUserToGroup(teamId, userId);
+            var addUserToGroupResult = await _userPoolClient.AddUserToGroup(teamId, userId);
+
+            var createUser = await addUserToGroupResult.Reduce(async nothing =>
+                {
+                    var getAttributesResult = await _userPoolClient.GetUserAttributesAsync(userId);
+
+                    var result = getAttributesResult.Reduce(
+                        attributes =>
+                        {
+                            var user = CreateUserFromUserAndAttributes(
+                                userId,
+                                attributes
+                            );
+
+                            return new Result<User, NotFound>(user);
+                        },
+                        notFound => new Result<User, NotFound>(notFound));
+
+                    return result;
+                },
+                notFound => Task.FromResult(new Result<User, NotFound>(notFound))
+            );
+
+
+            return createUser;
         }
     }
 }
