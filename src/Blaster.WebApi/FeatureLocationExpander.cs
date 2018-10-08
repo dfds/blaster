@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace Blaster.WebApi
@@ -12,12 +13,17 @@ namespace Blaster.WebApi
 
         public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
         {
-            return new[]
+            var yPlural = Regex.Replace(context.ControllerName, @"^(.+)y$", "$1");
+
+            var temp = new[]
             {
                 "/Features/{1}/{0}.cshtml",
                 "/Features/{1}s/{0}.cshtml",
-                "/Features/Shared/{0}.cshtml"
+                $"/Features/{yPlural}ies/{{0}}.cshtml",
+                "/Features/Shared/{0}.cshtml",
             };
+
+            return temp;
         }
     }
 }
