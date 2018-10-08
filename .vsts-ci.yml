@@ -13,25 +13,11 @@ steps:
   displayName: Blaster pipeline Bash Script
   enabled: true
 
-- bash: |
-   export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY)
-   chmod +x ./cognito-api-pipeline.sh
-   ./cognito-api-pipeline.sh $(Build.BuildId) $(System.DefaultWorkingDirectory)
-  displayName: Cognito pipeline Bash Script
-
 - task: PublishTestResults@2
   displayName: Publish Test Results - Blaster
   inputs:
     testRunner: VSTest
     testResultsFiles: testresult.trx
-    searchFolder: '$(System.DefaultWorkingDirectory)/src'
-  condition: succeededOrFailed()
-
-- task: PublishTestResults@2
-  displayName: Publish Test Results - Cognito API
-  inputs:
-    testRunner: VSTest
-    testResultsFiles: testresults-cognito.trx
     searchFolder: '$(System.DefaultWorkingDirectory)/src'
   condition: succeededOrFailed()
 
