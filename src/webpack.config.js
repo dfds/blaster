@@ -7,6 +7,7 @@ module.exports = {
         dashboard: "./Blaster.WebApi/Features/Dashboards/main.js",
         teams: "./Blaster.WebApi/Features/Teams/main.js",
         aws: "./Blaster.WebApi/Features/AWS/main.js",
+        containerregistry: "./Blaster.WebApi/Features/ContainerRegistry/main.js",
     },
     output: {
         path: path.resolve(__dirname, "Blaster.WebApi", "wwwroot"),
@@ -17,6 +18,8 @@ module.exports = {
             vue: 'vue/dist/vue.js',
             httpclient$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/httpclient.js"),
             userservice$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/userservice.js"),
+            alertdialog$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/alert-dialog.js"),
+            modeleditor$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/model-editor.js"),
         },
         extensions: [".js", ".scss"]
     },
