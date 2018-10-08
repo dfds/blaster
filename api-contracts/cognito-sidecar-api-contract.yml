@@ -75,7 +75,11 @@ paths:
           headers:
             location:
               type: string
-              description: A URI to a location when the team can be retrieved      
+              description: A URI to a location when the team can be retrieved
+        400:
+          description: Bad request. name can not be empty.
+        409:
+          description: A team with the given name already exists
   /api/teams/{id}:
     get:
       summary: Returns a single team

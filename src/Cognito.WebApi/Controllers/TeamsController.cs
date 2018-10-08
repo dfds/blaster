@@ -42,12 +42,16 @@ namespace Cognito.WebApi.Controllers
             return team;
         }
 
-
+        public class NegativeHttpResponse
+        {
+            public string Message { get; set; }
+        }
+        
+        
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(Team))]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(409)]
-        [ProducesResponseType(500)]
+        [ProducesResponseType(400, Type = typeof(NegativeHttpResponse))]
+        [ProducesResponseType(409, Type = typeof(NegativeHttpResponse))]
         public async Task<ActionResult> CreateTeam([FromBody] CreateTeam createTeam)
         {
             var result = await _teamsService.CreateTeam(createTeam);
@@ -62,12 +66,12 @@ namespace Cognito.WebApi.Controllers
                 {
                     if (failure.GetType() == typeof(Conflict))
                     {
-                        return Conflict(failure.Message);
+                        return Conflict(new NegativeHttpResponse {Message = failure.Message});
                     }
 
                     if (failure.GetType() == typeof(ValidationFailed))
                     {
-                        return BadRequest(failure.Message);
+                        return BadRequest(new NegativeHttpResponse {Message = failure.Message});
                     }
 
                     return StatusCode(500, failure.Message);
