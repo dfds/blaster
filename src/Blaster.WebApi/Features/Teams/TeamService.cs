@@ -12,7 +12,7 @@ namespace Blaster.WebApi.Features.Teams
 {
     public class TeamService : ITeamService
     {
-        private const string CognitoApiUrlKey = "BLASTER_COGNITO_API_URL";
+        private const string TeamServiceApiUrlKey = "BLASTER_TEAMSERVICE_API_URL";
 
         private readonly HttpClient _client;
         private readonly IJsonSerializer _serializer;
@@ -20,11 +20,11 @@ namespace Blaster.WebApi.Features.Teams
 
         public TeamService(IConfiguration configuration, HttpClient client, IJsonSerializer serializer)
         {
-            _baseUrl = configuration[CognitoApiUrlKey];
+            _baseUrl = configuration[TeamServiceApiUrlKey];
 
             if (string.IsNullOrWhiteSpace(_baseUrl))
             {
-                throw new MissingConfigurationException($"Error, missing configuration value for \"{CognitoApiUrlKey}\".");
+                throw new MissingConfigurationException($"Error, missing configuration value for \"{TeamServiceApiUrlKey}\".");
             }
 
             _client = client;

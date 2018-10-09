@@ -43,3 +43,5 @@ spec:
             value: $(BLASTER_COGNITO_CLIENT_SECRET)
           - name: BLASTER_COGNITO_API_URL
             value: http://localhost:5000
+          - name: BLASTER_TEAMSERVICE_API_URL
+            value: http://team-service
