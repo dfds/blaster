@@ -19,7 +19,7 @@
         "BLASTER_COGNITO_CLIENT_SECRET": "7usmumvc9a6fnsgm2n737aq8de0dhf03efmgvjlbomdcjdhcg93",
         "BLASTER_COGNITO_POOL_ID": "eu-central-1_y2kIM3LEL",
         "BLASTER_COGNITO_API_URL": "http://localhost:5000",
-        "BLASTER_TEAMSERVICE_API_URL": "http://localhost:6000",
+        "BLASTER_TEAMSERVICE_API_URL": "http://localhost:50900",
         "BLASTER_COGNITO_CLIENT_ID": "4b2cs9j36rnllhijup1s42jr0q",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -41,7 +41,7 @@
         "BLASTER_COGNITO_CLIENT_SECRET": "7usmumvc9a6fnsgm2n737aq8de0dhf03efmgvjlbomdcjdhcg93",
         "BLASTER_COGNITO_POOL_ID": "eu-central-1_y2kIM3LEL",
         "BLASTER_COGNITO_API_URL": "http://localhost:6000",
-        "BLASTER_TEAMSERVICE_API_URL": "http://localhost:6000",
+        "BLASTER_TEAMSERVICE_API_URL": "http://localhost:50900",
         "BLASTER_COGNITO_CLIENT_ID": "4b2cs9j36rnllhijup1s42jr0q",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
