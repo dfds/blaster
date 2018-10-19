@@ -1,28 +1,33 @@
-﻿@section header
-{
-    <link rel="stylesheet" href="~/myservices.css" />
-}
-@section Scripts
+﻿@section Scripts
 {
     <script src="~/myservices.bundle.js"></script>
 }
 
 
 <div id="myservices-app">
-    <ul>
-        <li v-for="team in teams" class="panel">
-            <p class="panel-heading">
-            {{ team.name }}
-            </p>
-            <div class="panel-block">
-                <ul>
-                    <li v-for="service in team.availableServices">
-                            <a class="button is-rounded">
-                            {{ service }}
-                            </a>
-                    </li>
-                </ul>
+    <section class="section">
+        <div class="container">
+            <div class="level">
+                <div class="level-left">
+                    <div class="level-item">
+                    <ul>
+                        <li v-for="team in teams" class="panel">
+                            <p class="panel-heading">
+                            {{ team.name }}
+                            </p>
+                            <div class="panel-block">
+                                <ul>
+                                    <li v-for="service in team.services">
+                                            <a v-bind:href="service.location" class="button is-rounded">
+                                            {{ service.name }}
+                                            </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </li>
-    </ul>
+        </div>
+    </section>
 </div>

@@ -1,14 +1,21 @@
 import Vue from 'vue';
+import { currentUser } from "userservice";
+import MyServicesClient from "./myservicesclient";
+
+const myServicesClient = new MyServicesClient();
 
 const app = new Vue({
     el: '#myservices-app',
     data: {
-        teams: [
-            {
-                name: 'awesome',
-                availableServices: ['aws console', 'slack channel']
-            },
-            {name: 'the unnamed team that takes up a lot of space'}
-        ]
+        teams: [],
+        currentUser: currentUser
+    },
+    created(){
+        myServicesClient
+            .getAll()
+            .then(data => {
+                const items = data.items || [];
+                items.forEach(team => app.teams.push(team));
+            });
     }
 });
