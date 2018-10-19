@@ -1,0 +1,28 @@
+﻿@section header
+{
+    <link rel="stylesheet" href="~/myservices.css" />
+}
+@section Scripts
+{
+    <script src="~/myservices.bundle.js"></script>
+}
+
+
+<div id="myservices-app">
+    <ul>
+        <li v-for="team in teams" class="panel">
+            <p class="panel-heading">
+            {{ team.name }}
+            </p>
+            <div class="panel-block">
+                <ul>
+                    <li v-for="service in team.availableServices">
+                            <a class="button is-rounded">
+                            {{ service }}
+                            </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>
