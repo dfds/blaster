@@ -15,7 +15,7 @@ const app = new Vue({
             .getAll()
             .then(data => {
                 const items = data.items || [];
-                items.forEach(team => app.teams.push(team));
+                app.teams = items;
             });
     }
 });
