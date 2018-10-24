@@ -10,7 +10,7 @@ const app = new Vue({
 });
 
 function getAwsLink() {
-    return jq.getJSON("api/aws");
+    return jq.getJSON("api/teams/0f6beb61-0421-4b75-b226-3cce81061ca7/aws/console-url");
 }
 
 jq.ready

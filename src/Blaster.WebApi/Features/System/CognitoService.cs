@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Dashboards;
 using Blaster.WebApi.Features.System.Models;
@@ -27,6 +28,7 @@ namespace Blaster.WebApi.Features.System
             _client = client;
             _serializer = serializer;
         }
+//         [HttpGet("api/teams/{id}/aws/console-url")]
 
         public async Task<string> SayHello()
         {
@@ -36,9 +38,9 @@ namespace Blaster.WebApi.Features.System
             return await response.Content.ReadAsStringAsync();
         }
 
-        public async Task<AwsConsoleLinkResponse> GetAwsConsoleLink(string idToken)
+        public async Task<AwsConsoleLinkResponse> GetAwsConsoleLink(Guid teamId, string idToken)
         {
-            var response = await _client.GetAsync($"{_cognitoApiUrl}/aws/console?idToken={idToken}");
+            var response = await _client.GetAsync($"{_cognitoApiUrl}/api/teams/{teamId}/aws/console-url?idToken={idToken}");
             var content = await response.Content.ReadAsStringAsync();
 
             return _serializer.Deserialize<AwsConsoleLinkResponse>(content);

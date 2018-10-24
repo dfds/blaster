@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Blaster.WebApi.Features.System.Models;
 
 namespace Blaster.WebApi.Features.System
@@ -6,6 +7,6 @@ namespace Blaster.WebApi.Features.System
     public interface ICognitoService
     {
         Task<string> SayHello();
-        Task<AwsConsoleLinkResponse> GetAwsConsoleLink(string idToken);
+        Task<AwsConsoleLinkResponse> GetAwsConsoleLink(Guid teamId, string idToken);
     }
 }

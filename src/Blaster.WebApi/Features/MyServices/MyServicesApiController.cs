@@ -1,15 +1,35 @@
+using System.Net.Http;
 using Blaster.WebApi.Features.MyServices.Model;
+using Blaster.WebApi.Features.System;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace Blaster.WebApi.Features.MyServices
 {
-    [Route("api/myservices")]
     [ApiController]
-
-    public class MyServiceSController : ControllerBase
+    public class MyServiceController : ControllerBase
     {
-        [HttpGet("")]
-        public TeamsResponse GetAll()
+        private const string TeamServiceApiUrlKey = "BLASTER_TEAMSERVICE_API_URL";
+
+        private readonly HttpClient _client
+            ;
+        private readonly string _teamsBaseUri;
+
+        public MyServiceController(
+            IConfiguration configuration, 
+            HttpClient client
+        ){
+            _client = client;
+            _teamsBaseUri =configuration[TeamServiceApiUrlKey];
+
+                 if (string.IsNullOrWhiteSpace(_teamsBaseUri))
+            {
+                throw new MissingConfigurationException($"Error, missing configuration value for \"{TeamServiceApiUrlKey}\".");
+            }
+        }
+
+        [HttpGet("api/users/{userId}/services")]
+        public TeamsResponse GetServices(string userId)
         {
             var awsConsoleLogin = new Service
             {
