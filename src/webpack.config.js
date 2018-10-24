@@ -6,7 +6,7 @@ module.exports = {
     entry: {
         dashboard: "./Blaster.WebApi/Features/Dashboards/main.js",
         teams: "./Blaster.WebApi/Features/Teams/main.js",
-        aws: "./Blaster.WebApi/Features/AWS/main.js",
+        aws: "./Blaster.WebApi/Features/AwsConsoleUrl/main.js",
         myservices: "./Blaster.WebApi/Features/MyServices/app.js",
         containerregistry: "./Blaster.WebApi/Features/ContainerRegistry/main.js",
     },
