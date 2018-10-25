@@ -1,4 +1,7 @@
+using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
+using Blaster.WebApi.Features.Dashboards;
 using Blaster.WebApi.Features.System;
 using DFDS.TeamService.WebApi.Features.UserServices.model;
 using Microsoft.AspNetCore.Mvc;
@@ -10,16 +13,20 @@ namespace Blaster.WebApi.Features.MyServices
     public class UserServicesApiController : ControllerBase
     {
         private const string TeamServiceApiUrlKey = "BLASTER_TEAMSERVICE_API_URL";
-
         private readonly HttpClient _client
             ;
         private readonly string _teamsBaseUri;
+        private readonly IJsonSerializer _serializer;
+
 
         public UserServicesApiController(
             IConfiguration configuration, 
-            HttpClient client
+            HttpClient client, 
+            IJsonSerializer serializer
         ){
+            
             _client = client;
+            _serializer = serializer;
             _teamsBaseUri =configuration[TeamServiceApiUrlKey];
 
                  if (string.IsNullOrWhiteSpace(_teamsBaseUri))
@@ -30,35 +37,25 @@ namespace Blaster.WebApi.Features.MyServices
 
         
         [HttpGet("api/users/{userId}/services")]
-        public TeamsDTO GetServices(string userId)
+        public async Task<TeamsDTO> GetServices(string userId)
         {
-            var awsConsoleLogin = new ServiceDTO
+            var url = $"{_teamsBaseUri}/api/users/{userId}/services";
+            var response = await _client.GetAsync(url);
+            var content = await response.Content.ReadAsStringAsync();
+
+            var teams =  _serializer.Deserialize<TeamsDTO>(content);
+
+            
+            foreach (var team in teams.Items)
             {
-                Name = "AWS Console",
-                Location = "/aws"
-            };
-
-            var teamAwesome = new TeamDTO{
-                Name = "Awsome",
-                Department = "Swimming",
-                Services = new []{awsConsoleLogin}
-            };
-
-               var teamSecond = new TeamDTO{
-                Name = "Second",
-                Department = "Swimming",
-                Services = new ServiceDTO[0]
-            };
-
-            var teamsDto = new TeamsDTO(){
-                Items = new []{
-                    teamAwesome, 
-                    teamSecond
+                foreach (var service in team.Services)
+                {
+                    service.Location = "https://localhost:5001" + service.Location;
                 }
-            };
+            }
+            
 
-
-            return teamsDto;
+            return teams;
         }
     }
 }
