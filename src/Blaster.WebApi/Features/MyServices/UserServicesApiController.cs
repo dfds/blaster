@@ -1,13 +1,13 @@
 using System.Net.Http;
-using Blaster.WebApi.Features.MyServices.Model;
 using Blaster.WebApi.Features.System;
+using DFDS.TeamService.WebApi.Features.UserServices.model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
 namespace Blaster.WebApi.Features.MyServices
 {
     [ApiController]
-    public class MyServiceController : ControllerBase
+    public class UserServicesApiController : ControllerBase
     {
         private const string TeamServiceApiUrlKey = "BLASTER_TEAMSERVICE_API_URL";
 
@@ -15,7 +15,7 @@ namespace Blaster.WebApi.Features.MyServices
             ;
         private readonly string _teamsBaseUri;
 
-        public MyServiceController(
+        public UserServicesApiController(
             IConfiguration configuration, 
             HttpClient client
         ){
@@ -28,28 +28,29 @@ namespace Blaster.WebApi.Features.MyServices
             }
         }
 
+        
         [HttpGet("api/users/{userId}/services")]
-        public TeamsResponse GetServices(string userId)
+        public TeamsDTO GetServices(string userId)
         {
-            var awsConsoleLogin = new Service
+            var awsConsoleLogin = new ServiceDTO
             {
                 Name = "AWS Console",
                 Location = "/aws"
             };
 
-            var teamAwesome = new Team{
+            var teamAwesome = new TeamDTO{
                 Name = "Awsome",
                 Department = "Swimming",
                 Services = new []{awsConsoleLogin}
             };
 
-               var teamSecond = new Team{
+               var teamSecond = new TeamDTO{
                 Name = "Second",
                 Department = "Swimming",
-                Services = new Service[0]
+                Services = new ServiceDTO[0]
             };
 
-            var teamsResponse = new TeamsResponse{
+            var teamsDto = new TeamsDTO(){
                 Items = new []{
                     teamAwesome, 
                     teamSecond
@@ -57,7 +58,7 @@ namespace Blaster.WebApi.Features.MyServices
             };
 
 
-            return teamsResponse;
+            return teamsDto;
         }
     }
 }
