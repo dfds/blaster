@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -12,48 +13,62 @@ namespace Blaster.WebApi.Features.MyServices
     [ApiController]
     public class UserServicesApiController : ControllerBase
     {
+        private const string BlasterUrlKey = "BLASTER_URL";
         private const string TeamServiceApiUrlKey = "BLASTER_TEAMSERVICE_API_URL";
-        private readonly HttpClient _client
-            ;
-        private readonly string _teamsBaseUri;
+
+        private readonly HttpClient _client;
+        private readonly Uri _blasterBaseUri;
+        private readonly Uri _teamsBaseUri;
         private readonly IJsonSerializer _serializer;
 
 
         public UserServicesApiController(
-            IConfiguration configuration, 
-            HttpClient client, 
+            IConfiguration configuration,
+            HttpClient client,
             IJsonSerializer serializer
-        ){
+        )
+        {
+            if (string.IsNullOrWhiteSpace(configuration[BlasterUrlKey]))
+            {
+                throw new MissingConfigurationException(
+                    $"Error, missing configuration value for \"{BlasterUrlKey}\".");
+            }
+
+            _blasterBaseUri = new Uri(configuration[BlasterUrlKey]);
+        
             
+            if (string.IsNullOrWhiteSpace(configuration[TeamServiceApiUrlKey]))
+            {
+                throw new MissingConfigurationException(
+                    $"Error, missing configuration value for \"{TeamServiceApiUrlKey}\".");
+            }
+
+            _teamsBaseUri = new Uri(configuration[TeamServiceApiUrlKey]);
+
             _client = client;
             _serializer = serializer;
-            _teamsBaseUri =configuration[TeamServiceApiUrlKey];
-
-                 if (string.IsNullOrWhiteSpace(_teamsBaseUri))
-            {
-                throw new MissingConfigurationException($"Error, missing configuration value for \"{TeamServiceApiUrlKey}\".");
-            }
         }
 
-        
+
         [HttpGet("api/users/{userId}/services")]
         public async Task<TeamsDTO> GetServices(string userId)
         {
-            var url = $"{_teamsBaseUri}/api/users/{userId}/services";
+            var url = new Uri(
+                _teamsBaseUri,
+                $"/api/users/{userId}/services"
+            );
+
             var response = await _client.GetAsync(url);
             var content = await response.Content.ReadAsStringAsync();
 
-            var teams =  _serializer.Deserialize<TeamsDTO>(content);
+            var teams = _serializer.Deserialize<TeamsDTO>(content);
 
-            
-            foreach (var team in teams.Items)
+            foreach (var service in teams.Items.SelectMany(t => t.Services))
             {
-                foreach (var service in team.Services)
-                {
-                    service.Location = "https://localhost:5001" + service.Location;
-                }
+                var serviceUrl = new Uri(_blasterBaseUri, service.Location);
+                service.Location = serviceUrl.OriginalString;
             }
-            
+
 
             return teams;
         }
