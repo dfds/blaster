@@ -10,6 +10,11 @@ const app = new Vue({
         teams: [],
         currentUser: currentUser
     },
+    methods: {
+        goToService: function (url) {
+            myServicesClient.goToService(url);
+        }
+    },
     created(){
         myServicesClient
             .getAll()
