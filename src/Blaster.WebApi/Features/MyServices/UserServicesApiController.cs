@@ -28,28 +28,34 @@ namespace Blaster.WebApi.Features.MyServices
             IJsonSerializer serializer
         )
         {
-            if (string.IsNullOrWhiteSpace(configuration[BlasterUrlKey]))
-            {
-                throw new MissingConfigurationException(
-                    $"Error, missing configuration value for \"{BlasterUrlKey}\".");
-            }
-
-            _blasterBaseUri = new Uri(configuration[BlasterUrlKey]);
-        
-            
-            if (string.IsNullOrWhiteSpace(configuration[TeamServiceApiUrlKey]))
-            {
-                throw new MissingConfigurationException(
-                    $"Error, missing configuration value for \"{TeamServiceApiUrlKey}\".");
-            }
-
-            _teamsBaseUri = new Uri(configuration[TeamServiceApiUrlKey]);
-
+            _blasterBaseUri = GetUriFromConfiguration(configuration, BlasterUrlKey);
+            _teamsBaseUri = GetUriFromConfiguration(configuration, TeamServiceApiUrlKey);
+       
             _client = client;
             _serializer = serializer;
         }
 
+        
+        private Uri GetUriFromConfiguration(IConfiguration configuration, string configurationKey)
+        {
+            var uriString = configuration[configurationKey];
+            if (string.IsNullOrWhiteSpace(uriString))
+            {
+                throw new MissingConfigurationException(
+                    $"Error, missing configuration value for \"{configurationKey}\".");
+            }
 
+
+            if (uriString.EndsWith('/') == false)
+            {
+                uriString += '/';
+            }
+
+            
+            return new Uri(uriString);
+        }
+
+        
         [HttpGet("api/users/{userId}/services")]
         public async Task<TeamsDTO> GetServices(string userId)
         {
@@ -65,8 +71,8 @@ namespace Blaster.WebApi.Features.MyServices
 
             foreach (var service in teams.Items.SelectMany(t => t.Services))
             {
-                var serviceUrl = new Uri(_blasterBaseUri, service.Location);
-                service.Location = serviceUrl.OriginalString;
+                var serviceUrl = new Uri(_blasterBaseUri, service.Location.TrimStart('/'));
+                service.Location = serviceUrl.AbsoluteUri;
             }
 
 
