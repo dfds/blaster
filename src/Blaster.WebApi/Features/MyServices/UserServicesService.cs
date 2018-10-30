@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -15,8 +14,8 @@ namespace Blaster.WebApi.Features.MyServices
         private const string TeamServiceApiUrlKey = "BLASTER_TEAMSERVICE_API_URL";
 
         private readonly HttpClient _client;
-        private readonly Uri _blasterBaseUri;
-        private readonly Uri _teamsBaseUri;
+        private readonly string _blasterBaseUri;
+        private readonly string _teamsBaseUri;
         private readonly IJsonSerializer _serializer;
 
 
@@ -26,15 +25,18 @@ namespace Blaster.WebApi.Features.MyServices
             IJsonSerializer serializer
         )
         {
-            _blasterBaseUri = GetUriFromConfiguration(configuration, BlasterUrlKey);
-            _teamsBaseUri = GetUriFromConfiguration(configuration, TeamServiceApiUrlKey);
+            _blasterBaseUri = GetStringFromConfiguration(configuration, BlasterUrlKey);
+            _teamsBaseUri = GetStringFromConfiguration(configuration, TeamServiceApiUrlKey);
        
             _client = client;
             _serializer = serializer;
         }
 
         
-        private Uri GetUriFromConfiguration(IConfiguration configuration, string configurationKey)
+        private string GetStringFromConfiguration(
+            IConfiguration configuration, 
+            string configurationKey
+        )
         {
             var uriString = configuration[configurationKey]; 
             if (string.IsNullOrWhiteSpace(uriString))
@@ -43,42 +45,28 @@ namespace Blaster.WebApi.Features.MyServices
                     $"Error, missing configuration value for \"{configurationKey}\".");
             }
 
-
-            if (uriString.EndsWith('/') == false)
-            {
-                uriString += '/';
-            }
-
-            
-            return new Uri(uriString);
+            return uriString;
         }
 
         
         public async Task<TeamsDTO> GetServices(string userId)
         {
-            var url = new Uri(
-                _teamsBaseUri,
-                $"/api/users/{userId}/services"
+            var teamsServicesUri = _teamsBaseUri.AddPath(
+                $"api/users/{userId}/services"
             );
 
-            var response = await _client.GetAsync(url);
+            var response = await _client.GetAsync(teamsServicesUri);
             var content = await response.Content.ReadAsStringAsync();
 
             var teams = _serializer.Deserialize<TeamsDTO>(content);
 
             foreach (var service in teams.Items.SelectMany(t => t.Services))
             {
-                var serviceUrl = new Uri(_blasterBaseUri, CreateRelativeUri(service.Location));
-                service.Location = serviceUrl.AbsoluteUri;
+                service.Location =_blasterBaseUri.AddPath(service.Location);
             }
 
 
             return teams;
         }
-
-        private string CreateRelativeUri(string uri)
-        {
-            return uri.TrimStart('/');
-        }   
     }
 }
