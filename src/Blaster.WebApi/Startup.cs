@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Dashboards;
+using Blaster.WebApi.Features.MyServices;
 using Blaster.WebApi.Features.Namespaces;
 using Blaster.WebApi.Features.System;
 using Blaster.WebApi.Features.Teams;
@@ -58,6 +59,7 @@ namespace Blaster.WebApi
 
             services.AddTransient<ForwardedHeaderBasePath>();
 
+            services.AddTransient<IUserServicesService, UserServicesService>();
             ConfigureMvc(services);
             ConfigureAuthentication(services);
         }
