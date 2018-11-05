@@ -28,7 +28,7 @@ spec:
             cpu: "200m"
         env:
           - name:  blaster_message
-            value: banana
+            value: Blaster root
           - name: blaster_apikey
             value: $(blaster_apikey)
           - name: BLASTER_DASHBOARD_SERVICE_URL
