@@ -423,4 +423,7 @@ wwwroot/
 output/
 .vscode/
 my-stuff/
-testresult.trx
+
+# Miscellaneous
+# (Could also fix script to put testresult.trx in the right folder )
+testresult.trx 
