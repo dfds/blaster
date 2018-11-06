@@ -1,6 +1,6 @@
-﻿@section header
+@section header
 {
-    <link rel="stylesheet" href="~/containerregistry.css"/>
+    <link rel="stylesheet" href="~/containerregistry.css" />
 }
 
 @section Scripts
@@ -8,59 +8,108 @@
     <script src="~/containerregistry.bundle.js"></script>
 }
 
-<div id="containerregistry-app" v-cloak>
-    
-    <section class="section">
-        <div class="container">
-            <h1 class="title">Container Registry</h1>
-        </div>
-    </section>
+<div id="teams-app" v-cloak>
 
     <section class="section">
+        <div class="container">
+            <div class="level">
+                <div class="level-left">
+                    <div class="level-item">
+                        <h1 class="title">Container Repository Management</h1>
+                    </div>
+                </div>
+                <div class="level-right">
+                    <div class="level-item">
+                        <button type="button" class="button is-primary" v-on:click="newTeam()">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
         <div class="container">
 
             <div id="global-dialog-container"></div>
 
-            <div v-if="isLoading">
+            <div class="has-text-centered" v-if="initializing">
                 Loading...
             </div>
 
-            <div v-if="isRunning">
-                <div class="level">
-                    <div class="level-left">
-                        <input class="input level-item" type="text" v-on:keyup="search($event)" placeholder="Search for repository..." />
-                    </div>
-                    <div class="level-right">
-                        <div class="level-item">
-                            <button type="button" class="button is-primary" v-on:click="add()">Add</button>
-                        </div>
-                    </div>
-                </div>
-
-                <table class="table is-fullwidth is-hoverable" v-if="hasRepositories">
-                    <thead>
-                        <tr>
-                            <th>Repository</th>
-                            <th>Created</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="repo in searchResult" v-bind:data-id="repo.id">
-                            <td>{{repo.name}}</td>
-                            <td>{{repo.createdDate}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="notification is-info" v-else>
-                    <strong>No repositories - yet!</strong> You can add a new repository by clicking the add button 
-                    at the top of the page.
-                </div>
-            </div>
-
+            <table class="table is-fullwidth is-hoverable" v-if="hasTeams">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Members</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="team in items" v-bind:data-id="team.id">
+                        <td>{{team.name}}</td>
+                        <td>{{team.department}}</td>
+                        <td>
+                            <div class="tags">
+                                <span :class='isCurrentUser(member) ? "tag is-primary" : "tag is-light"' v-for="member in team.members">{{member.name}}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="buttons is-right">
+                                <button 
+                                    type="button" 
+                                    class="button is-small is-primary" 
+                                    v-if="!isCurrentlyMemberOf(team)"
+                                    v-on:click="joinTeam(team.id)">Join</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </section>
 
 </div>
+
+<script id="editor-template" type="text/x-mustache">
+    <div id="team-editor" class="modal is-active">
+        <div class="modal-background" data-behavior="close"></div>
+        <div class="modal-card">
+
+            <header class="modal-card-head">
+                <p class="modal-card-title">Add team</p>
+                <button class="delete" aria-label="close" data-behavior="close"></button>
+            </header>
+
+            <div class="modal-card-body">
+                <div class="dialog-container"></div>
+                <div class="form">
+                    <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Enter team name" data-property="name" value="{{name}}">
+                    </div>
+                    </div>
+
+                    <div class="field">
+                    <label class="label">Department</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Enter department number" data-property="department" value="{{department}}">
+                    </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control has-text-centered">
+                            <button class="button is-success" data-behavior="save">Save</button>
+                            <button class="button is-white" aria-label="close" data-behavior="close">Cancel</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
 
 <script id="error-dialog-template" type="text/x-mustache">
     <article class="message is-danger">
@@ -71,37 +120,4 @@
             {{message}}
         </div>
     </article>
-</script>
-
-<script id="editor-template" type="text/x-mustache">
-    <div id="model-editor" class="modal is-active">
-        <div class="modal-background" data-behavior="close"></div>
-        <div class="modal-card">
-
-            <header class="modal-card-head">
-                <p class="modal-card-title">Add repository</p>
-                <button class="delete" aria-label="close" data-behavior="close"></button>
-            </header>
-
-            <div class="modal-card-body">
-                <div class="dialog-container"></div>
-                <div class="form">
-                    <div class="field">
-                        <label class="label">Name</label>
-                        <div class="control">
-                            <input class="input" type="text" placeholder="Enter repository name" data-property="name" value="{{name}}">
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <div class="control has-text-centered">
-                            <button class="button is-success" data-behavior="save">Save</button>
-                            <button class="button is-white" aria-label="close" data-behavior="close">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
 </script>
