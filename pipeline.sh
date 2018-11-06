@@ -51,16 +51,6 @@ push_container_image() {
     docker push ${image_name}
 }
 
-if ! which aws >/dev/null ; then
-    echo 'Installing AWS'
-    curl -fsSO https://bootstrap.pypa.io/get-pip.py
-    python3 get-pip.py
-    pip -q install awscli --upgrade
-    aws --version
-else
-    echo "Yay, AWS already installed :-)";
-fi
-
 cd ./src
 
 restore_dependencies
