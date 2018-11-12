@@ -44,7 +44,6 @@ namespace Blaster.WebApi
                 return new Kubernetes(config);
             });
 
-            services.AddTransient<IApiKeyValidator, EnvironmentVariableBasedApiKeyValidator>();
             services.AddTransient<INamespaceRepository, NamespaceRepository>();
             services.AddSingleton<HttpClient>();
             services.AddTransient<IJsonSerializer, JsonSerializer>();
