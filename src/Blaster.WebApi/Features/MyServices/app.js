@@ -7,6 +7,7 @@ const myServicesClient = new MyServicesClient();
 const app = new Vue({
     el: '#myservices-app',
     data: {
+        initializing: true,
         teams: [],
         currentUser: currentUser
     },
@@ -21,6 +22,7 @@ const app = new Vue({
             .then(data => {
                 const items = data.items || [];
                 app.teams = items;
-            });
+            })
+            .then(() => app.initializing = false);
     }
 });

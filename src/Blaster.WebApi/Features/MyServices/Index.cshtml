@@ -7,6 +7,10 @@
 <div id="myservices-app">
     <section class="section">
         <div class="container">
+            <div class="has-text-centered" v-if="initializing">
+                Loading...
+            </div>
+            
             <div class="level">
                 <div class="level-left">
                     <div class="level-item">
