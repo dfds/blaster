@@ -1,10 +1,13 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Dashboards;
 using Blaster.WebApi.Features.MyServices;
 using Blaster.WebApi.Features.Namespaces;
 using Blaster.WebApi.Features.System;
 using Blaster.WebApi.Features.Teams;
+using CorrelationId;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +38,57 @@ namespace Blaster.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            /* configure generic functionality */
+            ConfigureMvc(services);
+            ConfigureAuthentication(services);
+            services.AddTransient<ForwardedHeaderBasePath>();
+            services.AddHttpContextAccessor();
+            services.AddCorrelationId();
+            services.AddTransient<CorrelationIdMessageHandler>();
+            services.AddTransient<IJsonSerializer, JsonSerializer>();
+
+            /* configure each feature */
+            ConfigureNamespacesFeature(services);
+            ConfigureTeamsFeature(services);
+            ConfigureDashboardsFeature(services);
+            ConfigureMyServicesFeature(services);
+
+            services.AddTransient<ICognitoService, CognitoService>();
+        }
+
+        private void ConfigureMyServicesFeature(IServiceCollection services)
+        {
+            //services.AddTransient<IUserServicesService, UserServicesService>();
+
+            services
+                .AddHttpClient<IUserServicesService, UserServicesService>(client =>
+                {
+                    client.BaseAddress = new Uri(Configuration["BLASTER_TEAMSERVICE_API_URL"]);
+                })
+                .AddHttpMessageHandler<CorrelationIdMessageHandler>();
+        }
+
+        private void ConfigureDashboardsFeature(IServiceCollection services)
+        {
+            services.AddTransient<IDashboardService, DashboardService>();
+            services.AddSingleton<ExternalDashboardServiceSettings>(serviceProvider => new ExternalDashboardServiceSettings
+            {
+                ServiceEndpoint = Configuration["BLASTER_DASHBOARD_SERVICE_URL"]
+            });
+        }
+
+        private void ConfigureTeamsFeature(IServiceCollection services)
+        {
+            services
+                .AddHttpClient<ITeamService, TeamService>(client =>
+                {
+                    client.BaseAddress = new Uri(Configuration["BLASTER_TEAMSERVICE_API_URL"]);
+                })
+                .AddHttpMessageHandler<CorrelationIdMessageHandler>();
+        }
+
+        private void ConfigureNamespacesFeature(IServiceCollection services)
+        {
             services.AddTransient<IKubernetes>(serviceProvider =>
             {
                 var config = _env.IsDevelopment()
@@ -45,22 +99,6 @@ namespace Blaster.WebApi
             });
 
             services.AddTransient<INamespaceRepository, NamespaceRepository>();
-            services.AddSingleton<HttpClient>();
-            services.AddTransient<IJsonSerializer, JsonSerializer>();
-            services.AddTransient<IDashboardService, DashboardService>();
-            services.AddSingleton<ExternalDashboardServiceSettings>(serviceProvider => new ExternalDashboardServiceSettings
-            {
-                ServiceEndpoint = Configuration["BLASTER_DASHBOARD_SERVICE_URL"]
-            });
-
-            services.AddTransient<ICognitoService, CognitoService>();
-            services.AddTransient<ITeamService, TeamService>();
-
-            services.AddTransient<ForwardedHeaderBasePath>();
-
-            services.AddTransient<IUserServicesService, UserServicesService>();
-            ConfigureMvc(services);
-            ConfigureAuthentication(services);
         }
 
         protected virtual void ConfigureMvc(IServiceCollection services)
@@ -129,6 +167,13 @@ namespace Blaster.WebApi
             app.UseMetricServer();
             app.UseStaticFiles();
             app.UseAuthentication();
+            app.UseCorrelationId(new CorrelationIdOptions
+            {
+                Header = "x-correlation-id",
+                UpdateTraceIdentifier = true,
+                IncludeInResponse = true
+            });
+
             app.UseMvc();
         }
     }
@@ -156,6 +201,29 @@ namespace Blaster.WebApi
         public static IApplicationBuilder UseForwardedHeadersAsBasePath(this IApplicationBuilder builder)
         {
             return builder.UseMiddleware<ForwardedHeaderBasePath>();
+        }
+    }
+
+    public class CorrelationIdMessageHandler : DelegatingHandler
+    {
+        private readonly ICorrelationContextAccessor _correlationContextAccessor;
+
+        public CorrelationIdMessageHandler(ICorrelationContextAccessor correlationContextAccessor)
+        {
+            _correlationContextAccessor = correlationContextAccessor;
+        }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            var headerName = _correlationContextAccessor.CorrelationContext.Header;
+            var correlationId = _correlationContextAccessor.CorrelationContext.CorrelationId;
+
+            if (!request.Headers.Contains(headerName))
+            {
+                request.Headers.Add(headerName, correlationId);
+            }
+
+            return base.SendAsync(request, cancellationToken);
         }
     }
 }

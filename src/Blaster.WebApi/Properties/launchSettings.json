@@ -21,6 +21,7 @@
         "BLASTER_COGNITO_API_URL": "http://localhost:5000",
         "BLASTER_TEAMSERVICE_API_URL": "http://localhost:50900",
         "BLASTER_COGNITO_CLIENT_ID": "4b2cs9j36rnllhijup1s42jr0q",
+        "BLASTER_URL": "http://localhost:33677",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
@@ -43,6 +44,7 @@
         "BLASTER_COGNITO_API_URL": "http://localhost:6000",
         "BLASTER_TEAMSERVICE_API_URL": "http://localhost:50900",
         "BLASTER_COGNITO_CLIENT_ID": "4b2cs9j36rnllhijup1s42jr0q",
+        "BLASTER_URL": "http://localhost:5000",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "https://localhost:5001;http://localhost:5000"

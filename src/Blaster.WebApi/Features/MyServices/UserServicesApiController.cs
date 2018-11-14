@@ -17,8 +17,6 @@ namespace Blaster.WebApi.Features.MyServices
         [HttpGet("api/users/{userId}/services")]
         public async Task<TeamsDTO> GetServices(string userId)
         {
-
-
             return await _userServicesService.GetServices(userId);
         }
     }

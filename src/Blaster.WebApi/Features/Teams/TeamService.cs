@@ -4,36 +4,24 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Dashboards;
-using Blaster.WebApi.Features.System;
 using Blaster.WebApi.Features.Teams.Models;
-using Microsoft.Extensions.Configuration;
 
 namespace Blaster.WebApi.Features.Teams
 {
     public class TeamService : ITeamService
     {
-        private const string TeamServiceApiUrlKey = "BLASTER_TEAMSERVICE_API_URL";
-
         private readonly HttpClient _client;
         private readonly IJsonSerializer _serializer;
-        private readonly string _baseUrl;
 
-        public TeamService(IConfiguration configuration, HttpClient client, IJsonSerializer serializer)
+        public TeamService(HttpClient client, IJsonSerializer serializer)
         {
-            _baseUrl = configuration[TeamServiceApiUrlKey];
-
-            if (string.IsNullOrWhiteSpace(_baseUrl))
-            {
-                throw new MissingConfigurationException($"Error, missing configuration value for \"{TeamServiceApiUrlKey}\".");
-            }
-
             _client = client;
             _serializer = serializer;
         }
 
         public async Task<TeamListResponse> GetAll()
         {
-            var response = await _client.GetAsync($"{_baseUrl}/api/teams");
+            var response = await _client.GetAsync("/api/teams");
             var content = await response.Content.ReadAsStringAsync();
 
             return _serializer.Deserialize<TeamListResponse>(content);
@@ -47,7 +35,7 @@ namespace Blaster.WebApi.Features.Teams
                 mediaType: "application/json"
             );
 
-            var response = await _client.PostAsync($"{_baseUrl}/api/teams", content);
+            var response = await _client.PostAsync("/api/teams", content);
             if (response.StatusCode != HttpStatusCode.Created)
             {
                 throw new Exception($"Error! Team was not created in external service. Service returned ({response.StatusCode} - {response.ReasonPhrase})");
@@ -59,7 +47,7 @@ namespace Blaster.WebApi.Features.Teams
 
         public async Task<TeamListItem> GetById(string id)
         {
-            var response = await _client.GetAsync($"{_baseUrl}/api/teams/{id}");
+            var response = await _client.GetAsync($"/api/teams/{id}");
             var content = await response.Content.ReadAsStringAsync();
 
             return _serializer.Deserialize<TeamListItem>(content);
@@ -73,7 +61,7 @@ namespace Blaster.WebApi.Features.Teams
                 mediaType: "application/json"
             );
 
-            var response = await _client.PostAsync($"{_baseUrl}/api/teams/{teamId}/members", content);
+            var response = await _client.PostAsync($"/api/teams/{teamId}/members", content);
             var responseBody = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode == HttpStatusCode.Conflict)
