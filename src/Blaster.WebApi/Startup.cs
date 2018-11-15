@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading;
+using System.Linq;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Dashboards;
 using Blaster.WebApi.Features.MyServices;
@@ -77,6 +78,7 @@ namespace Blaster.WebApi
             });
         }
 
+
         private void ConfigureTeamsFeature(IServiceCollection services)
         {
             services
@@ -133,6 +135,14 @@ namespace Blaster.WebApi
                     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 })
                 .AddCookie()
+//                .AddCookie(options =>
+//                {
+//                    // What default values from AddCookie() needs to be added here?
+//                    options.Events = new CookieAuthenticationEvents
+//                    {
+//                        OnValidatePrincipal = RefreshAwsTokenIfNeeded
+//                    };
+//                })
                 .AddOpenIdConnect(options =>
                 {
                     var poolId = Configuration["BLASTER_COGNITO_POOL_ID"];
@@ -141,7 +151,8 @@ namespace Blaster.WebApi
                     var clientSecret = Configuration["BLASTER_COGNITO_CLIENT_SECRET"];
 
                     options.ResponseType = "code";
-                    options.MetadataAddress = $"https://cognito-idp.{region}.amazonaws.com/{poolId}/.well-known/openid-configuration";
+                    options.MetadataAddress =
+                        $"https://cognito-idp.{region}.amazonaws.com/{poolId}/.well-known/openid-configuration";
                     options.ClientId = clientId;
                     options.ClientSecret = clientSecret;
                     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
@@ -152,6 +163,48 @@ namespace Blaster.WebApi
                 });
         }
 
+        
+        public async Task RefreshAwsTokenIfNeeded(CookieValidatePrincipalContext context)
+        {
+            if (
+                context.Properties.Items.TryGetValue(".Token.expires_at", out var expireAtString) == false ||
+                context.Properties.Items.TryGetValue(".Token.refresh_token", out var refreshToken) == false
+            )
+            { return; }
+
+            var expiresAt = DateTime.Parse(expireAtString);
+            if (DateTime.Now.AddMinutes(5) < expiresAt) { return; }
+
+
+            var userName = context.Principal.Identities.First()
+                .Claims.FirstOrDefault(c => c.Type == "cognito:username")
+                .Value;
+
+            
+            
+            var dateTimeBeforeRefresh = DateTime.UtcNow;
+            var awsCognitoClient = new AwsCognitoClient(
+                Configuration["BLASTER_COGNITO_CLIENT_ID"],
+                Configuration["BLASTER_COGNITO_CLIENT_SECRET"],
+                Configuration["BLASTER_COGNITO_POOL_ID"],
+                Configuration["BLASTER_COGNITO_REGION"]
+            );
+            var authenticationResult = await awsCognitoClient.RefreshToken(
+                userName,
+                refreshToken
+            );
+
+            var newTokenExpiresAt = dateTimeBeforeRefresh.AddSeconds(authenticationResult.ExpiresIn);
+            var newTokenExpiresAtString = newTokenExpiresAt.ToString("yyyy-MM-ddTHH\\:mm\\:ss.fffffffzzz");
+
+            context.Properties.Items[".Token.access_token"] = authenticationResult.AccessToken;
+            context.Properties.Items[".Token.id_token"] = authenticationResult.IdToken;
+            context.Properties.Items[".Token.expires_at"] = newTokenExpiresAtString;
+
+            context.ShouldRenew = true;
+        }
+
+        
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -187,6 +240,7 @@ namespace Blaster.WebApi
                 //context.Request.Path = prefix + context.Request.Path;
                 context.Request.PathBase = new PathString(prefix);
             }
+
             if (context.Request.Headers.TryGetValue("X-Forwarded-Proto", out var protocol))
             {
                 context.Request.Scheme = protocol;

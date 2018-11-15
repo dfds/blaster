@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="correlationid" Version="2.1.0" />
+    <PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.3.11.19" />
+    <PackageReference Include="AWSSDK.Extensions.CognitoAuthentication" Version="0.9.4" />
     <PackageReference Include="kubernetesclient" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.1.2" />
