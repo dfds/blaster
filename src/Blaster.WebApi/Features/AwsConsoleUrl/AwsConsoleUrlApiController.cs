@@ -19,8 +19,7 @@ namespace Blaster.WebApi.Features.AWS
         [HttpGet("api/teams/{id}/aws/console-url")]
         public async Task<ActionResult<AwsConsoleLinkResponse>> GetConsoleUrl(Guid id)
         {
-            var idToken = await HttpContext.GetTokenAsync("id_token");
-            var link = await _cognitoService.GetAwsConsoleLink(id, idToken);
+            var link = await _cognitoService.GetAwsConsoleLink(id);
 
             return link ?? new AwsConsoleLinkResponse()
             {

@@ -12,7 +12,7 @@ namespace Blaster.Tests.TestDoubles
             return Task.FromResult("foo");
         }
 
-        public Task<AwsConsoleLinkResponse> GetAwsConsoleLink(Guid teamId, string idToken)
+        public Task<AwsConsoleLinkResponse> GetAwsConsoleLink(Guid teamId)
         {
             return Task.FromResult(new AwsConsoleLinkResponse
             {

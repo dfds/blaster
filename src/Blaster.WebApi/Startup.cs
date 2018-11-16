@@ -8,6 +8,7 @@ using Blaster.WebApi.Features.MyServices;
 using Blaster.WebApi.Features.Namespaces;
 using Blaster.WebApi.Features.System;
 using Blaster.WebApi.Features.Teams;
+using Blaster.WebApi.Security;
 using CorrelationId;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -44,6 +45,7 @@ namespace Blaster.WebApi
             ConfigureAuthentication(services);
             services.AddTransient<ForwardedHeaderBasePath>();
             services.AddHttpContextAccessor();
+            services.AddTransient<IdTokenAccessor>();
             services.AddCorrelationId();
             services.AddTransient<CorrelationIdMessageHandler>();
             services.AddTransient<IJsonSerializer, JsonSerializer>();
@@ -53,8 +55,6 @@ namespace Blaster.WebApi
             ConfigureTeamsFeature(services);
             ConfigureDashboardsFeature(services);
             ConfigureMyServicesFeature(services);
-
-            services.AddTransient<ICognitoService, CognitoService>();
         }
 
         private void ConfigureMyServicesFeature(IServiceCollection services)
@@ -63,6 +63,13 @@ namespace Blaster.WebApi
 
             services
                 .AddHttpClient<IUserServicesService, UserServicesService>(client =>
+                {
+                    client.BaseAddress = new Uri(Configuration["BLASTER_TEAMSERVICE_API_URL"]);
+                })
+                .AddHttpMessageHandler<CorrelationIdMessageHandler>();
+
+            services
+                .AddHttpClient<ICognitoService, CognitoService>(client =>
                 {
                     client.BaseAddress = new Uri(Configuration["BLASTER_TEAMSERVICE_API_URL"]);
                 })

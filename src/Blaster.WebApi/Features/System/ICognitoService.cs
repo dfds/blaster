@@ -7,6 +7,6 @@ namespace Blaster.WebApi.Features.System
     public interface ICognitoService
     {
         Task<string> SayHello();
-        Task<AwsConsoleLinkResponse> GetAwsConsoleLink(Guid teamId, string idToken);
+        Task<AwsConsoleLinkResponse> GetAwsConsoleLink(Guid teamId);
     }
 }
