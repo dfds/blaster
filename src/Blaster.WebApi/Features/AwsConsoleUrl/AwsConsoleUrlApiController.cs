@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.System;
 using Blaster.WebApi.Features.System.Models;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blaster.WebApi.Features.AWS
@@ -17,11 +16,8 @@ namespace Blaster.WebApi.Features.AWS
             _cognitoService = cognitoService;
         }
 
-
         [HttpGet("api/teams/{id}/aws/console-url")]
-        public async Task<ActionResult<AwsConsoleLinkResponse>> GetConsoleUrl(
-            Guid id
-        )
+        public async Task<ActionResult<AwsConsoleLinkResponse>> GetConsoleUrl(Guid id)
         {
             var idToken = await HttpContext.GetTokenAsync("id_token");
             var link = await _cognitoService.GetAwsConsoleLink(id, idToken);

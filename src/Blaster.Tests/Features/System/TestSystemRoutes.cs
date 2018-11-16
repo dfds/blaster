@@ -4,7 +4,6 @@ using Blaster.Tests.Builders;
 using Blaster.Tests.TestDoubles;
 using Blaster.WebApi.Features.System;
 using Xunit;
-using NotImplementedException = System.NotImplementedException;
 
 namespace Blaster.Tests.Features.System
 {
