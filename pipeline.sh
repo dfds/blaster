@@ -33,6 +33,7 @@ run_tests() {
     echo "Running tests..."
 
     MSYS_NO_PATHCONV=1 dotnet test \
+        -c Release \
         --no-build \
         --logger:"trx;LogFileName=testresults.trx" \
         Blaster.Tests/Blaster.Tests.csproj \
@@ -42,7 +43,6 @@ run_tests() {
 
     mv ./Blaster.Tests/coverage.cobertura.xml "${BUILD_SOURCES_DIRECTORY}/output/"
     mv ./Blaster.Tests/TestResults/testresults.trx "${BUILD_SOURCES_DIRECTORY}/output/"
-
 }
 
 publish_binaries() {
