@@ -1,25 +1,30 @@
 name: $(Build.BuildId)
-queue: Hosted Linux Preview
+queue: Hosted Ubuntu 1604
 trigger:
 - master
 steps:
 
 - bash: |
-   pip install setuptools
-   pip install awscli
+   sudo pip install setuptools
+   sudo pip install awscli
    export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY)
    chmod +x ./pipeline.sh
    ./pipeline.sh $(Build.BuildId) $(System.DefaultWorkingDirectory)
-  displayName: Blaster pipeline Bash Script
-  enabled: true
+  displayName: Pipeline Bash Script
 
 - task: PublishTestResults@2
-  displayName: Publish Test Results - Blaster
+  displayName: Publish Test Results
   inputs:
     testRunner: VSTest
-    testResultsFiles: testresult.trx
-    searchFolder: '$(System.DefaultWorkingDirectory)/src'
+    testResultsFiles: testresults.trx
+    searchFolder: '$(System.DefaultWorkingDirectory)/output'
   condition: succeededOrFailed()
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage'
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/output/coverage.cobertura.xml'
 
 - task: PublishBuildArtifacts@1
   displayName: "Publish Artifact: manifests"

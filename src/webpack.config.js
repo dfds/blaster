@@ -7,7 +7,6 @@ module.exports = {
         dashboard: "./Blaster.WebApi/Features/Dashboards/main.js",
         teams: "./Blaster.WebApi/Features/Teams/main.js",
         myservices: "./Blaster.WebApi/Features/MyServices/app.js",
-        containerregistry: "./Blaster.WebApi/Features/ContainerRegistry/main.js",
     },
     output: {
         path: path.resolve(__dirname, "Blaster.WebApi", "wwwroot"),
