@@ -1,0 +1,114 @@
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: Team Service
+  description: The authority of all things TEAM related!
+consumes:
+  - application/json
+produces:
+  - application/json
+basePath: /api/v1/
+paths:
+  /teams: 
+    get:
+      summary: Returns a list of teams
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/team-list'
+    post:
+      summary: Create a new team
+      parameters: 
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+      responses:
+        201:
+          description: Created
+          headers:
+            location:
+              type: string
+              description: URI where the team can be retrieved
+          schema:
+            $ref: '#/definitions/team'
+  /teams/{teamId}:
+    get:
+      summary: Returns a single team
+      parameters:
+        - in: path
+          name: teamId
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/team'
+  /teams/{teamId}/members:
+    post:
+      summary: Adds a person to a team 
+      parameters:
+        - in: path
+          name: teamId
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+      responses:
+        200:
+          description: Ok
+        404:
+          description: Not Found
+  /teams/{teamId}/members/{email}:
+    delete:
+      summary: Deletes a person from a team 
+      parameters:
+        - in: path
+          name: teamId
+          required: true
+          type: string
+        - in: path
+          name: email
+          type: string
+          required: true
+      responses:
+        200:
+          description: Ok
+        404:
+          description: Not Found
+definitions:
+  team-list:
+    type: object
+    properties:
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/team'
+  team:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      members:
+        type: array
+        items:
+          $ref: '#/definitions/member'
+  member:
+    type: object
+    properties:
+      email:
+        type: string
