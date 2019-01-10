@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  teamservice:
+    build: 
+      context: ./teamservice
+    ports:
+      - "50900:3000"
