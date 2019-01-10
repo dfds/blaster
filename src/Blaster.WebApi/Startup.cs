@@ -11,11 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Prometheus;
 
@@ -23,11 +19,8 @@ namespace Blaster.WebApi
 {
     public class Startup
     {
-        private readonly IHostingEnvironment _env;
-
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            _env = env;
             Configuration = configuration;
         }
 
@@ -49,30 +42,10 @@ namespace Blaster.WebApi
             ConfigureTeamsFeature(services);
         }
 
-        private void ConfigureTeamsFeature(IServiceCollection services)
-        {
-            services
-                .AddHttpClient<ITeamService, TeamService>(client =>
-                {
-                    client.BaseAddress = new Uri(Configuration["BLASTER_TEAMSERVICE_API_URL"]);
-                })
-                .AddHttpMessageHandler<CorrelationIdMessageHandler>();
-        }
-
         protected virtual void ConfigureMvc(IServiceCollection services)
         {
             services
-                .AddMvc(options =>
-                {
-                    if (!_env.IsDevelopment())
-                    {
-                        var policy = new AuthorizationPolicyBuilder()
-                            .RequireAuthenticatedUser()
-                            .Build();
-
-                        options.Filters.Add(new AuthorizeFilter(policy));
-                    }
-                })
+                .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.Configure<RazorViewEngineOptions>(options =>
@@ -83,40 +56,17 @@ namespace Blaster.WebApi
 
         protected virtual void ConfigureAuthentication(IServiceCollection services)
         {
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-                })
-                .AddCookie()
-//                .AddCookie(options =>
-//                {
-//                    // What default values from AddCookie() needs to be added here?
-//                    options.Events = new CookieAuthenticationEvents
-//                    {
-//                        OnValidatePrincipal = RefreshAwsTokenIfNeeded
-//                    };
-//                })
-                .AddOpenIdConnect(options =>
-                {
-                    var poolId = Configuration["BLASTER_COGNITO_POOL_ID"];
-                    var region = Configuration["BLASTER_COGNITO_REGION"];
-                    var clientId = Configuration["BLASTER_COGNITO_CLIENT_ID"];
-                    var clientSecret = Configuration["BLASTER_COGNITO_CLIENT_SECRET"];
+            // ...
+        }
 
-                    options.ResponseType = "code";
-                    options.MetadataAddress =
-                        $"https://cognito-idp.{region}.amazonaws.com/{poolId}/.well-known/openid-configuration";
-                    options.ClientId = clientId;
-                    options.ClientSecret = clientSecret;
-                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-                    {
-                        NameClaimType = "name"
-                    };
-                    options.SaveTokens = true;
-                });
+        private void ConfigureTeamsFeature(IServiceCollection services)
+        {
+            services
+                .AddHttpClient<ITeamService, TeamService>(client =>
+                {
+                    client.BaseAddress = new Uri(Configuration["BLASTER_TEAMSERVICE_API_URL"]);
+                })
+                .AddHttpMessageHandler<CorrelationIdMessageHandler>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -133,7 +83,6 @@ namespace Blaster.WebApi
             app.UseForwardedHeadersAsBasePath();
             app.UseMetricServer();
             app.UseStaticFiles();
-            app.UseAuthentication();
             app.UseCorrelationId(new CorrelationIdOptions
             {
                 Header = "x-correlation-id",
