@@ -27,21 +27,5 @@ spec:
             memory: "128Mi"
             cpu: "200m"
         env:
-          - name:  blaster_message
-            value: Blaster root
-          - name: blaster_apikey
-            value: $(blaster_apikey)
-          - name: BLASTER_DASHBOARD_SERVICE_URL
-            value: http://dash
-          - name: BLASTER_COGNITO_POOL_ID
-            value: $(BLASTER_COGNITO_POOL_ID)
-          - name: BLASTER_COGNITO_REGION
-            value: $(BLASTER_COGNITO_REGION)
-          - name: BLASTER_COGNITO_CLIENT_ID
-            value: $(BLASTER_COGNITO_CLIENT_ID)
-          - name: BLASTER_COGNITO_CLIENT_SECRET
-            value: $(BLASTER_COGNITO_CLIENT_SECRET)
           - name: BLASTER_TEAMSERVICE_API_URL
             value: $(BLASTER_TEAMSERVICE_API_URL)
-          - name: BLASTER_URL
-            value: $(BLASTER_URL)
