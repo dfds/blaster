@@ -4,9 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
     entry: {
-        dashboard: "./Blaster.WebApi/Features/Dashboards/main.js",
         teams: "./Blaster.WebApi/Features/Teams/main.js",
-        myservices: "./Blaster.WebApi/Features/MyServices/app.js",
     },
     output: {
         path: path.resolve(__dirname, "Blaster.WebApi", "wwwroot"),
@@ -25,10 +23,7 @@ module.exports = {
     devtool: 'source-map',
     plugins: [
         new MiniCssExtractPlugin({
-            // Options similar to the same options in webpackOptions.output
-            // both options are optional
             filename: "[name].css",
-            // chunkFilename: "[id].css"
         })
     ],
     module: {
