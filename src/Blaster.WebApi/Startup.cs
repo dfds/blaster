@@ -3,9 +3,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Dashboards;
-using Blaster.WebApi.Features.MyServices;
-using Blaster.WebApi.Features.Namespaces;
-using Blaster.WebApi.Features.System;
 using Blaster.WebApi.Features.Teams;
 using Blaster.WebApi.Security;
 using CorrelationId;
@@ -14,7 +11,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using k8s;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
@@ -50,36 +46,7 @@ namespace Blaster.WebApi
             services.AddTransient<IJsonSerializer, JsonSerializer>();
 
             /* configure each feature */
-            ConfigureNamespacesFeature(services);
             ConfigureTeamsFeature(services);
-            ConfigureDashboardsFeature(services);
-            ConfigureMyServicesFeature(services);
-        }
-
-        private void ConfigureMyServicesFeature(IServiceCollection services)
-        {
-            services
-                .AddHttpClient<IUserServicesService, UserServicesService>(client =>
-                {
-                    client.BaseAddress = new Uri(Configuration["BLASTER_TEAMSERVICE_API_URL"]);
-                })
-                .AddHttpMessageHandler<CorrelationIdMessageHandler>();
-
-            services
-                .AddHttpClient<ICognitoService, CognitoService>(client =>
-                {
-                    client.BaseAddress = new Uri(Configuration["BLASTER_TEAMSERVICE_API_URL"]);
-                })
-                .AddHttpMessageHandler<CorrelationIdMessageHandler>();
-        }
-
-        private void ConfigureDashboardsFeature(IServiceCollection services)
-        {
-            services.AddTransient<IDashboardService, DashboardService>();
-            services.AddSingleton<ExternalDashboardServiceSettings>(serviceProvider => new ExternalDashboardServiceSettings
-            {
-                ServiceEndpoint = Configuration["BLASTER_DASHBOARD_SERVICE_URL"]
-            });
         }
 
         private void ConfigureTeamsFeature(IServiceCollection services)
@@ -90,20 +57,6 @@ namespace Blaster.WebApi
                     client.BaseAddress = new Uri(Configuration["BLASTER_TEAMSERVICE_API_URL"]);
                 })
                 .AddHttpMessageHandler<CorrelationIdMessageHandler>();
-        }
-
-        private void ConfigureNamespacesFeature(IServiceCollection services)
-        {
-            services.AddTransient<IKubernetes>(serviceProvider =>
-            {
-                var config = _env.IsDevelopment()
-                    ? KubernetesClientConfiguration.BuildConfigFromConfigFile()
-                    : KubernetesClientConfiguration.InClusterConfig();
-
-                return new Kubernetes(config);
-            });
-
-            services.AddTransient<INamespaceRepository, NamespaceRepository>();
         }
 
         protected virtual void ConfigureMvc(IServiceCollection services)

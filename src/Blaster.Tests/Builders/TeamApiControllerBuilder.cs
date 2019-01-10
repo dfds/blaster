@@ -1,6 +1,4 @@
-﻿using Blaster.Tests.Features.Teams;
-using Blaster.Tests.Helpers;
-using Blaster.WebApi.Features.System;
+﻿using Blaster.Tests.Helpers;
 using Blaster.WebApi.Features.Teams;
 
 namespace Blaster.Tests.Builders

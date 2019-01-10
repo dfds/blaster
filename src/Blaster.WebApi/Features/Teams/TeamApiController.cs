@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Blaster.WebApi.Features.Dashboards;
 using Blaster.WebApi.Features.Teams.Models;
 using Microsoft.AspNetCore.Mvc;
 
