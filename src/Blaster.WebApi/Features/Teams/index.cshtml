@@ -20,7 +20,7 @@
                 </div>
                 <div class="level-right">
                     <div class="level-item">
-                        <button type="button" class="button is-primary" v-on:click="newTeam()">Add</button>
+                        <!-- <button type="button" class="button is-primary" v-on:click="newTeam()">Add</button> -->
                     </div>
                 </div>
             </div>
@@ -40,7 +40,6 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Department</th>
                         <th>Members</th>
                         <th></th>
                     </tr>
@@ -48,19 +47,18 @@
                 <tbody>
                     <tr v-for="team in items" v-bind:data-id="team.id">
                         <td>{{team.name}}</td>
-                        <td>{{team.department}}</td>
                         <td>
                             <div class="tags">
-                                <span :class='isCurrentUser(member) ? "tag is-primary" : "tag is-light"' v-for="member in team.members">{{member.name}}</span>
+                                <span :class='isCurrentUser(member) ? "tag is-primary" : "tag is-light"' v-for="member in team.members">{{member.email}}</span>
                             </div>
                         </td>
                         <td>
                             <div class="buttons is-right">
-                                <button 
+                                <!-- <button 
                                     type="button" 
                                     class="button is-small is-primary" 
                                     v-if="!isCurrentlyMemberOf(team)"
-                                    v-on:click="joinTeam(team.id)">Join</button>
+                                    v-on:click="joinTeam(team.id)">Join</button> -->
                             </div>
                         </td>
                     </tr>

@@ -65,13 +65,15 @@ export default new Vue({
                 });
         },
         isCurrentUser: function(teamMember) {
-            return this.currentUser.id == teamMember.id;
+            // return this.currentUser.id == teamMember.id;
+            return false;
         },
         isCurrentlyMemberOf: function(team) {
-            const members = team.members || [];
-            return members
-                .filter(member => member.id == this.currentUser.id)
-                .length > 0;
+            // const members = team.members || [];
+            // return members
+            //     .filter(member => member.id == this.currentUser.id)
+            //     .length > 0;
+            return false;
         }
     }
 });

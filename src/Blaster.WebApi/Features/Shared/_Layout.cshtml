@@ -1,17 +1,4 @@
 ﻿@using Microsoft.AspNetCore.Hosting
-@inject IHostingEnvironment Env;
-@{
-    var usernameClaim = User.Claims.FirstOrDefault(x => x.Type == "cognito:username");
-    var username = usernameClaim != null ? usernameClaim.Value : "1";
-
-    var currentUser = new
-    {
-        Id = @username,
-        Name = Env.IsDevelopment()
-            ? "John Doe"
-            : User.Identity.Name
-    };
-}
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,7 +13,7 @@
 
     <header>
         <div class="container has-text-right has-text-weight-light">
-            Welcome, @currentUser.Name
+            Welcome, John Doe
         </div>
 
         <br />
@@ -44,15 +31,6 @@
                         <div class="navbar-item">
                             <a href="/teams" class="button is-outlined is-rounded">Teams</a>
                         </div>
-                        <div class="navbar-item">
-                            <a href="/containerregistry" class="button is-outlined is-rounded">Containers</a>
-                        </div>
-                        <div class="navbar-item">
-                            <a href="/namespaces" class="button is-outlined is-rounded" disabled>Namespaces</a>
-                        </div>
-                        <div class="navbar-item">
-                            <a href="/dashboards" class="button is-outlined is-rounded" disabled>Dashboards</a>
-                        </div>
                     </div>
                 </div>
             </nav>
@@ -65,11 +43,7 @@
     @RenderBody()
 
     <script>
-    window.basePath = "@Context.Request.PathBase";
-    window.currentUser = {
-        id: "@currentUser.Id",
-        name: "@currentUser.Name"
-    };
+        window.basePath = "@Context.Request.PathBase";
     </script>
 
     @RenderSection("Scripts", required: false)
