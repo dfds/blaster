@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading;
-using System.Linq;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Dashboards;
 using Blaster.WebApi.Features.MyServices;
@@ -59,8 +58,6 @@ namespace Blaster.WebApi
 
         private void ConfigureMyServicesFeature(IServiceCollection services)
         {
-            //services.AddTransient<IUserServicesService, UserServicesService>();
-
             services
                 .AddHttpClient<IUserServicesService, UserServicesService>(client =>
                 {
@@ -84,7 +81,6 @@ namespace Blaster.WebApi
                 ServiceEndpoint = Configuration["BLASTER_DASHBOARD_SERVICE_URL"]
             });
         }
-
 
         private void ConfigureTeamsFeature(IServiceCollection services)
         {
@@ -170,48 +166,6 @@ namespace Blaster.WebApi
                 });
         }
 
-        
-        public async Task RefreshAwsTokenIfNeeded(CookieValidatePrincipalContext context)
-        {
-            if (
-                context.Properties.Items.TryGetValue(".Token.expires_at", out var expireAtString) == false ||
-                context.Properties.Items.TryGetValue(".Token.refresh_token", out var refreshToken) == false
-            )
-            { return; }
-
-            var expiresAt = DateTime.Parse(expireAtString);
-            if (DateTime.Now.AddMinutes(5) < expiresAt) { return; }
-
-
-            var userName = context.Principal.Identities.First()
-                .Claims.FirstOrDefault(c => c.Type == "cognito:username")
-                .Value;
-
-            
-            
-            var dateTimeBeforeRefresh = DateTime.UtcNow;
-            var awsCognitoClient = new AwsCognitoClient(
-                Configuration["BLASTER_COGNITO_CLIENT_ID"],
-                Configuration["BLASTER_COGNITO_CLIENT_SECRET"],
-                Configuration["BLASTER_COGNITO_POOL_ID"],
-                Configuration["BLASTER_COGNITO_REGION"]
-            );
-            var authenticationResult = await awsCognitoClient.RefreshToken(
-                userName,
-                refreshToken
-            );
-
-            var newTokenExpiresAt = dateTimeBeforeRefresh.AddSeconds(authenticationResult.ExpiresIn);
-            var newTokenExpiresAtString = newTokenExpiresAt.ToString("yyyy-MM-ddTHH\\:mm\\:ss.fffffffzzz");
-
-            context.Properties.Items[".Token.access_token"] = authenticationResult.AccessToken;
-            context.Properties.Items[".Token.id_token"] = authenticationResult.IdToken;
-            context.Properties.Items[".Token.expires_at"] = newTokenExpiresAtString;
-
-            context.ShouldRenew = true;
-        }
-
-        
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
