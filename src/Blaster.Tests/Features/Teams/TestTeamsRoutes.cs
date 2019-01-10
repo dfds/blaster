@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Blaster.Tests.Builders;
 using Blaster.Tests.Helpers;
 using Blaster.Tests.TestDoubles;
-using Blaster.WebApi.Features.Dashboards;
+using Blaster.WebApi;
 using Blaster.WebApi.Features.Teams;
 using Blaster.WebApi.Features.Teams.Models;
 using Xunit;

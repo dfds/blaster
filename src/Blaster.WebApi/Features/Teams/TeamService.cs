@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Blaster.WebApi.Features.Dashboards;
 using Blaster.WebApi.Features.Teams.Models;
 
 namespace Blaster.WebApi.Features.Teams
@@ -11,9 +10,9 @@ namespace Blaster.WebApi.Features.Teams
     public class TeamService : ITeamService
     {
         private readonly HttpClient _client;
-        private readonly IJsonSerializer _serializer;
+        private readonly JsonSerializer _serializer;
 
-        public TeamService(HttpClient client, IJsonSerializer serializer)
+        public TeamService(HttpClient client, JsonSerializer serializer)
         {
             _client = client;
             _serializer = serializer;

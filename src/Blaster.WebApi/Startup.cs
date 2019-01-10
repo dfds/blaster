@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Blaster.WebApi.Features.Dashboards;
 using Blaster.WebApi.Features.Teams;
 using Blaster.WebApi.Security;
 using CorrelationId;
@@ -36,7 +35,7 @@ namespace Blaster.WebApi
             services.AddTransient<IdTokenAccessor>();
             services.AddCorrelationId();
             services.AddTransient<CorrelationIdMessageHandler>();
-            services.AddTransient<IJsonSerializer, JsonSerializer>();
+            services.AddTransient<JsonSerializer>();
 
             /* configure each feature */
             ConfigureTeamsFeature(services);

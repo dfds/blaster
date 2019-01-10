@@ -2,9 +2,9 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Blaster.WebApi.Features.Dashboards
+namespace Blaster.WebApi.Features.Teams
 {
-    public class JsonSerializer : IJsonSerializer
+    public class JsonSerializer
     {
         private readonly JsonSerializerSettings _jsonSerializerSettings;
 
