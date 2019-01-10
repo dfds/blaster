@@ -21,7 +21,7 @@ namespace Blaster.WebApi.Features.Teams
 
         public async Task<TeamListResponse> GetAll()
         {
-            var response = await _client.GetAsync("/api/teams");
+            var response = await _client.GetAsync("/api/v1/teams");
             var content = await response.Content.ReadAsStringAsync();
 
             return _serializer.Deserialize<TeamListResponse>(content);
@@ -35,7 +35,7 @@ namespace Blaster.WebApi.Features.Teams
                 mediaType: "application/json"
             );
 
-            var response = await _client.PostAsync("/api/teams", content);
+            var response = await _client.PostAsync("/api/v1/teams", content);
             if (response.StatusCode != HttpStatusCode.Created)
             {
                 throw new Exception($"Error! Team was not created in external service. Service returned ({response.StatusCode} - {response.ReasonPhrase})");
@@ -47,7 +47,7 @@ namespace Blaster.WebApi.Features.Teams
 
         public async Task<TeamListItem> GetById(string id)
         {
-            var response = await _client.GetAsync($"/api/teams/{id}");
+            var response = await _client.GetAsync($"/api/v1/teams/{id}");
             var content = await response.Content.ReadAsStringAsync();
 
             return _serializer.Deserialize<TeamListItem>(content);
@@ -61,7 +61,7 @@ namespace Blaster.WebApi.Features.Teams
                 mediaType: "application/json"
             );
 
-            var response = await _client.PostAsync($"/api/teams/{teamId}/members", content);
+            var response = await _client.PostAsync($"/api/v1/teams/{teamId}/members", content);
             var responseBody = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode == HttpStatusCode.Conflict)
