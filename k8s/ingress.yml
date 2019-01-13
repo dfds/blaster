@@ -6,21 +6,31 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: traefik
     traefik.frontend.rule.type: PathPrefixStrip
+  labels:
+    project: selfservice
 spec:
   rules:
-  - host: tools.dfds.cloud
-    http:
-      paths:
-      # - path: /$(environment)-blaster
-      - path: /blaster
-        backend:
-          serviceName: blaster
-          servicePort: external
-  - host: app.dfds.cloud
-    http:
-      paths:
-      # - path: /$(environment)-blaster
-      - path: /blaster
-        backend:
-          serviceName: blaster
-          servicePort: external
+    - host: api.lovelace.oxygen.dfds.cloud
+      http:
+        paths:
+          - path: /blaster
+            backend:
+              serviceName: blaster
+              servicePort: external
+
+  # - host: tools.dfds.cloud
+  #   http:
+  #     paths:
+  #     # - path: /$(environment)-blaster
+  #     - path: /blaster
+  #       backend:
+  #         serviceName: blaster
+  #         servicePort: external
+  # - host: app.dfds.cloud
+  #   http:
+  #     paths:
+  #     # - path: /$(environment)-blaster
+  #     - path: /blaster
+  #       backend:
+  #         serviceName: blaster
+  #         servicePort: external
