@@ -84,8 +84,7 @@ export default class TeamEditor {
         jq("[data-behavior=save]", element).click(() => {
             if (options.onSave) {
                 options.onSave({
-                    name: jq("[data-property=name]", element).val(),
-                    department: jq("[data-property=department]", element).val()
+                    name: jq("[data-property=name]", element).val()
                 });
             }
         });

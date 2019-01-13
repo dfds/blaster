@@ -6,7 +6,7 @@ namespace Blaster.WebApi.Features.Teams
     public interface ITeamService
     {
         Task<TeamListResponse> GetAll();
-        Task<TeamListItem> CreateTeam(string name, string department);
+        Task<TeamListItem> CreateTeam(string name);
         Task<TeamListItem> GetById(string id);
         Task<Member> JoinTeam(string teamId, string userId);
     }

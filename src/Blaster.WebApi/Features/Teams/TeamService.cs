@@ -26,10 +26,10 @@ namespace Blaster.WebApi.Features.Teams
             return _serializer.Deserialize<TeamListResponse>(content);
         }
 
-        public async Task<TeamListItem> CreateTeam(string name, string department)
+        public async Task<TeamListItem> CreateTeam(string name)
         {
             var content = new StringContent(
-                content: _serializer.Serialize(new { Name = name, Department = department }),
+                content: _serializer.Serialize(new { Name = name }),
                 encoding: Encoding.UTF8,
                 mediaType: "application/json"
             );

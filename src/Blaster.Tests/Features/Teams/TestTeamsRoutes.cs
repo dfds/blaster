@@ -230,7 +230,7 @@ namespace Blaster.Tests.Features.Teams
             throw _error;
         }
 
-        public Task<TeamListItem> CreateTeam(string name, string department)
+        public Task<TeamListItem> CreateTeam(string name)
         {
             throw _error;
         }

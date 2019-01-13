@@ -44,7 +44,7 @@ namespace Blaster.WebApi.Features.Teams
         [HttpPost("", Name = "CreateTeam")]
         public async Task<CreatedAtRouteResult<TeamListItem>> CreateTeam([FromBody] TeamInput input)
         {
-            var team = await  _teamService.CreateTeam(input.Name, input.Department);
+            var team = await  _teamService.CreateTeam(input.Name);
 
             return new CreatedAtRouteResult<TeamListItem>(
                 routeName: "GetTeamById",

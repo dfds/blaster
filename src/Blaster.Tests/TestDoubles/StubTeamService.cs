@@ -24,7 +24,7 @@ namespace Blaster.Tests.TestDoubles
             });
         }
 
-        public Task<TeamListItem> CreateTeam(string name, string department)
+        public Task<TeamListItem> CreateTeam(string name)
         {
             return Task.FromResult(_teams.First());
         }

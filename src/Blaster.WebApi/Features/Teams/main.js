@@ -26,7 +26,6 @@ const app = new Vue({
                 template: document.getElementById("editor-template"),
                 data: {
                     name: "",
-                    department: ""
                 },
                 onClose: () => editor.close(),
                 onSave: (teamData) => { 
