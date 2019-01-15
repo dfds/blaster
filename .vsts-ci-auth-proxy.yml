@@ -11,3 +11,6 @@ steps:
    chmod +x ./pipeline-auth-proxy.sh
    ./pipeline-auth-proxy.sh $(Build.BuildId) $(System.DefaultWorkingDirectory)
   displayName: Pipeline Bash Script
+  trigger:
+    paths:
+      include: src/auth-proxy
