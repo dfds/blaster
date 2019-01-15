@@ -1,7 +1,8 @@
 {
   "name": "auth-proxy",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple proxy which enriches headers with user information.",
+  "repository": "https://github.com/dfds/blaster",
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
