@@ -93,21 +93,21 @@ namespace Blaster.Tests.Features.Teams
             );
         }
 
-        [Fact]
-        public async Task returns_expected_when_user_joins_a_team()
-        {
-            var expected = new UserBuilder().Build();
+        //[Fact]
+        //public async Task returns_expected_when_user_joins_a_team()
+        //{
+        //    var expected = new UserBuilder().Build();
 
-            var sut = new TeamApiControllerBuilder()
-                .WithTeamService(new StubTeamService(member: expected))
-                .Build();
+        //    var sut = new TeamApiControllerBuilder()
+        //        .WithTeamService(new StubTeamService(member: expected))
+        //        .Build();
 
-            var stubTeamId = "foo";
+        //    var stubTeamId = "foo";
 
-            var result = await sut.JoinTeam(stubTeamId, new JoinTeamInput { UserId = expected.Id });
+        //    var result = await sut.JoinTeam(stubTeamId, new JoinTeamInput { UserId = expected.Id });
 
-            Assert.Equal(expected, result.Value);
-        }
+        //    Assert.Equal(expected, result.Value);
+        //}
 
         [Fact]
         public async Task returns_expected_when_user_joins_a_team_and_user_has_already_joined()

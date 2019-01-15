@@ -248,27 +248,11 @@ namespace Blaster.Tests.Features.Teams
 
     public class UserBuilder
     {
-        private string _id;
-        private string _name;
         private string _email;
 
         public UserBuilder()
         {
-            _id = "1";
-            _name = "foo";
             _email = "bar";
-        }
-
-        public UserBuilder WithId(string id)
-        {
-            _id = id;
-            return this;
-        }
-
-        public UserBuilder WithName(string name)
-        {
-            _name = name;
-            return this;
         }
 
         public UserBuilder WithEmail(string email)
@@ -281,8 +265,6 @@ namespace Blaster.Tests.Features.Teams
         {
             return new Member
             {
-                Id = _id,
-                Name = _name,
                 Email = _email
             };
         }
