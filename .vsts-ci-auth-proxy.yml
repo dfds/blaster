@@ -2,6 +2,7 @@ name: $(Build.BuildId)
 queue: Hosted Ubuntu 1604
 trigger:
   branches:
+    include:
     - master
   paths:
     include: src/auth-proxy
