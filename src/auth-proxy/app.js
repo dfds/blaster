@@ -7,14 +7,12 @@ const forwardAddress = process.env.FORWARD_ADDRESS || "localhost:50801";
 
 app.use('/', proxy(forwardAddress, {
     proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
+        let jwt = proxyReqOpts.headers["x-amzn-oidc-data"];
+        let user = jwtUtil.getUserInformation(jwt);
         
-        var jwt = proxyReqOpts.headers["x-amzn-oidc-data"];
-        var email = jwtUtil.getEmail(jwt);
-        // console.log(email);
-        
-        proxyReqOpts.headers['X-Email'] = email;
-
-        // console.log(JSON.stringify(proxyReqOpts));
+        proxyReqOpts.headers['X-User-Id'] = user.id;
+        proxyReqOpts.headers['X-User-Name'] = user.name;
+        proxyReqOpts.headers['X-User-Email'] = user.email;
         
         return proxyReqOpts;
     }})

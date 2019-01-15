@@ -1,19 +1,23 @@
 class JWTUtilities {
-    getEmail(jwt) {
+    getUserInformation(jwt) {
         if (jwt == undefined) {
             return "";
         }
     
-        var jwtParts = jwt.split(".");
+        let jwtParts = jwt.split(".");
     
         if (jwtParts.length != 3) {
             return "";
         }
     
-        var userPartBase64 = jwtParts[1];
-        var userPart = JSON.parse(this.base64Decode(userPartBase64));
+        let userPartBase64 = jwtParts[1];
+        let userPart = JSON.parse(this.base64Decode(userPartBase64));
         
-        return userPart.email;
+        return {
+            id: userPart.email,
+            name: userPart.name,
+            email: userPart.email
+        };
     }
     
     base64Decode(str, encoding = 'utf-8') {

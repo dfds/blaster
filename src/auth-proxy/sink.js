@@ -13,4 +13,4 @@ app.get("/", (req, res) => {
 
 app.listen(port, () => {
     console.log(`Sink is running on port ${port}`);
-})
+});
