@@ -1,7 +1,10 @@
 name: $(Build.BuildId)
 queue: Hosted Ubuntu 1604
 trigger:
-- master
+  branches:
+    - master
+  paths:
+    include: src/auth-proxy
 steps:
 
 - bash: |
@@ -11,6 +14,3 @@ steps:
    chmod +x ./pipeline-auth-proxy.sh
    ./pipeline-auth-proxy.sh $(Build.BuildId) $(System.DefaultWorkingDirectory)
   displayName: Pipeline Bash Script
-  trigger:
-    paths:
-      include: src/auth-proxy
