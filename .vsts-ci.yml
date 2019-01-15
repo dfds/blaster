@@ -1,7 +1,13 @@
 name: $(Build.BuildId)
 queue: Hosted Ubuntu 1604
 trigger:
-- master
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+    - src/auth-proxy/*
+    - .vsts-ci-auth-proxy.yml
 steps:
 
 - bash: |
