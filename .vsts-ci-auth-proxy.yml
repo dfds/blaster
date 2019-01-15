@@ -1,0 +1,13 @@
+name: $(Build.BuildId)
+queue: Hosted Ubuntu 1604
+trigger:
+- master
+steps:
+
+- bash: |
+   sudo pip install setuptools
+   sudo pip install awscli
+   export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY)
+   chmod +x ./pipeline-auth-proxy.sh
+   ./pipeline-auth-proxy.sh $(Build.BuildId) $(System.DefaultWorkingDirectory)
+  displayName: Pipeline Bash Script
