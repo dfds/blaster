@@ -1,13 +1,14 @@
 class JWTUtilities {
     getUserInformation(jwt) {
         if (jwt == undefined) {
-            return "";
+            return null;
         }
     
         let jwtParts = jwt.split(".");
     
+        /// JWT should consist of 3 parts.
         if (jwtParts.length != 3) {
-            return "";
+            return null;
         }
     
         let userPartBase64 = jwtParts[1];

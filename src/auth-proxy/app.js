@@ -10,9 +10,11 @@ app.use('/', proxy(forwardAddress, {
         let jwt = proxyReqOpts.headers["x-amzn-oidc-data"];
         let user = jwtUtil.getUserInformation(jwt);
         
-        proxyReqOpts.headers['X-User-Id'] = user.id;
-        proxyReqOpts.headers['X-User-Name'] = user.name;
-        proxyReqOpts.headers['X-User-Email'] = user.email;
+        if (user != null) {
+            proxyReqOpts.headers['X-User-Id'] = user.id;
+            proxyReqOpts.headers['X-User-Name'] = user.name;
+            proxyReqOpts.headers['X-User-Email'] = user.email;
+        }
         
         return proxyReqOpts;
     }})
