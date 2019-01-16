@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  blaster:
+    build: 
+      context: ./
+    ports:
+      - "5000:80"
+    depends_on:
+      - auth-proxy
+      - teamservice
+    environment: 
+      - BLASTER_TEAMSERVICE_API_URL=http://teamservice:3000
+  auth-proxy:
+    build: 
+      context: ./src/auth-proxy
+    ports:
+      - "5001:50800"
+    environment:
+      - FORWARD_ADDRESS=blaster:80
+  teamservice:
+    build: 
+      context: ./fake_dependencies/teamservice
+    ports:
+      - "50900:3000"
