@@ -9,6 +9,8 @@ app.use(express.json());
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
+const serialize = (data) => JSON.stringify(data, null, 2);
+const deserialize = (text) => JSON.parse(text);
 
 app.get("/api/v1/teams", (req, res) => {
     readFile("./data.json")
@@ -40,6 +42,33 @@ app.post("/api/v1/teams", (req, res) => {
         })
         .catch(err => {
             res.status(500).json(err);
+        });
+});
+
+app.post("/api/v1/teams/:teamid/members", (req, res) => {
+    const teamid = req.params.teamid;
+    const { email } = req.body;
+
+    readFile("./data.json")
+        .then(data => JSON.parse(data))
+        .then(teams => {
+            const team = teams.find(team => team.id == teamid);
+            
+            if (!team) {
+                return new Promise(resolve => {
+                    res
+                        .status(404)
+                        .send({message: `Team with id ${teamid} could not be found`});
+                    resolve();
+                });
+            } else {
+                team.members.push({ email: email });
+                
+                return Promise.resolve(serialize(teams))
+                    .then(json => writeFile("./data.json", json))
+                    .then(() => console.log(`Added member ${email} to team ${team.name}`))
+                    .then(() => res.sendStatus(200));
+            }
         });
 });
 
