@@ -1,4 +1,4 @@
-const currentUser = window.currentUser || { email: "jdog@me.com"};
+const currentUser = window.currentUser;
 
 export { currentUser as currentUser }
 

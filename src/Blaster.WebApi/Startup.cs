@@ -36,6 +36,7 @@ namespace Blaster.WebApi
             services.AddCorrelationId();
             services.AddTransient<CorrelationIdMessageHandler>();
             services.AddTransient<JsonSerializer>();
+            services.AddTransient<UserHelper>();
 
             /* configure each feature */
             ConfigureTeamsFeature(services);
