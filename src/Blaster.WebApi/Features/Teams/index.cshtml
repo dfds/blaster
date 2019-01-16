@@ -49,16 +49,20 @@
                         <td>{{team.name}}</td>
                         <td>
                             <div class="tags">
-                                <span :class='isCurrentUser(member) ? "tag is-primary" : "tag is-light"' v-for="member in team.members">{{member.email}}</span>
+                                <span :class='isCurrentUser(member.email) ? "tag is-primary" : "tag is-light"' v-for="member in team.members">{{member.email}}</span>
                             </div>
                         </td>
                         <td>
                             <div class="buttons is-right">
-                                <!-- <button 
+                                <button 
                                     type="button" 
                                     class="button is-small is-primary" 
-                                    v-if="!isCurrentlyMemberOf(team)"
-                                    v-on:click="joinTeam(team.id)">Join</button> -->
+                                    v-if="getMembershipStatusFor(team.id) == 'notmember'"
+                                    v-on:click="joinTeam(team.id)">Join</button>
+                                <button 
+                                    type="button" 
+                                    class="button is-small is-primary is-loading" 
+                                    v-if="getMembershipStatusFor(team.id) == 'requested'">Join</button>
                             </div>
                         </td>
                     </tr>

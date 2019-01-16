@@ -8,35 +8,35 @@ namespace Blaster.Tests.TestDoubles
     public class StubTeamService : ITeamService
     {
         private readonly Member _member;
-        private readonly TeamListItem[] _teams;
+        private readonly Team[] _teams;
 
-        public StubTeamService(Member member = null, params TeamListItem[] teams)
+        public StubTeamService(Member member = null, params Team[] teams)
         {
             _member = member;
             _teams = teams;
         }
 
-        public Task<TeamListResponse> GetAll()
+        public Task<TeamsResponse> GetAll()
         {
-            return Task.FromResult(new TeamListResponse
+            return Task.FromResult(new TeamsResponse
             {
                 Items = _teams,
             });
         }
 
-        public Task<TeamListItem> CreateTeam(string name)
+        public Task<Team> CreateTeam(string name)
         {
             return Task.FromResult(_teams.First());
         }
 
-        public Task<TeamListItem> GetById(string id)
+        public Task<Team> GetById(string id)
         {
             return Task.FromResult(_teams.FirstOrDefault());
         }
 
-        public Task<Member> JoinTeam(string teamId, string userId)
+        public Task JoinTeam(string teamId, string memberEmail)
         {
-            return Task.FromResult(_member);
+            return Task.CompletedTask;
         }
     }
 }

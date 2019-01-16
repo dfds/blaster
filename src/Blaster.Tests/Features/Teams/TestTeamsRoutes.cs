@@ -142,12 +142,12 @@ namespace Blaster.Tests.Features.Teams
                     .WithService<ITeamService>(new StubTeamService(member: dummyUser))
                     .Build();
 
-                var dummyContent = new JsonContent(new {UserId = 1});
+                var dummyContent = new JsonContent(new {Email = "foo@bar.com"});
 
                 var response = await client.PostAsync("/api/teams/1/members", dummyContent);
 
                 Assert.Equal(
-                    expected: HttpStatusCode.OK,
+                    expected: HttpStatusCode.NoContent,
                     actual: response.StatusCode
                 );
             }
@@ -182,7 +182,7 @@ namespace Blaster.Tests.Features.Teams
                     .WithService<ITeamService>(new ErroneousTeamService(new AlreadyJoinedException()))
                     .Build();
 
-                var dummyContent = new JsonContent(new {UserId = 1});
+                var dummyContent = new JsonContent(new {Email = "foo@bar.com"});
 
                 var response = await client.PostAsync("/api/teams/1/members", dummyContent);
 
@@ -225,22 +225,22 @@ namespace Blaster.Tests.Features.Teams
             _error = error;
         }
 
-        public Task<TeamListResponse> GetAll()
+        public Task<TeamsResponse> GetAll()
         {
             throw _error;
         }
 
-        public Task<TeamListItem> CreateTeam(string name)
+        public Task<Team> CreateTeam(string name)
         {
             throw _error;
         }
 
-        public Task<TeamListItem> GetById(string id)
+        public Task<Team> GetById(string id)
         {
             throw _error;
         }
 
-        public Task<Member> JoinTeam(string teamId, string userId)
+        public Task JoinTeam(string teamId, string memberEmail)
         {
             throw _error;
         }

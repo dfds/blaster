@@ -18,15 +18,15 @@ namespace Blaster.WebApi.Features.Teams
             _serializer = serializer;
         }
 
-        public async Task<TeamListResponse> GetAll()
+        public async Task<TeamsResponse> GetAll()
         {
             var response = await _client.GetAsync("/api/v1/teams");
             var content = await response.Content.ReadAsStringAsync();
 
-            return _serializer.Deserialize<TeamListResponse>(content);
+            return _serializer.Deserialize<TeamsResponse>(content);
         }
 
-        public async Task<TeamListItem> CreateTeam(string name)
+        public async Task<Team> CreateTeam(string name)
         {
             var content = new StringContent(
                 content: _serializer.Serialize(new { Name = name }),
@@ -41,21 +41,21 @@ namespace Blaster.WebApi.Features.Teams
             }
 
             var receivedContent = await response.Content.ReadAsStringAsync();
-            return _serializer.Deserialize<TeamListItem>(receivedContent);
+            return _serializer.Deserialize<Team>(receivedContent);
         }
 
-        public async Task<TeamListItem> GetById(string id)
+        public async Task<Team> GetById(string id)
         {
             var response = await _client.GetAsync($"/api/v1/teams/{id}");
             var content = await response.Content.ReadAsStringAsync();
 
-            return _serializer.Deserialize<TeamListItem>(content);
+            return _serializer.Deserialize<Team>(content);
         }
 
-        public async Task<Member> JoinTeam(string teamId, string userId)
+        public async Task JoinTeam(string teamId, string memberEmail)
         {
             var content = new StringContent(
-                content: _serializer.Serialize(new { UserId = userId }),
+                content: _serializer.Serialize(new { Email = memberEmail }),
                 encoding: Encoding.UTF8,
                 mediaType: "application/json"
             );
@@ -72,14 +72,6 @@ namespace Blaster.WebApi.Features.Teams
             {
                 throw new ServerReturnedUnexpectedResponseException($"{response.StatusCode:D} - {response.ReasonPhrase}", responseBody);
             }
-
-            var member = _serializer.Deserialize<Member>(responseBody);
-            if (member == null)
-            {
-                throw new Exception("Error, unable to deserialize response body into team member instance. Reponse body was: " + responseBody);
-            }
-
-            return member;
         }
     }
 

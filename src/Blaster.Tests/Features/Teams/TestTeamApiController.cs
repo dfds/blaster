@@ -104,7 +104,7 @@ namespace Blaster.Tests.Features.Teams
 
         //    var stubTeamId = "foo";
 
-        //    var result = await sut.JoinTeam(stubTeamId, new JoinTeamInput { UserId = expected.Id });
+        //    var result = await sut.JoinTeam(stubTeamId, new JoinTeamInput { Email = expected.Id });
 
         //    Assert.Equal(expected, result.Value);
         //}
@@ -116,7 +116,7 @@ namespace Blaster.Tests.Features.Teams
                 .WithTeamService(new ErroneousTeamService(new AlreadyJoinedException()))
                 .Build();
 
-            var result = await sut.JoinTeam("foo", new JoinTeamInput {UserId = "bar"});
+            var result = await sut.JoinTeam("foo", new JoinTeamInput {Email = "bar"});
             
             Assert.Null(result.Value);
         }

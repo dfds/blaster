@@ -12,6 +12,7 @@ const app = new Vue({
     el: "#teams-app",
     data: {
         items: [],
+        membershipRequests: [],
         initializing: true,
         currentUser: currentUser
     },
@@ -53,36 +54,46 @@ const app = new Vue({
             });
         },
         joinTeam: function(teamId) {
-            const team = this.items.find(x => x.id == teamId);
-            
-            teamService
-                .join(team.id)
-                .then(newMember => {
-                    team.members.push(newMember);
-                })
-                .catch(err => {
-                    console.log("error joining team: " + JSON.stringify(err));
+            const team = this.items.find(team => team.id == teamId);
+            this.membershipRequests.push(team.id);
+
+            teamService.join(team.id)
+                .then(() => team.members.push({ email: this.currentUser.email }))
+                .catch(err => console.log("error joining team: " + JSON.stringify(err)))
+                .done(() => {
+                        this.membershipRequests = this.membershipRequests.filter(requestedTeamId => requestedTeamId != team.id);
                 });
         },
-        isCurrentUser: function(teamMember) {
-            // return this.currentUser.id == teamMember.id;
-            return false;
+        isCurrentUser: function(memberEmail) {
+            return this.currentUser.email == memberEmail;
         },
-        isCurrentlyMemberOf: function(team) {
-            // const members = team.members || [];
-            // return members
-            //     .filter(member => member.id == this.currentUser.id)
-            //     .length > 0;
-            return false;
+        getMembershipStatusFor: function(teamId) {
+            const team = this.items.find(team => team.id == teamId);
+            const isRequested = this.membershipRequests.indexOf(team.id) > -1;
+
+            if (isRequested) {
+                return "requested";
+            }
+
+            return this._isCurrentlyMemberOf(team)
+                ? "member"
+                : "notmember";
+        },
+        _isCurrentlyMemberOf: function(team) {
+            if (!team) {
+                return false;
+            }
+
+            const members = team.members || [];
+            return members
+                .filter(member => member.id == this.currentUser.id)
+                .length > 0;
         }
     },
     mounted: function () {
         jq.ready
             .then(() => teamService.getAll())
-            .then(data => {
-                const items = data.items || [];
-                items.forEach(item => this.items.push(item));
-            })
+            .then(teams => teams.forEach(team => this.items.push(team)))
             .catch(info => {
                 if (info.status != 200) {
                     AlertDialog.open({

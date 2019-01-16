@@ -11,7 +11,8 @@ export default class TeamService {
     }
 
     getAll() {
-        return this.client.get(this.baseUrl);
+        return this.client.get(this.baseUrl)
+            .then(data => data.items || []);
     }
 
     add (team) {
@@ -20,9 +21,9 @@ export default class TeamService {
 
     join(teamId) {
         const payload = {
-            userId: currentUser.id
+            email: currentUser.email
         };
 
-        return this.client.post(`/api/teams/${teamId}/members`, payload);
+        return this.client.post(`${this.baseUrl}/${teamId}/members`, payload);
     }
 }

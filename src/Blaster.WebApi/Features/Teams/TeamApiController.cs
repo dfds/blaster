@@ -17,36 +17,36 @@ namespace Blaster.WebApi.Features.Teams
         }
 
         [HttpGet("", Name = "GetAllTeams")]
-        public async Task<ActionResult<TeamListResponse>> GetAll()
+        public async Task<ActionResult<TeamsResponse>> GetAll()
         {
             var teams = await _teamService.GetAll();
 
-            return teams ?? new TeamListResponse
+            return teams ?? new TeamsResponse
             {
-                Items = new TeamListItem[0]
+                Items = new Team[0]
             };
         }
 
         [HttpGet("{id}", Name = "GetTeamById")]
-        public async Task<ActionResult<TeamListItem>> GetById(string id)
+        public async Task<ActionResult<Team>> GetById(string id)
         {
             var team = await _teamService.GetById(id);
 
             if (team != null)
             {
-                return new ActionResult<TeamListItem>(team);
+                return new ActionResult<Team>(team);
             }
 
-            return new ActionResult<TeamListItem>(NotFound());
+            return new ActionResult<Team>(NotFound());
 
         }
 
         [HttpPost("", Name = "CreateTeam")]
-        public async Task<CreatedAtRouteResult<TeamListItem>> CreateTeam([FromBody] TeamInput input)
+        public async Task<CreatedAtRouteResult<Team>> CreateTeam([FromBody] TeamInput input)
         {
             var team = await  _teamService.CreateTeam(input.Name);
 
-            return new CreatedAtRouteResult<TeamListItem>(
+            return new CreatedAtRouteResult<Team>(
                 routeName: "GetTeamById",
                 routeValues: new {id = team.Id},
                 value: team
@@ -56,19 +56,19 @@ namespace Blaster.WebApi.Features.Teams
         [HttpPost("{id}/members", Name = "JoinTeam")]
         public async Task<ActionResult<Member>> JoinTeam([FromRoute] string id, [FromBody] JoinTeamInput input)
         {
-            if (string.IsNullOrWhiteSpace(input.UserId))
+            if (string.IsNullOrWhiteSpace(input.Email))
             {
                 return new ActionResult<Member>(BadRequest());
             }
 
             try
             {
-                var user = await _teamService.JoinTeam(
+                await _teamService.JoinTeam(
                     teamId: id,
-                    userId: input.UserId
+                    memberEmail: input.Email
                 );
 
-                return new ActionResult<Member>(user);
+                return new ActionResult<Member>(NoContent());
             }
             catch (AlreadyJoinedException)
             {
@@ -87,6 +87,6 @@ namespace Blaster.WebApi.Features.Teams
 
     public class JoinTeamInput
     {
-        public string UserId { get; set; }
+        public string Email { get; set; }
     }
 }
