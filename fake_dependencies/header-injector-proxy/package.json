@@ -1,0 +1,17 @@
+{
+  "name": "header-injector-proxy",
+  "version": "1.0.0",
+  "description": "Proxy to simulate inclusion of AWS ALB header values.",
+  "repository": "https://github.com/dfds/blaster",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "express-http-proxy": "^1.5.0"
+  }
+}

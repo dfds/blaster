@@ -7,10 +7,20 @@ services:
     ports:
       - "5000:80"
     depends_on:
+      - header-injector-proxy
       - auth-proxy
       - teamservice
     environment: 
       - BLASTER_TEAMSERVICE_API_URL=http://teamservice:3000
+  header-injector-proxy:
+    build: 
+      context: ./fake_dependencies/header-injector-proxy
+    ports:
+      - "5002:50802"
+    depends_on:
+      - auth-proxy
+    environment:
+      - FORWARD_ADDRESS=auth-proxy:50800
   auth-proxy:
     build: 
       context: ./src/auth-proxy
