@@ -10,7 +10,7 @@ metadata:
     project: selfservice
 spec:
   rules:
-    - host: api.lovelace.oxygen.dfds.cloud
+    - host: internal.lovelace.oxygen.dfds.cloud
       http:
         paths:
           - path: /blaster
