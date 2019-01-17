@@ -16,11 +16,25 @@ spec:
         app: blaster
     spec:
       containers:
+        - name: auth-proxy
+          image: 579478677147.dkr.ecr.eu-central-1.amazonaws.com/ded/auth-proxy:$(Build.BuildId)
+          ports:
+            - containerPort: 3000
+              name: web
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
+          env:
+            - name: FORWARD_ADDRESS
+              value: localhost:80
+            - name: PORT
+              value: "3000"
         - name: blaster
           image: 579478677147.dkr.ecr.eu-central-1.amazonaws.com/ded/blaster:$(Build.BuildId)
-          ports:
-            - containerPort: 80
-              name: web
           resources:
             requests:
               memory: "64Mi"
