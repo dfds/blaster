@@ -86,7 +86,7 @@ const app = new Vue({
 
             const members = team.members || [];
             return members
-                .filter(member => member.id == this.currentUser.id)
+                .filter(member => member.email == this.currentUser.email)
                 .length > 0;
         }
     },
