@@ -9,6 +9,9 @@ app.use('/', proxy(forwardAddress, {
         proxyReqOpts.headers['X-User-Name'] = "Jane Doe";
         proxyReqOpts.headers['X-User-Email'] = "jane@doe.com";
 
+        // Simulate real JWT-token:
+        //proxyReqOpts.headers["X-Amzn-Oidc-Data"] = "";
+
         return proxyReqOpts;
     }})
 );

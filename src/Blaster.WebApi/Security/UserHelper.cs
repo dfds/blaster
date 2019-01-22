@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using Microsoft.AspNetCore.Http;
 
 namespace Blaster.WebApi.Security
 {
@@ -16,13 +17,17 @@ namespace Blaster.WebApi.Security
             get
             {
                 var name = "[unknown user]";
+                var email = string.Empty;
                 if (_contextAccessor.HttpContext.Request.Headers.TryGetValue("X-User-Name", out var headerName))
                 {
-                    name = headerName;
+                    name = DecodeBase64(headerName);
                 }
 
-                _contextAccessor.HttpContext.Request.Headers.TryGetValue("X-User-Email", out var email);
-
+                if (_contextAccessor.HttpContext.Request.Headers.TryGetValue("X-User-Email", out var headerEmail))
+                {
+                    email = DecodeBase64(headerEmail);
+                }
+                
                 return new User(name, email);
             }
         }
@@ -37,6 +42,14 @@ namespace Blaster.WebApi.Security
 
             public string Name { get; private set; }
             public string Email { get; private set; }
+        }
+
+        private string DecodeBase64(string base64String)
+        {
+            byte[] decodedBytes = Convert.FromBase64String(base64String);
+            string decodedText = System.Text.Encoding.UTF8.GetString(decodedBytes);
+            
+            return decodedText;
         }
     }
 }
