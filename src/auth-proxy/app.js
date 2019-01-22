@@ -11,9 +11,9 @@ app.use('/', proxy(forwardAddress, {
         let user = jwtUtil.getUserInformation(jwt);
         
         if (user != null) {
-            proxyReqOpts.headers['X-User-Id'] = user.id;
-            proxyReqOpts.headers['X-User-Name'] = user.name;
-            proxyReqOpts.headers['X-User-Email'] = user.email;
+            proxyReqOpts.headers['X-User-Id'] = jwtUtil.base64Encode(user.id);
+            proxyReqOpts.headers['X-User-Name'] = jwtUtil.base64Encode(user.name);
+            proxyReqOpts.headers['X-User-Email'] = jwtUtil.base64Encode(user.email);
         }
         
         return proxyReqOpts;

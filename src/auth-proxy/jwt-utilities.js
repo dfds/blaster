@@ -22,8 +22,15 @@ class JWTUtilities {
     }
     
     base64Decode(str, encoding = 'utf-8') {
-        let buff = Buffer.from(str, 'base64');  
-        let text = buff.toString(encoding);
+        let buffer = Buffer.from(str, 'base64');  
+        let text = buffer.toString(encoding);
+        
+        return text;
+    }
+
+    base64Encode(str, encoding = 'base64') {
+        let buffer = Buffer.from(str);
+        let text = buffer.toString(encoding);
         
         return text;
     }

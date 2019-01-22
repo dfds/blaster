@@ -22,7 +22,7 @@ app.get("/api/v1/teams", (req, res) => {
         });
 });
 
-app.post("/api/v1/teams", (req, res) => {
+app.post("/api/v1/teams", (req, res) => {   
     const newTeam = Object.assign({
         id: new Date().getTime().toString(),
         members: []
@@ -69,6 +69,38 @@ app.post("/api/v1/teams/:teamid/members", (req, res) => {
                     .then(() => console.log(`Added member ${email} to team ${team.name}`))
                     .then(() => res.sendStatus(200));
             }
+        });
+});
+
+app.delete("/api/v1/teams/:teamid/members/:memberemail", (req, res) => {
+    const teamId = req.params.teamid;
+    const memberEmail = req.params.memberemail;
+
+    readFile("./data.json")
+        .then(data => JSON.parse(data))
+        .then(teams => {
+            const team = teams.find(team => team.id == teamId);
+            if (!team) {
+                return new Promise(resolve => {
+                    res
+                        .status(404)
+                        .send({message: `Team with id ${teamId} could not be found`});
+                    resolve();
+                });
+            } else {
+                const desiredMembers = team.members
+                    .filter(member => member.email.toLowerCase() != memberEmail.toLowerCase());
+
+                team.members = desiredMembers;
+
+                return Promise.resolve(serialize(teams))
+                    .then(json => writeFile("./data.json", json))
+                    .then(() => console.log(`Removed member ${memberEmail} from team ${team.name}`))
+                    .then(() => res.sendStatus(200));
+            }
+        })
+        .catch(err => {
+            console.log("ERROR! " + JSON.stringify(err));
         });
 });
 
