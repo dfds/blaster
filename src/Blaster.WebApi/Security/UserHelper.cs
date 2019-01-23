@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
 namespace Blaster.WebApi.Security
@@ -6,30 +7,35 @@ namespace Blaster.WebApi.Security
     public class UserHelper
     {
         private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IHostingEnvironment _environment;
 
-        public UserHelper(IHttpContextAccessor contextAccessor)
+        public UserHelper(IHttpContextAccessor contextAccessor, IHostingEnvironment environment)
         {
             _contextAccessor = contextAccessor;
+            _environment = environment;
         }
 
-        public User CurrentUser
-        {
-            get
-            {
-                var name = "[unknown user]";
-                var email = string.Empty;
-                if (_contextAccessor.HttpContext.Request.Headers.TryGetValue("X-User-Name", out var headerName))
-                {
-                    name = DecodeBase64(headerName);
-                }
+        public User CurrentUser => _environment.IsDevelopment()
+            ? StubUser
+            : GetUserFromHeaders();
 
-                if (_contextAccessor.HttpContext.Request.Headers.TryGetValue("X-User-Email", out var headerEmail))
-                {
-                    email = DecodeBase64(headerEmail);
-                }
-                
-                return new User(name, email);
+        private User StubUser => new User("John Doe", "jdog@me.com");
+
+        private User GetUserFromHeaders()
+        {
+            var name = "[unknown user]";
+            if (_contextAccessor.HttpContext.Request.Headers.TryGetValue("X-User-Name", out var headerName))
+            {
+                name = DecodeBase64(headerName);
             }
+
+            var email = string.Empty;
+            if (_contextAccessor.HttpContext.Request.Headers.TryGetValue("X-User-Email", out var headerEmail))
+            {
+                email = DecodeBase64(headerEmail);
+            }
+
+            return new User(name, email);
         }
 
         public class User
