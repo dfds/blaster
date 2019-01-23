@@ -26,4 +26,8 @@ export default class TeamService {
 
         return this.client.post(`${this.baseUrl}/${teamId}/members`, payload);
     }
+
+    leave(teamId) {
+        return this.client.delete(`${this.baseUrl}/${teamId}/members/${currentUser.email}`);
+    }
 }

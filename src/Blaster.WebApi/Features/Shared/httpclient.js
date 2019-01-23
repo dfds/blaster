@@ -7,6 +7,7 @@ export default class HttpClient {
         this.createEndpointFrom = this.createEndpointFrom.bind(this);
         this.get = this.get.bind(this);
         this.post = this.post.bind(this);
+        this.delete = this.delete.bind(this);
     }
 
     createEndpointFrom(url) {
@@ -32,5 +33,12 @@ export default class HttpClient {
             contentType: "application/json",
             data: JSON.stringify(data)
         });
-    }    
+    }
+
+    delete(url) {
+        return jq.ajax({
+            type: "DELETE",
+            url: this.createEndpointFrom(url)
+        });
+    }
 }

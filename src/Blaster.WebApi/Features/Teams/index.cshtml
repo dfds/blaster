@@ -63,6 +63,11 @@
                                     type="button" 
                                     class="button is-small is-primary is-loading" 
                                     v-if="getMembershipStatusFor(team.id) == 'requested'">Join</button>
+                                <button 
+                                    type="button" 
+                                    class="button is-small is-danger is-outlined" 
+                                    v-if="getMembershipStatusFor(team.id) == 'member'"
+                                    v-on:click="leaveTeam(team.id)">Leave</button>
                             </div>
                         </td>
                     </tr>
@@ -102,6 +107,37 @@
 
                 </div>
             </div>
+        </div>
+    </div>
+</script>
+
+<script id="leave-dialog-template" type="text/x-mustache">
+    <div id="leave-dialog" class="modal is-active">
+        <div class="modal-background" data-behavior="close"></div>
+        <div class="modal-card">
+
+<article class="message">
+  <div class="message-header">
+    <p>Warning...</p>
+    <button class="delete" aria-label="delete" data-behavior="close"></button>
+  </div>
+  <div class="message-body">
+    <div class="error is-hidden notification is-danger">
+        <strong class="error-title"></strong> <span class="error-message"></span>
+    </div>
+    <p>
+        You are about to leave the team <strong>{{teamName}}</strong>. Changes can take up 
+        to 30 minutes to take effect. Please confirm?
+    </p>
+    <br>
+
+    <div class="buttons is-centered">
+        <button class="button is-danger" data-behavior="save">Leave</button>
+        <button class="button is-white" aria-label="close" data-behavior="close">Cancel</button>
+    </div>
+  </div>
+</article>
+            
         </div>
     </div>
 </script>

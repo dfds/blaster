@@ -73,6 +73,21 @@ namespace Blaster.WebApi.Features.Teams
                 throw new ServerReturnedUnexpectedResponseException($"{response.StatusCode:D} - {response.ReasonPhrase}", responseBody);
             }
         }
+
+        public async Task LeaveTeam(string teamId, string memberEmail)
+        {
+            var response = await _client.DeleteAsync($"/api/v1/teams/{teamId}/members/{memberEmail}");
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new UnknownTeamException();
+            }
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new ServerReturnedUnexpectedResponseException($"{response.StatusCode:D} - {response.ReasonPhrase}", await response.Content.ReadAsStringAsync());
+            }
+        }
     }
 
     public class ServerReturnedUnexpectedResponseException : Exception

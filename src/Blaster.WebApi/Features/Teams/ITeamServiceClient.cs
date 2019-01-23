@@ -9,5 +9,6 @@ namespace Blaster.WebApi.Features.Teams
         Task<Team> CreateTeam(string name);
         Task<Team> GetById(string id);
         Task JoinTeam(string teamId, string memberEmail);
+        Task LeaveTeam(string teamId, string memberEmail);
     }
 }

@@ -38,5 +38,10 @@ namespace Blaster.Tests.TestDoubles
         {
             return Task.CompletedTask;
         }
+
+        public Task LeaveTeam(string teamId, string memberEmail)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

@@ -15,6 +15,7 @@ export default class ModelEditor {
         this.assignEventHandlers = this.assignEventHandlers.bind(this);
         this.close = this.close.bind(this);
         this.focus = this.focus.bind(this);
+        this.showError = this.showError.bind(this);
 
         this.assignEventHandlers();
     }
@@ -49,13 +50,25 @@ export default class ModelEditor {
     }
 
     handleSaveClick(button) {
-        jq(button).addClass("is-loading");
+        Promise.resolve()
+            .then(() => jq(button).addClass("is-loading"))
+            .then(() => this.getFormData())
+            .then(data => {
+                const callback = this.options.onSave || emptyCallback;
+                return callback(data);        
+            })
+            .then(() => jq(button).removeClass("is-loading"));
+    }
 
-        const data = this.getFormData();
-        const callback = this.options.onSave || emptyCallback;
-        callback(data);
+    showError(data) {
+        const container = jq(".error", this.element);
+        jq(".error-title", container).text(data.title);
+        jq(".error-message", container).text(data.message);
+        container.removeClass("is-hidden");
 
-        jq(button).removeClass("is-loading");
+        setTimeout(function() {
+            container.addClass("is-hidden");
+        }, 2000);
     }
 
     close() {

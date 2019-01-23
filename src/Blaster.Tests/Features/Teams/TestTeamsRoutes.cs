@@ -193,6 +193,42 @@ namespace Blaster.Tests.Features.Teams
             }
         }
 
+        [Fact]
+        public async Task delete_member_from_team_returns_expected_status_code()
+        {
+            using (var clientBuilder = new HttpClientBuilder())
+            {
+                var client = clientBuilder
+                    .WithService<ITeamServiceClient>(new StubTeamServiceClient())
+                    .Build();
+
+                var response = await client.DeleteAsync("/api/teams/1/members/foo@bar.com");
+
+                Assert.Equal(
+                    expected: HttpStatusCode.NoContent,
+                    actual: response.StatusCode
+                );
+            }
+        }
+
+        [Fact]
+        public async Task delete_member_from_team_returns_expected_status_code_when_team_does_not_exist()
+        {
+            using (var clientBuilder = new HttpClientBuilder())
+            {
+                var client = clientBuilder
+                    .WithService<ITeamServiceClient>(new ErroneousTeamServiceClient(new UnknownTeamException()))
+                    .Build();
+
+                var response = await client.DeleteAsync("/api/teams/1/members/foo@bar.com");
+
+                Assert.Equal(
+                    expected: HttpStatusCode.NotFound,
+                    actual: response.StatusCode
+                );
+            }
+        }
+
         public class JsonContent : StringContent
         {
             public JsonContent(object instance) 
@@ -241,6 +277,11 @@ namespace Blaster.Tests.Features.Teams
         }
 
         public Task JoinTeam(string teamId, string memberEmail)
+        {
+            throw _error;
+        }
+
+        public Task LeaveTeam(string teamId, string memberEmail)
         {
             throw _error;
         }

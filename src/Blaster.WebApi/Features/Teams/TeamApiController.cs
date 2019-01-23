@@ -78,9 +78,28 @@ namespace Blaster.WebApi.Features.Teams
                 }));
             }
         }
+
+        [HttpDelete("{id}/members/{memberEmail}", Name = "LeaveTeam")]
+        public async Task<IActionResult> LeaveTeam([FromRoute] string id, [FromRoute] string memberEmail)
+        {
+            try
+            {
+                await _teamServiceClient.LeaveTeam(id, memberEmail);
+                return NoContent();                
+            }
+            catch (UnknownTeamException)
+            {
+                return NotFound();
+            }
+        }
     }
 
     public class AlreadyJoinedException : Exception
+    {
+
+    }
+
+    public class UnknownTeamException : Exception
     {
 
     }

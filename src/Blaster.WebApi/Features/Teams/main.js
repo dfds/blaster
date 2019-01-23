@@ -2,6 +2,7 @@ import Vue from "vue";
 import Editor from "./team-editor";
 import TeamService from "./teamservice";
 import AlertDialog from "./alert-dialog";
+import ModelEditor from "modeleditor";
 import jq from "jquery";
 import { currentUser } from "userservice";
 import "./styles"
@@ -63,6 +64,32 @@ const app = new Vue({
                 .done(() => {
                         this.membershipRequests = this.membershipRequests.filter(requestedTeamId => requestedTeamId != team.id);
                 });
+        },
+        leaveTeam: function(teamId) {
+            const team = this.items.find(aTeam => aTeam.id == teamId);
+            const currentUserEmail = this.currentUser.email;
+
+            const editor = ModelEditor.open({
+                template: document.getElementById("leave-dialog-template"),
+                data: {
+                    teamName: team.name
+                },
+                onClose: () => editor.close(),
+                onSave: () => {
+                    return teamService.leave(team.id)
+                        .then(() => {
+                            team.members = team.members.filter(member => member.email != currentUserEmail);
+                            editor.close();
+                        })
+                        .catch(err => {
+                            console.log("ERROR leaving team: " + JSON.stringify(err));
+                            editor.showError({
+                                title: "Error!",
+                                message: `Could not leave team. Try again or reload the page.`
+                            });
+                        });
+                }
+            });
         },
         isCurrentUser: function(memberEmail) {
             return this.currentUser.email == memberEmail;
