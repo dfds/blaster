@@ -62,7 +62,7 @@ namespace Blaster.WebApi
         private void ConfigureTeamsFeature(IServiceCollection services)
         {
             services
-                .AddHttpClient<ITeamService, TeamService>(client =>
+                .AddHttpClient<ITeamServiceClient, TeamServiceClient>(client =>
                 {
                     client.BaseAddress = new Uri(Configuration["BLASTER_TEAMSERVICE_API_URL"]);
                 })

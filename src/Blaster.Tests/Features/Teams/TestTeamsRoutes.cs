@@ -37,7 +37,7 @@ namespace Blaster.Tests.Features.Teams
             using (var clientBuilder = new HttpClientBuilder())
             {
                 var client = clientBuilder
-                    .WithService<ITeamService>(new StubTeamService())
+                    .WithService<ITeamServiceClient>(new StubTeamServiceClient())
                     .Build();
 
                 var response = await client.GetAsync("/api/teams");
@@ -57,7 +57,7 @@ namespace Blaster.Tests.Features.Teams
                 var stubTeam = new TeamListItemBuilder().Build();
 
                 var client = clientBuilder
-                    .WithService<ITeamService>(new StubTeamService(teams: stubTeam))
+                    .WithService<ITeamServiceClient>(new StubTeamServiceClient(teams: stubTeam))
                     .Build();
 
                 var dummyContent = JsonContent.Empty;
@@ -79,7 +79,7 @@ namespace Blaster.Tests.Features.Teams
                 var stubTeam = new TeamListItemBuilder().Build();
 
                 var client = clientBuilder
-                    .WithService<ITeamService>(new StubTeamService(teams: stubTeam))
+                    .WithService<ITeamServiceClient>(new StubTeamServiceClient(teams: stubTeam))
                     .Build();
 
                 var dummyContent = JsonContent.Empty;
@@ -99,7 +99,7 @@ namespace Blaster.Tests.Features.Teams
             using (var clientBuilder = new HttpClientBuilder())
             {
                 var client = clientBuilder
-                    .WithService<ITeamService>(new StubTeamService())
+                    .WithService<ITeamServiceClient>(new StubTeamServiceClient())
                     .Build();
 
                 var response = await client.GetAsync("/api/teams/1");
@@ -119,7 +119,7 @@ namespace Blaster.Tests.Features.Teams
                 var stubTeam = new TeamListItemBuilder().Build();
 
                 var client = clientBuilder
-                    .WithService<ITeamService>(new StubTeamService(teams: stubTeam))
+                    .WithService<ITeamServiceClient>(new StubTeamServiceClient(teams: stubTeam))
                     .Build();
 
                 var response = await client.GetAsync($"/api/teams/{stubTeam.Id}");
@@ -139,7 +139,7 @@ namespace Blaster.Tests.Features.Teams
                 var dummyUser = new UserBuilder().Build();
 
                 var client = clientBuilder
-                    .WithService<ITeamService>(new StubTeamService(member: dummyUser))
+                    .WithService<ITeamServiceClient>(new StubTeamServiceClient(member: dummyUser))
                     .Build();
 
                 var dummyContent = new JsonContent(new {Email = "foo@bar.com"});
@@ -159,7 +159,7 @@ namespace Blaster.Tests.Features.Teams
             using (var clientBuilder = new HttpClientBuilder())
             {
                 var client = clientBuilder
-                    .WithService<ITeamService>(Dummy.Of<ITeamService>())
+                    .WithService<ITeamServiceClient>(Dummy.Of<ITeamServiceClient>())
                     .Build();
 
                 var dummyContent = JsonContent.Empty;
@@ -179,7 +179,7 @@ namespace Blaster.Tests.Features.Teams
             using (var clientBuilder = new HttpClientBuilder())
             {
                 var client = clientBuilder
-                    .WithService<ITeamService>(new ErroneousTeamService(new AlreadyJoinedException()))
+                    .WithService<ITeamServiceClient>(new ErroneousTeamServiceClient(new AlreadyJoinedException()))
                     .Build();
 
                 var dummyContent = new JsonContent(new {Email = "foo@bar.com"});
@@ -216,11 +216,11 @@ namespace Blaster.Tests.Features.Teams
         }
     }
 
-    public class ErroneousTeamService : ITeamService
+    public class ErroneousTeamServiceClient : ITeamServiceClient
     {
         private readonly Exception _error;
 
-        public ErroneousTeamService(Exception error)
+        public ErroneousTeamServiceClient(Exception error)
         {
             _error = error;
         }

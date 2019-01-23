@@ -7,12 +7,12 @@ using Blaster.WebApi.Features.Teams.Models;
 
 namespace Blaster.WebApi.Features.Teams
 {
-    public class TeamService : ITeamService
+    public class TeamServiceClient : ITeamServiceClient
     {
         private readonly HttpClient _client;
         private readonly JsonSerializer _serializer;
 
-        public TeamService(HttpClient client, JsonSerializer serializer)
+        public TeamServiceClient(HttpClient client, JsonSerializer serializer)
         {
             _client = client;
             _serializer = serializer;

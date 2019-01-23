@@ -9,17 +9,17 @@ namespace Blaster.WebApi.Features.Teams
     [ApiController]
     public class TeamApiController : ControllerBase
     {
-        private readonly ITeamService _teamService;
+        private readonly ITeamServiceClient _teamServiceClient;
 
-        public TeamApiController(ITeamService teamService)
+        public TeamApiController(ITeamServiceClient teamServiceClient)
         {
-            _teamService = teamService;
+            _teamServiceClient = teamServiceClient;
         }
 
         [HttpGet("", Name = "GetAllTeams")]
         public async Task<ActionResult<TeamsResponse>> GetAll()
         {
-            var teams = await _teamService.GetAll();
+            var teams = await _teamServiceClient.GetAll();
 
             return teams ?? new TeamsResponse
             {
@@ -30,7 +30,7 @@ namespace Blaster.WebApi.Features.Teams
         [HttpGet("{id}", Name = "GetTeamById")]
         public async Task<ActionResult<Team>> GetById(string id)
         {
-            var team = await _teamService.GetById(id);
+            var team = await _teamServiceClient.GetById(id);
 
             if (team != null)
             {
@@ -44,7 +44,7 @@ namespace Blaster.WebApi.Features.Teams
         [HttpPost("", Name = "CreateTeam")]
         public async Task<CreatedAtRouteResult<Team>> CreateTeam([FromBody] TeamInput input)
         {
-            var team = await  _teamService.CreateTeam(input.Name);
+            var team = await  _teamServiceClient.CreateTeam(input.Name);
 
             return new CreatedAtRouteResult<Team>(
                 routeName: "GetTeamById",
@@ -63,7 +63,7 @@ namespace Blaster.WebApi.Features.Teams
 
             try
             {
-                await _teamService.JoinTeam(
+                await _teamServiceClient.JoinTeam(
                     teamId: id,
                     memberEmail: input.Email
                 );

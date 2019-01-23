@@ -25,7 +25,7 @@ namespace Blaster.Tests.Features.Teams
             var expected = new TeamListItemBuilder().Build();
 
             var sut = new TeamApiControllerBuilder()
-                .WithTeamService(new StubTeamService(teams: expected))
+                .WithTeamService(new StubTeamServiceClient(teams: expected))
                 .Build();
 
             var result = await sut.GetAll();
@@ -46,7 +46,7 @@ namespace Blaster.Tests.Features.Teams
             };
 
             var sut = new TeamApiControllerBuilder()
-                .WithTeamService(new StubTeamService(teams: expected))
+                .WithTeamService(new StubTeamServiceClient(teams: expected))
                 .Build();
 
             var result = await sut.GetAll();
@@ -63,7 +63,7 @@ namespace Blaster.Tests.Features.Teams
             var expected = new TeamListItemBuilder().Build();
 
             var sut = new TeamApiControllerBuilder()
-                .WithTeamService(new StubTeamService(teams: expected))
+                .WithTeamService(new StubTeamServiceClient(teams: expected))
                 .Build();
 
             var dummyInput = new TeamInput();
@@ -82,7 +82,7 @@ namespace Blaster.Tests.Features.Teams
             var expected = new TeamListItemBuilder().Build();
 
             var sut = new TeamApiControllerBuilder()
-                .WithTeamService(new StubTeamService(teams: expected))
+                .WithTeamService(new StubTeamServiceClient(teams: expected))
                 .Build();
 
             var result = await sut.GetById(expected.Id);
@@ -113,7 +113,7 @@ namespace Blaster.Tests.Features.Teams
         public async Task returns_expected_when_user_joins_a_team_and_user_has_already_joined()
         {
             var sut = new TeamApiControllerBuilder()
-                .WithTeamService(new ErroneousTeamService(new AlreadyJoinedException()))
+                .WithTeamService(new ErroneousTeamServiceClient(new AlreadyJoinedException()))
                 .Build();
 
             var result = await sut.JoinTeam("foo", new JoinTeamInput {Email = "bar"});

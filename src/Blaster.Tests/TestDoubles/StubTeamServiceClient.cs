@@ -5,12 +5,12 @@ using Blaster.WebApi.Features.Teams.Models;
 
 namespace Blaster.Tests.TestDoubles
 {
-    public class StubTeamService : ITeamService
+    public class StubTeamServiceClient : ITeamServiceClient
     {
         private readonly Member _member;
         private readonly Team[] _teams;
 
-        public StubTeamService(Member member = null, params Team[] teams)
+        public StubTeamServiceClient(Member member = null, params Team[] teams)
         {
             _member = member;
             _teams = teams;

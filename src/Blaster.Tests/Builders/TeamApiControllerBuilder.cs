@@ -5,22 +5,22 @@ namespace Blaster.Tests.Builders
 {
     public class TeamApiControllerBuilder
     {
-        private ITeamService _teamService;
+        private ITeamServiceClient _teamServiceClient;
 
         public TeamApiControllerBuilder()
         {
-            _teamService = Dummy.Of<ITeamService>();
+            _teamServiceClient = Dummy.Of<ITeamServiceClient>();
         }
 
-        public TeamApiControllerBuilder WithTeamService(ITeamService teamService)
+        public TeamApiControllerBuilder WithTeamService(ITeamServiceClient teamServiceClient)
         {
-            _teamService = teamService;
+            _teamServiceClient = teamServiceClient;
             return this;
         }
 
         public TeamApiController Build()
         {
-            return new TeamApiController(_teamService);
+            return new TeamApiController(_teamServiceClient);
         }
     }
 }
