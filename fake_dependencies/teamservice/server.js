@@ -28,6 +28,10 @@ app.post("/api/v1/teams", (req, res) => {
         members: []
     }, req.body);
 
+    if (newTeam.name === "failme") {
+        res.status(400).send({message: "Name must be a string of length 3 to 32. consisting of only alphanumeric ASCII characters, starting with a capital letter. Underscores and hyphens are allowed."});
+        return;
+    }
     readFile("./data.json")
         .then(data => JSON.parse(data))
         .then(teams => {
