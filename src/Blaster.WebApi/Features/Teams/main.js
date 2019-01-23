@@ -35,8 +35,22 @@ const app = new Vue({
                         .add(teamData)
                         .then(team => this.items.push(team))
                         .then(() => editor.close())
-                        .catch(err => {
-                            if (err.status != 200) {
+                        .catch(err => {                            
+                            if (err.status == 400) {
+                                const dialog = AlertDialog.open({
+                                    template: document.getElementById("error-dialog-template"),
+                                    container: jq(".dialog-container", editor.element),
+                                    data: {
+                                        title: "Validation issue",
+                                        message: err.responseJSON.message
+                                    }
+                                });
+
+                                setTimeout(function() {
+                                    dialog.close();
+                                }, 15000);
+                            }
+                            else if (err.status != 200) {
                                 const dialog = AlertDialog.open({
                                     template: document.getElementById("error-dialog-template"),
                                     container: jq(".dialog-container", editor.element),

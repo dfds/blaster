@@ -42,15 +42,23 @@ namespace Blaster.WebApi.Features.Teams
         }
 
         [HttpPost("", Name = "CreateTeam")]
-        public async Task<CreatedAtRouteResult<Team>> CreateTeam([FromBody] TeamInput input)
+        public async Task<IActionResult> CreateTeam([FromBody] TeamInput input)
         {
-            var team = await  _teamServiceClient.CreateTeam(input.Name);
+            try
+            {
+                var team = await _teamServiceClient.CreateTeam(input.Name);
 
-            return new CreatedAtRouteResult<Team>(
-                routeName: "GetTeamById",
-                routeValues: new {id = team.Id},
-                value: team
-            );
+                var a = new CreatedAtRouteResult<Team>(
+                    routeName: "GetTeamById",
+                    routeValues: new { id = team.Id },
+                    value: team
+                );
+                return a.Convert();
+            } catch (TeamValidationException tve) {
+                return BadRequest(new {
+                    Message = tve.Message
+                });
+            }
         }
 
         [HttpPost("{id}/members", Name = "JoinTeam")]
@@ -96,7 +104,14 @@ namespace Blaster.WebApi.Features.Teams
 
     public class AlreadyJoinedException : Exception
     {
+    }
 
+    public class TeamValidationException : Exception
+    {
+        public TeamValidationException(string message) : base(message)
+        {
+
+        }
     }
 
     public class UnknownTeamException : Exception
