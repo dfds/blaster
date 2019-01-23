@@ -68,12 +68,28 @@ namespace Blaster.Tests.Features.Teams
 
             var dummyInput = new TeamInput();
 
-            var result = await sut.CreateTeam(dummyInput);
+            var result = (CreatedAtRouteResult)await sut.CreateTeam(dummyInput);
 
             Assert.Equal(
                 expected: expected,
                 actual: result.Value
             );
+        }
+
+        [Fact]
+        public async Task returns_badrequest_when_creating_new_team_with_invalid_name()
+        {
+            var expected = new TeamListItemBuilder().Build();
+
+            var sut = new TeamApiControllerBuilder()
+                .WithTeamService(new ErroneousTeamServiceClient(new TeamValidationException("booo")))
+                .Build();
+
+            var dummyInput = new TeamInput();
+
+            var result = await sut.CreateTeam(dummyInput);
+
+            Assert.IsType<BadRequestObjectResult>(result);
         }
 
         [Fact]
