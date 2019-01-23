@@ -67,14 +67,51 @@ A number of environment variables are read to point to the relevant services but
 ## Structure
 Currently, blaster is just a web UI. The planned CLI is not there yet.
 
-    ./api-contracts: API contracts are for reference-only, and are stored in .
-    ./k8s: kubernetes tokenized manifests
-    ./src: Blaster source
-        ./Blaster.Tests: Xunit based tests
-        ./Blaster.WebApi: .NET Core WebApi code
+    ./docker-compose.yml: Docker-compose definition to spin up fake dependencies for local development.
+    ./fake_dependencies: Fake dependencies which can be spun up to ease local development.
+    ./k8s: Kubernetes tokenized manifests.
+    ./src: Blaster source.
+        ./auth-proxy: NodeJS proxy sitting between AWS ALB and Blaster to decouple Blaster from authentication implementation.
+        ./Blaster.Tests: Xunit based tests.
+        ./Blaster.WebApi: .NET Core WebApi code and frontend.
 
 Blaster uses Vue for client-side framework.
 
+## Local development with fake dependencies
+A Docker-compose definition is available in the root of the repository. This spins up fake dependencies to ease local development.
+
+To spin up the fake dependencies run:
+
+On first run:
+```
+docker-compose up --build
+```
+Otherwise:
+```
+docker-compose up
+```
+The call flow from user to Blaster goes through an AWS ALB for authentication. To simulate the JWT from the ALB (1) below is replaced with a header-injector proxy.
+ 
+(2) is replaced with a fake team service.
+
+```ascii
+                  +---------+
+                  | (1)     |
++------------+    |         |      +-----+------+     +-----+-------+     +-----+--------+
+|            |    |         |      |            |     |             |     | (2)          |
+|    User    +--->+ AWS ALB +----->+ auth-proxy +---->+   Blaster   +---->+ Team Service |
+|            |    |         |      |            |     |             |     |              |
++------------+    |         |      +------------+     +-------------+     +--------------+
+                  |         |
+                  +----+----+
+                       |
+                       v
+                +------+------+
+                |             |
+                |  Azure AD   +
+                |             |
+                +-------------+
+```
 
 # Deployment
 FIXME This section and any notes on this are woefully out of date FIXME
