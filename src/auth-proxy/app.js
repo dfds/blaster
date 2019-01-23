@@ -3,7 +3,7 @@ const app = require('express')();
 const JWTUtilities = require('./jwt-utilities');
 const jwtUtil = new JWTUtilities();
 const port = process.env.PORT || 50800;
-const forwardAddress = process.env.FORWARD_ADDRESS || "localhost:50801";
+const forwardAddress = process.env.FORWARD_ADDRESS || "localhost:5000";
 
 app.use('/', proxy(forwardAddress, {
     proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
@@ -21,5 +21,5 @@ app.use('/', proxy(forwardAddress, {
 );
 
 app.listen(port, () => {
-    console.log(`auth-proxy is running on port ${port}`);
+    console.log(`auth-proxy is running on port ${port}. Forwarding to ${forwardAddress}`);
 });

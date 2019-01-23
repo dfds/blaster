@@ -1,17 +1,14 @@
 version: "3"
 
 services:
-  blaster:
-    build: 
-      context: ./
-    ports:
-      - "5000:80"
-    depends_on:
-      - header-injector-proxy
-      - auth-proxy
-      - teamservice
-    environment: 
-      - BLASTER_TEAMSERVICE_API_URL=http://teamservice:3000
+  # Enables container to host communication:
+  dockerhost:
+    image: qoomon/docker-host
+    cap_add:
+      - 'NET_ADMIN'
+      - 'NET_RAW'
+    restart: on-failure
+  # Simulates JWT header from AWS ALB:
   header-injector-proxy:
     build: 
       context: ./fake_dependencies/header-injector-proxy
@@ -21,13 +18,18 @@ services:
       - auth-proxy
     environment:
       - FORWARD_ADDRESS=auth-proxy:50800
+  # Transforms JWT from ALB to an vendor agnostic header:
+  # Going forward it might enrich data about the user.
   auth-proxy:
     build: 
       context: ./src/auth-proxy
     ports:
-      - "5001:50800"
+      - "5003:50800"
+    depends_on:
+      - dockerhost
     environment:
-      - FORWARD_ADDRESS=blaster:80
+      - FORWARD_ADDRESS=dockerhost:5000
+  # Fake team service:
   teamservice:
     build: 
       context: ./fake_dependencies/teamservice

@@ -17,5 +17,5 @@ app.use('/', proxy(forwardAddress, {
 );
 
 app.listen(port, () => {
-    console.log(`header-injector-proxy is running on port ${port}`);
+    console.log(`header-injector-proxy is running on port ${port}. Forwarding to ${forwardAddress}`);
 });
