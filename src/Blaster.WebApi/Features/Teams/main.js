@@ -1,5 +1,4 @@
 import Vue from "vue";
-import Editor from "./team-editor";
 import TeamService from "./teamservice";
 import AlertDialog from "./alert-dialog";
 import ModelEditor from "modeleditor";
@@ -24,15 +23,14 @@ const app = new Vue({
     },
     methods: {
         newTeam: function() {
-            const editor = Editor.open({
+            const editor = ModelEditor.open({
                 template: document.getElementById("editor-template"),
                 data: {
                     name: "",
                 },
                 onClose: () => editor.close(),
                 onSave: (teamData) => { 
-                    teamService
-                        .add(teamData)
+                    return teamService.add(teamData)
                         .then(team => this.items.push(team))
                         .then(() => editor.close())
                         .catch(err => {                            
@@ -75,7 +73,7 @@ const app = new Vue({
             teamService.join(team.id)
                 .then(() => team.members.push({ email: this.currentUser.email }))
                 .catch(err => console.log("error joining team: " + JSON.stringify(err)))
-                .done(() => {
+                .then(() => {
                         this.membershipRequests = this.membershipRequests.filter(requestedTeamId => requestedTeamId != team.id);
                 });
         },
