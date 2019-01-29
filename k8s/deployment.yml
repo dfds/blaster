@@ -5,6 +5,7 @@ metadata:
   namespace: $(kubernetes-namespace)
   labels:
     project: selfservice
+    department: devex
 spec:
   replicas: 1
   selector:
@@ -14,6 +15,8 @@ spec:
     metadata:
       labels:
         app: blaster
+        project: selfservice
+        department: devex
     spec:
       containers:
         - name: auth-proxy

@@ -8,29 +8,13 @@ metadata:
     traefik.frontend.rule.type: PathPrefixStrip
   labels:
     project: selfservice
+    department: devex
 spec:
   rules:
-    - host: internal.lovelace.oxygen.dfds.cloud
+    - host: internal.turing.oxygen.dfds.cloud
       http:
         paths:
           - path: /blaster
             backend:
               serviceName: blaster
               servicePort: external
-
-  # - host: tools.dfds.cloud
-  #   http:
-  #     paths:
-  #     # - path: /$(environment)-blaster
-  #     - path: /blaster
-  #       backend:
-  #         serviceName: blaster
-  #         servicePort: external
-  # - host: app.dfds.cloud
-  #   http:
-  #     paths:
-  #     # - path: /$(environment)-blaster
-  #     - path: /blaster
-  #       backend:
-  #         serviceName: blaster
-  #         servicePort: external
