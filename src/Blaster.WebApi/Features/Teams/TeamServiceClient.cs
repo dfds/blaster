@@ -20,7 +20,7 @@ namespace Blaster.WebApi.Features.Teams
 
         public async Task<TeamsResponse> GetAll()
         {
-            var response = await _client.GetAsync("/api/v1/teams");
+            var response = await _client.GetAsync("/api/v1/capabilities");
             var content = await response.Content.ReadAsStringAsync();
 
             return _serializer.Deserialize<TeamsResponse>(content);
@@ -34,7 +34,7 @@ namespace Blaster.WebApi.Features.Teams
                 mediaType: "application/json"
             );
 
-            var response = await _client.PostAsync("/api/v1/teams", content);
+            var response = await _client.PostAsync("/api/v1/capabilities", content);
             if (response.StatusCode == HttpStatusCode.BadRequest) {
                 var errorObj = _serializer.Deserialize<ErrorObject>(await response.Content.ReadAsStringAsync());
                 throw new TeamValidationException(errorObj.Message);
@@ -50,7 +50,7 @@ namespace Blaster.WebApi.Features.Teams
 
         public async Task<Team> GetById(string id)
         {
-            var response = await _client.GetAsync($"/api/v1/teams/{id}");
+            var response = await _client.GetAsync($"/api/v1/capabilities/{id}");
             var content = await response.Content.ReadAsStringAsync();
 
             return _serializer.Deserialize<Team>(content);
@@ -64,7 +64,7 @@ namespace Blaster.WebApi.Features.Teams
                 mediaType: "application/json"
             );
 
-            var response = await _client.PostAsync($"/api/v1/teams/{teamId}/members", content);
+            var response = await _client.PostAsync($"/api/v1/capabilities/{teamId}/members", content);
             var responseBody = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode == HttpStatusCode.Conflict)
@@ -80,7 +80,7 @@ namespace Blaster.WebApi.Features.Teams
 
         public async Task LeaveTeam(string teamId, string memberEmail)
         {
-            var response = await _client.DeleteAsync($"/api/v1/teams/{teamId}/members/{memberEmail}");
+            var response = await _client.DeleteAsync($"/api/v1/capabilities/{teamId}/members/{memberEmail}");
 
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
