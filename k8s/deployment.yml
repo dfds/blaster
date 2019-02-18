@@ -6,6 +6,8 @@ metadata:
   labels:
     project: selfservice
     department: devex
+    app: blaster
+    component: blaster
 spec:
   replicas: 1
   selector:

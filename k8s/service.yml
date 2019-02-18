@@ -9,6 +9,7 @@ metadata:
     app: blaster
     project: selfservice
     department: devex
+    component: blaster
 spec:
   ports:
     - name: external
