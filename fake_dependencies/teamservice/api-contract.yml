@@ -1,24 +1,24 @@
 swagger: '2.0'
 info:
   version: 0.0.1
-  title: Team Service
-  description: The authority of all things TEAM related!
+  title: Capability Service
+  description: The authority of all things capability related!
 consumes:
   - application/json
 produces:
   - application/json
 basePath: /api/v1/
 paths:
-  /teams: 
+  /capabilities: 
     get:
-      summary: Returns a list of teams
+      summary: Returns a list of capabilities
       responses:
         200:
           description: OK
           schema:
-            $ref: '#/definitions/team-list'
+            $ref: '#/definitions/capability-list'
     post:
-      summary: Create a new team
+      summary: Create a new capability
       parameters: 
         - in: body
           name: body
@@ -34,32 +34,32 @@ paths:
           headers:
             location:
               type: string
-              description: URI where the team can be retrieved
+              description: URI where the capability can be retrieved
           schema:
-            $ref: '#/definitions/team'
+            $ref: '#/definitions/capability'
         400:
           description: BadRequest
           schema:
             $ref: '#/definitions/errorObject'
-  /teams/{teamId}:
+  /capabilities/{capabilityId}:
     get:
-      summary: Returns a single team
+      summary: Returns a single capability
       parameters:
         - in: path
-          name: teamId
+          name: capabilityId
           type: string
           required: true
       responses:
         200:
           description: OK
           schema:
-            $ref: '#/definitions/team'
-  /teams/{teamId}/members:
+            $ref: '#/definitions/capability'
+  /capabilities/{capabilityId}/members:
     post:
-      summary: Adds a person to a team 
+      summary: Adds a person to a capability 
       parameters:
         - in: path
-          name: teamId
+          name: capabilityId
           required: true
           type: string
         - in: body
@@ -77,12 +77,12 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/errorObject'
-  /teams/{teamId}/members/{email}:
+  /capabilities/{capabilityId}/members/{email}:
     delete:
-      summary: Deletes a person from a team 
+      summary: Deletes a person from a capability 
       parameters:
         - in: path
-          name: teamId
+          name: capabilityId
           required: true
           type: string
         - in: path
@@ -95,14 +95,14 @@ paths:
         404:
           description: Not Found
 definitions:
-  team-list:
+  capability-list:
     type: object
     properties:
       items:
         type: array
         items:
-          $ref: '#/definitions/team'
-  team:
+          $ref: '#/definitions/capability'
+  capability:
     type: object
     properties:
       id:

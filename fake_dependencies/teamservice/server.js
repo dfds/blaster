@@ -12,7 +12,7 @@ const writeFile = util.promisify(fs.writeFile);
 const serialize = (data) => JSON.stringify(data, null, 2);
 const deserialize = (text) => JSON.parse(text);
 
-app.get("/api/v1/teams", (req, res) => {
+app.get("/api/v1/capabilities", (req, res) => {
     readFile("./data.json")
         .then(data => JSON.parse(data))
         .then(teams => {
@@ -22,7 +22,7 @@ app.get("/api/v1/teams", (req, res) => {
         });
 });
 
-app.post("/api/v1/teams", (req, res) => {   
+app.post("/api/v1/capabilities", (req, res) => {   
     const newTeam = Object.assign({
         id: new Date().getTime().toString(),
         members: []
@@ -41,7 +41,7 @@ app.post("/api/v1/teams", (req, res) => {
         .then(teams => JSON.stringify(teams, null, 2))
         .then(json => writeFile("./data.json", json))
         .then(() => {
-            res.location(`/api/v1/teams/${newTeam.id}`);
+            res.location(`/api/v1/capabilities/${newTeam.id}`);
             res.status(201).send(newTeam);
         })
         .catch(err => {
@@ -49,7 +49,7 @@ app.post("/api/v1/teams", (req, res) => {
         });
 });
 
-app.post("/api/v1/teams/:teamid/members", (req, res) => {
+app.post("/api/v1/capabilities/:teamid/members", (req, res) => {
     const teamid = req.params.teamid;
     const { email } = req.body;
 
@@ -76,7 +76,7 @@ app.post("/api/v1/teams/:teamid/members", (req, res) => {
         });
 });
 
-app.delete("/api/v1/teams/:teamid/members/:memberemail", (req, res) => {
+app.delete("/api/v1/capabilities/:teamid/members/:memberemail", (req, res) => {
     const teamId = req.params.teamid;
     const memberEmail = req.params.memberemail;
 
