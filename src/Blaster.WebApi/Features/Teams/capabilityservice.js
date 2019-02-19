@@ -1,7 +1,7 @@
 import HttpClient from "httpclient";
 import { currentUser } from "userservice";
 
-export default class TeamService {
+export default class CapabilityService {
     constructor() {
         this.client = new HttpClient();
         this.baseUrl = "api/teams";
@@ -15,19 +15,19 @@ export default class TeamService {
             .then(data => data.items || []);
     }
 
-    add (team) {
-        return this.client.post(this.baseUrl, team);
+    add (capability) {
+        return this.client.post(this.baseUrl, capability);
     }
 
-    join(teamId) {
+    join(capabilityId) {
         const payload = {
             email: currentUser.email
         };
 
-        return this.client.post(`${this.baseUrl}/${teamId}/members`, payload);
+        return this.client.post(`${this.baseUrl}/${capabilityId}/members`, payload);
     }
 
-    leave(teamId) {
-        return this.client.delete(`${this.baseUrl}/${teamId}/members/${currentUser.email}`);
+    leave(capabilityId) {
+        return this.client.delete(`${this.baseUrl}/${capabilityId}/members/${currentUser.email}`);
     }
 }

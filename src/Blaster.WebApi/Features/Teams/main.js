@@ -1,12 +1,12 @@
 import Vue from "vue";
-import TeamService from "./teamservice";
+import CapabilityService from "./capabilityservice";
 import AlertDialog from "./alert-dialog";
 import ModelEditor from "modeleditor";
 import jq from "jquery";
 import { currentUser } from "userservice";
 import "./styles"
 
-const teamService = new TeamService();
+const capabilityService = new CapabilityService();
 
 const app = new Vue({
     el: "#teams-app",
@@ -30,7 +30,7 @@ const app = new Vue({
                 },
                 onClose: () => editor.close(),
                 onSave: (teamData) => { 
-                    return teamService.add(teamData)
+                    return capabilityService.add(teamData)
                         .then(team => this.items.push(team))
                         .then(() => editor.close())
                         .catch(err => {                            
@@ -70,7 +70,7 @@ const app = new Vue({
             const team = this.items.find(team => team.id == teamId);
             this.membershipRequests.push(team.id);
 
-            teamService.join(team.id)
+            capabilityService.join(team.id)
                 .then(() => team.members.push({ email: this.currentUser.email }))
                 .catch(err => console.log("error joining team: " + JSON.stringify(err)))
                 .then(() => {
@@ -88,7 +88,7 @@ const app = new Vue({
                 },
                 onClose: () => editor.close(),
                 onSave: () => {
-                    return teamService.leave(team.id)
+                    return capabilityService.leave(team.id)
                         .then(() => {
                             team.members = team.members.filter(member => member.email != currentUserEmail);
                             editor.close();
@@ -131,7 +131,7 @@ const app = new Vue({
     },
     mounted: function () {
         jq.ready
-            .then(() => teamService.getAll())
+            .then(() => capabilityService.getAll())
             .then(teams => teams.forEach(team => this.items.push(team)))
             .catch(info => {
                 if (info.status != 200) {
