@@ -4,9 +4,9 @@ namespace Blaster.Tests.Builders
 {
     public class TeamListItemBuilder
     {
-        public Team Build()
+        public Capability Build()
         {
-            return new Team
+            return new Capability
             {
                 Id = "1",
                 Name = "team foo",

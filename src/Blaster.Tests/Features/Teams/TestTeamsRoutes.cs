@@ -37,7 +37,7 @@ namespace Blaster.Tests.Features.Teams
             using (var clientBuilder = new HttpClientBuilder())
             {
                 var client = clientBuilder
-                    .WithService<ITeamServiceClient>(new StubTeamServiceClient())
+                    .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient())
                     .Build();
 
                 var response = await client.GetAsync("/api/teams");
@@ -57,7 +57,7 @@ namespace Blaster.Tests.Features.Teams
                 var stubTeam = new TeamListItemBuilder().Build();
 
                 var client = clientBuilder
-                    .WithService<ITeamServiceClient>(new StubTeamServiceClient(teams: stubTeam))
+                    .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient(capabilities: stubTeam))
                     .Build();
 
                 var dummyContent = JsonContent.Empty;
@@ -79,7 +79,7 @@ namespace Blaster.Tests.Features.Teams
                 var stubTeam = new TeamListItemBuilder().Build();
 
                 var client = clientBuilder
-                    .WithService<ITeamServiceClient>(new StubTeamServiceClient(teams: stubTeam))
+                    .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient(capabilities: stubTeam))
                     .Build();
 
                 var dummyContent = JsonContent.Empty;
@@ -99,7 +99,7 @@ namespace Blaster.Tests.Features.Teams
             using (var clientBuilder = new HttpClientBuilder())
             {
                 var client = clientBuilder
-                    .WithService<ITeamServiceClient>(new StubTeamServiceClient())
+                    .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient())
                     .Build();
 
                 var response = await client.GetAsync("/api/teams/1");
@@ -119,7 +119,7 @@ namespace Blaster.Tests.Features.Teams
                 var stubTeam = new TeamListItemBuilder().Build();
 
                 var client = clientBuilder
-                    .WithService<ITeamServiceClient>(new StubTeamServiceClient(teams: stubTeam))
+                    .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient(capabilities: stubTeam))
                     .Build();
 
                 var response = await client.GetAsync($"/api/teams/{stubTeam.Id}");
@@ -139,7 +139,7 @@ namespace Blaster.Tests.Features.Teams
                 var dummyUser = new UserBuilder().Build();
 
                 var client = clientBuilder
-                    .WithService<ITeamServiceClient>(new StubTeamServiceClient(member: dummyUser))
+                    .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient(member: dummyUser))
                     .Build();
 
                 var dummyContent = new JsonContent(new {Email = "foo@bar.com"});
@@ -159,7 +159,7 @@ namespace Blaster.Tests.Features.Teams
             using (var clientBuilder = new HttpClientBuilder())
             {
                 var client = clientBuilder
-                    .WithService<ITeamServiceClient>(Dummy.Of<ITeamServiceClient>())
+                    .WithService<ICapabilityServiceClient>(Dummy.Of<ICapabilityServiceClient>())
                     .Build();
 
                 var dummyContent = JsonContent.Empty;
@@ -179,7 +179,7 @@ namespace Blaster.Tests.Features.Teams
             using (var clientBuilder = new HttpClientBuilder())
             {
                 var client = clientBuilder
-                    .WithService<ITeamServiceClient>(new ErroneousTeamServiceClient(new AlreadyJoinedException()))
+                    .WithService<ICapabilityServiceClient>(new ErroneousCapabilityServiceClient(new AlreadyJoinedException()))
                     .Build();
 
                 var dummyContent = new JsonContent(new {Email = "foo@bar.com"});
@@ -199,7 +199,7 @@ namespace Blaster.Tests.Features.Teams
             using (var clientBuilder = new HttpClientBuilder())
             {
                 var client = clientBuilder
-                    .WithService<ITeamServiceClient>(new StubTeamServiceClient())
+                    .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient())
                     .Build();
 
                 var response = await client.DeleteAsync("/api/teams/1/members/foo@bar.com");
@@ -217,7 +217,7 @@ namespace Blaster.Tests.Features.Teams
             using (var clientBuilder = new HttpClientBuilder())
             {
                 var client = clientBuilder
-                    .WithService<ITeamServiceClient>(new ErroneousTeamServiceClient(new UnknownTeamException()))
+                    .WithService<ICapabilityServiceClient>(new ErroneousCapabilityServiceClient(new UnknownTeamException()))
                     .Build();
 
                 var response = await client.DeleteAsync("/api/teams/1/members/foo@bar.com");
@@ -252,36 +252,36 @@ namespace Blaster.Tests.Features.Teams
         }
     }
 
-    public class ErroneousTeamServiceClient : ITeamServiceClient
+    public class ErroneousCapabilityServiceClient : ICapabilityServiceClient
     {
         private readonly Exception _error;
 
-        public ErroneousTeamServiceClient(Exception error)
+        public ErroneousCapabilityServiceClient(Exception error)
         {
             _error = error;
         }
 
-        public Task<TeamsResponse> GetAll()
+        public Task<CapabilitiesResponse> GetAll()
         {
             throw _error;
         }
 
-        public Task<Team> CreateTeam(string name)
+        public Task<Capability> CreateCapability(string name)
         {
             throw _error;
         }
 
-        public Task<Team> GetById(string id)
+        public Task<Capability> GetById(string id)
         {
             throw _error;
         }
 
-        public Task JoinTeam(string teamId, string memberEmail)
+        public Task JoinCapability(string teamId, string memberEmail)
         {
             throw _error;
         }
 
-        public Task LeaveTeam(string teamId, string memberEmail)
+        public Task LeaveCapability(string teamId, string memberEmail)
         {
             throw _error;
         }

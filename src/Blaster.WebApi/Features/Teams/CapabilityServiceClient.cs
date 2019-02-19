@@ -7,26 +7,26 @@ using Blaster.WebApi.Features.Teams.Models;
 
 namespace Blaster.WebApi.Features.Teams
 {
-    public class TeamServiceClient : ITeamServiceClient
+    public class CapabilityServiceClient : ICapabilityServiceClient
     {
         private readonly HttpClient _client;
         private readonly JsonSerializer _serializer;
 
-        public TeamServiceClient(HttpClient client, JsonSerializer serializer)
+        public CapabilityServiceClient(HttpClient client, JsonSerializer serializer)
         {
             _client = client;
             _serializer = serializer;
         }
 
-        public async Task<TeamsResponse> GetAll()
+        public async Task<CapabilitiesResponse> GetAll()
         {
             var response = await _client.GetAsync("/api/v1/capabilities");
             var content = await response.Content.ReadAsStringAsync();
 
-            return _serializer.Deserialize<TeamsResponse>(content);
+            return _serializer.Deserialize<CapabilitiesResponse>(content);
         }
 
-        public async Task<Team> CreateTeam(string name)
+        public async Task<Capability> CreateCapability(string name)
         {
             var content = new StringContent(
                 content: _serializer.Serialize(new { Name = name }),
@@ -45,18 +45,18 @@ namespace Blaster.WebApi.Features.Teams
             }
 
             var receivedContent = await response.Content.ReadAsStringAsync();
-            return _serializer.Deserialize<Team>(receivedContent);
+            return _serializer.Deserialize<Capability>(receivedContent);
         }
 
-        public async Task<Team> GetById(string id)
+        public async Task<Capability> GetById(string id)
         {
             var response = await _client.GetAsync($"/api/v1/capabilities/{id}");
             var content = await response.Content.ReadAsStringAsync();
 
-            return _serializer.Deserialize<Team>(content);
+            return _serializer.Deserialize<Capability>(content);
         }
 
-        public async Task JoinTeam(string teamId, string memberEmail)
+        public async Task JoinCapability(string teamId, string memberEmail)
         {
             var content = new StringContent(
                 content: _serializer.Serialize(new { Email = memberEmail }),
@@ -78,7 +78,7 @@ namespace Blaster.WebApi.Features.Teams
             }
         }
 
-        public async Task LeaveTeam(string teamId, string memberEmail)
+        public async Task LeaveCapability(string teamId, string memberEmail)
         {
             var response = await _client.DeleteAsync($"/api/v1/capabilities/{teamId}/members/{memberEmail}");
 

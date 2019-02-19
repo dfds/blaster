@@ -9,35 +9,35 @@ namespace Blaster.WebApi.Features.Teams
     [ApiController]
     public class TeamApiController : ControllerBase
     {
-        private readonly ITeamServiceClient _teamServiceClient;
+        private readonly ICapabilityServiceClient _capabilityServiceClient;
 
-        public TeamApiController(ITeamServiceClient teamServiceClient)
+        public TeamApiController(ICapabilityServiceClient capabilityServiceClient)
         {
-            _teamServiceClient = teamServiceClient;
+            _capabilityServiceClient = capabilityServiceClient;
         }
 
         [HttpGet("", Name = "GetAllTeams")]
-        public async Task<ActionResult<TeamsResponse>> GetAll()
+        public async Task<ActionResult<CapabilitiesResponse>> GetAll()
         {
-            var teams = await _teamServiceClient.GetAll();
+            var teams = await _capabilityServiceClient.GetAll();
 
-            return teams ?? new TeamsResponse
+            return teams ?? new CapabilitiesResponse
             {
-                Items = new Team[0]
+                Items = new Capability[0]
             };
         }
 
         [HttpGet("{id}", Name = "GetTeamById")]
-        public async Task<ActionResult<Team>> GetById(string id)
+        public async Task<ActionResult<Capability>> GetById(string id)
         {
-            var team = await _teamServiceClient.GetById(id);
+            var team = await _capabilityServiceClient.GetById(id);
 
             if (team != null)
             {
-                return new ActionResult<Team>(team);
+                return new ActionResult<Capability>(team);
             }
 
-            return new ActionResult<Team>(NotFound());
+            return new ActionResult<Capability>(NotFound());
 
         }
 
@@ -46,9 +46,9 @@ namespace Blaster.WebApi.Features.Teams
         {
             try
             {
-                var team = await _teamServiceClient.CreateTeam(input.Name);
+                var team = await _capabilityServiceClient.CreateCapability(input.Name);
 
-                var a = new CreatedAtRouteResult<Team>(
+                var a = new CreatedAtRouteResult<Capability>(
                     routeName: "GetTeamById",
                     routeValues: new { id = team.Id },
                     value: team
@@ -71,7 +71,7 @@ namespace Blaster.WebApi.Features.Teams
 
             try
             {
-                await _teamServiceClient.JoinTeam(
+                await _capabilityServiceClient.JoinCapability(
                     teamId: id,
                     memberEmail: input.Email
                 );
@@ -92,7 +92,7 @@ namespace Blaster.WebApi.Features.Teams
         {
             try
             {
-                await _teamServiceClient.LeaveTeam(id, memberEmail);
+                await _capabilityServiceClient.LeaveCapability(id, memberEmail);
                 return NoContent();                
             }
             catch (UnknownTeamException)
