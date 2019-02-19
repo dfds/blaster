@@ -18,9 +18,9 @@ namespace Blaster.Tests.Builders
             return this;
         }
 
-        public TeamApiController Build()
+        public CapabilityApiController Build()
         {
-            return new TeamApiController(_capabilityServiceClient);
+            return new CapabilityApiController(_capabilityServiceClient);
         }
     }
 }

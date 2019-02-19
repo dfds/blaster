@@ -132,7 +132,7 @@ namespace Blaster.Tests.Features.Teams
                 .WithTeamService(new ErroneousCapabilityServiceClient(new AlreadyJoinedException()))
                 .Build();
 
-            var result = await sut.JoinTeam("foo", new JoinTeamInput {Email = "bar"});
+            var result = await sut.JoinTeam("foo", new JoinCapabilityInput {Email = "bar"});
             
             Assert.Null(result.Value);
         }
