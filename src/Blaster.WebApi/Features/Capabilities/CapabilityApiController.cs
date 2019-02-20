@@ -42,7 +42,7 @@ namespace Blaster.WebApi.Features.Teams
         }
 
         [HttpPost("", Name = "CreateTeam")]
-        public async Task<IActionResult> CreateTeam([FromBody] TeamInput input)
+        public async Task<IActionResult> CreateTeam([FromBody] CapabilityInput input)
         {
             try
             {

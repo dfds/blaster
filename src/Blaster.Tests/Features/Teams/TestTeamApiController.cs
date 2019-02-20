@@ -66,7 +66,7 @@ namespace Blaster.Tests.Features.Teams
                 .WithTeamService(new StubCapabilityServiceClient(capabilities: expected))
                 .Build();
 
-            var dummyInput = new TeamInput();
+            var dummyInput = new CapabilityInput();
 
             var result = (CreatedAtRouteResult)await sut.CreateTeam(dummyInput);
 
@@ -85,7 +85,7 @@ namespace Blaster.Tests.Features.Teams
                 .WithTeamService(new ErroneousCapabilityServiceClient(new TeamValidationException("booo")))
                 .Build();
 
-            var dummyInput = new TeamInput();
+            var dummyInput = new CapabilityInput();
 
             var result = await sut.CreateTeam(dummyInput);
 
