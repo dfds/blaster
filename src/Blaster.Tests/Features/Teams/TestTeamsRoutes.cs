@@ -7,8 +7,8 @@ using Blaster.Tests.Builders;
 using Blaster.Tests.Helpers;
 using Blaster.Tests.TestDoubles;
 using Blaster.WebApi;
-using Blaster.WebApi.Features.Teams;
-using Blaster.WebApi.Features.Teams.Models;
+using Blaster.WebApi.Features.Capabilities;
+using Blaster.WebApi.Features.Capabilities.Models;
 using Xunit;
 
 namespace Blaster.Tests.Features.Teams

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Blaster.WebApi.Features.Teams;
-using Blaster.WebApi.Features.Teams.Models;
+using Blaster.WebApi.Features.Capabilities;
+using Blaster.WebApi.Features.Capabilities.Models;
 
 namespace Blaster.Tests.TestDoubles
 {

@@ -1,4 +1,4 @@
-namespace Blaster.WebApi.Features.Teams.Models
+namespace Blaster.WebApi.Features.Capabilities.Models
 {
     public class ErrorObject
     {

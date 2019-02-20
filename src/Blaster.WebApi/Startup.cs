@@ -2,8 +2,8 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Blaster.WebApi.Features.Capabilities;
 using Blaster.WebApi.Features.Frontpage;
-using Blaster.WebApi.Features.Teams;
 using Blaster.WebApi.Security;
 using CorrelationId;
 using Microsoft.AspNetCore.Builder;

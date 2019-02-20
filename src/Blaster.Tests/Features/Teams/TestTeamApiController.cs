@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Blaster.Tests.Builders;
 using Blaster.Tests.TestDoubles;
-using Blaster.WebApi.Features.Teams;
-using Blaster.WebApi.Features.Teams.Models;
+using Blaster.WebApi.Features.Capabilities;
+using Blaster.WebApi.Features.Capabilities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 

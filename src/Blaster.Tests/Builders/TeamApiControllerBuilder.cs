@@ -1,5 +1,5 @@
 ﻿using Blaster.Tests.Helpers;
-using Blaster.WebApi.Features.Teams;
+using Blaster.WebApi.Features.Capabilities;
 
 namespace Blaster.Tests.Builders
 {

@@ -1,4 +1,4 @@
-﻿using Blaster.WebApi.Features.Teams.Models;
+﻿using Blaster.WebApi.Features.Capabilities.Models;
 
 namespace Blaster.Tests.Builders
 {

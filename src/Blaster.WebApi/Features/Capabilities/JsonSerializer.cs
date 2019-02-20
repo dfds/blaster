@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Blaster.WebApi.Features.Teams
+namespace Blaster.WebApi.Features.Capabilities
 {
     public class JsonSerializer
     {

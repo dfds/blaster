@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Blaster.WebApi.Features.Teams
+namespace Blaster.WebApi.Features.Capabilities
 {
     [Route("teams")]
     public class CapabilityController : Controller

@@ -3,9 +3,9 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Blaster.WebApi.Features.Teams.Models;
+using Blaster.WebApi.Features.Capabilities.Models;
 
-namespace Blaster.WebApi.Features.Teams
+namespace Blaster.WebApi.Features.Capabilities
 {
     public class CapabilityServiceClient : ICapabilityServiceClient
     {

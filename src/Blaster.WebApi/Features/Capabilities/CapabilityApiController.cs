@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Blaster.WebApi.Features.Teams.Models;
+using Blaster.WebApi.Features.Capabilities.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Blaster.WebApi.Features.Teams
+namespace Blaster.WebApi.Features.Capabilities
 {
     [Route("api/teams")]
     [ApiController]
