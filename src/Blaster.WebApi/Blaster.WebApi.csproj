@@ -33,7 +33,7 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Features\Teams\index.cshtml">
+    <Content Update="Features\Capabilities\index.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

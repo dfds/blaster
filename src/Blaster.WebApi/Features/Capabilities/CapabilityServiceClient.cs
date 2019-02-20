@@ -37,11 +37,11 @@ namespace Blaster.WebApi.Features.Capabilities
             var response = await _client.PostAsync("/api/v1/capabilities", content);
             if (response.StatusCode == HttpStatusCode.BadRequest) {
                 var errorObj = _serializer.Deserialize<ErrorObject>(await response.Content.ReadAsStringAsync());
-                throw new TeamValidationException(errorObj.Message);
+                throw new CapabilityValidationException(errorObj.Message);
             }
             else if (response.StatusCode != HttpStatusCode.Created)
             {
-                throw new Exception($"Error! Team was not created in external service. Service returned ({response.StatusCode} - {response.ReasonPhrase})");
+                throw new Exception($"Error! Capability was not created in external service. Service returned ({response.StatusCode} - {response.ReasonPhrase})");
             }
 
             var receivedContent = await response.Content.ReadAsStringAsync();
@@ -56,7 +56,7 @@ namespace Blaster.WebApi.Features.Capabilities
             return _serializer.Deserialize<Capability>(content);
         }
 
-        public async Task JoinCapability(string teamId, string memberEmail)
+        public async Task JoinCapability(string capabilityId, string memberEmail)
         {
             var content = new StringContent(
                 content: _serializer.Serialize(new { Email = memberEmail }),
@@ -64,7 +64,7 @@ namespace Blaster.WebApi.Features.Capabilities
                 mediaType: "application/json"
             );
 
-            var response = await _client.PostAsync($"/api/v1/capabilities/{teamId}/members", content);
+            var response = await _client.PostAsync($"/api/v1/capabilities/{capabilityId}/members", content);
             var responseBody = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode == HttpStatusCode.Conflict)
@@ -78,13 +78,13 @@ namespace Blaster.WebApi.Features.Capabilities
             }
         }
 
-        public async Task LeaveCapability(string teamId, string memberEmail)
+        public async Task LeaveCapability(string capabilityId, string memberEmail)
         {
-            var response = await _client.DeleteAsync($"/api/v1/capabilities/{teamId}/members/{memberEmail}");
+            var response = await _client.DeleteAsync($"/api/v1/capabilities/{capabilityId}/members/{memberEmail}");
 
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
-                throw new UnknownTeamException();
+                throw new UnknownCapabilityException();
             }
 
             if (response.StatusCode != HttpStatusCode.OK)

@@ -11,7 +11,7 @@ services:
       - auth-proxy
       - teamservice
     environment: 
-      - BLASTER_TEAMSERVICE_API_URL=http://teamservice:3000
+      - BLASTER_CAPABILITYSERVICE_API_URL=http://teamservice:3000
       - BLASTER_IAMROLESERVICE_API_URL=http://iamroleservice:3000
   header-injector-proxy:
     build: 

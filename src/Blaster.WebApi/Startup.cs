@@ -40,7 +40,7 @@ namespace Blaster.WebApi
             services.AddTransient<UserHelper>();
 
             /* configure each feature */
-            ConfigureTeamsFeature(services);
+            ConfigureCapabilityFeature(services);
             ConfigureFrontpageFeature(services);
         }
 
@@ -61,12 +61,12 @@ namespace Blaster.WebApi
             // ...
         }
 
-        private void ConfigureTeamsFeature(IServiceCollection services)
+        private void ConfigureCapabilityFeature(IServiceCollection services)
         {
             services
                 .AddHttpClient<ICapabilityServiceClient, CapabilityServiceClient>(client =>
                 {
-                    client.BaseAddress = new Uri(Configuration["BLASTER_TEAMSERVICE_API_URL"]);
+                    client.BaseAddress = new Uri(Configuration["BLASTER_CAPABILITYSERVICE_API_URL"]);
                 })
                 .AddHttpMessageHandler<CorrelationIdMessageHandler>();
         }

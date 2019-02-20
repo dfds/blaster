@@ -34,12 +34,12 @@ namespace Blaster.Tests.TestDoubles
             return Task.FromResult(_capabilities.FirstOrDefault());
         }
 
-        public Task JoinCapability(string teamId, string memberEmail)
+        public Task JoinCapability(string capabilityId, string memberEmail)
         {
             return Task.CompletedTask;
         }
 
-        public Task LeaveCapability(string teamId, string memberEmail)
+        public Task LeaveCapability(string capabilityId, string memberEmail)
         {
             return Task.CompletedTask;
         }

@@ -6,23 +6,22 @@ using System.Threading.Tasks;
 using Blaster.Tests.Builders;
 using Blaster.Tests.Helpers;
 using Blaster.Tests.TestDoubles;
-using Blaster.WebApi;
 using Blaster.WebApi.Features.Capabilities;
 using Blaster.WebApi.Features.Capabilities.Models;
 using Xunit;
 
-namespace Blaster.Tests.Features.Teams
+namespace Blaster.Tests.Features.Capabilities
 {
-    public class TestTeamsRoutes
+    public class TestCapabilityRoutes
     {
         [Fact]
-        public async Task get_front_page_for_teams_returns_expected_status_code()
+        public async Task get_front_page_for_capabilities_returns_expected_status_code()
         {
             using (var clientBuilder = new HttpClientBuilder())
             {
                 var client = clientBuilder.Build();
 
-                var response = await client.GetAsync("/teams");
+                var response = await client.GetAsync("/capabilities");
 
                 Assert.Equal(
                     expected: HttpStatusCode.OK,
@@ -32,7 +31,7 @@ namespace Blaster.Tests.Features.Teams
         }
 
         [Fact]
-        public async Task get_teams_from_api_returns_expected_status_code()
+        public async Task get_capabilities_from_api_returns_expected_status_code()
         {
             using (var clientBuilder = new HttpClientBuilder())
             {
@@ -40,7 +39,7 @@ namespace Blaster.Tests.Features.Teams
                     .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient())
                     .Build();
 
-                var response = await client.GetAsync("/api/teams");
+                var response = await client.GetAsync("/api/capabilities");
 
                 Assert.Equal(
                     expected: HttpStatusCode.OK,
@@ -50,19 +49,19 @@ namespace Blaster.Tests.Features.Teams
         }
 
         [Fact]
-        public async Task post_team_through_api_returns_expected_status_code()
+        public async Task post_capability_through_api_returns_expected_status_code()
         {
             using (var clientBuilder = new HttpClientBuilder())
             {
-                var stubTeam = new TeamListItemBuilder().Build();
+                var stub = new CapabilityListItemBuilder().Build();
 
                 var client = clientBuilder
-                    .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient(capabilities: stubTeam))
+                    .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient(capabilities: stub))
                     .Build();
 
                 var dummyContent = JsonContent.Empty;
 
-                var response = await client.PostAsync("/api/teams", dummyContent);
+                var response = await client.PostAsync("/api/capabilities", dummyContent);
 
                 Assert.Equal(
                     expected: HttpStatusCode.Created,
@@ -72,29 +71,29 @@ namespace Blaster.Tests.Features.Teams
         }
 
         [Fact]
-        public async Task post_team_through_api_returns_expected_location_header()
+        public async Task post_capability_through_api_returns_expected_location_header()
         {
             using (var clientBuilder = new HttpClientBuilder())
             {
-                var stubTeam = new TeamListItemBuilder().Build();
+                var stub = new CapabilityListItemBuilder().Build();
 
                 var client = clientBuilder
-                    .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient(capabilities: stubTeam))
+                    .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient(capabilities: stub))
                     .Build();
 
                 var dummyContent = JsonContent.Empty;
 
-                var response = await client.PostAsync("/api/teams", dummyContent);
+                var response = await client.PostAsync("/api/capabilities", dummyContent);
 
                 Assert.EndsWith(
-                    expectedEndString: $"/api/teams/{stubTeam.Id}",
+                    expectedEndString: $"/api/capabilities/{stub.Id}",
                     actualString: string.Join("", response.Headers.Location.Segments)
                 );
             }
         }
 
         [Fact]
-        public async Task get_single_team_returns_expected_status_code_when_no_teams_are_available()
+        public async Task get_single_capability_returns_expected_status_code_when_no_capabilities_are_available()
         {
             using (var clientBuilder = new HttpClientBuilder())
             {
@@ -102,7 +101,7 @@ namespace Blaster.Tests.Features.Teams
                     .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient())
                     .Build();
 
-                var response = await client.GetAsync("/api/teams/1");
+                var response = await client.GetAsync("/api/capabilities/1");
 
                 Assert.Equal(
                     expected: HttpStatusCode.NotFound,
@@ -112,17 +111,17 @@ namespace Blaster.Tests.Features.Teams
         }
 
         [Fact]
-        public async Task get_single_team_returns_expected_status_code_when_team_is_available()
+        public async Task get_single_capability_returns_expected_status_code_when_capability_is_available()
         {
             using (var clientBuilder = new HttpClientBuilder())
             {
-                var stubTeam = new TeamListItemBuilder().Build();
+                var stub = new CapabilityListItemBuilder().Build();
 
                 var client = clientBuilder
-                    .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient(capabilities: stubTeam))
+                    .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient(capabilities: stub))
                     .Build();
 
-                var response = await client.GetAsync($"/api/teams/{stubTeam.Id}");
+                var response = await client.GetAsync($"/api/capabilities/{stub.Id}");
 
                 Assert.Equal(
                     expected: HttpStatusCode.OK,
@@ -132,7 +131,7 @@ namespace Blaster.Tests.Features.Teams
         }
 
         [Fact]
-        public async Task post_member_to_team_through_api_returns_expected_status_code_on_success()
+        public async Task post_member_to_capability_through_api_returns_expected_status_code_on_success()
         {
             using (var clientBuilder = new HttpClientBuilder())
             {
@@ -144,7 +143,7 @@ namespace Blaster.Tests.Features.Teams
 
                 var dummyContent = new JsonContent(new {Email = "foo@bar.com"});
 
-                var response = await client.PostAsync("/api/teams/1/members", dummyContent);
+                var response = await client.PostAsync("/api/capabilities/1/members", dummyContent);
 
                 Assert.Equal(
                     expected: HttpStatusCode.NoContent,
@@ -154,7 +153,7 @@ namespace Blaster.Tests.Features.Teams
         }
 
         [Fact]
-        public async Task post_member_to_team_through_api_returns_expected_status_code_when_userid_is_missing()
+        public async Task post_member_to_capability_through_api_returns_expected_status_code_when_userid_is_missing()
         {
             using (var clientBuilder = new HttpClientBuilder())
             {
@@ -164,7 +163,7 @@ namespace Blaster.Tests.Features.Teams
 
                 var dummyContent = JsonContent.Empty;
 
-                var response = await client.PostAsync("/api/teams/1/members", dummyContent);
+                var response = await client.PostAsync("/api/capabilities/1/members", dummyContent);
 
                 Assert.Equal(
                     expected: HttpStatusCode.BadRequest,
@@ -174,7 +173,7 @@ namespace Blaster.Tests.Features.Teams
         }
 
         [Fact]
-        public async Task post_member_to_team_through_api_returns_expected_status_code_when_member_already_joined()
+        public async Task post_member_to_capability_through_api_returns_expected_status_code_when_member_already_joined()
         {
             using (var clientBuilder = new HttpClientBuilder())
             {
@@ -184,7 +183,7 @@ namespace Blaster.Tests.Features.Teams
 
                 var dummyContent = new JsonContent(new {Email = "foo@bar.com"});
 
-                var response = await client.PostAsync("/api/teams/1/members", dummyContent);
+                var response = await client.PostAsync("/api/capabilities/1/members", dummyContent);
 
                 Assert.Equal(
                     expected: HttpStatusCode.Conflict,
@@ -194,7 +193,7 @@ namespace Blaster.Tests.Features.Teams
         }
 
         [Fact]
-        public async Task delete_member_from_team_returns_expected_status_code()
+        public async Task delete_member_from_capability_returns_expected_status_code()
         {
             using (var clientBuilder = new HttpClientBuilder())
             {
@@ -202,7 +201,7 @@ namespace Blaster.Tests.Features.Teams
                     .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient())
                     .Build();
 
-                var response = await client.DeleteAsync("/api/teams/1/members/foo@bar.com");
+                var response = await client.DeleteAsync("/api/capabilities/1/members/foo@bar.com");
 
                 Assert.Equal(
                     expected: HttpStatusCode.NoContent,
@@ -212,15 +211,15 @@ namespace Blaster.Tests.Features.Teams
         }
 
         [Fact]
-        public async Task delete_member_from_team_returns_expected_status_code_when_team_does_not_exist()
+        public async Task delete_member_from_capability_returns_expected_status_code_when_capability_does_not_exist()
         {
             using (var clientBuilder = new HttpClientBuilder())
             {
                 var client = clientBuilder
-                    .WithService<ICapabilityServiceClient>(new ErroneousCapabilityServiceClient(new UnknownTeamException()))
+                    .WithService<ICapabilityServiceClient>(new ErroneousCapabilityServiceClient(new UnknownCapabilityException()))
                     .Build();
 
-                var response = await client.DeleteAsync("/api/teams/1/members/foo@bar.com");
+                var response = await client.DeleteAsync("/api/capabilities/1/members/foo@bar.com");
 
                 Assert.Equal(
                     expected: HttpStatusCode.NotFound,
@@ -231,10 +230,9 @@ namespace Blaster.Tests.Features.Teams
 
         public class JsonContent : StringContent
         {
-            public JsonContent(object instance) 
+            public JsonContent(object instance)
                 : base(ConvertToJson(instance), Encoding.UTF8, "application/json")
             {
-
             }
 
             public static string ConvertToJson(object instance)
@@ -276,12 +274,12 @@ namespace Blaster.Tests.Features.Teams
             throw _error;
         }
 
-        public Task JoinCapability(string teamId, string memberEmail)
+        public Task JoinCapability(string capabilityId, string memberEmail)
         {
             throw _error;
         }
 
-        public Task LeaveCapability(string teamId, string memberEmail)
+        public Task LeaveCapability(string capabilityId, string memberEmail)
         {
             throw _error;
         }

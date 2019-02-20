@@ -48,7 +48,7 @@ spec:
               memory: "128Mi"
               cpu: "200m"
           env:
-            - name: BLASTER_TEAMSERVICE_API_URL
-              value: $(BLASTER_TEAMSERVICE_API_URL)
+            - name: BLASTER_CAPABILITYSERVICE_API_URL
+              value: http://capability-service
             - name: BLASTER_IAMROLESERVICE_API_URL
               value: http://iamroleservice

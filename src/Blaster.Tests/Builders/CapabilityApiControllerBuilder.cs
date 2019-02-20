@@ -3,16 +3,16 @@ using Blaster.WebApi.Features.Capabilities;
 
 namespace Blaster.Tests.Builders
 {
-    public class TeamApiControllerBuilder
+    public class CapabilityApiControllerBuilder
     {
         private ICapabilityServiceClient _capabilityServiceClient;
 
-        public TeamApiControllerBuilder()
+        public CapabilityApiControllerBuilder()
         {
             _capabilityServiceClient = Dummy.Of<ICapabilityServiceClient>();
         }
 
-        public TeamApiControllerBuilder WithTeamService(ICapabilityServiceClient capabilityServiceClient)
+        public CapabilityApiControllerBuilder WithCapabilityService(ICapabilityServiceClient capabilityServiceClient)
         {
             _capabilityServiceClient = capabilityServiceClient;
             return this;

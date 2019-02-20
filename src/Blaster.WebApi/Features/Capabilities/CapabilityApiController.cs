@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Blaster.WebApi.Features.Capabilities
 {
-    [Route("api/teams")]
+    [Route("api/capabilities")]
     [ApiController]
     public class CapabilityApiController : ControllerBase
     {
@@ -16,7 +16,7 @@ namespace Blaster.WebApi.Features.Capabilities
             _capabilityServiceClient = capabilityServiceClient;
         }
 
-        [HttpGet("", Name = "GetAllTeams")]
+        [HttpGet("", Name = "GetAllCapabilities")]
         public async Task<ActionResult<CapabilitiesResponse>> GetAll()
         {
             var capabilities = await _capabilityServiceClient.GetAll();
@@ -27,7 +27,7 @@ namespace Blaster.WebApi.Features.Capabilities
             };
         }
 
-        [HttpGet("{id}", Name = "GetTeamById")]
+        [HttpGet("{id}", Name = "GetCapabilityById")]
         public async Task<ActionResult<Capability>> GetById(string id)
         {
             var capability = await _capabilityServiceClient.GetById(id);
@@ -41,28 +41,28 @@ namespace Blaster.WebApi.Features.Capabilities
 
         }
 
-        [HttpPost("", Name = "CreateTeam")]
-        public async Task<IActionResult> CreateTeam([FromBody] CapabilityInput input)
+        [HttpPost("", Name = "CreateCapability")]
+        public async Task<IActionResult> CreateCapability([FromBody] CapabilityInput input)
         {
             try
             {
                 var capability = await _capabilityServiceClient.CreateCapability(input.Name);
 
                 var a = new CreatedAtRouteResult<Capability>(
-                    routeName: "GetTeamById",
+                    routeName: "GetCapabilityById",
                     routeValues: new { id = capability.Id },
                     value: capability
                 );
                 return a.Convert();
-            } catch (TeamValidationException tve) {
+            } catch (CapabilityValidationException tve) {
                 return BadRequest(new {
                     Message = tve.Message
                 });
             }
         }
 
-        [HttpPost("{id}/members", Name = "JoinTeam")]
-        public async Task<ActionResult<Member>> JoinTeam([FromRoute] string id, [FromBody] JoinCapabilityInput input)
+        [HttpPost("{id}/members", Name = "JoinCapability")]
+        public async Task<ActionResult<Member>> JoinCapability([FromRoute] string id, [FromBody] JoinCapabilityInput input)
         {
             if (string.IsNullOrWhiteSpace(input.Email))
             {
@@ -72,7 +72,7 @@ namespace Blaster.WebApi.Features.Capabilities
             try
             {
                 await _capabilityServiceClient.JoinCapability(
-                    teamId: id,
+                    capabilityId: id,
                     memberEmail: input.Email
                 );
 
@@ -87,15 +87,15 @@ namespace Blaster.WebApi.Features.Capabilities
             }
         }
 
-        [HttpDelete("{id}/members/{memberEmail}", Name = "LeaveTeam")]
-        public async Task<IActionResult> LeaveTeam([FromRoute] string id, [FromRoute] string memberEmail)
+        [HttpDelete("{id}/members/{memberEmail}", Name = "LeaveCapability")]
+        public async Task<IActionResult> LeaveCapability([FromRoute] string id, [FromRoute] string memberEmail)
         {
             try
             {
                 await _capabilityServiceClient.LeaveCapability(id, memberEmail);
                 return NoContent();                
             }
-            catch (UnknownTeamException)
+            catch (UnknownCapabilityException)
             {
                 return NotFound();
             }
@@ -106,15 +106,15 @@ namespace Blaster.WebApi.Features.Capabilities
     {
     }
 
-    public class TeamValidationException : Exception
+    public class CapabilityValidationException : Exception
     {
-        public TeamValidationException(string message) : base(message)
+        public CapabilityValidationException(string message) : base(message)
         {
 
         }
     }
 
-    public class UnknownTeamException : Exception
+    public class UnknownCapabilityException : Exception
     {
 
     }

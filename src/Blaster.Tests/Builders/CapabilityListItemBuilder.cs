@@ -2,14 +2,14 @@
 
 namespace Blaster.Tests.Builders
 {
-    public class TeamListItemBuilder
+    public class CapabilityListItemBuilder
     {
         public Capability Build()
         {
             return new Capability
             {
                 Id = "1",
-                Name = "team foo",
+                Name = "capability foo",
                 Members = new Member[0]
             };
         }
