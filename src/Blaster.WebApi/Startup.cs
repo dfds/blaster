@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Blaster.WebApi.Features.Frontpage;
 using Blaster.WebApi.Features.Teams;
 using Blaster.WebApi.Security;
 using CorrelationId;
@@ -40,6 +41,7 @@ namespace Blaster.WebApi
 
             /* configure each feature */
             ConfigureTeamsFeature(services);
+            ConfigureFrontpageFeature(services);
         }
 
         protected virtual void ConfigureMvc(IServiceCollection services)
@@ -65,6 +67,16 @@ namespace Blaster.WebApi
                 .AddHttpClient<ICapabilityServiceClient, CapabilityServiceClient>(client =>
                 {
                     client.BaseAddress = new Uri(Configuration["BLASTER_TEAMSERVICE_API_URL"]);
+                })
+                .AddHttpMessageHandler<CorrelationIdMessageHandler>();
+        }
+
+        private void ConfigureFrontpageFeature(IServiceCollection services)
+        {
+            services
+                .AddHttpClient<IIamRoleService, IamRoleService>(client =>
+                {
+                    client.BaseAddress = new Uri(Configuration["BLASTER_IAMROLESERVICE_API_URL"]);
                 })
                 .AddHttpMessageHandler<CorrelationIdMessageHandler>();
         }

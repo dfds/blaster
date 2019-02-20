@@ -3,30 +3,25 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:33677",
+      "applicationUrl": "http://localhost:49448/",
       "sslPort": 0
     }
   },
-  "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "BLASTER_TEAMSERVICE_API_URL": "http://localhost:50900",
-        "BLASTER_IAMROLESERVICE_API_URL": "http://localhost:50901",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Blaster.WebApi": {
+    "Blaster.Tests": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "BLASTER_TEAMSERVICE_API_URL": "http://localhost:50900",
-        "BLASTER_IAMROLESERVICE_API_URL": "http://localhost:50901",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:5001;http://localhost:5000"
+      "applicationUrl": "http://localhost:49452/"
     }
   }
 }

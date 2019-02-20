@@ -1,0 +1,42 @@
+﻿@inject Blaster.WebApi.Security.UserHelper UserHelper
+
+<section class="section">
+    <div class="container">
+        <h1 class="title">Welcome</h1>
+        <h2 class="subtitle">
+            Hello <span class="tag is-primary">@UserHelper.CurrentUser.Name</span>, and welcome to the <span class="tag is-primary">Self Service</span> portal.
+        </h2>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h1 class="title is-4">Capabilities</h1>
+        
+        <p>To get started creating a capability, or joining an existing please go to:</p>
+        <p>@Html.ActionLink("Capabilities", "Index", "Capability", null, new { @class = "button is-primary" })</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h1 class="title is-4">Kubernetes</h1>
+        <h2 class="subtitle">
+            Below is a collection of resources for getting started on the Kubernetes platform.
+        </h2>
+
+        <div class="content">
+            <p>
+                If this is your first visit, please go to <a target="_blank" href="https://wiki.build.dfds.com/playbooks/login-with-sso">Login with SSO</a>,
+                for information about what to do to get started.
+            </p>
+
+            <p>
+                Then grab the default Kubernetes config file (information about location, etc., is also available in the link above):
+                <br /><br />
+                <a class="button" href="@Url.Action("DownloadKubeConfig", "Frontpage")"><span class="icon"><i class="fas fa-file-download"></i></span><span>Get Kubernetes config</span></a>
+            </p>
+        </div>
+    </div>
+</section>
+

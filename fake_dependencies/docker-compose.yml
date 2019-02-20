@@ -6,3 +6,8 @@ services:
       context: ./teamservice
     ports:
       - "50900:3000"
+  iamroleservice:
+    build: 
+      context: ./iamroleservice
+    ports:
+      - "50901:3000"

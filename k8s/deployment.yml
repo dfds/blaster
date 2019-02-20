@@ -50,3 +50,5 @@ spec:
           env:
             - name: BLASTER_TEAMSERVICE_API_URL
               value: $(BLASTER_TEAMSERVICE_API_URL)
+            - name: BLASTER_IAMROLESERVICE_API_URL
+              value: http://iamroleservice
