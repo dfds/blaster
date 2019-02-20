@@ -5,53 +5,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Blaster</title>
+    <title>Cloud Self Service Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     @RenderSection("Header", required: false)
 </head>
 <body>
+    
+<nav class="navbar is-primary" role="navigation" aria-label="main navigation" style="background-color: rgb(12, 43, 67)">
+    <div class="container">
 
-    <header>
-        <div class="container has-text-right has-text-weight-light">
-            Welcome, @UserHelper.CurrentUser.Name
+        <div class="navbar-brand" style="height: 80px">
+            <a class="navbar-item" href="@Url.Action("Index", "Frontpage")">
+                <img src="https://brand-central.dfds.com/upload/screens/1/5fd535300d6f9ef9b7e6ffae900a5aa1-1521806467_1521806498_large.png" style="max-height: 49px" alt="Bulma: a modern CSS framework based on Flexbox">
+            </a>
         </div>
 
-        <br />
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <a href="@Url.Action("Index", "Frontpage")" class="navbar-item">Home</a>
+                <a href="@Url.Action("Index", "Capability")" class="navbar-item">Capabilities</a>
+            </div>
 
-        <div class="container">
-            <nav class="navbar is-transparent">
-                <div class="navbar-brand">
-                    <div class="navbar-item">
-                        <span class="title is-1">Blaster</span>
-                    </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    Welcome, @UserHelper.CurrentUser.Name
                 </div>
-                <div class="navbar-menu">
-                    <div class="navbar-start"></div>
-                    <div class="navbar-end">
-                        <div class="navbar-item">
-                            <a href="@Url.Action("Index", "Frontpage")" class="button is-outlined is-rounded">Home</a>
-                        </div>
-                        <div class="navbar-item">
-                            <a href="@Url.Action("Index", "Capability")" class="button is-outlined is-rounded">Capabilities</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
+            </div>
         </div>
 
-        <br />
+    </div>
+</nav>
 
-    </header>
+@RenderBody()
 
-    @RenderBody()
+<script>
+    window.basePath = "@Context.Request.PathBase";
+    window.currentUser = { email: "@UserHelper.CurrentUser.Email"};
+</script>
 
-    <script>
-        window.basePath = "@Context.Request.PathBase";
-        window.currentUser = { email: "@UserHelper.CurrentUser.Email"};
-    </script>
-
-    @RenderSection("Scripts", required: false)
+@RenderSection("Scripts", required: false)
 
 </body>
 </html>
