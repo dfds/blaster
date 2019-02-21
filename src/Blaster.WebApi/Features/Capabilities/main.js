@@ -4,7 +4,6 @@ import AlertDialog from "./alert-dialog";
 import ModelEditor from "modeleditor";
 import jq from "jquery";
 import { currentUser } from "userservice";
-import "./styles"
 
 const capabilityService = new CapabilityService();
 

@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Cloud Self Service Portal</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />*@
+    <link rel="stylesheet" href="~/bundle.css" />
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     @RenderSection("Header", required: false)
 </head>
@@ -43,6 +44,8 @@
     window.basePath = "@Context.Request.PathBase";
     window.currentUser = { email: "@UserHelper.CurrentUser.Email"};
 </script>
+
+<script src="~/main.bundle.js"></script>
 
 @RenderSection("Scripts", required: false)
 

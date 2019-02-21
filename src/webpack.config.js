@@ -4,7 +4,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
     entry: {
-        teams: "./Blaster.WebApi/Features/Capabilities/main.js",
+        main: "./Blaster.WebApi/Features/Shared/index.js",
+        capabilities: "./Blaster.WebApi/Features/Capabilities/main.js",
     },
     output: {
         path: path.resolve(__dirname, "Blaster.WebApi", "wwwroot"),
