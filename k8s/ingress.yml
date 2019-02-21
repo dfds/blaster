@@ -18,3 +18,10 @@ spec:
             backend:
               serviceName: blaster
               servicePort: external
+    - host: build.dfds.cloud
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: blaster
+              servicePort: external
