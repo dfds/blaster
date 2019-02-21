@@ -1,7 +1,7 @@
 [![Build Status](https://dfds.visualstudio.com/DevelopmentExcellence/_apis/build/status/Blaster-CI?branch=master)](https://dfds.visualstudio.com/DevelopmentExcellence/_build/latest?definitionId=803&branch=master)[![Release Status](https://dfds.vsrm.visualstudio.com/_apis/public/Release/badge/ace5e409-c242-4356-93f4-23c53a3dc87b/14/18)](https://dfds.visualstudio.com/DevelopmentExcellence/_build/latest?definitionId=803&branch=master)
 
 # blaster
-Automation platform for http://kubernetes.io/ running on AWS with AFDS from Microsoft.
+Automation platform for http://kubernetes.io/ running on AWS with Active Directory Federation Services (AD FS) from Microsoft.
 
 > Autobot Blaster's speciality is communications. He possesses a Flight Pack that can transform into a signal-jamming, electro-scrambler gun.
 
@@ -13,12 +13,12 @@ DFDS-Blaster is a front-end/facade service that requires other services to do ac
 - Creating Kubernetes namespaces with, again, appropriate naming rules and permissions applied
 - Storing the mappings and permissions durably so that they can be replayed for disaster recovery/2nd site setup etc
 
-Currently, the "team" is the root entity in Blaster. 
+Currently, the "Capability" is the root entity in Blaster. 
 
 ```ascii
                    +-------------+
                    |             | 1      * +------------+          +----------+
-                   |    Team     +----------+  Member    +---------->          |
+                   | Capability  +----------+  Member    +---------->          |
               +---->             |          +------------+          |[Azure AD]|
               |    +-------+-----+                                  |          |
               |            ^                                        |          |
@@ -99,8 +99,8 @@ The call flow from user to Blaster goes through an AWS ALB for authentication. T
                   | (1)     |
 +------------+    |         |      +-----+------+     +-----+-------+     +-----+--------+
 |            |    |         |      |            |     |             |     | (2)          |
-|    User    +--->+ AWS ALB +----->+ auth-proxy +---->+   Blaster   +---->+ Team Service |
-|            |    |         |      |            |     |             |     |              |
+|    User    +--->+ AWS ALB +----->+ auth-proxy +---->+   Blaster   +---->+  Capability  |
+|            |    |         |      |            |     |             |     |   Service    |
 +------------+    |         |      +------------+     +-------------+     +--------------+
                   |         |
                   +----+----+
