@@ -6,19 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Cloud Self Service Portal</title>
-    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />*@
-    <link rel="stylesheet" href="~/bundle.css" />
+    <link rel="stylesheet" href="~/main.css" />
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     @RenderSection("Header", required: false)
 </head>
 <body>
     
-<nav class="navbar is-primary" role="navigation" aria-label="main navigation" style="background-color: rgb(12, 43, 67)">
+<nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="container">
 
-        <div class="navbar-brand" style="height: 80px">
+        <div class="navbar-brand">
             <a class="navbar-item" href="@Url.Action("Index", "Frontpage")">
-                <img src="https://brand-central.dfds.com/upload/screens/1/5fd535300d6f9ef9b7e6ffae900a5aa1-1521806467_1521806498_large.png" style="max-height: 49px" alt="Bulma: a modern CSS framework based on Flexbox">
+                <img src="https://brand-central.dfds.com/upload/screens/1/5fd535300d6f9ef9b7e6ffae900a5aa1-1521806467_1521806498_large.png">
             </a>
         </div>
 
@@ -30,7 +29,7 @@
 
             <div class="navbar-end">
                 <div class="navbar-item">
-                    Welcome, @UserHelper.CurrentUser.Name
+                    @UserHelper.CurrentUser.Name
                 </div>
             </div>
         </div>

@@ -1,5 +1,66 @@
+@charset "utf-8";
+@import url('https://unpkg.com/@dfds-frontend/fonts/main/font.css');
+
+$dfds-font: DFDS, sans-serif;
+
+// DFDS brand colors
+$group-blue: #002B45;
+$text-grey: #4D4E4C;
+$yes-green: #68BD45;
+$no-red: #BE1E2D;
+$background-grey: #EEF0F1;
+
+$primary-orange: #ED8B00;
+$action-blue: #68B2E3;
+$inactive-grey: #D8DAD9;
+$link-blue: #1B5786;
+
+// Update Bulma's global variables
+$family-sans-serif: $dfds-font;
+$family-primary: $family-sans-serif;
+
+// $grey-dark: $brown;
+// $grey-light: $beige-light;
+
+$background: $background-grey;
+$primary: $primary-orange;
+$link: $link-blue;
+
+// $info: $action-blue;
+$success: $yes-green;
+// $warning: $yellow;
+$danger: $no-red;
+// $dark: $grey-darker;
+// $text: $grey-dark;
+
+$widescreen-enabled: false;
+$fullhd-enabled: false;
+
+
+// navbar
+$navbar-background-color: $group-blue;
+$navbar-height: 80;
+$navbar-item-color: rgba(255, 255, 255,0.8);
+$navbar-item-hover-color: #FFFFFF;
+$navbar-item-hover-background-color: $group-blue;
+$navbar-padding-horizontal: 10em;
+
 @import "~bulma/bulma";
 
 [v-cloak] {
     display: none;
+}
+
+.navbar-brand {
+    height: 80px;
+
+    .navbar-item {
+        img {
+            max-height: 49px;
+        }
+    }
+}
+
+.button {
+    border-radius: 0;
 }

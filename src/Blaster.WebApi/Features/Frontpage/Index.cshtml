@@ -4,7 +4,7 @@
     <div class="container">
         <h1 class="title">Welcome</h1>
         <h2 class="subtitle">
-            Hello <span class="tag is-primary">@UserHelper.CurrentUser.Name</span>, and welcome to the <span class="tag is-primary">Self Service</span> portal.
+            Hello @UserHelper.CurrentUser.Name, and welcome to the Cloud Self Service portal.
         </h2>
     </div>
 </section>
@@ -13,8 +13,7 @@
     <div class="container">
         <h1 class="title is-4">Capabilities</h1>
         
-        <p>To get started creating a capability, or joining an existing please go to:</p>
-        <p>@Html.ActionLink("Capabilities", "Index", "Capability", null, new { @class = "button is-primary" })</p>
+        <p>To get started creating a capability, or joining an existing please go to @Html.ActionLink("Capabilities", "Index", "Capability")</p>
     </div>
 </section>
 
