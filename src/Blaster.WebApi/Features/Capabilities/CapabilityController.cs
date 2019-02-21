@@ -2,7 +2,7 @@
 
 namespace Blaster.WebApi.Features.Capabilities
 {
-    [Route("capability")]
+    [Route("capabilities")]
     public class CapabilityController : Controller
     {
         public IActionResult Index()
