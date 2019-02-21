@@ -6,8 +6,8 @@ $dfds-font: DFDS, sans-serif;
 // DFDS brand colors
 $group-blue: #002B45;
 $text-grey: #4D4E4C;
-$yes-green: #68BD45;
-$no-red: #BE1E2D;
+$yes-green: #C3E5B5;
+$no-red: #E5A5AB;
 $background-grey: #EEF0F1;
 
 $primary-orange: #ED8B00;
@@ -26,7 +26,7 @@ $background: $background-grey;
 $primary: $primary-orange;
 $link: $link-blue;
 
-$info: $action-blue;
+// $info: $action-blue;
 $success: $yes-green;
 // $warning: $yellow;
 $danger: $no-red;
@@ -41,7 +41,7 @@ $fullhd-enabled: false;
 $navbar-background-color: $group-blue;
 $navbar-height: 80;
 $navbar-item-color: rgba(255, 255, 255,0.8);
-$navbar-item-hover-color: #FFFFFF;
+$navbar-item-hover-color: #5087AC;
 $navbar-item-hover-background-color: $group-blue;
 $navbar-padding-horizontal: 10em;
 
