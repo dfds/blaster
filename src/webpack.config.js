@@ -42,12 +42,22 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(jpe?g|png|gif|svg|eot|woff|ttf|svg|woff2)$/,
+                test: /\.(eot|woff|ttf|woff2)$/,
                 use: [{
                     loader: 'file-loader',
                     options: {
                         name: '[name].[ext]',
                         outputPath: 'fonts/'
+                    }
+                }]                
+            },
+            {
+                test: /\.(jpe?g|png|gif|svg)$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[ext]',
+                        outputPath: 'img/'
                     }
                 }]                
             }
