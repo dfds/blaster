@@ -19,14 +19,20 @@
             <a class="navbar-item" href="@Url.Action("Index", "Frontpage")">
                 <img src="~/img/dfdslogo_large.png">
             </a>
-        </div>
 
-        <div id="navbarBasicExample" class="navbar-menu">
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="menu">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        
+        <div id="menu" class="navbar-menu">
             <div class="navbar-start">
                 <a href="@Url.Action("Index", "Frontpage")" class="navbar-item">Home</a>
                 <a href="@Url.Action("Index", "Capability")" class="navbar-item">Capabilities</a>             
-                <a href="https://wiki.build.dfds.com "How To")" class="navbar-item">How to (Wiki)</a> 
-                <a href="https://github.com/dfds "GitHub")" class="navbar-item">GitHub (Code examples)</a>
+                <a href="https://wiki.build.dfds.com" class="navbar-item">How to (Wiki)</a> 
+                <a href="https://github.com/dfds" class="navbar-item">GitHub (Code examples)</a>
             </div>
 
             <div class="navbar-end">
@@ -44,6 +50,16 @@
 <script>
     window.basePath = "@Context.Request.PathBase";
     window.currentUser = { email: "@UserHelper.CurrentUser.Email"};
+    
+    (function() {
+        var burger = document.querySelector('.burger');
+        var menu = document.querySelector('#'+burger.dataset.target);
+        burger.addEventListener('click', function() {
+            burger.classList.toggle('is-active');
+            menu.classList.toggle('is-active');
+        });
+    })();
+    
 </script>
 
 <script src="~/main.bundle.js"></script>
