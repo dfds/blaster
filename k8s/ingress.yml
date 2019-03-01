@@ -11,8 +11,8 @@ metadata:
     department: devex
 spec:
   rules:
-    - host: internal.turing.oxygen.dfds.cloud
-      http:
+    - host: internal.hellman.oxygen.dfds.cloud
+    -  http:
         paths:
           - path: /blaster
             backend:
