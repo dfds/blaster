@@ -87,10 +87,6 @@ namespace Blaster.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseHsts();
-            }
 
             app.UseForwardedHeadersAsBasePath();
             app.UseMetricServer();
