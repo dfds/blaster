@@ -12,7 +12,7 @@ metadata:
 spec:
   rules:
     - host: internal.hellman.oxygen.dfds.cloud
-    -  http:
+      http:
         paths:
           - path: /blaster
             backend:
