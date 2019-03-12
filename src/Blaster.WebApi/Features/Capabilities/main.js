@@ -53,7 +53,7 @@ const app = new Vue({
                                     container: jq(".dialog-container", editor.element),
                                     data: {
                                         title: "Error!",
-                                        message: `Unable to save team. Server returned (${err.status}) ${err.statusText}.`
+                                        message: `Unable to save capability. Server returned (${err.status}) ${err.statusText}.`
                                     }
                                 });
 
@@ -71,7 +71,7 @@ const app = new Vue({
 
             capabilityService.join(team.id)
                 .then(() => team.members.push({ email: this.currentUser.email }))
-                .catch(err => console.log("error joining team: " + JSON.stringify(err)))
+                .catch(err => console.log("error joining capability: " + JSON.stringify(err)))
                 .then(() => {
                         this.membershipRequests = this.membershipRequests.filter(requestedTeamId => requestedTeamId != team.id);
                 });
@@ -93,10 +93,10 @@ const app = new Vue({
                             editor.close();
                         })
                         .catch(err => {
-                            console.log("ERROR leaving team: " + JSON.stringify(err));
+                            console.log("ERROR leaving capability: " + JSON.stringify(err));
                             editor.showError({
                                 title: "Error!",
-                                message: `Could not leave team. Try again or reload the page.`
+                                message: `Could not leave capability. Try again or reload the page.`
                             });
                         });
                 }
@@ -139,7 +139,7 @@ const app = new Vue({
                         container: document.getElementById("global-dialog-container"),
                         data: {
                             title: "Error!",
-                            message: `Could not retrieve list of teams. Server returned (${info.status}) ${info.statusText}.`
+                            message: `Could not retrieve list of capabilities. Server returned (${info.status}) ${info.statusText}.`
                         }
                     });
                 }
