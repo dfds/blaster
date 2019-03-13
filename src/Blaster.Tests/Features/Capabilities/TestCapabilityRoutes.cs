@@ -1,13 +1,9 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Text;
+﻿using System.Net;
 using System.Threading.Tasks;
 using Blaster.Tests.Builders;
 using Blaster.Tests.Helpers;
 using Blaster.Tests.TestDoubles;
 using Blaster.WebApi.Features.Capabilities;
-using Blaster.WebApi.Features.Capabilities.Models;
 using Xunit;
 
 namespace Blaster.Tests.Features.Capabilities
@@ -226,86 +222,6 @@ namespace Blaster.Tests.Features.Capabilities
                     actual: response.StatusCode
                 );
             }
-        }
-
-        public class JsonContent : StringContent
-        {
-            public JsonContent(object instance)
-                : base(ConvertToJson(instance), Encoding.UTF8, "application/json")
-            {
-            }
-
-            public static string ConvertToJson(object instance)
-            {
-                if (instance == null)
-                {
-                    return "{ }";
-                }
-
-                var serializer = new JsonSerializer();
-                return serializer.Serialize(instance);
-            }
-
-            public static JsonContent Empty => new JsonContent(null);
-        }
-    }
-
-    public class ErroneousCapabilityServiceClient : ICapabilityServiceClient
-    {
-        private readonly Exception _error;
-
-        public ErroneousCapabilityServiceClient(Exception error)
-        {
-            _error = error;
-        }
-
-        public Task<CapabilitiesResponse> GetAll()
-        {
-            throw _error;
-        }
-
-        public Task<Capability> CreateCapability(string name)
-        {
-            throw _error;
-        }
-
-        public Task<Capability> GetById(string id)
-        {
-            throw _error;
-        }
-
-        public Task JoinCapability(string capabilityId, string memberEmail)
-        {
-            throw _error;
-        }
-
-        public Task LeaveCapability(string capabilityId, string memberEmail)
-        {
-            throw _error;
-        }
-    }
-
-    public class UserBuilder
-    {
-        private string _email;
-
-        public UserBuilder()
-        {
-            _email = "bar";
-        }
-
-        public UserBuilder WithEmail(string email)
-        {
-            _email = email;
-            return this;
-        }
-
-        public Member Build()
-        {
-            return new Member
-            {
-                Email = _email
-            };
         }
     }
 }
