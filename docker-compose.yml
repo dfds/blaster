@@ -39,3 +39,8 @@ services:
       context: ./fake_dependencies/iamroleservice
     ports:
       - "50901:3000"
+  tika:
+    build: 
+      context: ./fake_dependencies/tika
+    ports:
+      - "50902:3000"

@@ -1,0 +1,47 @@
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: TIKA
+  description: TIny Kafka Api
+consumes:
+  - application/json
+produces:
+  - application/json
+basePath: /api
+paths:
+  /topics:
+    get:
+      summary: Get a list of the topics
+      responses:
+        200:
+          description: Available topics
+          schema:
+            $ref: "#/definitions/ListTopicsResponse"
+    post:
+      summary: Creates a new topic with default settings
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/CreateTopicRequest"
+      responses:
+        204:
+          description: The topic was created.
+        400:
+          description: Invalid topic name.
+        500:
+          description: An error occurred during topic creation.
+definitions:
+  ListTopicsResponse:
+    type: object
+    properties:
+      items:
+        type: array
+        items:
+          type: string
+  CreateTopicRequest:
+    type: object
+    properties:
+      name:
+        type: string
