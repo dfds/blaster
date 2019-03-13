@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities;
 using Blaster.WebApi.Features.Frontpage;
+using Blaster.WebApi.Features.Topic;
 using Blaster.WebApi.Security;
 using CorrelationId;
 using Microsoft.AspNetCore.Builder;
@@ -42,6 +43,7 @@ namespace Blaster.WebApi
             /* configure each feature */
             ConfigureCapabilityFeature(services);
             ConfigureFrontpageFeature(services);
+            ConfigureTopicFeature(services);
         }
 
         protected virtual void ConfigureMvc(IServiceCollection services)
@@ -77,6 +79,16 @@ namespace Blaster.WebApi
                 .AddHttpClient<IIamRoleService, IamRoleService>(client =>
                 {
                     client.BaseAddress = new Uri(Configuration["BLASTER_IAMROLESERVICE_API_URL"]);
+                })
+                .AddHttpMessageHandler<CorrelationIdMessageHandler>();
+        }
+
+        private void ConfigureTopicFeature(IServiceCollection services)
+        {
+            services
+                .AddHttpClient<ITopicClient, TikaTopicClient>(client =>
+                {
+                    client.BaseAddress = new Uri(Configuration["BLASTER_TIKA_API_URL"]);
                 })
                 .AddHttpMessageHandler<CorrelationIdMessageHandler>();
         }

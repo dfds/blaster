@@ -1,0 +1,94 @@
+﻿@section Scripts
+{
+    <script src="~/topics.bundle.js"></script>
+}
+
+<div id="topics-app" v-cloak>
+
+    <section class="section">
+        <div class="container">
+            <div class="level">
+                <div class="level-left">
+                    <div class="level-item">
+                        <h1 class="title">Topics</h1>
+                    </div>
+                </div>
+                <div class="level-right">
+                    <div class="level-item">
+                        <button type="button" class="button is-primary" v-on:click="newTopic()">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="container">
+
+            <div id="global-dialog-container"></div>
+
+            <div class="has-text-centered" v-if="initializing">
+                Loading...
+            </div>
+
+            <table class="table is-fullwidth is-hoverable" v-if="hasTopics">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="topic in items" v-bind:data-id="topic">
+                        <td>{{topic}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+
+<script id="editor-template" type="text/x-mustache">
+    <div id="topic-editor" class="modal is-active">
+        <div class="modal-background" data-behavior="close"></div>
+        <div class="modal-card">
+
+            <header class="modal-card-head">
+                <p class="modal-card-title">Add topic</p>
+                <button class="delete" aria-label="close" data-behavior="close"></button>
+            </header>
+
+            <div class="modal-card-body">
+                <div class="dialog-container"></div>
+                <div class="form">
+                    <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Enter topic name" data-property="name" value="{{name}}">
+                    </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control has-text-centered">
+                            <button class="button is-primary" data-behavior="save">Save</button>
+                            <button class="button is-info" aria-label="close" data-behavior="close">Cancel</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script id="error-dialog-template" type="text/x-mustache">
+    <article class="message is-danger">
+        <div class="message-header">
+            <p>{{title}}</p>
+        </div>
+        <div class="message-body">
+            {{message}}
+        </div>
+    </article>
+</script>

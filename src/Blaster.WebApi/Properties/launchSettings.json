@@ -16,6 +16,7 @@
         "BLASTER_CAPABILITYSERVICE_API_URL": "http://localhost:50900",
         "BLASTER_IAMROLESERVICE_API_URL": "http://localhost:50901",
         "ASPNETCORE_ENVIRONMENT": "Development"
+        "BLASTER_TIKA_API_URL": "http://localhost:50902"
       }
     },
     "Blaster.WebApi": {
@@ -25,6 +26,7 @@
         "BLASTER_CAPABILITYSERVICE_API_URL": "http://localhost:50900",
         "BLASTER_IAMROLESERVICE_API_URL": "http://localhost:50901",
         "ASPNETCORE_ENVIRONMENT": "Development"
+        "BLASTER_TIKA_API_URL": "http://localhost:50902"
       },
       "applicationUrl": "http://localhost:5000"
     }
