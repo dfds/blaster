@@ -52,3 +52,5 @@ spec:
               value: http://capability-service
             - name: BLASTER_IAMROLESERVICE_API_URL
               value: http://iamroleservice
+            - name: BLASTER_TIKA_API_URL
+              value: http://tika
