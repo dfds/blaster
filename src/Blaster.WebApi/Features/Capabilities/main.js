@@ -20,6 +20,11 @@ const app = new Vue({
             return this.items.length > 0;
         }
     },
+    filters: {
+        toawspermspage: function(value) {
+            return `/awspermissions?currentCapability=${value}`
+        }
+    },    
     methods: {
         newTeam: function() {
             const editor = ModelEditor.open({

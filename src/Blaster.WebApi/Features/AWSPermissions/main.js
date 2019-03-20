@@ -11,6 +11,13 @@ const app = new Vue({
         items: [],
         initializing: true
     },
+    filters: {
+        pretty: function(value) {
+            try {
+                return JSON.stringify(JSON.parse(value), null, 2);
+            } catch(e) { return '<not parseable>'; }
+        }
+    },    
     computed: {
         hasAWSPermissions: function () {
             return this.items.length > 0;
@@ -19,8 +26,9 @@ const app = new Vue({
     methods: {
     },
     mounted: function () {
+        const currentCapability = new URLSearchParams(window.location.search).get('currentCapability');
         jq.ready
-            .then(() => awsPermissionsService.getAll())
+            .then(() => awsPermissionsService.getAllByCapability(currentCapability))
             .then(awsPermissions => awsPermissions.forEach(permission => this.items.push(permission)))
             .catch(info => {
                 if (info.status != 200) {

@@ -30,15 +30,17 @@
                 Loading...
             </div>
 
-            <table class="table is-fullwidth is-hoverable" v-if="hasPermissions">
+            <table class="table is-fullwidth is-hoverable" v-if="hasAWSPermissions">
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Document</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="permission in items" v-bind:data-id="permission">
-                        <td>{{permission}}</td>
+                        <td>{{permission.policyName}}</td>
+                        <td><pre>{{permission.policyDocument|pretty}}</pre></td>
                     </tr>
                 </tbody>
             </table>

@@ -5,11 +5,11 @@ export default class AWSPermissionsService {
         this.client = new HttpClient();
         this.baseUrl = "api/awspermissions";
 
-        this.getAll = this.getAll.bind(this);
+        this.getAllByCapability = this.getAllByCapability.bind(this);
     }
 
-    getAll() {
-        return this.client.get(this.baseUrl)
+    getAllByCapability(capabilityId) {
+        return this.client.get(`${this.baseUrl}/${capabilityId}`)
             .then(data => data.items || []);
     }
 }

@@ -41,7 +41,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="team in items" v-bind:data-id="team.id">
-                        <td>{{team.name}}</td>
+                        <td><a :href="team.name|toawspermspage">{{team.name}}</a>             </td>
                         <td>
                             <div class="tags">
                                 <span :class='isCurrentUser(member.email) ? "tag is-primary" : "tag is-light"' v-for="member in team.members">{{member.email}}</span>
