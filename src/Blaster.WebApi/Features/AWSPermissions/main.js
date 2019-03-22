@@ -14,7 +14,7 @@ const app = new Vue({
     filters: {
         pretty: function(value) {
             try {
-                return JSON.stringify(JSON.parse(value), null, 2);
+                return JSON.stringify(value, null, 2);
             } catch(e) { return '<not parseable>'; }
         }
     },    
