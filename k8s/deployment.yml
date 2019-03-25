@@ -54,3 +54,5 @@ spec:
               value: http://iamroleservice
             - name: BLASTER_TIKA_API_URL
               value: http://tika
+            - name: BLASTER_AWS_JANITOR_API_URL
+              value: http://aws-janitor
