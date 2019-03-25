@@ -26,9 +26,9 @@ const app = new Vue({
     methods: {
     },
     mounted: function () {
-        const currentCapability = new URLSearchParams(window.location.search).get('currentCapability');
+        const capability = new URLSearchParams(window.location.search).get('capability');
         jq.ready
-            .then(() => awsPermissionsService.getAllByCapability(currentCapability))
+            .then(() => awsPermissionsService.getAllByCapability(capability))
             .then(awsPermissions => awsPermissions.forEach(permission => this.items.push(permission)))
             .catch(info => {
                 if (info.status != 200) {

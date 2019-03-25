@@ -22,7 +22,7 @@ const app = new Vue({
     },
     filters: {
         toawspermspage: function(value) {
-            return `/awspermissions?currentCapability=${value}`
+            return `/awspermissions?capability=${value}`
         }
     },    
     methods: {
