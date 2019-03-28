@@ -84,7 +84,7 @@ namespace Blaster.WebApi
             services
                 .AddHttpClient<IIamRoleService, IamRoleService>(client =>
                 {
-                    client.BaseAddress = new Uri(Configuration["BLASTER_IAMROLESERVICE_API_URL"]);
+                    client.BaseAddress = new Uri(Configuration["BLASTER_AWS_JANITOR_API_URL"]);;
                 })
                 .AddHttpMessageHandler<CorrelationIdMessageHandler>();
         }

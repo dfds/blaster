@@ -50,9 +50,7 @@ spec:
           env:
             - name: BLASTER_CAPABILITYSERVICE_API_URL
               value: http://capability-service
-            - name: BLASTER_IAMROLESERVICE_API_URL
-              value: http://iamroleservice
-            - name: BLASTER_TIKA_API_URL
-              value: http://tika
             - name: BLASTER_AWS_JANITOR_API_URL
               value: http://aws-janitor
+            - name: BLASTER_TIKA_API_URL
+              value: http://tika

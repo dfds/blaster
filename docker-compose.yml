@@ -12,7 +12,7 @@ services:
       - teamservice
     environment: 
       - BLASTER_CAPABILITYSERVICE_API_URL=http://teamservice:3000
-      - BLASTER_IAMROLESERVICE_API_URL=http://iamroleservice:3000
+      - BLASTER_AWS_JANITOR_API_URL=http://iamroleservice:3000
   header-injector-proxy:
     build: 
       context: ./fake_dependencies/header-injector-proxy
