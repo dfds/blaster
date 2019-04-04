@@ -27,7 +27,7 @@ const app = new Vue({
                 onClose: () => editor.close(),
                 onSave: (data) => {
                     return topicService.add(data)
-                        .then(team => this.items.push(data.name))
+                        .then(data => this.items.push(data.name))
                         .then(() => editor.close())
                         .catch(err => {
                             if (err.status == 400) {

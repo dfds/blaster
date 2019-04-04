@@ -15,9 +15,9 @@ const deserialize = (text) => JSON.parse(text);
 app.get("/api/topics", (req, res) => {
     readFile("./data.json")
         .then(data => JSON.parse(data))
-        .then(teams => {
+        .then(topics => {
             res.json({
-                items: teams
+                items: topics
             });
         });
 });
