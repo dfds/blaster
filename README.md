@@ -92,7 +92,7 @@ docker-compose up
 ```
 The call flow from user to Blaster goes through an AWS ALB for authentication. To simulate the JWT from the ALB (1) below is replaced with a header-injector proxy.
  
-(2) is replaced with a fake team service.
+(2) is replaced with a fake capability service.
 
 ```ascii
                   +---------+
