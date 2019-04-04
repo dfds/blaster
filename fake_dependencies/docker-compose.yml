@@ -1,13 +1,13 @@
 version: "3"
 
 services:
-  teamservice:
+  capability-service:
     build: 
-      context: ./teamservice
+      context: ./capability-service
     ports:
       - "50900:3000"
-  iamroleservice:
+  aws-janitor:
     build: 
-      context: ./iamroleservice
+      context: ./aws-janitor
     ports:
       - "50901:3000"
