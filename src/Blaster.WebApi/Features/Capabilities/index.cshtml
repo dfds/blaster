@@ -3,7 +3,7 @@
     <script src="~/capabilities.bundle.js"></script>
 }
 
-<div id="teams-app" v-cloak>
+<div id="capabilities-app" v-cloak>
 
     <section class="section">
         <div class="container">
@@ -15,7 +15,7 @@
                 </div>
                 <div class="level-right">
                     <div class="level-item">
-                        <button type="button" class="button is-primary" v-on:click="newTeam()">Add</button>
+                        <button type="button" class="button is-primary" v-on:click="newCapability()">Add</button>
                     </div>
                 </div>
             </div>
@@ -34,7 +34,7 @@
                 <p>Capabilities should be named uniquely after their (business) capability. Avoid using team or project names.</p><p>Read more on <a href="https://playbooks.dfds.cloud/naming/capabilities.html">Playbooks</a>.</p>
             </div>
 
-            <table class="table is-fullwidth is-hoverable" v-if="hasTeams">
+            <table class="table is-fullwidth is-hoverable" v-if="hasCapabilities">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -43,11 +43,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="team in items" v-bind:data-id="team.id">
-                        <td><a :href="team.name|toawspermspage">{{team.name}}</a>             </td>
+                    <tr v-for="capability in items" v-bind:data-id="capability.id">
+                        <td><a :href="capability.name|toawspermspage">{{capability.name}}</a>             </td>
                         <td>
                             <div class="tags">
-                                <span :class='isCurrentUser(member.email) ? "tag is-primary" : "tag is-light"' v-for="member in team.members">{{member.email}}</span>
+                                <span :class='isCurrentUser(member.email) ? "tag is-primary" : "tag is-light"' v-for="member in capability.members">{{member.email}}</span>
                             </div>
                         </td>
                         <td>
@@ -55,17 +55,17 @@
                                 <button 
                                     type="button" 
                                     class="button is-small is-primary" 
-                                    v-if="getMembershipStatusFor(team.id) == 'notmember'"
-                                    v-on:click="joinTeam(team.id)">Join</button>
+                                    v-if="getMembershipStatusFor(capability.id) == 'notmember'"
+                                    v-on:click="joinCapability(capability.id)">Join</button>
                                 <button 
                                     type="button" 
                                     class="button is-small is-primary is-loading" 
-                                    v-if="getMembershipStatusFor(team.id) == 'requested'">Join</button>
+                                    v-if="getMembershipStatusFor(capability.id) == 'requested'">Join</button>
                                 <button 
                                     type="button" 
                                     class="button is-small is-danger is-outlined" 
-                                    v-if="getMembershipStatusFor(team.id) == 'member'"
-                                    v-on:click="leaveTeam(team.id)">Leave</button>
+                                    v-if="getMembershipStatusFor(capability.id) == 'member'"
+                                    v-on:click="leaveCapability(capability.id)">Leave</button>
                             </div>
                         </td>
                     </tr>
@@ -77,7 +77,7 @@
 </div>
 
 <script id="editor-template" type="text/x-mustache">
-    <div id="team-editor" class="modal is-active">
+    <div id="capability-editor" class="modal is-active">
         <div class="modal-background" data-behavior="close"></div>
         <div class="modal-card">
 
@@ -124,7 +124,7 @@
         <strong class="error-title"></strong> <span class="error-message"></span>
     </div>
     <p>
-        You are about to leave the capability <strong>{{teamName}}</strong>. Changes can take up 
+        You are about to leave the capability <strong>{{capabilityName}}</strong>. Changes can take up 
         to 30 minutes to take effect. Please confirm?
     </p>
     <br>

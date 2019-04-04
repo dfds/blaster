@@ -8,7 +8,7 @@ import { currentUser } from "userservice";
 const capabilityService = new CapabilityService();
 
 const app = new Vue({
-    el: "#teams-app",
+    el: "#capabilities-app",
     data: {
         items: [],
         membershipRequests: [],
@@ -16,7 +16,7 @@ const app = new Vue({
         currentUser: currentUser
     },
     computed: {
-        hasTeams: function () {
+        hasCapabilities: function () {
             return this.items.length > 0;
         }
     },
@@ -26,16 +26,16 @@ const app = new Vue({
         }
     },    
     methods: {
-        newTeam: function() {
+        newCapability: function() {
             const editor = ModelEditor.open({
                 template: document.getElementById("editor-template"),
                 data: {
                     name: "",
                 },
                 onClose: () => editor.close(),
-                onSave: (teamData) => { 
-                    return capabilityService.add(teamData)
-                        .then(team => this.items.push(team))
+                onSave: (capabilityData) => { 
+                    return capabilityService.add(capabilityData)
+                        .then(capability => this.items.push(capability))
                         .then(() => editor.close())
                         .catch(err => {                            
                             if (err.status == 400) {
@@ -70,31 +70,31 @@ const app = new Vue({
                 }
             });
         },
-        joinTeam: function(teamId) {
-            const team = this.items.find(team => team.id == teamId);
-            this.membershipRequests.push(team.id);
+        joinCapability: function(capabilityId) {
+            const capability = this.items.find(capability => capability.id == capabilityId);
+            this.membershipRequests.push(capability.id);
 
-            capabilityService.join(team.id)
-                .then(() => team.members.push({ email: this.currentUser.email }))
+            capabilityService.join(capability.id)
+                .then(() => capability.members.push({ email: this.currentUser.email }))
                 .catch(err => console.log("error joining capability: " + JSON.stringify(err)))
                 .then(() => {
-                        this.membershipRequests = this.membershipRequests.filter(requestedTeamId => requestedTeamId != team.id);
+                        this.membershipRequests = this.membershipRequests.filter(requestedCapabilityId => requestedCapabilityId != capability.id);
                 });
         },
-        leaveTeam: function(teamId) {
-            const team = this.items.find(aTeam => aTeam.id == teamId);
+        leaveCapability: function(capabilityId) {
+            const capability = this.items.find(capability => capability.id == capabilityId);
             const currentUserEmail = this.currentUser.email;
 
             const editor = ModelEditor.open({
                 template: document.getElementById("leave-dialog-template"),
                 data: {
-                    teamName: team.name
+                    capabilityName: capability.name
                 },
                 onClose: () => editor.close(),
                 onSave: () => {
-                    return capabilityService.leave(team.id)
+                    return capabilityService.leave(capability.id)
                         .then(() => {
-                            team.members = team.members.filter(member => member.email != currentUserEmail);
+                            capability.members = capability.members.filter(member => member.email != currentUserEmail);
                             editor.close();
                         })
                         .catch(err => {
@@ -110,24 +110,24 @@ const app = new Vue({
         isCurrentUser: function(memberEmail) {
             return this.currentUser.email == memberEmail;
         },
-        getMembershipStatusFor: function(teamId) {
-            const team = this.items.find(team => team.id == teamId);
-            const isRequested = this.membershipRequests.indexOf(team.id) > -1;
+        getMembershipStatusFor: function(capabilityId) {
+            const capability = this.items.find(capability => capability.id == capabilityId);
+            const isRequested = this.membershipRequests.indexOf(capability.id) > -1;
 
             if (isRequested) {
                 return "requested";
             }
 
-            return this._isCurrentlyMemberOf(team)
+            return this._isCurrentlyMemberOf(capability)
                 ? "member"
                 : "notmember";
         },
-        _isCurrentlyMemberOf: function(team) {
-            if (!team) {
+        _isCurrentlyMemberOf: function(capability) {
+            if (!capability) {
                 return false;
             }
 
-            const members = team.members || [];
+            const members = capability.members || [];
             return members
                 .filter(member => member.email == this.currentUser.email)
                 .length > 0;
@@ -136,7 +136,7 @@ const app = new Vue({
     mounted: function () {
         jq.ready
             .then(() => capabilityService.getAll())
-            .then(teams => teams.forEach(team => this.items.push(team)))
+            .then(capabilities => capabilities.forEach(capability => this.items.push(capability)))
             .catch(info => {
                 if (info.status != 200) {
                     AlertDialog.open({
