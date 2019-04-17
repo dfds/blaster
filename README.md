@@ -51,23 +51,34 @@ Prerequisites:
 5. dotnet core 2.1
 6. You may also quickly want docker, docker-compose, awscli and kubectl but they are not prerequisites per-se
 
-Then read pipeline.sh, and mostly ignore it. Once that's done, go:
+Then read pipeline.sh.
 
+Then the steps are:
 ```
+# OPEN THREE (3) TERMINAL WINDOWS FOR THIS:
+
+# 1: dotnet BFF
 cd src
 npm install
-dotnet restore Blaster.sln
-dotnet watch run # or just run
+cd Blaster.WebApi
+dotnet restore
+dotnet watch run
+
+# 2: webpack frontend
+cd src
+npm start # runs webpack
+
+# 3: dependency fakes
+cd fake_dependencies
+docker-compose up --build
 ```
 
-Quite likely, nothing will work without at least one supporting service so go and grab https://github.com/dfds/team-service.
+The above setup should run with no further changes. If you need a real backend, go look at e.g.  https://github.com/dfds/capability-service or some of the others.
 
 A number of environment variables are read to point to the relevant services but out of the box, everything points to localhost so if other services are running on the same machine, Blaster should be good to go.
 
 ## Structure
-Currently, blaster is just a web UI. The planned CLI is not there yet.
 
-    ./docker-compose.yml: Docker-compose definition to spin up fake dependencies for local development.
     ./fake_dependencies: Fake dependencies which can be spun up to ease local development.
     ./k8s: Kubernetes tokenized manifests.
     ./src: Blaster source.
@@ -77,19 +88,9 @@ Currently, blaster is just a web UI. The planned CLI is not there yet.
 
 Blaster uses Vue for client-side framework.
 
-## Local development with fake dependencies
-A Docker-compose definition is available in the root of the repository. This spins up fake dependencies to ease local development.
+## Call flow (prod)
+While in development, the actual user is magistubbed. In production, the auth-proxy sits in front and handles the workload. There is a sample docker-compose definition is available in `fake_dependencies/docker-compose-with-auth-proxy.yml`. Note that this is probably not ready to run. 
 
-To spin up the fake dependencies run:
-
-On first run:
-```
-docker-compose up --build
-```
-Otherwise:
-```
-docker-compose up
-```
 The call flow from user to Blaster goes through an AWS ALB for authentication. To simulate the JWT from the ALB (1) below is replaced with a header-injector proxy.
  
 (2) is replaced with a fake capability service.
@@ -112,10 +113,3 @@ The call flow from user to Blaster goes through an AWS ALB for authentication. T
                 |             |
                 +-------------+
 ```
-
-# Deployment
-FIXME This section and any notes on this are woefully out of date FIXME
-
-
-# Pull request and dev stuff
-FIXME This section and any notes on this are woefully out of date FIXME
