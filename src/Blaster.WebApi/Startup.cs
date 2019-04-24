@@ -43,7 +43,6 @@ namespace Blaster.WebApi
             /* configure each feature */
             ConfigureAWSPermissionsFeature(services);
             ConfigureCapabilityFeature(services);
-            ConfigureCapabilityFeaturev2(services);
             ConfigureFrontpageFeature(services);
             ConfigureTopicFeature(services);
         }
@@ -74,15 +73,6 @@ namespace Blaster.WebApi
         {
             services
                 .AddHttpClient<ICapabilityServiceClient, CapabilityServiceClient>(client =>
-                {
-                    client.BaseAddress = new Uri(Configuration["BLASTER_CAPABILITYSERVICE_API_URL"]);
-                })
-                .AddHttpMessageHandler<CorrelationIdMessageHandler>();
-        }
-        private void ConfigureCapabilityFeaturev2(IServiceCollection services)
-        {
-            services
-                .AddHttpClient<Blaster.WebApi.Features.Capabilitiesv2.ICapabilityServiceClient, Blaster.WebApi.Features.Capabilitiesv2.CapabilityServiceClient>(client =>
                 {
                     client.BaseAddress = new Uri(Configuration["BLASTER_CAPABILITYSERVICE_API_URL"]);
                 })

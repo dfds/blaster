@@ -26,10 +26,10 @@ namespace Blaster.WebApi.Features.Capabilities
             return _serializer.Deserialize<CapabilitiesResponse>(content);
         }
 
-        public async Task<Capability> CreateCapability(string name)
+        public async Task<Capability> CreateCapability(string name, string description)
         {
             var content = new StringContent(
-                content: _serializer.Serialize(new { Name = name }),
+                content: _serializer.Serialize(new { Name = name, Description = description}),
                 encoding: Encoding.UTF8,
                 mediaType: "application/json"
             );

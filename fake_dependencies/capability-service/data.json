@@ -2,6 +2,7 @@
     {
         "id": "1",
         "name": "Foo",
+        "description": "FooDescription",
         "members": [
           {
             "email": "jdog@me.com"

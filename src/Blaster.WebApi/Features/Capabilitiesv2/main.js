@@ -31,6 +31,7 @@ const app = new Vue({
                 template: document.getElementById("editor-template"),
                 data: {
                     name: "",
+                    description: "",
                 },
                 onClose: () => editor.close(),
                 onSave: (capabilityData) => { 

@@ -46,7 +46,7 @@ namespace Blaster.WebApi.Features.Capabilities
         {
             try
             {
-                var capability = await _capabilityServiceClient.CreateCapability(input.Name);
+                var capability = await _capabilityServiceClient.CreateCapability(input.Name, input.Description);
 
                 var a = new CreatedAtRouteResult<Capability>(
                     routeName: "GetCapabilityById",

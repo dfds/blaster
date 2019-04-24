@@ -32,6 +32,12 @@ app.post("/api/v1/capabilities", (req, res) => {
         res.status(400).send({message: "Name must be a string of length 3 to 32. consisting of only alphanumeric ASCII characters, starting with a capital letter. Underscores and hyphens are allowed."});
         return;
     }
+
+    if (newTeam.description == null) {
+        // Null or undefined
+        newTeam.description = "generic description"
+    }
+
     readFile("./data.json")
         .then(data => JSON.parse(data))
         .then(teams => {

@@ -21,7 +21,7 @@ export default class ModelEditor {
     }
 
     focus() {
-        jq("[data-property]", this.element).focus();
+        jq("[data-property]", this.element).first().focus();
     }
 
     assignEventHandlers() {

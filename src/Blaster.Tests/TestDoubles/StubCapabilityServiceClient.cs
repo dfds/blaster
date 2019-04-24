@@ -24,7 +24,7 @@ namespace Blaster.Tests.TestDoubles
             });
         }
 
-        public Task<Capability> CreateCapability(string name)
+        public Task<Capability> CreateCapability(string name, string description)
         {
             return Task.FromResult(_capabilities.First());
         }

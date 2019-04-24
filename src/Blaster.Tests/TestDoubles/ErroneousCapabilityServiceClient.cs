@@ -19,7 +19,7 @@ namespace Blaster.Tests.TestDoubles
             throw _error;
         }
 
-        public Task<Capability> CreateCapability(string name)
+        public Task<Capability> CreateCapability(string name, string description)
         {
             throw _error;
         }

@@ -4,7 +4,7 @@ import { currentUser } from "userservice";
 export default class CapabilityService {
     constructor() {
         this.client = new HttpClient();
-        this.baseUrl = "api/capabilitiesv2";
+        this.baseUrl = "api/capabilities";
 
         this.getAll = this.getAll.bind(this);
         this.add = this.add.bind(this);
