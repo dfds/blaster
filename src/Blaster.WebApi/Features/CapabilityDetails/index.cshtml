@@ -1,0 +1,116 @@
+﻿@section Scripts
+{
+    <script src="~/capabilitydetails.bundle.js"></script>
+}
+
+<div id="capabilitydetails-app" v-cloak>
+
+    <section class="section">
+        <div class="container">
+            <div class="level">
+                <div class="level-left">
+                    <div class="level-item">
+                        <h1 class="title">Capability details</h1>
+                    </div>
+                </div>
+                <div class="level-right">
+                    <div class="level-item">
+                        <button type="button" class="button is-primary" v-on:click="newCapability()">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="container">
+
+            <div id="global-dialog-container"></div>
+
+            <div class="has-text-centered" v-if="initializing">
+                Loading...
+            </div>
+            <div>
+                <p>Capabilities v2 should be named uniquely after their (business) capability. Avoid using team or project names.</p><p>Read more on <a href="https://playbooks.dfds.cloud/naming/capabilities.html">Playbooks</a>.</p>
+            </div>
+
+            <table class="table is-fullwidth is-hoverable" v-if="hasCapabilities">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Joined</th>
+                        <th>Overview</th>
+                        <th>Service indicators</th>
+                        <th>State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="capability in items" v-bind:data-id="capability.id">
+                        <td><a :href="capability.name">{{capability.name}}</a></td>
+                        <td>
+                            <div class="tags">
+                                <span v-if="getMembershipStatusFor(capability.id) == 'member'" class="tag is-primary">Joined</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="icon">
+                                <i class="far fa-chart-bar"></i>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="icon">
+                                <i class="fas fa-tasks"></i>
+                            </span>
+                        </td>
+                        <td>
+                            Ready
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+
+<script id="leave-dialog-template" type="text/x-mustache">
+    <div id="leave-dialog" class="modal is-active">
+        <div class="modal-background" data-behavior="close"></div>
+        <div class="modal-card">
+
+<article class="message">
+  <div class="message-header">
+    <p>Warning...</p>
+    <button class="delete" aria-label="delete" data-behavior="close"></button>
+  </div>
+  <div class="message-body">
+    <div class="error is-hidden notification is-danger">
+        <strong class="error-title"></strong> <span class="error-message"></span>
+    </div>
+    <p>
+        You are about to leave the capability <strong>{{capabilityName}}</strong>. Changes can take up 
+        to 30 minutes to take effect. Please confirm?
+    </p>
+    <br>
+
+    <div class="buttons is-centered">
+        <button class="button is-danger" data-behavior="save">Leave</button>
+        <button class="button is-info" aria-label="close" data-behavior="close">Cancel</button>
+    </div>
+  </div>
+</article>
+            
+        </div>
+    </div>
+</script>
+
+<script id="error-dialog-template" type="text/x-mustache">
+    <article class="message is-danger">
+        <div class="message-header">
+            <p>{{title}}</p>
+        </div>
+        <div class="message-body">
+            {{message}}
+        </div>
+    </article>
+</script>

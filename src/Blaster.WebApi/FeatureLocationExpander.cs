@@ -13,19 +13,8 @@ namespace Blaster.WebApi
 
         public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
         {
-        /*
-         *
-         * /Features/Capabilityv2/Index.cshtml
-/Features/Capabilityv2s/Index.cshtml
-/Features/Capabilityv2ies/Index.cshtml
-/Features/Capabilitv2ies/Index.cshtml
-/Features/Shared/Index.cshtml
-         */
-        
             var yPlural = Regex.Replace(context.ControllerName, @"^(.+)y$", "$1");
             var vPlural = Regex.Replace(context.ControllerName, @"^(.+)y(v[0-9]*)$", "$1ies$2");
-           
-            
             
             var temp = new[]
             {

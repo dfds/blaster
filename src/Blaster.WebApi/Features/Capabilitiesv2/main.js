@@ -19,12 +19,7 @@ const app = new Vue({
         hasCapabilities: function () {
             return this.items.length > 0;
         }
-    },
-    filters: {
-        toawspermspage: function(value) {
-            return `/awspermissions?capability=${value}`
-        }
-    },    
+    },   
     methods: {
         newCapability: function() {
             const editor = ModelEditor.open({
@@ -67,43 +62,6 @@ const app = new Vue({
                                     dialog.close();
                                 }, 3000);
                             }
-                        });
-                }
-            });
-        },
-        joinCapability: function(capabilityId) {
-            const capability = this.items.find(capability => capability.id == capabilityId);
-            this.membershipRequests.push(capability.id);
-
-            capabilityService.join(capability.id)
-                .then(() => capability.members.push({ email: this.currentUser.email }))
-                .catch(err => console.log("error joining capability: " + JSON.stringify(err)))
-                .then(() => {
-                        this.membershipRequests = this.membershipRequests.filter(requestedCapabilityId => requestedCapabilityId != capability.id);
-                });
-        },
-        leaveCapability: function(capabilityId) {
-            const capability = this.items.find(capability => capability.id == capabilityId);
-            const currentUserEmail = this.currentUser.email;
-
-            const editor = ModelEditor.open({
-                template: document.getElementById("leave-dialog-template"),
-                data: {
-                    capabilityName: capability.name
-                },
-                onClose: () => editor.close(),
-                onSave: () => {
-                    return capabilityService.leave(capability.id)
-                        .then(() => {
-                            capability.members = capability.members.filter(member => member.email != currentUserEmail);
-                            editor.close();
-                        })
-                        .catch(err => {
-                            console.log("ERROR leaving capability: " + JSON.stringify(err));
-                            editor.showError({
-                                title: "Error!",
-                                message: `Could not leave capability. Try again or reload the page.`
-                            });
                         });
                 }
             });
