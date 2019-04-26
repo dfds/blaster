@@ -92,6 +92,11 @@ const app = new Vue({
                 .length > 0;
         }
     },
+    filters: {
+        capabilitydetails: function(capabilityId) {
+            return `/capabilitydashboard?capabilityId=${capabilityId}`
+        }
+    },
     mounted: function () {
         jq.ready
             .then(() => capabilityService.getAll())

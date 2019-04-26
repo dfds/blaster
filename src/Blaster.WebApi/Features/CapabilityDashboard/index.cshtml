@@ -1,25 +1,41 @@
 ﻿@section Scripts
 {
-    <script src="~/capabilitydetails.bundle.js"></script>
+    <script src="~/capabilitydashboard.bundle.js"></script>
 }
 
-<div id="capabilitydetails-app" v-cloak>
+<div id="capabilitydashboard-app" v-cloak>
 
     <section class="section">
         <div class="container">
             <div class="level">
                 <div class="level-left">
                     <div class="level-item">
-                        <h1 class="title">Capability details</h1>
+                        <h1 class="title">{{ capability.name }}</h1>
                     </div>
                 </div>
+                <!-- Right side -->
                 <div class="level-right">
-                    <div class="level-item">
-                        <button type="button" class="button is-primary" v-on:click="newCapability()">Add</button>
-                    </div>
-                </div>
+
+                    <div class="buttons is-right">
+                                <button 
+                                    type="button" 
+                                    class="button is-small is-primary">Request context</button>
+                                <button 
+                                    type="button" 
+                                    class="button is-small is-primary is-loading">Join</button>
+                                <button 
+                                    type="button" 
+                                    class="button is-small is-danger is-outlined">Leave</button>
+                                <button 
+                                    type="button" 
+                                    class="button is-small is-danger is-outlined">Leave</button>
+                            </div>
+
+                </div>  
             </div>
         </div>
+
+
 
         <br />
 
@@ -34,40 +50,6 @@
                 <p>Capabilities v2 should be named uniquely after their (business) capability. Avoid using team or project names.</p><p>Read more on <a href="https://playbooks.dfds.cloud/naming/capabilities.html">Playbooks</a>.</p>
             </div>
 
-            <table class="table is-fullwidth is-hoverable" v-if="hasCapabilities">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Joined</th>
-                        <th>Overview</th>
-                        <th>Service indicators</th>
-                        <th>State</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="capability in items" v-bind:data-id="capability.id">
-                        <td><a :href="capability.name">{{capability.name}}</a></td>
-                        <td>
-                            <div class="tags">
-                                <span v-if="getMembershipStatusFor(capability.id) == 'member'" class="tag is-primary">Joined</span>
-                            </div>
-                        </td>
-                        <td>
-                            <span class="icon">
-                                <i class="far fa-chart-bar"></i>
-                            </span>
-                        </td>
-                        <td>
-                            <span class="icon">
-                                <i class="fas fa-tasks"></i>
-                            </span>
-                        </td>
-                        <td>
-                            Ready
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
     </section>
 

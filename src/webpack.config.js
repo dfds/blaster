@@ -9,7 +9,7 @@ module.exports = {
         capabilitiesv2: "./Blaster.WebApi/Features/Capabilitiesv2/main.js",
         topics: "./Blaster.WebApi/Features/Topic/main.js",
         awspermissions: "./Blaster.WebApi/Features/AWSPermissions/main.js",
-        capabilitydetails: "./Blaster.WebApi/Features/CapabilityDetails/main.js",
+        capabilitydashboard: "./Blaster.WebApi/Features/CapabilityDashboard/main.js",
     },
     output: {
         path: path.resolve(__dirname, "Blaster.WebApi", "wwwroot"),
@@ -22,6 +22,7 @@ module.exports = {
             userservice$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/userservice.js"),
             alertdialog$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/alert-dialog.js"),
             modeleditor$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/model-editor.js"),
+            capabilityservice$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/capabilityservice.js"),
         },
         extensions: [".js", ".scss"]
     },

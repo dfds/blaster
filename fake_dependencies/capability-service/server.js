@@ -22,6 +22,8 @@ app.get("/api/v1/capabilities", (req, res) => {
         });
 });
 
+
+
 app.post("/api/v1/capabilities", (req, res) => {   
     const newTeam = Object.assign({
         id: new Date().getTime().toString(),
@@ -111,6 +113,25 @@ app.delete("/api/v1/capabilities/:teamid/members/:memberemail", (req, res) => {
         })
         .catch(err => {
             console.log("ERROR! " + JSON.stringify(err));
+        });
+});
+
+app.get("/api/v1/capabilities/:capabilityid", (req, res) => {
+    const capabilityid = req.params.capabilityid;
+    readFile("./data.json")
+        .then(data => JSON.parse(data))
+        .then(capabilities => {
+            const capability = capabilities.find(cap => cap.id === capabilityid)
+            if (!capability) {
+                return new Promise(resolve => {
+                    res
+                        .status(404)
+                        .send({message: `Capability with id ${capabilityid} could not be found`});
+                    resolve();
+                });
+            } else {
+                return res.json(capability);
+            }
         });
 });
 

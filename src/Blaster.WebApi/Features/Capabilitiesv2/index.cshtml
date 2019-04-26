@@ -46,7 +46,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="capability in items" v-bind:data-id="capability.id">
-                        <td><a :href="capability.name">{{capability.name}}</a></td>
+                        <td><a :href="capability.id | capabilitydetails">{{capability.name}}</a></td>
                         <td>
                             <div class="tags">
                                 <span v-if="getMembershipStatusFor(capability.id) == 'member'" class="tag is-primary">Joined</span>
