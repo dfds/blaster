@@ -4,13 +4,13 @@
 }
 
 <div id="capabilitydashboard-app" v-cloak>
-
     <section class="section">
         <div class="container">
+            <h1 class="title">Summary</h1>
             <div class="level">
                 <div class="level-left">
                     <div class="level-item">
-                        <h1 class="title">{{ capability.name }}</h1>
+                        <h2 class="title">{{ capability.name }}</h1>
                     </div>
                 </div>
                 <!-- Right side -->
@@ -19,26 +19,27 @@
                     <div class="buttons is-right">
                                 <button 
                                     type="button" 
-                                    class="button is-small is-primary">Request context</button>
+                                    class="button is-small is-primary">Add context</button>
                                 <button 
                                     type="button" 
-                                    class="button is-small is-primary is-loading">Join</button>
+                                    class="button is-small is-primary"
+                                    v-if="getMembershipStatusFor(capability.id) == 'notmember'"
+                                    v-on:click="joinCapability()">Join</button>
                                 <button 
                                     type="button" 
-                                    class="button is-small is-danger is-outlined">Leave</button>
+                                    class="button is-small is-primary  is-loading"
+                                    v-if="getMembershipStatusFor(capability.id) == 'requested'">Join</button>
                                 <button 
                                     type="button" 
-                                    class="button is-small is-danger is-outlined">Leave</button>
+                                    class="button is-small is-danger is-outlined"
+                                    v-if="getMembershipStatusFor(capability.id) == 'member'"
+                                    v-on:click="leaveCapability()">Leave</button>
                             </div>
 
                 </div>  
             </div>
         </div>
-
-
-
-        <br />
-
+        <br/>
         <div class="container">
 
             <div id="global-dialog-container"></div>
@@ -47,12 +48,51 @@
                 Loading...
             </div>
             <div>
-                <p>Capabilities v2 should be named uniquely after their (business) capability. Avoid using team or project names.</p><p>Read more on <a href="https://playbooks.dfds.cloud/naming/capabilities.html">Playbooks</a>.</p>
+                <p>{{capability.description}}</p>
             </div>
 
         </div>
-    </section>
-
+        <br/>
+        <div class="container">
+                    <div class="level">
+            <div class="tags">
+                <span :class='isCurrentUser(member.email) ? "tag is-primary" : "tag is-light"' v-for="member in capability.members">{{member.email}}</span>
+            </div>
+        </div>
+        </div>
+        </section>
+        <!--- Summary section --->
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Capability summary</h1>
+            <nav class="level">
+  <div class="level-item has-text-centered">
+    <div>
+      <p class="heading">Services</p>
+      <p class="title">54</p>
+    </div>
+  </div>
+  <div class="level-item has-text-centered">
+    <div>
+      <p class="heading">Daily ingress</p>
+      <p class="title">58Mb</p>
+    </div>
+  </div>
+  <div class="level-item has-text-centered">
+    <div>
+      <p class="heading">Daily egress</p>
+      <p class="title">1Mb</p>
+    </div>
+  </div>
+  <div class="level-item has-text-centered">
+    <div>
+      <p class="heading">Estimated users</p>
+      <p class="title">7893</p>
+    </div>
+  </div>
+</nav>
+        </div>
+        </section>
 </div>
 
 <script id="leave-dialog-template" type="text/x-mustache">

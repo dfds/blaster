@@ -12,21 +12,19 @@ const app = new Vue({
     data: {
         capability: "",
         initializing: true,
-        currentUser: currentUser
+        currentUser: currentUser,
+        membershipRequested: false,
     },
     methods: {
         isCurrentUser: function(memberEmail) {
             return this.currentUser.email == memberEmail;
         },
-        getMembershipStatusFor: function(capabilityId) {
-            const capability = this.items.find(capability => capability.id == capabilityId);
-            const isRequested = this.membershipRequests.indexOf(capability.id) > -1;
-
+        getMembershipStatusFor: function() {
+            const isRequested = this.membershipRequested;
             if (isRequested) {
                 return "requested";
             }
-
-            return this._isCurrentlyMemberOf(capability)
+            return this._isCurrentlyMemberOf(this.capability)
                 ? "member"
                 : "notmember";
         },
@@ -34,37 +32,35 @@ const app = new Vue({
             if (!capability) {
                 return false;
             }
-
             const members = capability.members || [];
             return members
                 .filter(member => member.email == this.currentUser.email)
                 .length > 0;
         },
         joinCapability: function() {
-            const capability = this.items.find(capability => capability.id == capabilityId);
-            this.membershipRequests.push(capability.id);
-
-            capabilityService.join(capability.id)
-                .then(() => capability.members.push({ email: this.currentUser.email }))
+            this.membershipRequested = true;
+            capabilityService.join(this.capability.id)
+                .then(() => this.capability.members.push({ email: this.currentUser.email }))
                 .catch(err => console.log("error joining capability: " + JSON.stringify(err)))
                 .then(() => {
-                        this.membershipRequests = this.membershipRequests.filter(requestedCapabilityId => requestedCapabilityId != capability.id);
+                        this.membershipRequested = false;
                 });
         },
-        leaveCapability: function(capabilityId) {
-            const capability = this.items.find(capability => capability.id == capabilityId);
+        leaveCapability: function() {
+            const capabilityId = this.capability.id;
+            const capabilityName = this.capability.name;
             const currentUserEmail = this.currentUser.email;
 
             const editor = ModelEditor.open({
                 template: document.getElementById("leave-dialog-template"),
                 data: {
-                    capabilityName: capability.name
+                    capabilityName: capabilityName
                 },
                 onClose: () => editor.close(),
                 onSave: () => {
-                    return capabilityService.leave(capability.id)
+                    return capabilityService.leave(capabilityId)
                         .then(() => {
-                            capability.members = capability.members.filter(member => member.email != currentUserEmail);
+                            this.capability.members = this.capability.members.filter(member => member.email != currentUserEmail);
                             editor.close();
                         })
                         .catch(err => {
@@ -83,6 +79,7 @@ const app = new Vue({
     },
     mounted: function () {
         const capabilityIdParam = new URLSearchParams(window.location.search).get('capabilityId');
+        // TODO Handle no or empty capabilityId
         jq.ready
             .then(() => capabilityService.get(capabilityIdParam))
             .then(capability => this.capability = capability)
