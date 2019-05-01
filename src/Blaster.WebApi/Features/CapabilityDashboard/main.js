@@ -14,6 +14,7 @@ const app = new Vue({
         initializing: true,
         currentUser: currentUser,
         membershipRequested: false,
+        contextRequested: false,
     },
     methods: {
         isCurrentUser: function(memberEmail) {
@@ -73,7 +74,9 @@ const app = new Vue({
                 }
             });
         },
-        requestContext: function() {
+        addContext: function() {
+            this.contextRequested = true;
+            capabilityService.addContext(this.capability.id)
 
         }
     },

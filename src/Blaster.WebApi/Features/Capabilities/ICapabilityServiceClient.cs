@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities.Models;
+using Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal;
 
 namespace Blaster.WebApi.Features.Capabilities
 {
@@ -10,5 +11,6 @@ namespace Blaster.WebApi.Features.Capabilities
         Task<Capability> GetById(string id);
         Task JoinCapability(string capabilityId, string memberEmail);
         Task LeaveCapability(string capabilityId, string memberEmail);
+        Task AddContext(string capabilityId, string contextName);
     }
 }

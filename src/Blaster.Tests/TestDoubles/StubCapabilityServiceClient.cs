@@ -43,5 +43,10 @@ namespace Blaster.Tests.TestDoubles
         {
             return Task.CompletedTask;
         }
+
+        public Task AddContext(string capabilityId, string contextName)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

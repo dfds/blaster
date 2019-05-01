@@ -38,5 +38,10 @@ namespace Blaster.Tests.TestDoubles
         {
             throw _error;
         }
+
+        public Task AddContext(string capabilityId, string contextName)
+        {
+            throw _error;
+        }
     }
 }

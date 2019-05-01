@@ -100,10 +100,36 @@ namespace Blaster.WebApi.Features.Capabilities
                 return NotFound();
             }
         }
+
+        [HttpPost("{id}/contexts", Name = "AddContext")]
+        public async Task<ActionResult<Capability>> AddContext([FromRoute] string id)
+        {
+            try
+            {
+                await _capabilityServiceClient.AddContext(
+                    capabilityId: id,
+                    contextName: "default"
+                );
+
+                return new ActionResult<Capability>(NoContent());
+            }
+            catch (ContextAlreadyAddedException)
+            {
+                return new ActionResult<Capability>(Conflict(new
+                {
+                    Message = "Default context already added to capability"
+                }));
+            }
+        }
     }
 
     public class AlreadyJoinedException : Exception
     {
+    }
+
+    public class ContextAlreadyAddedException : Exception
+    {
+        
     }
 
     public class CapabilityValidationException : Exception

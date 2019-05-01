@@ -27,7 +27,8 @@ app.get("/api/v1/capabilities", (req, res) => {
 app.post("/api/v1/capabilities", (req, res) => {   
     const newTeam = Object.assign({
         id: new Date().getTime().toString(),
-        members: []
+        members: [],
+
     }, req.body);
 
     if (newTeam.name === "failme") {
@@ -79,6 +80,35 @@ app.post("/api/v1/capabilities/:teamid/members", (req, res) => {
                 return Promise.resolve(serialize(teams))
                     .then(json => writeFile("./data.json", json))
                     .then(() => console.log(`Added member ${email} to team ${team.name}`))
+                    .then(() => res.sendStatus(200));
+            }
+        });
+});
+
+app.post("/api/v1/capabilities/:capabilityid/contexts", (req, res) => {
+    const capabilityid = req.params.capabilityid;
+    const newContext = Object.assign({
+        id: new Date().getTime().toString(),
+    }, req.body);
+
+    readFile("./data.json")
+        .then(data => JSON.parse(data))
+        .then(capabilities => {
+            const capability = capabilitites.find(capability => capability.id == capabilityid);
+            
+            if (!capability) {
+                return new Promise(resolve => {
+                    res
+                        .status(404)
+                        .send({message: `Capability with id ${capabilityid} could not be found`});
+                    resolve();
+                });
+            } else {
+                capabilities.contexts.push(newContext);
+                
+                return Promise.resolve(serialize(capabilities))
+                    .then(json => writeFile("./data.json", json))
+                    .then(() => console.log(`Added context ${newContext.name} to capability ${capability.name}`))
                     .then(() => res.sendStatus(200));
             }
         });

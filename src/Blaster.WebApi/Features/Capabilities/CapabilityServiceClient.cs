@@ -92,6 +92,28 @@ namespace Blaster.WebApi.Features.Capabilities
                 throw new ServerReturnedUnexpectedResponseException($"{response.StatusCode:D} - {response.ReasonPhrase}", await response.Content.ReadAsStringAsync());
             }
         }
+
+        public async Task AddContext(string capabilityId, string contextName)
+        {
+            var content = new StringContent(
+                content: _serializer.Serialize(new { Name = contextName }),
+                encoding: Encoding.UTF8,
+                mediaType: "application/json"
+            );
+
+            var response = await _client.PostAsync($"/api/v1/capabilities/{capabilityId}/contexts", content);
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            if (response.StatusCode == HttpStatusCode.Conflict)
+            {
+                throw new ContextAlreadyAddedException();
+            }
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new ServerReturnedUnexpectedResponseException($"{response.StatusCode:D} - {response.ReasonPhrase}", responseBody);
+            }
+        }
     }
 
     public class ServerReturnedUnexpectedResponseException : Exception

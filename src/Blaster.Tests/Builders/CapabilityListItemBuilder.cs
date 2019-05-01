@@ -11,7 +11,8 @@ namespace Blaster.Tests.Builders
                 Id = "1",
                 Name = "capability foo",
                 Description = "description foo",
-                Members = new Member[0]
+                Members = new Member[0],
+                Contexts = new Context[0]
             };
         }
     }

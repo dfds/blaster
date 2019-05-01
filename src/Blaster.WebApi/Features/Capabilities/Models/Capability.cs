@@ -6,5 +6,7 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public Member[] Members { get; set; }
+        public Context[] Contexts { get; set; }
+        
     }
 }

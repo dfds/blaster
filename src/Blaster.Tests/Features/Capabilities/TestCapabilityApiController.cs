@@ -120,5 +120,34 @@ namespace Blaster.Tests.Features.Capabilities
 
             Assert.Null(result.Value);
         }
+        
+        [Fact]
+        public async Task returns_expected_when_context_is_added()
+        {
+            var expected = new CapabilityListItemBuilder().Build();
+
+            var sut = new CapabilityApiControllerBuilder()
+                .WithCapabilityService(new StubCapabilityServiceClient(capabilities: expected))
+                .Build();
+
+            var result = await sut.AddContext(id: "foo");
+
+            Assert.Null(result.Value);
+        }
+        
+        [Fact]
+        public async Task returns_conflict_when_context_is_already_present()
+        {
+            var expected = new CapabilityListItemBuilder().Build();
+
+            var sut = new CapabilityApiControllerBuilder()
+                .WithCapabilityService(new ErroneousCapabilityServiceClient(new ContextAlreadyAddedException()))
+                .Build();
+
+            var result = await sut.AddContext(id: "foo");
+
+            Assert.IsType<ConflictObjectResult>(result.Result);
+        }
+        
     }
 }

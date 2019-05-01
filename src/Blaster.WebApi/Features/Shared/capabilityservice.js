@@ -32,6 +32,10 @@ export default class CapabilityService {
         return this.client.post(`${this.baseUrl}/${capabilityId}/members`, payload);
     }
 
+    addContext(capabilityId) {
+        return this.client.post(`${this.baseUrl}/${capabilityId}/contexts`);
+    }
+
     leave(capabilityId) {
         return this.client.delete(`${this.baseUrl}/${capabilityId}/members/${currentUser.email}`);
     }
