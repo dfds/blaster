@@ -29,6 +29,17 @@ const app = new Vue({
                 ? "member"
                 : "notmember";
         },
+        getContextStatusFor: function(){
+            const isContextRequested = this.contextRequested;
+            if(isContextRequested)
+            {
+                return "requested"
+            }
+            const contexts = this.capability.contexts || [];
+            return contexts.length > 0
+                ? "added"
+                : "notadded";
+        },
         _isCurrentlyMemberOf: function(capability) {
             if (!capability) {
                 return false;
@@ -77,7 +88,11 @@ const app = new Vue({
         addContext: function() {
             this.contextRequested = true;
             capabilityService.addContext(this.capability.id)
-
+                .catch(err => console.log("error requesting context: " + JSON.stringify(err)))
+                .then(() => this.capability.contexts.push({name: "default"}))
+                .then(() => {
+                        this.contextRequested = false;
+                });
         }
     },
     mounted: function () {

@@ -28,6 +28,7 @@ app.post("/api/v1/capabilities", (req, res) => {
     const newTeam = Object.assign({
         id: new Date().getTime().toString(),
         members: [],
+        contexts: []
 
     }, req.body);
 
@@ -94,7 +95,7 @@ app.post("/api/v1/capabilities/:capabilityid/contexts", (req, res) => {
     readFile("./data.json")
         .then(data => JSON.parse(data))
         .then(capabilities => {
-            const capability = capabilitites.find(capability => capability.id == capabilityid);
+            const capability = capabilities.find(capability => capability.id == capabilityid);
             
             if (!capability) {
                 return new Promise(resolve => {
@@ -104,8 +105,7 @@ app.post("/api/v1/capabilities/:capabilityid/contexts", (req, res) => {
                     resolve();
                 });
             } else {
-                capabilities.contexts.push(newContext);
-                
+                capability.contexts.push(newContext);
                 return Promise.resolve(serialize(capabilities))
                     .then(json => writeFile("./data.json", json))
                     .then(() => console.log(`Added context ${newContext.name} to capability ${capability.name}`))
