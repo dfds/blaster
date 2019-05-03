@@ -10,12 +10,17 @@ const capabilityService = new CapabilityService();
 const app = new Vue({
     el: "#capabilitydashboard-app",
     data: {
-        capability: "",
+        capability: null,
         initializing: true,
         currentUser: currentUser,
         membershipRequested: false,
         contextRequested: false,
     },
+    computed: {
+        capabilityFound: function() {
+            return this.capability.id != null
+        }
+    },    
     methods: {
         isCurrentUser: function(memberEmail) {
             return this.currentUser.email == memberEmail;

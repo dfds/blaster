@@ -5,6 +5,15 @@
 
 <div id="capabilitydashboard-app" v-cloak>
     <section class="section">
+    <div class="container">
+
+        <div id="global-dialog-container"></div>
+
+        <div class="has-text-centered" v-if="initializing">
+            Loading...
+        </div>
+    </div>
+    <div class="container" v-if="capabilityFound">
         <div class="container">
             <h1 class="title">Summary</h1>
             <div class="level">
@@ -17,92 +26,110 @@
                 <div class="level-right">
 
                     <div class="buttons is-right">
-                                <button 
-                                    type="button" 
-                                    class="button is-small is-primary"
-                                    v-on:click="addContext()"
-                                    v-if="getContextStatusFor() == 'notadded'">Add context</button>
-                                <button 
-                                    type="button" 
-                                    class="button is-small is-primary is-loading"
-                                    v-if="getContextStatusFor() == 'requested'">Add context</button>
-                                <div 
-                                    class="button is-small is-info is-outlined" disabled
-                                    v-if="getContextStatusFor() == 'added'">Context added</div  >
-                                <button 
-                                    type="button" 
-                                    class="button is-small is-primary"
-                                    v-if="getMembershipStatusFor(capability.id) == 'notmember'"
-                                    v-on:click="joinCapability()">Join</button>
-                                <button 
-                                    type="button" 
-                                    class="button is-small is-primary  is-loading"
-                                    v-if="getMembershipStatusFor(capability.id) == 'requested'">Join</button>
-                                <button 
-                                    type="button" 
-                                    class="button is-small is-danger is-outlined"
-                                    v-if="getMembershipStatusFor(capability.id) == 'member'"
-                                    v-on:click="leaveCapability()">Leave</button>
-                            </div>
+                        <button
+                            type="button"
+                            class="button is-small is-primary"
+                            v-on:click="addContext()"
+                            v-if="getContextStatusFor() == 'notadded'">
+                            Add context
+                        </button>
+                        <button
+                            type="button"
+                            class="button is-small is-primary is-loading"
+                            v-if="getContextStatusFor() == 'requested'">
+                            Add context
+                        </button>
+                        <div
+                            class="button is-small is-info is-outlined" disabled
+                            v-if="getContextStatusFor() == 'added'">
+                            Context added
+                        </div >
+                        <button
+                            type="button"
+                            class="button is-small is-primary"
+                            v-if="getMembershipStatusFor(capability.id) == 'notmember'"
+                            v-on:click="joinCapability()">
+                            Join
+                        </button>
+                        <button
+                            type="button"
+                            class="button is-small is-primary  is-loading"
+                            v-if="getMembershipStatusFor(capability.id) == 'requested'">
+                            Join
+                        </button>
+                        <button
+                            type="button"
+                            class="button is-small is-danger is-outlined"
+                            v-if="getMembershipStatusFor(capability.id) == 'member'"
+                            v-on:click="leaveCapability()">
+                            Leave
+                        </button>
+                    </div>
 
-                </div>  
+                </div>
             </div>
         </div>
         <br/>
-        <div class="container">
-
-            <div id="global-dialog-container"></div>
-
-            <div class="has-text-centered" v-if="initializing">
-                Loading...
-            </div>
-            <div>
-                <p>{{capability.description}}</p>
-            </div>
-
+        <div>
+            <p>{{capability.description}}</p>
         </div>
         <br/>
         <div class="container">
-                    <div class="level">
-            <div class="tags">
-                <span :class='isCurrentUser(member.email) ? "tag is-primary" : "tag is-light"' v-for="member in capability.members">{{member.email}}</span>
+            <div class="level">
+                <div class="tags">
+                    <span :class='isCurrentUser(member.email) ? "tag is-primary" : "tag is-light"' v-for="member in capability.members">{{member.email}}</span>
+                </div>
             </div>
         </div>
-        </div>
-        </section>
         <!--- Summary section --->
-    <section class="section">
-        <div class="container">
-            <h1 class="title">Capability summary</h1>
-            <nav class="level">
-  <div class="level-item has-text-centered">
-    <div>
-      <p class="heading">Services</p>
-      <p class="title">54</p>
-    </div>
-  </div>
-  <div class="level-item has-text-centered">
-    <div>
-      <p class="heading">Daily ingress</p>
-      <p class="title">58Mb</p>
-    </div>
-  </div>
-  <div class="level-item has-text-centered">
-    <div>
-      <p class="heading">Daily egress</p>
-      <p class="title">1Mb</p>
-    </div>
-  </div>
-  <div class="level-item has-text-centered">
-    <div>
-      <p class="heading">Estimated users</p>
-      <p class="title">7893</p>
-    </div>
-  </div>
-</nav>
-        </div>
+        <section class="section">
+            <div class="container">
+                <h1 class="title">Capability summary</h1>
+                <nav class="level">
+                    <div class="level-item has-text-centered">
+                        <div>
+                            <p class="heading">Services</p>
+                            <p class="title">54</p>
+                        </div>
+                    </div>
+                    <div class="level-item has-text-centered">
+                        <div>
+                            <p class="heading">Daily ingress</p>
+                            <p class="title">58Mb</p>
+                        </div>
+                    </div>
+                    <div class="level-item has-text-centered">
+                        <div>
+                            <p class="heading">Daily egress</p>
+                            <p class="title">1Mb</p>
+                        </div>
+                    </div>
+                    <div class="level-item has-text-centered">
+                        <div>
+                            <p class="heading">Estimated users</p>
+                            <p class="title">7893</p>
+                        </div>
+                    </div>
+                </nav>
+            </div>
         </section>
-</div>
+    </div>
+    <div class="container" v-else>
+        <article class="message is-danger">
+            <div class="message-header">
+                <p>Unable to load capability</p>
+            </div>
+            <div class="message-body">
+                Cant find
+            </div>
+        </article>
+    </div>
+    </section>
+ </div>
+
+
+
+
 
 <script id="leave-dialog-template" type="text/x-mustache">
     <div id="leave-dialog" class="modal is-active">

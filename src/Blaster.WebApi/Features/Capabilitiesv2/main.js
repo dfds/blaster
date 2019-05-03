@@ -1,5 +1,5 @@
 import Vue from "vue";
-import CapabilityService from "./capabilityservice";
+import CapabilityService from "capabilityservice"
 import AlertDialog from "./alert-dialog";
 import ModelEditor from "modeleditor";
 import jq from "jquery";
@@ -65,9 +65,6 @@ const app = new Vue({
                         });
                 }
             });
-        },
-        isCurrentUser: function(memberEmail) {
-            return this.currentUser.email == memberEmail;
         },
         getMembershipStatusFor: function(capabilityId) {
             const capability = this.items.find(capability => capability.id == capabilityId);
