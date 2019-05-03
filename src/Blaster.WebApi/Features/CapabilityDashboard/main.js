@@ -18,12 +18,20 @@ const app = new Vue({
     },
     computed: {
         capabilityFound: function() {
-            return this.capability.id != null
+            return this.capability != null && this.capability.id != null 
         }
     },    
     methods: {
         isCurrentUser: function(memberEmail) {
-            return this.currentUser.email == memberEmail;
+            return this.currentUser.email === memberEmail;
+        },
+        hasMembers: function(){
+          const cap = this.capability;
+          
+          if (cap == null || cap.members == null || cap.members.length < 1)
+              return false;
+          
+          return true;
         },
         getMembershipStatusFor: function() {
             const isRequested = this.membershipRequested;

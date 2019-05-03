@@ -5,21 +5,22 @@
 
 <div id="capabilitydashboard-app" v-cloak>
     <section class="section">
-    <div class="container">
+        <div class="container" v-if="initializing">
 
-        <div id="global-dialog-container"></div>
+            <div id="global-dialog-container"></div>
 
-        <div class="has-text-centered" v-if="initializing">
-            Loading...
+            <div class="has-text-centered">
+                Loading...
+            </div>
         </div>
-    </div>
-    <div class="container" v-if="capabilityFound">
-        <div class="container">
-            <h1 class="title">Summary</h1>
+        <div class="container" v-if="initializing === false">
+            <div class="container" v-if="capabilityFound">
+        <div class="container box">
+            <h1 class="title is-uppercase">Summary</h1>
             <div class="level">
                 <div class="level-left">
                     <div class="level-item">
-                        <h2 class="title">{{ capability.name }}</h1>
+                        <h2 class="subtitle">{{ capability.name }}</h1>
                     </div>
                 </div>
                 <!-- Right side -->
@@ -68,40 +69,40 @@
 
                 </div>
             </div>
-        </div>
-        <br/>
-        <div>
-            <p>{{capability.description}}</p>
-        </div>
-        <br/>
-        <div class="container">
-            <div class="level">
-                <div class="tags">
-                    <span :class='isCurrentUser(member.email) ? "tag is-primary" : "tag is-light"' v-for="member in capability.members">{{member.email}}</span>
+            <div>
+                <p>{{capability.description}}</p>
+            </div>
+            <div class="container" v-if="hasMembers()">
+                <br/>
+                <p>Members: </p>
+                <div class="level">
+                    <div class="tags">
+                        <span :class='isCurrentUser(member.email) ? "tag is-primary" : "tag is-light"' v-for="member in capability.members">{{member.email}}</span>
+                    </div>
                 </div>
             </div>
         </div>
+       
         <!--- Summary section --->
-        <section class="section">
-            <div class="container">
-                <h1 class="title">Capability summary</h1>
+            <div class="container box">
+                <h1 class="title is-uppercase">Capability summary</h1>
                 <nav class="level">
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">Services</p>
+                            <p class="heading">Pods</p>
                             <p class="title">54</p>
                         </div>
                     </div>
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">Daily ingress</p>
+                            <p class="heading"># Errors/24h</p>
                             <p class="title">58Mb</p>
                         </div>
                     </div>
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">Daily egress</p>
-                            <p class="title">1Mb</p>
+                            <p class="heading">Active alerts</p>
+                            <p class="title is-info">0</p>
                         </div>
                     </div>
                     <div class="level-item has-text-centered">
@@ -112,7 +113,6 @@
                     </div>
                 </nav>
             </div>
-        </section>
     </div>
     <div class="container" v-else>
         <article class="message is-danger">
@@ -124,6 +124,8 @@
             </div>
         </article>
     </div>
+        </div>
+   
     </section>
  </div>
 
