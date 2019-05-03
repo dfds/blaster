@@ -20,7 +20,12 @@ const app = new Vue({
         capabilityFound: function() {
             return this.capability != null && this.capability.id != null 
         }
-    },    
+    },
+    filters: {
+        awsPermissions: function(capabilityName) {
+            return `/awspermissions?capability=${capabilityName}`;
+        }  
+    },
     methods: {
         isCurrentUser: function(memberEmail) {
             return this.currentUser.email === memberEmail;

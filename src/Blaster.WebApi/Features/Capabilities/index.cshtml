@@ -38,35 +38,32 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Members</th>
-                        <th></th>
+                        <th>Joined</th>
+                        <th>Overview</th>
+                        <th>Service indicators</th>
+                        <th>State</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="capability in items" v-bind:data-id="capability.id">
-                        <td><a :href="capability.name|toawspermspage">{{capability.name}}</a>             </td>
+                        <td><a :href="capability.id | capabilitydetails">{{capability.name}}</a></td>
                         <td>
                             <div class="tags">
-                                <span :class='isCurrentUser(member.email) ? "tag is-primary" : "tag is-light"' v-for="member in capability.members">{{member.email}}</span>
+                                <span v-if="getMembershipStatusFor(capability.id) == 'member'" class="tag is-primary">Joined</span>
                             </div>
                         </td>
                         <td>
-                            <div class="buttons is-right">
-                                <button 
-                                    type="button" 
-                                    class="button is-small is-primary" 
-                                    v-if="getMembershipStatusFor(capability.id) == 'notmember'"
-                                    v-on:click="joinCapability(capability.id)">Join</button>
-                                <button 
-                                    type="button" 
-                                    class="button is-small is-primary is-loading" 
-                                    v-if="getMembershipStatusFor(capability.id) == 'requested'">Join</button>
-                                <button 
-                                    type="button" 
-                                    class="button is-small is-danger is-outlined" 
-                                    v-if="getMembershipStatusFor(capability.id) == 'member'"
-                                    v-on:click="leaveCapability(capability.id)">Leave</button>
-                            </div>
+                            <span class="icon">
+                                <i class="far fa-chart-bar"></i>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="icon">
+                                <i class="fas fa-tasks"></i>
+                            </span>
+                        </td>
+                        <td>
+                            Ready
                         </td>
                     </tr>
                 </tbody>
@@ -85,7 +82,6 @@
                 <p class="modal-card-title">Add capability</p>
                 <button class="delete" aria-label="close" data-behavior="close"></button>
             </header>
-
             <div class="modal-card-body">
                 <div class="dialog-container"></div>
                 <div class="form">
@@ -95,7 +91,12 @@
                         <input class="input" type="text" placeholder="Enter capability name" data-property="name" value="{{name}}">
                     </div>
                     </div>
-
+                     <div class="field">
+                    <label class="label">Description</label>
+                    <div class="control">
+                       <input class="input" type="text" placeholder="Description" data-property="description" value="{{description}}">
+                    </div>
+                    </div>
                     <div class="field">
                         <div class="control has-text-centered">
                             <button class="button is-primary" data-behavior="save">Save</button>
@@ -105,37 +106,6 @@
 
                 </div>
             </div>
-        </div>
-    </div>
-</script>
-
-<script id="leave-dialog-template" type="text/x-mustache">
-    <div id="leave-dialog" class="modal is-active">
-        <div class="modal-background" data-behavior="close"></div>
-        <div class="modal-card">
-
-<article class="message">
-  <div class="message-header">
-    <p>Warning...</p>
-    <button class="delete" aria-label="delete" data-behavior="close"></button>
-  </div>
-  <div class="message-body">
-    <div class="error is-hidden notification is-danger">
-        <strong class="error-title"></strong> <span class="error-message"></span>
-    </div>
-    <p>
-        You are about to leave the capability <strong>{{capabilityName}}</strong>. Changes can take up 
-        to 30 minutes to take effect. Please confirm?
-    </p>
-    <br>
-
-    <div class="buttons is-centered">
-        <button class="button is-danger" data-behavior="save">Leave</button>
-        <button class="button is-info" aria-label="close" data-behavior="close">Cancel</button>
-    </div>
-  </div>
-</article>
-            
         </div>
     </div>
 </script>
