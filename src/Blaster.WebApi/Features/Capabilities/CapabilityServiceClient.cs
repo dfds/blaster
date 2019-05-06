@@ -51,6 +51,10 @@ namespace Blaster.WebApi.Features.Capabilities
         public async Task<Capability> GetById(string id)
         {
             var response = await _client.GetAsync($"/api/v1/capabilities/{id}");
+            if (response.IsSuccessStatusCode == false)
+            {
+                throw new Exception($"A error occured trying to reach {response.RequestMessage.RequestUri}, the html response code is {response.StatusCode}");
+            }
             var content = await response.Content.ReadAsStringAsync();
 
             return _serializer.Deserialize<Capability>(content);
