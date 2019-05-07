@@ -108,7 +108,7 @@ namespace Blaster.WebApi.Features.Capabilities
             {
                 await _capabilityServiceClient.AddContext(
                     capabilityId: id,
-                    contextName: "default"
+                    contextName: "production"
                 );
 
                 return new ActionResult<Capability>(NoContent());

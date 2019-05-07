@@ -53,7 +53,7 @@ namespace Blaster.WebApi.Features.Capabilities
             var response = await _client.GetAsync($"/api/v1/capabilities/{id}");
             if (response.IsSuccessStatusCode == false)
             {
-                throw new Exception($"A error occured trying to reach {response.RequestMessage.RequestUri}, the html response code is {response.StatusCode}");
+                throw new Exception($"An error occured trying to reach {response.RequestMessage.RequestUri}, the http response code is {response.StatusCode}");
             }
             var content = await response.Content.ReadAsStringAsync();
 
