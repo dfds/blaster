@@ -32,18 +32,18 @@
                             class="button is-small is-primary"
                             v-on:click="addContext()"
                             v-if="getContextStatusFor() == 'notadded'">
-                            Add context
+                            Add AWS account and K8s namespace
                         </button>
                         <button
                             type="button"
                             class="button is-small is-primary is-loading"
                             v-if="getContextStatusFor() == 'requested'">
-                            Add context
+                            Add AWS account and K8s namespace
                         </button>
                         <div
                             class="button is-small is-info is-outlined" disabled
                             v-if="getContextStatusFor() == 'added'">
-                            Context added
+                            AWS account and K8s namespace added
                         </div >
                         <button
                             type="button"
