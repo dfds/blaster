@@ -29,14 +29,14 @@
                     <div class="buttons is-right">
                         <button
                             type="button"
-                            class="button is-small is-primary"
+                            class="button is-small is-primary" disabled
                             v-on:click="addContext()"
                             v-if="getContextStatusFor() == 'notadded'">
                             Add AWS account and K8s namespace
                         </button>
                         <button
                             type="button"
-                            class="button is-small is-primary is-loading"
+                            class="button is-small is-primary is-loading" disabled
                             v-if="getContextStatusFor() == 'requested'">
                             Add AWS account and K8s namespace
                         </button>
