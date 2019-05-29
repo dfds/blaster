@@ -135,6 +135,31 @@
                 </div>
                 </div>
         </div>
+        
+        <!--- Topic section --->
+        <div class="container box">
+            <h1 class="title is-uppercase">Topics</h1>
+            <button type="button" class="button is-primary" v-on:click="newTopic()">Add</button>
+            <table class="table is-fullwidth is-hoverable">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Visibility</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="topic in topics" v-bind:data-id="capability.id">
+                    <td><a :href="topic.id | topicdetails">{{topic.name}}</a></td>
+                    <td>
+                        <div class="tags">
+                            private
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
     </div>
     <div class="container" v-else>
         <article class="message is-danger">
@@ -195,4 +220,41 @@
             {{message}}
         </div>
     </article>
+</script>
+
+<script id="new-topic-template" type="text/x-mustache">
+    <div id="topic-editor" class="modal is-active">
+        <div class="modal-background" data-behavior="close"></div>
+        <div class="modal-card">
+
+            <header class="modal-card-head">
+                <p class="modal-card-title">Add topic</p>
+                <button class="delete" aria-label="close" data-behavior="close"></button>
+            </header>
+            <div class="modal-card-body">
+                <div class="dialog-container"></div>
+                <div class="form">
+                    <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Enter topic name" data-property="name" value="{{name}}">
+                    </div>
+                    </div>
+                     <div class="field">
+                    <label class="label">Description</label>
+                    <div class="control">
+                       <input class="input" type="text" placeholder="Description" data-property="description" value="{{description}}">
+                    </div>
+                    </div>
+                    <div class="field">
+                        <div class="control has-text-centered">
+                            <button class="button is-primary" data-behavior="save">Save</button>
+                            <button class="button is-info" aria-label="close" data-behavior="close">Cancel</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </script>

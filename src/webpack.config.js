@@ -22,6 +22,7 @@ module.exports = {
             alertdialog$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/alert-dialog.js"),
             modeleditor$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/model-editor.js"),
             capabilityservice$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/capabilityservice.js"),
+            topicservice$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/topicservice.js"),
         },
         extensions: [".js", ".scss"]
     },

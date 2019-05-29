@@ -1,12 +1,13 @@
 import Vue from "vue";
 import ModelEditor from "modeleditor";
 import CapabilityService from "capabilityservice"
+import TopicService from "topicservice"
 import jq from "jquery";
 import { currentUser } from "userservice";
 import AlertDialog from "./alert-dialog";
 
 const capabilityService = new CapabilityService();
-
+const topicService = new TopicService();
 const app = new Vue({
     el: "#capabilitydashboard-app",
     data: {
@@ -15,6 +16,7 @@ const app = new Vue({
         currentUser: currentUser,
         membershipRequested: false,
         contextRequested: false,
+        topics: null
     },
     computed: {
         capabilityFound: function() {
@@ -24,7 +26,10 @@ const app = new Vue({
     filters: {
         awsPermissions: function(capabilityName) {
             return `/awspermissions?capability=${capabilityName}`;
-        }  
+        },
+        topicdetails: function(topicId){
+            return `/topicdashboard?topicId=${topicId}`
+        }
     },
     methods: {
         isCurrentUser: function(memberEmail) {
@@ -111,6 +116,20 @@ const app = new Vue({
                 .then(() => {
                         this.contextRequested = false;
                 });
+        },
+        newTopic: function() {
+            const editor= ModelEditor.open({
+                template: document.getElementById("new-topic-template"),
+                data: {
+                    name: "",
+                    description: "",
+                },
+                onClose: () => editor.close(),
+                onSave: (newTopic) => {
+                    return topicService.add(newTopic)
+                        .then(() => editor.close());
+                }
+            });
         }
     },
     mounted: function () {
@@ -131,6 +150,8 @@ const app = new Vue({
                     });
                 }
             })
+            .then(() => topicService.get(capabilityIdParam))
+            .then(topics => this.topics= topics)
             .done(() => this.initializing = false);
     }
 });
