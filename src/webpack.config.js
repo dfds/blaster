@@ -9,6 +9,8 @@ module.exports = {
         topics: "./Blaster.WebApi/Features/Topic/main.js",
         awspermissions: "./Blaster.WebApi/Features/AWSPermissions/main.js",
         capabilitydashboard: "./Blaster.WebApi/Features/CapabilityDashboard/main.js",
+        topicdetails: "./Blaster.WebApi/Features/TopicDetails/main.js",
+
     },
     output: {
         path: path.resolve(__dirname, "Blaster.WebApi", "wwwroot"),

@@ -28,7 +28,7 @@ const app = new Vue({
             return `/awspermissions?capability=${capabilityName}`;
         },
         topicdetails: function(topicId){
-            return `/topicdashboard?topicId=${topicId}`
+            return `/Topicdetails?topicId=${topicId}`
         }
     },
     methods: {
@@ -123,6 +123,7 @@ const app = new Vue({
                 data: {
                     name: "",
                     description: "",
+                    visibility: ""
                 },
                 onClose: () => editor.close(),
                 onSave: (newTopic) => {
@@ -150,7 +151,7 @@ const app = new Vue({
                     });
                 }
             })
-            .then(() => topicService.get(capabilityIdParam))
+            .then(() => topicService.getByCapabilityId(capabilityIdParam))
             .then(topics => this.topics= topics)
             .done(() => this.initializing = false);
     }
