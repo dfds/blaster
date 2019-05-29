@@ -1,10 +1,9 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace Blaster.WebApi.Features.Topic
 {
     public interface ITopicClient
     {
-        Task<TopicListResponse> GetAll();
-        Task CreateTopic(CreateTopicRequest topic);
+        Task<Topic> GetById(string topicId);
     }
 }

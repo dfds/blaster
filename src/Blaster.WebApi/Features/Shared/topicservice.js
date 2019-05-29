@@ -1,6 +1,10 @@
+import HttpClient from "httpclient";
 
 export default class TopicService {
-    constructor(){
+    constructor() {
+        this.client = new HttpClient();
+        this.baseUrl = "api/topics";
+
         this.topics = [{
             "id": require('crypto').randomBytes(16).toString('hex'), 
             "name":"aaa", 
@@ -18,8 +22,10 @@ export default class TopicService {
     getByCapabilityId(capabilityId) {
        return this.topics;
     }
+
     get(topicId){
-        return this.topics[0];
+        return this.client.get(`${this.baseUrl}/${topicId}`)
+        .then(data => data || {});
     }
   
     addMessageExample(topicId, messageExample){

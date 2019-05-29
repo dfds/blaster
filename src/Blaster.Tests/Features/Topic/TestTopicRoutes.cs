@@ -32,7 +32,7 @@ namespace Blaster.Tests.Features.Topic
             using (var clientBuilder = new HttpClientBuilder())
             {
                 var client = clientBuilder
-                    .WithService<ITopicClient>(new TopicClientStub())
+                    .WithService<ITikaTopicClient>(new TopicClientStub())
                     .Build();
 
                 var response = await client.GetAsync("/api/topics");
@@ -52,7 +52,7 @@ namespace Blaster.Tests.Features.Topic
                 var stub = new CapabilityListItemBuilder().Build();
 
                 var client = clientBuilder
-                    .WithService<ITopicClient>(new TopicClientStub())
+                    .WithService<ITikaTopicClient>(new TopicClientStub())
                     .Build();
 
                 var dummyContent = new JsonContent(new CreateTopicRequest {Name = "dummyTopic"});

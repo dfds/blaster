@@ -92,9 +92,16 @@ namespace Blaster.WebApi
         private void ConfigureTopicFeature(IServiceCollection services)
         {
             services
-                .AddHttpClient<ITopicClient, TikaTopicClient>(client =>
+                .AddHttpClient<ITikaTopicClient, TikaTopicClient>(client =>
                 {
                     client.BaseAddress = new Uri(Configuration["BLASTER_TIKA_API_URL"]);
+                })
+                .AddHttpMessageHandler<CorrelationIdMessageHandler>();
+        
+          services
+                .AddHttpClient<ITopicClient, TopicClient>(client =>
+                {
+                    client.BaseAddress = new Uri(Configuration["BLASTER_CAPABILITYSERVICE_API_URL"]);
                 })
                 .AddHttpMessageHandler<CorrelationIdMessageHandler>();
         }

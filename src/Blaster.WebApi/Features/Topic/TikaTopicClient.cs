@@ -5,7 +5,7 @@ using Blaster.WebApi.Features.Capabilities;
 
 namespace Blaster.WebApi.Features.Topic
 {
-    public class TikaTopicClient : ITopicClient
+    public class TikaTopicClient : ITikaTopicClient
     {
         private readonly HttpClient _client;
         private readonly JsonSerializer _serializer;
@@ -35,6 +35,17 @@ namespace Blaster.WebApi.Features.Topic
             var response = await _client.PostAsync("/api/topics", content);
 
             response.EnsureSuccessStatusCode();
+        }
+
+        public Task<Topic> GetById(string topicId)
+        {
+            return Task.FromResult(new Topic {
+                Id = "1",
+                Name = "Foo",
+                Description = "description",
+                Visibility = "private",
+                MessageExamples = new MessageExample[0]
+            });
         }
     }
 }

@@ -1,0 +1,15 @@
+[
+  {
+    "id": "1",
+    "name": "Foo",
+    "description": "FooDescription",
+    "visibility" : "private",
+    "messageExamples": [
+      {
+        "id": "1",
+        "messageType" : "foo_created",
+        "text" : "{\"messageType\" : \"capability_created\"}"
+      }
+    ]
+  }
+] 

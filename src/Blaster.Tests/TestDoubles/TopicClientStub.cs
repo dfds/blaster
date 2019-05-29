@@ -3,7 +3,7 @@ using Blaster.WebApi.Features.Topic;
 
 namespace Blaster.Tests.TestDoubles
 {
-    public class TopicClientStub : ITopicClient
+    public class TopicClientStub : ITikaTopicClient
     {
         public Task<TopicListResponse> GetAll()
         {

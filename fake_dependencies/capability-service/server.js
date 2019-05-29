@@ -165,6 +165,26 @@ app.get("/api/v1/capabilities/:capabilityid", (req, res) => {
         });
 });
 
+app.get("/api/v1/topics/:topicId", (req, res) => {
+    const topicId = req.params.topicId;
+    readFile("./topic-data.json")
+        .then(data => JSON.parse(data))
+        .then(topics => {
+            const topic = topics.find(top => top.id === topicId)
+            if (!topic) {
+                return new Promise(resolve => {
+                    res
+                        .status(404)
+                        .send({message: `Topic with id ${topicId} could not be found`});
+                    resolve();
+                });
+            } else {
+                return res.json(topic);
+            }
+        });
+});
+
+
 app.listen(port, () => {
     console.log("Fake team service is listening on port " + port);
 });
