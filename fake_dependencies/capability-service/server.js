@@ -185,6 +185,35 @@ app.get("/api/v1/topics/:topicName", (req, res) => {
 });
 
 
+app.post("/api/v1/topics/:topicName/messageexamples", (req, res) => {
+    const topicName = req.params.topicName;
+
+    const messageExample = Object.assign({
+        id: require('crypto').randomBytes(16).toString('hex'),
+    }, req.body);
+
+    readFile("./topic-data.json")
+        .then(data => JSON.parse(data))
+        .then(topics => {
+            const topic = topics.find(top => top.name === topicName)
+            if (!topic) {
+                return new Promise(resolve => {
+                    res
+                        .status(404)
+                        .send({message: `Topic with name: ${topicName} could not be found`});
+                    resolve();
+                });
+            } else {
+                topic.messageExamples.push(messageExample);
+               
+                return Promise.resolve(serialize(topics))
+                .then(json => writeFile("./topic-data.json", json))
+                .then(() => console.log(`Added message example with type: ${messageExample.messageType} to topic ${topic.name}`))
+                .then(() => res.sendStatus(200));
+            }
+        });
+});
+
 app.listen(port, () => {
     console.log("Fake team service is listening on port " + port);
 });

@@ -21,7 +21,7 @@ const app = new Vue({
                 },
                 onClose: () => editor.close(),
                 onSave: (newMessageExample) => {
-                    return topicService.addMessageExample(this.topic.id, newMessageExample)
+                    return topicService.addMessageExample(this.topic.name, newMessageExample)
                         .then(() => editor.close());
                 }
             });

@@ -37,6 +37,21 @@ namespace Blaster.WebApi.Features.Topic
 
             return NoContent();
         }
+        
+        [HttpPost("{name}/messageexamples", Name = "CreateMessageExample")]
+        public async Task<IActionResult> CreateMessageExample(
+            string name, 
+            [FromBody] CreateMessageExampleRequest input
+        )
+        {
+            await _topicClient.CreateMessageExample(
+                name, 
+                input.MessageType,
+                input.Text
+            );
+            
+            return NoContent();
+        }
 
         [HttpGet("{name}", Name = "GetTopicByName")]
         public async Task<ActionResult<Topic>> GetByName(string name)

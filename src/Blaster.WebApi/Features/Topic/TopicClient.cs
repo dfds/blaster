@@ -30,5 +30,16 @@ namespace Blaster.WebApi.Features.Topic
             return _serializer.Deserialize<Topic>(content);
  
         }
+
+        public async Task CreateMessageExample(string topicName, string messageType, string messageText)
+        {
+            var content = new StringContent(
+                content: _serializer.Serialize(new { MessageType = messageType, Text = messageText}),
+                encoding: Encoding.UTF8,
+                mediaType: "application/json"
+            );
+
+            await _client.PostAsync($"/api/v1/topics/{topicName}/messageexamples", content);
+        }
     }
 }

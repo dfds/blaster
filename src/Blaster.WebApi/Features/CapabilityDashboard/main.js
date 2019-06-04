@@ -1,11 +1,14 @@
 import Vue from "vue";
 import ModelEditor from "modeleditor";
 import CapabilityService from "capabilityservice"
+import TopicService from "topicservice"
 import jq from "jquery";
 import { currentUser } from "userservice";
 import AlertDialog from "./alert-dialog";
 
+const topicService = new TopicService();
 const capabilityService = new CapabilityService();
+
 const app = new Vue({
     el: "#capabilitydashboard-app",
     data: {

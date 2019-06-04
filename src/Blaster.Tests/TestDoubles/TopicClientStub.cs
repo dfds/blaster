@@ -9,5 +9,10 @@ namespace Blaster.Tests.TestDoubles
         {
             return Task.FromResult<Topic>(null);
         }
+
+        public Task CreateMessageExample(string topicName, string messageType, string messageText)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

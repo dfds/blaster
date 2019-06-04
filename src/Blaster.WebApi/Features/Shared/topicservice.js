@@ -4,19 +4,6 @@ export default class TopicService {
     constructor() {
         this.client = new HttpClient();
         this.baseUrl = "api/topics";
-
-        this.topics = [{
-            "name":"Foo", 
-            "description": "description", 
-            "visibility": "private", 
-            "messageExamples" :[
-                {
-                    "id": require('crypto').randomBytes(16).toString('hex'),
-                    "messageType" : "capability_created",
-                    "text" : "\{ \"messageType\" : \"capability_created\"\}"
-                }
-            ]
-        }]; 
     }
 
     get(topicName){
@@ -25,14 +12,7 @@ export default class TopicService {
     }
   
     addMessageExample(topicName, messageExample){
-        let topic = this.topics.find(obj => {
-            return obj.id === topicName
-        });
-  
-        messageExample.id = require('crypto').randomBytes(16).toString('hex');
-        topic.messageExamples.push(messageExample);
-
-        return new Promise((resolve, reject) => resolve());
+        return this.client.post(`${this.baseUrl}/${topicName}/messageexamples`, messageExample);
     }
 
     add(topic){
