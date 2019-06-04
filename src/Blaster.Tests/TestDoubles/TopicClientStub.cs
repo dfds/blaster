@@ -3,16 +3,11 @@ using Blaster.WebApi.Features.Topic;
 
 namespace Blaster.Tests.TestDoubles
 {
-    public class TopicClientStub : ITikaTopicClient
+    public class TopicClientStub : ITopicClient
     {
-        public Task<TopicListResponse> GetAll()
+        public Task<Topic> GetByName(string topicName)
         {
-            return Task.FromResult<TopicListResponse>(null);
-        }
-
-        public Task CreateTopic(CreateTopicRequest topic)
-        {
-            return Task.CompletedTask;
+            return Task.FromResult<Topic>(null);
         }
     }
 }
