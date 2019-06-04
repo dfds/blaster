@@ -1,13 +1,11 @@
 import Vue from "vue";
 import ModelEditor from "modeleditor";
 import CapabilityService from "capabilityservice"
-import TopicService from "topicservice"
 import jq from "jquery";
 import { currentUser } from "userservice";
 import AlertDialog from "./alert-dialog";
 
 const capabilityService = new CapabilityService();
-const topicService = new TopicService();
 const app = new Vue({
     el: "#capabilitydashboard-app",
     data: {
@@ -15,8 +13,7 @@ const app = new Vue({
         initializing: true,
         currentUser: currentUser,
         membershipRequested: false,
-        contextRequested: false,
-        topics: null
+        contextRequested: false
     },
     computed: {
         capabilityFound: function() {
@@ -151,8 +148,6 @@ const app = new Vue({
                     });
                 }
             })
-            .then(() => topicService.getByCapabilityId(capabilityIdParam))
-            .then(topics => this.topics= topics)
             .done(() => this.initializing = false);
     }
 });

@@ -8,6 +8,32 @@
             "email": "jdog@me.com"
           }
         ],
-        "contexts": []
-    }
+        "contexts": [],
+        "Topics": []
+    },
+    {
+      "id": "2",
+      "name": "Baa",
+      "description": "baaDescription",
+      "members": [
+        {
+          "email": "highace@me.com"
+        }
+      ],
+      "contexts": [],
+      "Topics": [
+        {"name" : "Foo"}
+      ]
+  },
+  {
+    "id": "3",
+    "name": "2000",
+    "description": "2000Description",
+    "members": [
+      {
+        "email": "highlander@me.com"
+      }
+    ],
+    "contexts": []
+  }
 ] 

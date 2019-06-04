@@ -18,9 +18,6 @@ export default class TopicService {
             ]
         }]; 
     }
-    getByCapabilityId(capabilityId) {
-       return this.topics;
-    }
 
     get(topicName){
         return this.client.get(`${this.baseUrl}/${topicName}`)

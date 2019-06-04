@@ -12,7 +12,8 @@ namespace Blaster.Tests.Builders
                 Name = "capability foo",
                 Description = "description foo",
                 Members = new Member[0],
-                Contexts = new Context[0]
+                Contexts = new Context[0],
+                Topics = new Topic[0]
             };
         }
     }
