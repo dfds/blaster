@@ -1,6 +1,5 @@
 [
   {
-    "id": "1",
     "name": "Foo",
     "description": "FooDescription",
     "visibility" : "private",

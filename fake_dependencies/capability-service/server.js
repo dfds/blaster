@@ -156,7 +156,7 @@ app.get("/api/v1/capabilities/:capabilityid", (req, res) => {
                 return new Promise(resolve => {
                     res
                         .status(404)
-                        .send({message: `Capability with id ${capabilityid} could not be found`});
+                        .send({message: `Capability with id: ${capabilityid} could not be found`});
                     resolve();
                 });
             } else {
@@ -165,17 +165,17 @@ app.get("/api/v1/capabilities/:capabilityid", (req, res) => {
         });
 });
 
-app.get("/api/v1/topics/:topicId", (req, res) => {
-    const topicId = req.params.topicId;
+app.get("/api/v1/topics/:topicName", (req, res) => {
+    const topicName = req.params.topicName;
     readFile("./topic-data.json")
         .then(data => JSON.parse(data))
         .then(topics => {
-            const topic = topics.find(top => top.id === topicId)
+            const topic = topics.find(top => top.name === topicName)
             if (!topic) {
                 return new Promise(resolve => {
                     res
                         .status(404)
-                        .send({message: `Topic with id ${topicId} could not be found`});
+                        .send({message: `Topic with name: ${topicName} could not be found`});
                     resolve();
                 });
             } else {

@@ -27,8 +27,8 @@ const app = new Vue({
         awsPermissions: function(capabilityName) {
             return `/awspermissions?capability=${capabilityName}`;
         },
-        topicdetails: function(topicId){
-            return `/Topicdetails?topicId=${topicId}`
+        topicdetails: function(topicName){
+            return `/Topicdetails?topicname=${topicName}`
         }
     },
     methods: {

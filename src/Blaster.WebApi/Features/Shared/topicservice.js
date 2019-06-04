@@ -6,8 +6,7 @@ export default class TopicService {
         this.baseUrl = "api/topics";
 
         this.topics = [{
-            "id": require('crypto').randomBytes(16).toString('hex'), 
-            "name":"aaa", 
+            "name":"Foo", 
             "description": "description", 
             "visibility": "private", 
             "messageExamples" :[
@@ -23,14 +22,14 @@ export default class TopicService {
        return this.topics;
     }
 
-    get(topicId){
-        return this.client.get(`${this.baseUrl}/${topicId}`)
+    get(topicName){
+        return this.client.get(`${this.baseUrl}/${topicName}`)
         .then(data => data || {});
     }
   
-    addMessageExample(topicId, messageExample){
+    addMessageExample(topicName, messageExample){
         let topic = this.topics.find(obj => {
-            return obj.id === topicId
+            return obj.id === topicName
         });
   
         messageExample.id = require('crypto').randomBytes(16).toString('hex');
@@ -40,7 +39,6 @@ export default class TopicService {
     }
 
     add(topic){
-        topic.id = require('crypto').randomBytes(16).toString('hex'),
         topic.messageExamples = [];
         this.topics.push(topic);
 

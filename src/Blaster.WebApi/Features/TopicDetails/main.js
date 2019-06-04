@@ -28,10 +28,10 @@ const app = new Vue({
         }
     },
     mounted: function () {
-        const topicIdParam = new URLSearchParams(window.location.search).get('topicId');
+        const topicNameParam = new URLSearchParams(window.location.search).get('topicname');
     
         jq.ready
-            .then(() => topicService.get(topicIdParam))
+            .then(() => topicService.get(topicNameParam))
             .then(topic => this.topic = topic)
             .done(() => this.initializing = false);
     }

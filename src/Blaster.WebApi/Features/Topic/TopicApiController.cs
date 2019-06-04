@@ -31,17 +31,17 @@ namespace Blaster.WebApi.Features.Topic
         }
 
         [HttpPost("", Name = "CreateTopic")]
-        public async Task<IActionResult> CreateCapability([FromBody] CreateTopicRequest input)
+        public async Task<IActionResult> CreateTopic([FromBody] CreateTopicRequest input)
         {
             await _tikaTopicClient.CreateTopic(input);
 
             return NoContent();
         }
 
-               [HttpGet("{id}", Name = "GetTopicById")]
-        public async Task<ActionResult<Topic>> GetById(string id)
+        [HttpGet("{name}", Name = "GetTopicByName")]
+        public async Task<ActionResult<Topic>> GetByName(string name)
         {
-            var topic = await _topicClient.GetById(id);
+            var topic = await _topicClient.GetByName(name);
 
             if (topic != null)
             {

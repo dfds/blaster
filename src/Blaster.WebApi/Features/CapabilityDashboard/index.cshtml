@@ -149,7 +149,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="topic in topics" v-bind:data-id="capability.id">
-                    <td><a :href="topic.id | topicdetails">{{topic.name}}</a></td>
+                    <td><a :href="topic.name | topicdetails">{{topic.name}}</a></td>
                     <td>
                         <div class="tags">
                             {{ topic.visibility }}

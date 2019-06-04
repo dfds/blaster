@@ -36,16 +36,5 @@ namespace Blaster.WebApi.Features.Topic
 
             response.EnsureSuccessStatusCode();
         }
-
-        public Task<Topic> GetById(string topicId)
-        {
-            return Task.FromResult(new Topic {
-                Id = "1",
-                Name = "Foo",
-                Description = "description",
-                Visibility = "private",
-                MessageExamples = new MessageExample[0]
-            });
-        }
     }
 }

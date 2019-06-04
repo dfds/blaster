@@ -18,9 +18,9 @@ namespace Blaster.WebApi.Features.Topic
         }
 
 
-        public async Task<Topic> GetById(string id)
+        public async Task<Topic> GetByName(string name)
         {
-               var response = await _client.GetAsync($"/api/v1/topics/{id}");
+               var response = await _client.GetAsync($"/api/v1/topics/{name}");
             if (response.IsSuccessStatusCode == false)
             {
                 throw new Exception($"An error occured trying to reach {response.RequestMessage.RequestUri}, the http response code is {response.StatusCode}");
