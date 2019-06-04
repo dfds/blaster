@@ -13,7 +13,7 @@ const serialize = (data) => JSON.stringify(data, null, 2);
 const deserialize = (text) => JSON.parse(text);
 
 app.get("/api/v1/capabilities", (req, res) => {
-    readFile("./data.json")
+    readFile("./capability-data.json")
         .then(data => JSON.parse(data))
         .then(teams => {
             res.json({
@@ -42,14 +42,14 @@ app.post("/api/v1/capabilities", (req, res) => {
         newTeam.description = "generic description"
     }
 
-    readFile("./data.json")
+    readFile("./capability-data.json")
         .then(data => JSON.parse(data))
         .then(teams => {
             teams.push(newTeam);
             return teams;
         })
         .then(teams => JSON.stringify(teams, null, 2))
-        .then(json => writeFile("./data.json", json))
+        .then(json => writeFile("./capability-data.json", json))
         .then(() => {
             res.location(`/api/v1/capabilities/${newTeam.id}`);
             res.status(201).send(newTeam);
@@ -63,7 +63,7 @@ app.post("/api/v1/capabilities/:teamid/members", (req, res) => {
     const teamid = req.params.teamid;
     const { email } = req.body;
 
-    readFile("./data.json")
+    readFile("./capability-data.json")
         .then(data => JSON.parse(data))
         .then(teams => {
             const team = teams.find(team => team.id == teamid);
@@ -79,7 +79,7 @@ app.post("/api/v1/capabilities/:teamid/members", (req, res) => {
                 team.members.push({ email: email });
                 
                 return Promise.resolve(serialize(teams))
-                    .then(json => writeFile("./data.json", json))
+                    .then(json => writeFile("./capability-data.json", json))
                     .then(() => console.log(`Added member ${email} to team ${team.name}`))
                     .then(() => res.sendStatus(200));
             }
@@ -92,7 +92,7 @@ app.post("/api/v1/capabilities/:capabilityid/contexts", (req, res) => {
         id: new Date().getTime().toString(),
     }, req.body);
 
-    readFile("./data.json")
+    readFile("./capability-data.json")
         .then(data => JSON.parse(data))
         .then(capabilities => {
             const capability = capabilities.find(capability => capability.id == capabilityid);
@@ -107,7 +107,7 @@ app.post("/api/v1/capabilities/:capabilityid/contexts", (req, res) => {
             } else {
                 capability.contexts.push(newContext);
                 return Promise.resolve(serialize(capabilities))
-                    .then(json => writeFile("./data.json", json))
+                    .then(json => writeFile("./capability-data.json", json))
                     .then(() => console.log(`Added context ${newContext.name} to capability ${capability.name}`))
                     .then(() => res.sendStatus(200));
             }
@@ -118,7 +118,7 @@ app.delete("/api/v1/capabilities/:teamid/members/:memberemail", (req, res) => {
     const teamId = req.params.teamid;
     const memberEmail = req.params.memberemail;
 
-    readFile("./data.json")
+    readFile("./capability-data.json")
         .then(data => JSON.parse(data))
         .then(teams => {
             const team = teams.find(team => team.id == teamId);
@@ -136,7 +136,7 @@ app.delete("/api/v1/capabilities/:teamid/members/:memberemail", (req, res) => {
                 team.members = desiredMembers;
 
                 return Promise.resolve(serialize(teams))
-                    .then(json => writeFile("./data.json", json))
+                    .then(json => writeFile("./capability-data.json", json))
                     .then(() => console.log(`Removed member ${memberEmail} from team ${team.name}`))
                     .then(() => res.sendStatus(200));
             }
@@ -148,7 +148,7 @@ app.delete("/api/v1/capabilities/:teamid/members/:memberemail", (req, res) => {
 
 app.get("/api/v1/capabilities/:capabilityid", (req, res) => {
     const capabilityid = req.params.capabilityid;
-    readFile("./data.json")
+    readFile("./capability-data.json")
         .then(data => JSON.parse(data))
         .then(capabilities => {
             const capability = capabilities.find(cap => cap.id === capabilityid)
