@@ -15,7 +15,7 @@ namespace Blaster.Tests.TestDoubles
             return Task.CompletedTask;
         }
 
-        public Task CreateTopic(string name)
+        public Task CreateTopic(string name, string description, string visibility)
         {
             return Task.CompletedTask;
         }

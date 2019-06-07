@@ -48,5 +48,10 @@ namespace Blaster.Tests.TestDoubles
         {
             return Task.CompletedTask;
         }
+
+        public Task AddTopic(string capabilityId, string topicName)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

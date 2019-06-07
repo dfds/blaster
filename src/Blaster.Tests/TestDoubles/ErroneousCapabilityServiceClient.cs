@@ -43,5 +43,10 @@ namespace Blaster.Tests.TestDoubles
         {
             throw _error;
         }
+
+        public Task AddTopic(string capabilityId, string topicName)
+        {
+            throw _error;
+        }
     }
 }
