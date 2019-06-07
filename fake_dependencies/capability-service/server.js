@@ -114,6 +114,32 @@ app.post("/api/v1/capabilities/:capabilityid/contexts", (req, res) => {
         });
 });
 
+app.post("/api/v1/capabilities/:capabilityid/topics", (req, res) => {
+    const capabilityid = req.params.capabilityid;
+    const newTopic =req.body;
+
+    readFile("./capability-data.json")
+        .then(data => JSON.parse(data))
+        .then(capabilities => {
+            const capability = capabilities.find(capability => capability.id == capabilityid);
+            
+            if (!capability) {
+                return new Promise(resolve => {
+                    res
+                        .status(404)
+                        .send({message: `Capability with id ${capabilityid} could not be found`});
+                    resolve();
+                });
+            } else {
+                capability.topics = capability.topics || [];
+                capability.topics.push(newTopic);
+                return Promise.resolve(serialize(capabilities))
+                    .then(json => writeFile("./capability-data.json", json))
+                    .then(() => console.log(`Added topic ${newTopic.name} to capability ${capability.name}`))
+                    .then(() => res.sendStatus(200));
+            }
+        });
+});
 app.delete("/api/v1/capabilities/:teamid/members/:memberemail", (req, res) => {
     const teamId = req.params.teamid;
     const memberEmail = req.params.memberemail;
@@ -213,6 +239,35 @@ app.post("/api/v1/topics/:topicName/messageexamples", (req, res) => {
             }
         });
 });
+
+
+app.post("/api/v1/topics", (req, res) => {
+    const newTopic = Object.assign({
+        messageExamples: []
+    }, req.body);
+
+    newTopic.description = newTopic.description || "generic description";
+    newTopic.visibility = newTopic.visibility || "private";
+
+    readFile("./topic-data.json")
+        .then(data => JSON.parse(data))
+        .then(topics => {
+            topics.push(newTopic);
+            return topics;
+        })
+        .then(topics => JSON.stringify(topics, null, 2))
+        .then(json => writeFile("./topic-data.json", json))
+        .then(() => {
+            res.location(`/api/v1/topics/${newTopic.name}`);
+            res.status(201).send(newTopic);
+        })
+        .then(() => console.log(`Added topic ${newTopic.name}`))
+
+        .catch(err => {
+            res.status(500).json(err);
+        });
+});
+
 
 app.listen(port, () => {
     console.log("Fake team service is listening on port " + port);

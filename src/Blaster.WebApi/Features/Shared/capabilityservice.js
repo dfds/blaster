@@ -36,6 +36,13 @@ export default class CapabilityService {
         return this.client.post(`${this.baseUrl}/${capabilityId}/contexts`);
     }
 
+    addTopic(capabilityId,topicName){
+        const payload = {
+            name: topicName
+        };
+        return this.client.post(`${this.baseUrl}/${capabilityId}/topics`, payload);
+    }
+    
     leave(capabilityId) {
         return this.client.delete(`${this.baseUrl}/${capabilityId}/members/${currentUser.email}`);
     }

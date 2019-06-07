@@ -33,7 +33,13 @@ namespace Blaster.WebApi.Features.Topic
         [HttpPost("", Name = "CreateTopic")]
         public async Task<IActionResult> CreateTopic([FromBody] CreateTopicRequest input)
         {
-            await _tikaTopicClient.CreateTopic(input);
+             await _tikaTopicClient.CreateTopic(input);
+            // WHEN WE ARE READY FOR THE SWITCH
+            //await _topicClient.CreateTopic(
+            //    input.Name,
+            //    input.Description,
+            //    input.Visibility
+            //);
 
             return NoContent();
         }

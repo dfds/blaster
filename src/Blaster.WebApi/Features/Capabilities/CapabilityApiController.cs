@@ -121,6 +121,20 @@ namespace Blaster.WebApi.Features.Capabilities
                 }));
             }
         }
+        
+        [HttpPost("{id}/topics", Name = "AddTopic")]
+        public async Task<ActionResult<Capability>> AddTopic(
+            [FromRoute] string id, 
+            [FromBody] AddTopicInput input
+        )
+        {
+            await _capabilityServiceClient.AddTopic(
+                capabilityId: id,
+                topicName: input.Name
+            );
+
+            return new ActionResult<Capability>(NoContent());
+        }
     }
 
     public class AlreadyJoinedException : Exception
@@ -148,5 +162,10 @@ namespace Blaster.WebApi.Features.Capabilities
     public class JoinCapabilityInput
     {
         public string Email { get; set; }
+    }
+
+    public class AddTopicInput
+    {
+        public string Name { get; set; }
     }
 }

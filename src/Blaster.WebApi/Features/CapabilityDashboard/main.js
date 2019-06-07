@@ -127,8 +127,10 @@ const app = new Vue({
                 },
                 onClose: () => editor.close(),
                 onSave: (newTopic) => {
-                    return topicService.add(newTopic)
-                        .then(() => editor.close());
+                    topicService.add(newTopic)
+                    .then(() => {capabilityService.addTopic(this.capability.id, newTopic.name)})
+                    .then(() => this.capability.topics.push({name: newTopic.name}))
+                    .then(() => editor.close());
                 }
             });
         }

@@ -16,9 +16,6 @@ export default class TopicService {
     }
 
     add(topic){
-        topic.messageExamples = [];
-        this.topics.push(topic);
-
-        return new Promise((resolve, reject) => resolve(topic));
+        return this.client.post(`${this.baseUrl}`, topic);
     }
 }

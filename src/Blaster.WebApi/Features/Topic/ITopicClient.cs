@@ -6,5 +6,6 @@ namespace Blaster.WebApi.Features.Topic
     {
         Task<Topic> GetByName(string topicName);
         Task CreateMessageExample(string topicName, string messageType, string messageText);
+        Task CreateTopic(string name, string description , string visibility);
     }
 }

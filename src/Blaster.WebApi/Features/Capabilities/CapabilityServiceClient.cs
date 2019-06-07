@@ -118,6 +118,17 @@ namespace Blaster.WebApi.Features.Capabilities
                 throw new ServerReturnedUnexpectedResponseException($"{response.StatusCode:D} - {response.ReasonPhrase}", responseBody);
             }
         }
+
+        public async Task AddTopic(string capabilityId, string topicName)
+        {
+            var content = new StringContent(
+                content: _serializer.Serialize(new { Name = topicName }),
+                encoding: Encoding.UTF8,
+                mediaType: "application/json"
+            );
+
+            await _client.PostAsync($"/api/v1/capabilities/{capabilityId}/topics", content);
+        }
     }
 
     public class ServerReturnedUnexpectedResponseException : Exception

@@ -12,5 +12,6 @@ namespace Blaster.WebApi.Features.Capabilities
         Task JoinCapability(string capabilityId, string memberEmail);
         Task LeaveCapability(string capabilityId, string memberEmail);
         Task AddContext(string capabilityId, string contextName);
+        Task AddTopic(string capabilityId, string topicName);
     }
 }
