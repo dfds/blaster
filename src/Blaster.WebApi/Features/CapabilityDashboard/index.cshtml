@@ -29,14 +29,14 @@
                     <div class="buttons is-right">
                         <button
                             type="button"
-                            class="button is-small is-primary" disabled
+                            class="button is-small is-primary"
                             v-on:click="addContext()"
                             v-if="getContextStatusFor() == 'notadded'">
                             Add AWS account and K8s namespace
                         </button>
                         <button
                             type="button"
-                            class="button is-small is-primary is-loading" disabled
+                            class="button is-small is-primary is-loading"
                             v-if="getContextStatusFor() == 'requested'">
                             Add AWS account and K8s namespace
                         </button>
@@ -83,7 +83,7 @@
             </div>
         </div>
 
-         <div class="container box">
+         <div class="container box" style="display: none;">
                 <h1 class="title is-uppercase">Info</h1>
                 <div class="level-right">
                 <div class="notification is-danger">
