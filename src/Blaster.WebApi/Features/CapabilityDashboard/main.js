@@ -116,6 +116,12 @@ const app = new Vue({
                 .then(() => {
                         this.contextRequested = false;
                 });
+            const editor = ModelEditor.open({
+                template: document.getElementById("add-context-dialog-template"),
+                data: {
+                },
+                onClose: () => editor.close(),
+            });
         },
         newTopic: function() {
             const editor= ModelEditor.open({
