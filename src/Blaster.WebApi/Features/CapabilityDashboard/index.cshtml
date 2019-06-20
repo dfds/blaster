@@ -29,14 +29,14 @@
                     <div class="buttons is-right">
                         <button
                             type="button"
-                            class="button is-small is-primary" disabled
+                            class="button is-small is-primary"
                             v-on:click="addContext()"
                             v-if="getContextStatusFor() == 'notadded'">
                             Add AWS account and K8s namespace
                         </button>
                         <button
                             type="button"
-                            class="button is-small is-primary is-loading" disabled
+                            class="button is-small is-primary is-loading"
                             v-if="getContextStatusFor() == 'requested'">
                             Add AWS account and K8s namespace
                         </button>
@@ -83,7 +83,7 @@
             </div>
         </div>
 
-         <div class="container box">
+         <div class="container box" style="display: none;">
                 <h1 class="title is-uppercase">Info</h1>
                 <div class="level-right">
                 <div class="notification is-danger">
@@ -199,6 +199,35 @@
     <div class="buttons is-centered">
         <button class="button is-danger" data-behavior="save">Leave</button>
         <button class="button is-info" aria-label="close" data-behavior="close">Cancel</button>
+    </div>
+  </div>
+</article>
+            
+        </div>
+    </div>
+</script>
+
+<script id="add-context-dialog-template" type="text/x-mustache">
+    <div id="leave-dialog" class="modal is-active">
+        <div class="modal-background" data-behavior="close"></div>
+        <div class="modal-card">
+
+<article class="message">
+  <div class="message-header">
+    <p>Info...</p>
+    <button class="delete" aria-label="delete" data-behavior="close"></button>
+  </div>
+  <div class="message-body">
+    <div class="error is-hidden notification is-danger">
+        <strong class="error-title"></strong> <span class="error-message"></span>
+    </div>
+    <p>
+        You will be notified in the capability Slack channel, when the namespace is ready for usage.
+    </p>
+    <br>
+
+    <div class="buttons is-centered">
+        <button class="button is-info" aria-label="close" data-behavior="close">Ok</button>
     </div>
   </div>
 </article>
