@@ -4,6 +4,7 @@ import AlertDialog from "./alert-dialog";
 import ModelEditor from "modeleditor";
 import jq from "jquery";
 import { currentUser } from "userservice";
+import TestCapabilitiesFiltered from './test-filter';
 
 const capabilityService = new CapabilityService();
 
@@ -95,9 +96,33 @@ const app = new Vue({
         }
     },
     mounted: function () {
+        var featureflag_testFilter = new URLSearchParams(window.location.search).get('ff_testfilter');
+        if (featureflag_testFilter == null) {
+            featureflag_testFilter = 0;
+        } else {
+            featureflag_testFilter = 1;
+        }
+
         jq.ready
             .then(() => capabilityService.getAll())
             .then(capabilities => capabilities.forEach(capability => this.items.push(capability)))
+            .then(() => {
+                if (featureflag_testFilter === 1) {
+                    var capabilitiesToFilter = TestCapabilitiesFiltered;
+                    var filteredItems = [];
+
+                    for (var i = 0; i < this.items.length; i++) {
+                        var item = this.items[i];
+                        
+                        var filteredItem = capabilitiesToFilter[item.id];
+                        if (filteredItem != "") {
+                            filteredItems.push(item);
+                        }
+                    }
+
+                    this.items = filteredItems;
+                }
+            })
             .catch(info => {
                 if (info.status != 200) {
                     AlertDialog.open({
