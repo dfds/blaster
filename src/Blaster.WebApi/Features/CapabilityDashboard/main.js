@@ -20,7 +20,17 @@ const app = new Vue({
     },
     computed: {
         capabilityFound: function() {
-            return this.capability != null && this.capability.id != null 
+            return this.capability != null && this.capability.id != null
+        },
+        isLegacyComputed: function () { // Determine if Capability is v1 or v2
+            if (this.capability) // Ensure capability object exists
+            {
+                if (this.capability.rootId) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
         }
     },
     filters: {
