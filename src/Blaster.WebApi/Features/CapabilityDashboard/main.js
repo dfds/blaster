@@ -28,11 +28,11 @@ const app = new Vue({
                 if (this.capability.rootId) { // Check if rootId is null
                     if (this.capability.rootId === "") {
                         return true;
+                    } else {
+                        return false;
                     }
-                    return false;
-                } else {
-                    return true;
                 }
+                return true;
             }
         },
         isJoinedComputed: function () {
@@ -55,18 +55,13 @@ const app = new Vue({
         },
         disabledContextButtonReasonComputed: function() {
             if (this.isAddContextDisallowedComputed) {
-                console.log("Context button will be disabled, writing error tooltip.");
-
                 var msg = "Reason(s) why this button is disabled:" + "\n";
-
                 if (!this.isJoinedComputed) {
                     msg = msg + "You haven't joined this Capability." + "\n";
                 }
-
                 if (this.isLegacyComputed) {
                     msg = msg + "This Capability is discontinued. Consider creating a new Capability." + "\n";
                 }
-
                 return msg;
             } else {
                 return "";

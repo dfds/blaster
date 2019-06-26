@@ -97,29 +97,27 @@ const app = new Vue({
     },
     mounted: function () {
         var featureflag_testFilter = new URLSearchParams(window.location.search).get('ff_testfilter');
-        if (featureflag_testFilter == null) {
-            featureflag_testFilter = 0;
+        if (featureflag_testFilter === null) {
+            featureflag_testFilter = false;
         } else {
-            featureflag_testFilter = 1;
+            featureflag_testFilter = true;
         }
 
         jq.ready
             .then(() => capabilityService.getAll())
             .then(capabilities => capabilities.forEach(capability => this.items.push(capability)))
             .then(() => {
-                if (featureflag_testFilter === 1) {
+                if (!featureflag_testFilter) {
                     var capabilitiesToFilter = TestCapabilitiesFiltered;
                     var filteredItems = [];
-
+    
                     for (var i = 0; i < this.items.length; i++) {
                         var item = this.items[i];
-                        
-                        var filteredItem = capabilitiesToFilter[item.id];
-                        if (filteredItem != "") {
+                        if (!capabilitiesToFilter.has(item.id)) {
                             filteredItems.push(item);
                         }
                     }
-
+    
                     this.items = filteredItems;
                 }
             })
