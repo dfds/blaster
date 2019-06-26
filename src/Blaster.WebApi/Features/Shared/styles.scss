@@ -46,6 +46,7 @@ $navbar-item-hover-background-color: $group-blue;
 $navbar-padding-horizontal: 10em;
 
 @import "~bulma/bulma";
+@import "~bulma-extensions/bulma-tooltip/src/sass/index";
 
 [v-cloak] {
     display: none;

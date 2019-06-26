@@ -52,6 +52,25 @@ const app = new Vue({
             } else {
                 return true;
             }
+        },
+        disabledContextButtonReasonComputed: function() {
+            if (this.isAddContextDisallowedComputed) {
+                console.log("Context button will be disabled, writing error tooltip.");
+
+                var msg = "Reason(s) why this button is disabled:" + "\n";
+
+                if (!this.isJoinedComputed) {
+                    msg = msg + "You haven't joined this Capability." + "\n";
+                }
+
+                if (this.isLegacyComputed) {
+                    msg = msg + "This Capability is discontinued. Consider creating a new Capability." + "\n";
+                }
+
+                return msg;
+            } else {
+                return "";
+            }
         }
     },
     filters: {

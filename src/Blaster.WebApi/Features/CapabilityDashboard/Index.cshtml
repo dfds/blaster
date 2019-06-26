@@ -30,7 +30,9 @@
                         <button
                             type="button"
                             class="button is-small is-primary"
+                            v-bind:class="{tooltip: isAddContextDisallowedComputed, 'is-tooltip-bottom': isAddContextDisallowedComputed, 'is-tooltip-multiline': isAddContextDisallowedComputed }"
                             :disabled='isAddContextDisallowedComputed'
+                            :data-tooltip="disabledContextButtonReasonComputed"
                             v-on:click="addContext()"
                             v-if="getContextStatusFor() == 'notadded'">
                             Add AWS account and K8s namespace
