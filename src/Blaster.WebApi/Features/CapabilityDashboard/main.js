@@ -34,6 +34,24 @@ const app = new Vue({
                     return true;
                 }
             }
+        },
+        isJoinedComputed: function () {
+            var isMemberRawText = this.getMembershipStatusFor();
+            if (isMemberRawText === "member") {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        isAddContextDisallowedComputed: function() {
+            var isLegacy = this.isLegacyComputed;
+            var isJoined = this.isJoinedComputed;
+
+            if (isLegacy == false && isJoined == true) {
+                return false;
+            } else {
+                return true;
+            }
         }
     },
     filters: {
