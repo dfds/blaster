@@ -10,7 +10,7 @@
         ],
         "contexts": [],
         "Topics": [],
-        "RootId": "foo-5234"
+        "RootId": "foo-1"
     },
     {
       "id": "2",
@@ -35,7 +35,8 @@
         "email": "highlander@me.com"
       }
     ],
-    "contexts": []
+    "contexts": [],
+    "RootId": null
   },
   {
     "id": "4",
@@ -47,7 +48,7 @@
       }
     ],
     "contexts": [],
-    "RootId": "testtitle-98237"
+    "RootId": "testtitle-4"
   },
   {
     "id": "5",
@@ -62,6 +63,21 @@
       }
     ],
     "contexts": [],
-    "RootId": "hellopelle-98237"
+    "RootId": "hellopelle-5"
+  },
+  {
+    "id": "6",
+    "name": "DockingEnvi",
+    "description": "dockingenviDescription",
+    "members": [
+      {
+        "email": "highlander@me.com"
+      },
+      {
+        "email": "jdog@me.com"
+      }
+    ],
+    "contexts": [],
+    "RootId": ""
   }
 ] 

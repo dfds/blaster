@@ -25,7 +25,10 @@ const app = new Vue({
         isLegacyComputed: function () { // Determine if Capability is v1 or v2
             if (this.capability) // Ensure capability object exists
             {
-                if (this.capability.rootId) {
+                if (this.capability.rootId) { // Check if rootId is null
+                    if (this.capability.rootId === "") {
+                        return true;
+                    }
                     return false;
                 } else {
                     return true;
