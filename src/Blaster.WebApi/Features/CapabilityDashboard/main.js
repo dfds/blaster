@@ -24,9 +24,6 @@ const app = new Vue({
         }
     },
     filters: {
-        awsPermissions: function(capabilityName) {
-            return `/awspermissions?capability=${capabilityName}`;
-        },
         topicdetails: function(topicName){
             return `/Topicdetails?topicname=${topicName}`
         }
