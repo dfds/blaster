@@ -37,11 +37,7 @@ const app = new Vue({
         },
         isJoinedComputed: function () {
             var isMemberRawText = this.getMembershipStatusFor();
-            if (isMemberRawText === "member") {
-                return true;
-            } else {
-                return false;
-            }
+            return isMemberRawText === "member";
         },
         isAddContextDisallowedComputed: function() {
             var isLegacy = this.isLegacyComputed;

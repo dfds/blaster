@@ -96,8 +96,9 @@ const app = new Vue({
         }
     },
     mounted: function () {
-        var featureflag_testFilter = new URLSearchParams(window.location.search).get('ff_testfilter');
-        if (featureflag_testFilter === null) {
+        const featureflag_testFilter_queryParam = new URLSearchParams(window.location.search).get('ff_testfilter');
+        var featureflag_testFilter = false;
+        if (featureflag_testFilter_queryParam === null) {
             featureflag_testFilter = false;
         } else {
             featureflag_testFilter = true;
@@ -108,17 +109,7 @@ const app = new Vue({
             .then(capabilities => capabilities.forEach(capability => this.items.push(capability)))
             .then(() => {
                 if (!featureflag_testFilter) {
-                    var capabilitiesToFilter = TestCapabilitiesFiltered;
-                    var filteredItems = [];
-    
-                    for (var i = 0; i < this.items.length; i++) {
-                        var item = this.items[i];
-                        if (!capabilitiesToFilter.has(item.id)) {
-                            filteredItems.push(item);
-                        }
-                    }
-    
-                    this.items = filteredItems;
+                    this.items = this.items.filter(item => !TestCapabilitiesFiltered.has(item.id));
                 }
             })
             .catch(info => {
