@@ -7,7 +7,6 @@ using Blaster.WebApi.Features.Frontpage;
 using Blaster.WebApi.Features.Topic;
 using Blaster.WebApi.Security;
 using CorrelationId;
-using DefaultNamespace;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -41,7 +40,6 @@ namespace Blaster.WebApi
             services.AddTransient<UserHelper>();
 
             /* configure each feature */
-            ConfigureAWSPermissionsFeature(services);
             ConfigureCapabilityFeature(services);
             ConfigureFrontpageFeature(services);
             ConfigureTopicFeature(services);
@@ -57,16 +55,6 @@ namespace Blaster.WebApi
             {
                 options.ViewLocationExpanders.Add(new FeatureLocationExpander());
             });
-        }
-
-        private void ConfigureAWSPermissionsFeature(IServiceCollection services)
-        {
-            services
-                .AddHttpClient<IAWSJanitorClient, AWSJanitorClient>(client =>
-                {
-                    client.BaseAddress = new Uri(Configuration["BLASTER_AWS_JANITOR_API_URL"]);
-                })
-                .AddHttpMessageHandler<CorrelationIdMessageHandler>();
         }
 
         private void ConfigureCapabilityFeature(IServiceCollection services)
