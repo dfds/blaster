@@ -20,7 +20,35 @@ const app = new Vue({
     },
     computed: {
         capabilityFound: function() {
-            return this.capability != null && this.capability.id != null 
+            return this.capability != null && this.capability.id != null
+        },
+        isLegacyComputed: function () { // Determine if Capability is v1 or v2
+            if (this.capability) // Ensure capability object exists
+            {
+                return (this.capability.rootId) ? (this.capability.rootId === "") : true;
+            }
+        },
+        isJoinedComputed: function () {
+            var isMemberRawText = this.getMembershipStatusFor();
+            return isMemberRawText === "member";
+        },
+        isAddContextDisallowedComputed: function() {
+            var isLegacy = this.isLegacyComputed;
+            var isJoined = this.isJoinedComputed;
+            return !(isLegacy == false && isJoined == true);
+        },
+        disabledContextButtonReasonComputed: function() {
+            var msg = "";
+            if (this.isAddContextDisallowedComputed) {
+                msg = "Reason(s) why this button is disabled:" + "\n";
+                if (!this.isJoinedComputed) {
+                    msg = msg + "You haven't joined this Capability." + "\n";
+                }
+                if (this.isLegacyComputed) {
+                    msg = msg + "This Capability is discontinued. Consider creating a new Capability." + "\n";
+                }
+            } 
+            return msg;
         }
     },
     filters: {
