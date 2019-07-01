@@ -25,14 +25,7 @@ const app = new Vue({
         isLegacyComputed: function () { // Determine if Capability is v1 or v2
             if (this.capability) // Ensure capability object exists
             {
-                if (this.capability.rootId) { // Check if rootId is null
-                    if (this.capability.rootId === "") {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-                return true;
+                return (this.capability.rootId) ? (this.capability.rootId === "") : true;
             }
         },
         isJoinedComputed: function () {
@@ -42,26 +35,20 @@ const app = new Vue({
         isAddContextDisallowedComputed: function() {
             var isLegacy = this.isLegacyComputed;
             var isJoined = this.isJoinedComputed;
-
-            if (isLegacy == false && isJoined == true) {
-                return false;
-            } else {
-                return true;
-            }
+            return !(isLegacy == false && isJoined == true);
         },
         disabledContextButtonReasonComputed: function() {
+            var msg = "";
             if (this.isAddContextDisallowedComputed) {
-                var msg = "Reason(s) why this button is disabled:" + "\n";
+                msg = "Reason(s) why this button is disabled:" + "\n";
                 if (!this.isJoinedComputed) {
                     msg = msg + "You haven't joined this Capability." + "\n";
                 }
                 if (this.isLegacyComputed) {
                     msg = msg + "This Capability is discontinued. Consider creating a new Capability." + "\n";
                 }
-                return msg;
-            } else {
-                return "";
-            }
+            } 
+            return msg;
         }
     },
     filters: {
