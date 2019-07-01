@@ -23,10 +23,8 @@ const app = new Vue({
             return this.capability != null && this.capability.id != null
         },
         isLegacyComputed: function () { // Determine if Capability is v1 or v2
-            if (this.capability) // Ensure capability object exists
-            {
-                return (this.capability.rootId) ? (this.capability.rootId === "") : true;
-            }
+            const isRootIdEmpty = (this.capability.rootId) ? (this.capability.rootId === "") : true;
+            return (this.capability) ? isRootIdEmpty : false; // Ensure capability object exists
         },
         isJoinedComputed: function () {
             var isMemberRawText = this.getMembershipStatusFor();
