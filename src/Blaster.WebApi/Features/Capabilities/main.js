@@ -97,12 +97,7 @@ const app = new Vue({
     },
     mounted: function () {
         const featureflag_testFilter_queryParam = new URLSearchParams(window.location.search).get('ff_testfilter');
-        var featureflag_testFilter = false;
-        if (featureflag_testFilter_queryParam === null) {
-            featureflag_testFilter = false;
-        } else {
-            featureflag_testFilter = true;
-        }
+        const featureflag_testFilter = featureflag_testFilter_queryParam !== null;
 
         jq.ready
             .then(() => capabilityService.getAll())
