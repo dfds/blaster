@@ -20,7 +20,7 @@
             <div class="level">
                 <div class="level-left">
                     <div class="level-item">
-                        <h2 class="subtitle">{{ capability.name }}</h1>
+                        <h2 class="subtitle">{{ capability.name }}</h2>
                     </div>
                 </div>
                 <!-- Right side -->
@@ -30,35 +30,8 @@
                         <button
                             type="button"
                             class="button is-small is-primary"
-                            v-bind:class="{tooltip: isAddContextDisallowedComputed, 'is-tooltip-bottom': isAddContextDisallowedComputed, 'is-tooltip-multiline': isAddContextDisallowedComputed }"
-                            :disabled='isAddContextDisallowedComputed'
-                            :data-tooltip="disabledContextButtonReasonComputed"
-                            v-on:click="addContext()"
-                            v-if="getContextStatusFor() == 'notadded'">
-                            Add AWS account and K8s namespace
-                        </button>
-                        <button
-                            type="button"
-                            class="button is-small is-primary is-loading"
-                            v-if="getContextStatusFor() == 'requested'">
-                            Add AWS account and K8s namespace
-                        </button>
-                        <div
-                            class="button is-small is-info is-outlined" disabled
-                            v-if="getContextStatusFor() == 'added'">
-                            AWS account and K8s namespace added
-                        </div >
-                        <button
-                            type="button"
-                            class="button is-small is-primary"
                             v-if="getMembershipStatusFor(capability.id) == 'notmember'"
                             v-on:click="joinCapability()">
-                            Join
-                        </button>
-                        <button
-                            type="button"
-                            class="button is-small is-primary  is-loading"
-                            v-if="getMembershipStatusFor(capability.id) == 'requested'">
                             Join
                         </button>
                         <button
@@ -86,14 +59,44 @@
             </div>
         </div>
 
-         <div class="container box" style="display: none;">
-                <h1 class="title is-uppercase">Info</h1>
+         <div class="container box">
+                <h1 class="title is-uppercase">Resources</h1>
+                <div>
+                    <p>
+                        A capability is the 'container' for your cloud resources. Currently we support 1 AWS Account (sandbox) and 1 Kubernetes namespace per capability. These are not added per default to a capability, but must be requested by clicking the button below. Note that there is manual processing involved in getting an AWS account attached so it may take a while before your resources are ready.
+                    </p>
+                </div>
                 <div class="level-right">
-                <div class="notification is-danger">
-                <button class="delete"></button>
-  For now you can't provision AWS Accounts and Kubernetes namespaces via the portal. Please contact Dev Excellence on slack, in channel #dev-excellence, if you need an AWS Account and Kubernetes namespce provisioned.
-</div>
-</div>
+                        <div class="buttons is-right">
+                         <button
+                            type="button"
+                            class="button is-small is-primary"
+                            v-bind:class="{tooltip: isAddContextDisallowedComputed, 'is-tooltip-bottom': isAddContextDisallowedComputed, 'is-tooltip-multiline': isAddContextDisallowedComputed }"
+                            :disabled='isAddContextDisallowedComputed'
+                            :data-tooltip="disabledContextButtonReasonComputed"
+                            v-on:click="addContext()"
+                            v-if="getContextStatusFor() == 'notadded'">
+                            Add AWS account and K8s namespace
+                        </button>
+                        <button
+                            type="button"
+                            class="button is-small is-primary is-loading"
+                            v-if="getContextStatusFor() == 'requested'">
+                            Add AWS account and K8s namespace
+                        </button>
+                        <div
+                            class="button is-small is-info is-outlined" disabled
+                            v-if="getContextStatusFor() == 'added'">
+                            AWS account and K8s namespace added
+                        </div >
+                        <button
+                            type="button"
+                            class="button is-small is-primary  is-loading"
+                            v-if="getMembershipStatusFor(capability.id) == 'requested'">
+                            Join
+                        </button>
+                        </div>
+                </div>
             </div>
        
         <!--- Summary section --->
@@ -214,7 +217,7 @@
         <strong class="error-title"></strong> <span class="error-message"></span>
     </div>
     <p>
-        You will be notified in the capability Slack channel, when the namespace is ready for usage.
+        Provisioning of resources is already in progress and we expect it to be completed as soon as possible. You will be notified in the capability Slack channel, when the namespace is ready for usage. Permissions may take longer to propagate.
     </p>
     <br>
 
