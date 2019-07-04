@@ -10,9 +10,13 @@ metadata:
     project: selfservice
     department: devex
     component: blaster
+    scrape-service-metrics: "true"
 spec:
   ports:
     - name: external
+      port: 80
+      targetPort: web
+    - name: metrics
       port: 80
       targetPort: web
   selector:
