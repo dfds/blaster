@@ -17,10 +17,10 @@ spec:
           - path: /blaster
             backend:
               serviceName: blaster
-              servicePort: external
+              servicePort: metrics
     - host: build.dfds.cloud
       http:
         paths:
           - backend:
               serviceName: blaster
-              servicePort: external
+              servicePort: ingress
