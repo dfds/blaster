@@ -23,4 +23,4 @@ spec:
         paths:
           - backend:
               serviceName: blaster
-              servicePort: ingress
+              servicePort: metrics
