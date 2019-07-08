@@ -1,6 +1,7 @@
 const express = require("express");
 const fs = require("fs");
 const util = require("util");
+const uuidv1 = require('uuid/v1');
 
 const port = process.env.port || 3000;
 
@@ -41,6 +42,9 @@ app.post("/api/v1/capabilities", (req, res) => {
         // Null or undefined
         newTeam.description = "generic description"
     }
+
+    // RootId generation
+    newTeam.RootId = (newTeam.name.substring(0, 20) + "-" + uuidv1().substring(0, 8)).toLocaleLowerCase();
 
     readFile("./capability-data.json")
         .then(data => JSON.parse(data))
