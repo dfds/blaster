@@ -108,7 +108,8 @@ namespace Blaster.WebApi
             {
                 Header = "x-correlation-id",
                 UpdateTraceIdentifier = true,
-                IncludeInResponse = true
+                IncludeInResponse = true,
+                UseGuidForCorrelationId = true
             });
 
             app.UseMvc();
