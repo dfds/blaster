@@ -24,11 +24,24 @@ export default class ModelEditor {
         jq("[data-property]", this.element).first().focus();
     }
 
+    nameValidation(evt) {
+        const input = jq("[data-property=name]");
+        const capNameValid = jq("#capNameValid");
+        const nameValidationRegex = new RegExp('^[A-Z][a-zA-Z0-9\\-]{2,20}$');
+
+        if (input.val().match(nameValidationRegex) == null) {
+            capNameValid.css("color", "#f5426c");
+        } else {
+            capNameValid.css("color", "#33f58e");
+        }
+    }
+
     assignEventHandlers() {
         const self = this;
 
         jq("[data-behavior=close]", this.element).click(function() { self.handleCloseClick(this); });
         jq("[data-behavior=save]", this.element).click(function() { self.handleSaveClick(this); });
+        jq("[data-property=name]", this.element).keyup(() => { self.nameValidation(this); });
     }
 
     getFormData() {
