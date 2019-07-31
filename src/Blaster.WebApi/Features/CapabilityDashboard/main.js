@@ -17,7 +17,20 @@ const TopicComponent = Vue.component("topic", {
     props: ["topic"],
     data: function() {
         return {
-            showData: false
+            showData: false,
+            messages: [
+                {
+                    "title": "aws_account_added_to_context",
+                    "id": 2,
+                    "payload": "{\"version\":\"1\",\"eventName\":\"aws_context_account_created\",\"x-correlationId\":\"874ba750-ae81-446f-90c7-01b49228c327\",\"x-sender\":\"eg. FQDN of assembly\",\"payload\":{\"capabilityId\":\"bc3f3bbe-eeee-4230-8b2f-d0e1c327c59c\",\"capabilityName\":\"PAX Bookings\",\"capabilityRootId\":\"pax-bookings-A43aS\",\"contextId\":\"0d03e3ad-2118-46b7-970e-0ca87b59a202\",\"contextName\":\"blue\",\"accountId\":\"1234567890\",\"roleArn\":\"arn:aws:iam::1234567890:role/pax-bookings-A43aS\",\"roleEmail\":\"aws.pax-bookings-a43as@dfds.com\"}                    }    "
+                },
+
+                {
+                    "title": "context_added_to_capability",
+                    "id": 1,
+                    "payload": "{\"version\":\"1\",\"eventName\":\"context_added_to_capability\",\"x-correlationId\":\"<guid>|any string\",\"x-sender\":\"eg. FQDN of assembly\",\"payload\":{\"capabilityId\":\"bc3f3bbe-eeee-4230-8b2f-d0e1c327c59c\",\"contextId\":\"0d03e3ad-2118-46b7-970e-0ca87b59a202\",\"capabilityRootId\":\"pax-bookings-A43aS\",\"capabilityName\":\"PAX Bookings\",\"contextName\":\"blue\"}} "
+                }
+            ]
         }
     },
     methods: {
@@ -40,6 +53,12 @@ const TopicComponent = Vue.component("topic", {
             <div class="details" v-if="showData">
                 <span class="entry"><span class="entry-title">Public:</span> <div :class="this.getPublicStyling()">{{ this.getPublicText() }}</div></span>
                 <span class="entry"><span class="entry-title">Description:</span> <p>{{ topic.description }}</p></span>
+                <span class="subtitle">"Message contracts":</span>
+
+                <div v-for="message_contract in messages" :key="message_contract.id" class="entry" style="margin-bottom: 40px;">
+                    <p style="word-wrap: break-word; width: 25%;"><span class="entry-title">Title:</span> {{ message_contract.title }}</p>
+                    <div class="schema" style="width: 75%;"><p style="word-wrap: break-word;">{{ message_contract.payload }}</p></div>
+                </div>               
             </div>
         </div>
     `
