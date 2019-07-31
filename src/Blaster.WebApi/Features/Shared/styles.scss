@@ -66,6 +66,61 @@ $navbar-padding-horizontal: 10em;
     border-radius: 0;
 }
 
+.topics {
+    display: flex;
+    margin-left: 35px;
+    flex-direction: column;
+}
+
+.topics > * {
+    margin-bottom: 15px;
+}
+
+.topic {
+    display: flex;
+    flex-direction: column;
+
+    h2 {
+        &.title {
+            font-size: 1.3rem;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .details {
+        display: flex;
+        flex-direction: column;
+
+        .entry {
+            display: flex;
+            flex-direction: row;
+
+            .entry-title {
+                font-weight: 600;
+                margin-right: 5px;
+            }
+        }
+
+        .green {
+            background-color: rgb(89, 204, 89);
+            color: #f1f1f1;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .red {
+            background-color: rgb(204, 102, 89);
+            color: #f1f1f1;
+            padding-left: 5px;
+            padding-right: 5px;            
+        }
+    }
+
+}
+
 // #companylogo {
 //     max-height: 76px;
 // }

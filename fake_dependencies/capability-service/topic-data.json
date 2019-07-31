@@ -1,14 +1,23 @@
 [
   {
-    "name": "Foo",
-    "description": "FooDescription",
-    "visibility" : "private",
-    "messageExamples": [
-      {
-        "id": "1",
-        "messageType" : "foo_created",
-        "text" : "{\"messageType\" : \"capability_created\"}"
-      }
-    ]
+    "name": "ship.livedata",
+    "id": "7699d5fa-fa82-4d5b-b8fd-09359a8e13d8",
+    "public": true,
+    "capabilityId": "1",
+    "description": "Events concerning up-to-date data aboout ships"
+  },
+  {
+    "name": "stuff.dunno",
+    "id": "f013d566-93cd-40fc-a80f-a0b3098dfcf8",
+    "capabilityId": "2",
+    "public": false,
+    "description": "Dunno."
+  },
+  {
+    "name": "ship.behindthescenes",
+    "id": "3c84f88c-bf41-4e7c-8266-d75f3026bb61",
+    "capabilityId": "1",
+    "public": false,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse porttitor rutrum nisl. Nulla enim dui, facilisis ut dictum vitae, elementum sed ligula. Fusce faucibus bibendum quam vel congue. Duis tempus aliquam consequat. Etiam vehicula dapibus leo ut pretium. Praesent quis commodo ligula. Nulla efficitur rutrum odio sit amet pellentesque. Mauris commodo iaculis diam, sed egestas ante pellentesque eget. Integer arcu nisl, pulvinar vitae ultricies quis, bibendum ac mauris. Sed quis arcu ac eros luctus dictum vel ac justo. Vestibulum at interdum nunc. Donec ac diam felis. Vivamus id convallis lectus, at pharetra magna. Sed non egestas enim. "
   }
-] 
+]

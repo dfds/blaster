@@ -12,6 +12,39 @@ const capabilityService = new CapabilityService();
 FeatureFlag.setKeybinding();
 
 Vue.prototype.$featureFlag = new FeatureFlag();
+
+const TopicComponent = Vue.component("topic", {
+    props: ["topic"],
+    data: function() {
+        return {
+            showData: false
+        }
+    },
+    methods: {
+        toggleShowData: function () {
+            this.showData = this.showData ? false : true;
+        },
+        getPublicStyling: function () {
+            return this.topic.public ? "green" : "red";
+        },
+        getPublicText: function () {
+            return this.topic.public ? "✔" : "✖";
+        }
+    },
+    computed: {
+
+    },
+    template: `
+        <div class="topic">
+            <h2 class="title" title="Click to expand" v-on:click="toggleShowData()" >{{ topic.name }}</h2>
+            <div class="details" v-if="showData">
+                <span class="entry"><span class="entry-title">Public:</span> <div :class="this.getPublicStyling()">{{ this.getPublicText() }}</div></span>
+                <span class="entry"><span class="entry-title">Description:</span> <p>{{ topic.description }}</p></span>
+            </div>
+        </div>
+    `
+})
+
 const app = new Vue({
     el: "#capabilitydashboard-app",
     data: {
@@ -19,7 +52,11 @@ const app = new Vue({
         initializing: true,
         currentUser: currentUser,
         membershipRequested: false,
-        contextRequested: false
+        contextRequested: false,
+        topics: null
+    },
+    components: {
+        'topic': TopicComponent
     },
     computed: {
         capabilityFound: function() {
@@ -98,6 +135,10 @@ const app = new Vue({
                 .filter(member => member.email == this.currentUser.email)
                 .length > 0;
         },
+        getAllTopics: function() {
+            const topics = topicService.getAll();
+            return topics;
+        },
         joinCapability: function() {
             this.membershipRequested = true;
             capabilityService.join(this.capability.id)
@@ -173,6 +214,8 @@ const app = new Vue({
         jq.ready
             .then(() => capabilityService.get(capabilityIdParam))
             .then(capability => this.capability = capability)
+            .then(() => topicService.getByCapabilityId(this.capability.id))
+            .then(topics => this.topics = topics)
             .catch(info => {
                 if (info.status != 200) {
                     AlertDialog.open({

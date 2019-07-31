@@ -203,80 +203,43 @@ app.get("/api/v1/capabilities/:capabilityid", (req, res) => {
         });
 });
 
-app.get("/api/v1/topics/:topicName", (req, res) => {
-    const topicName = req.params.topicName;
+app.get("/api/v1/topics", (req, res) => {
     readFile("./topic-data.json")
         .then(data => JSON.parse(data))
         .then(topics => {
-            const topic = topics.find(top => top.name === topicName)
-            if (!topic) {
-                return new Promise(resolve => {
-                    res
-                        .status(404)
-                        .send({message: `Topic with name: ${topicName} could not be found`});
-                    resolve();
-                });
-            } else {
-                return res.json(topic);
-            }
+            res.json({
+                items: topics
+            });
         });
 });
 
-
-app.post("/api/v1/topics/:topicName/messageexamples", (req, res) => {
-    const topicName = req.params.topicName;
-
-    const messageExample = Object.assign({
-        id: require('crypto').randomBytes(16).toString('hex'),
-    }, req.body);
+app.get("/api/v1/topics/:topicId", (req, res) => {
+    const topicId = req.params.topicId;
 
     readFile("./topic-data.json")
         .then(data => JSON.parse(data))
+        .then(data => {
+            return data.filter(topic => new String(topic.id).valueOf() === new String(topicId).valueOf());
+        })
         .then(topics => {
-            const topic = topics.find(top => top.name === topicName)
-            if (!topic) {
-                return new Promise(resolve => {
-                    res
-                        .status(404)
-                        .send({message: `Topic with name: ${topicName} could not be found`});
-                    resolve();
-                });
-            } else {
-                topic.messageExamples.push(messageExample);
-               
-                return Promise.resolve(serialize(topics))
-                .then(json => writeFile("./topic-data.json", json))
-                .then(() => console.log(`Added message example with type: ${messageExample.messageType} to topic ${topic.name}`))
-                .then(() => res.sendStatus(200));
-            }
+            res.json({
+                items: topics
+            });
         });
 });
 
-
-app.post("/api/v1/topics", (req, res) => {
-    const newTopic = Object.assign({
-        messageExamples: []
-    }, req.body);
-
-    newTopic.description = newTopic.description || "generic description";
-    newTopic.visibility = newTopic.visibility || "private";
+app.get("/api/v1/topics/by-capability-id/:capabilityId", (req, res) => {
+    const capabilityId = req.params.capabilityId;
 
     readFile("./topic-data.json")
         .then(data => JSON.parse(data))
+        .then(data => {
+            return data.filter(topic => new String(topic.capabilityId).valueOf() === new String(capabilityId).valueOf());
+        })
         .then(topics => {
-            topics.push(newTopic);
-            return topics;
-        })
-        .then(topics => JSON.stringify(topics, null, 2))
-        .then(json => writeFile("./topic-data.json", json))
-        .then(() => {
-            res.location(`/api/v1/topics/${newTopic.name}`);
-            res.status(201).send(newTopic);
-        })
-        .then(() => console.log(`Added topic ${newTopic.name}`))
-
-        .catch(err => {
-            res.status(500).json(err);
+            res.json({
+                items: topics
+            });
         });
 });
 

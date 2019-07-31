@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities;
 using Blaster.WebApi.Features.Frontpage;
-using Blaster.WebApi.Features.Topic;
+using Blaster.WebApi.Features.Topics;
 using Blaster.WebApi.Security;
 using CorrelationId;
 using Microsoft.AspNetCore.Builder;
@@ -80,13 +80,6 @@ namespace Blaster.WebApi
         private void ConfigureTopicFeature(IServiceCollection services)
         {
             services
-                .AddHttpClient<ITikaTopicClient, TikaTopicClient>(client =>
-                {
-                    client.BaseAddress = new Uri(Configuration["BLASTER_TIKA_API_URL"]);
-                })
-                .AddHttpMessageHandler<CorrelationIdMessageHandler>();
-        
-          services
                 .AddHttpClient<ITopicClient, TopicClient>(client =>
                 {
                     client.BaseAddress = new Uri(Configuration["BLASTER_CAPABILITYSERVICE_API_URL"]);

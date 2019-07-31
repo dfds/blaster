@@ -4,18 +4,22 @@ export default class TopicService {
     constructor() {
         this.client = new HttpClient();
         this.baseUrl = "api/topics";
+
+        this.getAll = this.getAll.bind(this);
     }
 
-    get(topicName){
-        return this.client.get(`${this.baseUrl}/${topicName}`)
-        .then(data => data || {});
-    }
-  
-    addMessageExample(topicName, messageExample){
-        return this.client.post(`${this.baseUrl}/${topicName}/messageexamples`, messageExample);
+    getAll() {
+        return this.client.get(this.baseUrl)
+            .then(data => data.items || []);
     }
 
-    add(topic){
-        return this.client.post(`${this.baseUrl}`, topic);
+    getById(topicId) {
+        return this.client.get(`${this.baseUrl}/${topicId}`)
+            .then(data => data || {});
+    }
+
+    getByCapabilityId(capabilityId) {
+        return this.client.get(`${this.baseUrl}/by-capability-id/${capabilityId}`)
+            .then(data => data.items || []);
     }
 }

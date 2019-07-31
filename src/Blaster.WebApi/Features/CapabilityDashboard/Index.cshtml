@@ -98,6 +98,23 @@
                         </div>
                 </div>
             </div>
+
+            <div class="container box">
+                <h1 class="title is-uppercase">Topics</h1>
+                <div>
+                    <p>
+                         Listed below is the Kafka topics that are attached to this Capability.
+                    </p>
+                </div>
+                <br>
+
+                <div class="topics">
+                    <div v-for="topic in topics" :key="topic.id">
+                        <!-- <h2 class="title">{{ topic.name }}</h2> -->
+                        <topic :topic="topic" />
+                    </div>
+                </div>                
+            </div>
        
         <!--- Summary section --->
             <div class="container box" style="display:none">
