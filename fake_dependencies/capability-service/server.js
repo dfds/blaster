@@ -126,32 +126,6 @@ app.post("/api/v1/capabilities/:capabilityid/contexts", (req, res) => {
         });
 });
 
-app.post("/api/v1/capabilities/:capabilityid/topics", (req, res) => {
-    const capabilityid = req.params.capabilityid;
-    const newTopic =req.body;
-
-    readFile("./capability-data.json")
-        .then(data => JSON.parse(data))
-        .then(capabilities => {
-            const capability = capabilities.find(capability => capability.id == capabilityid);
-            
-            if (!capability) {
-                return new Promise(resolve => {
-                    res
-                        .status(404)
-                        .send({message: `Capability with id ${capabilityid} could not be found`});
-                    resolve();
-                });
-            } else {
-                capability.topics = capability.topics || [];
-                capability.topics.push(newTopic);
-                return Promise.resolve(serialize(capabilities))
-                    .then(json => writeFile("./capability-data.json", json))
-                    .then(() => console.log(`Added topic ${newTopic.name} to capability ${capability.name}`))
-                    .then(() => res.sendStatus(200));
-            }
-        });
-});
 app.delete("/api/v1/capabilities/:teamid/members/:memberemail", (req, res) => {
     const teamId = req.params.teamid;
     const memberEmail = req.params.memberemail;
@@ -198,8 +172,21 @@ app.get("/api/v1/capabilities/:capabilityid", (req, res) => {
                     resolve();
                 });
             } else {
-                return res.json(capability);
+                return capability;
             }
+        })
+        .then(capability => {
+            if (capability.id)
+            {
+                readFile("./topic-data.json")
+                .then(data => JSON.parse(data))
+                .then(topics => {
+                    const cap_topics = topics.filter(topic => topic.capabilityId === capability.id)
+                    capability.topics = cap_topics;
+                    return res.json(capability);
+                })
+            }
+
         });
 });
 
@@ -213,14 +200,15 @@ app.get("/api/v1/topics", (req, res) => {
         });
 });
 
-app.post("/api/v1/topics", (req, res) => {
+app.post("/api/v1/capabilities/:capabilityId/topics", (req, res) => {
+    const capabilityId = req.params.capabilityId;
     const newTopic = req.body;
     var newTopicInExpectedFormat = {
         "name": newTopic.name,
         "description": newTopic.description,
         "id": new Date().getTime().toString(),
-        "capabilityId": newTopic.capabilityId,
-        "public": newTopic.public
+        "capabilityId": capabilityId,
+        "isPrivate": newTopic.isPrivate
     }
 
     readFile("./topic-data.json")
@@ -232,7 +220,7 @@ app.post("/api/v1/topics", (req, res) => {
     .then(topics => JSON.stringify(topics, null, 2))
     .then(json => writeFile("./topic-data.json", json))
     .then(() => {
-        res.location(`/api/v1/topics/${newTopic.id}`);
+        //res.location(`/api/v1/topics/${newTopic.id}`);
         res.status(201).send(newTopicInExpectedFormat);
     })
     .catch(err => {
@@ -255,7 +243,9 @@ app.get("/api/v1/topics/:topicId", (req, res) => {
         });
 });
 
-app.get("/api/v1/topics/by-capability-id/:capabilityId", (req, res) => {
+
+
+app.get("/api/v1/capabilities/:capabilityId/topics", (req, res) => {
     const capabilityId = req.params.capabilityId;
 
     readFile("./topic-data.json")

@@ -47,6 +47,21 @@ namespace Blaster.WebApi.Features.Capabilities
             var receivedContent = await response.Content.ReadAsStringAsync();
             return _serializer.Deserialize<Capability>(receivedContent);
         }
+        
+        public async Task<Topic> CreateTopic(string name, string description, string capabilityId, bool isPrivate)
+        {
+            var content = new StringContent(
+                content: _serializer.Serialize(new { Name = name, Description = description, IsPrivate = isPrivate}),
+                encoding: Encoding.UTF8,
+                mediaType: "application/json"
+            );
+
+            var response = await _client.PostAsync($"/api/v1/capabilities/{capabilityId}/topics", content);
+            response.EnsureSuccessStatusCode();
+
+            var receivedContent = await response.Content.ReadAsStringAsync();
+            return _serializer.Deserialize<Topic>(receivedContent);
+        }
 
         public async Task<Capability> GetById(string id)
         {

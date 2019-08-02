@@ -60,6 +60,19 @@ namespace Blaster.WebApi.Features.Capabilities
                 });
             }
         }
+        
+        [HttpPost("{id}/topics", Name = "CreateTopic")]
+        public async Task<ActionResult<Topic>> CreateTopic(string id, [FromBody] Topic input)
+        {
+            var topic = await _capabilityServiceClient.CreateTopic(input.Name, input.Description, id, input.IsPrivate);
+
+            if (topic != null)
+            {
+                return new ActionResult<Topic>(topic);
+            }
+            
+            return new ActionResult<Topic>(BadRequest());
+        }
 
         [HttpPost("{id}/members", Name = "JoinCapability")]
         public async Task<ActionResult<Member>> JoinCapability([FromRoute] string id, [FromBody] JoinCapabilityInput input)
@@ -120,20 +133,6 @@ namespace Blaster.WebApi.Features.Capabilities
                     Message = "Default context already added to capability"
                 }));
             }
-        }
-        
-        [HttpPost("{id}/topics", Name = "AddTopic")]
-        public async Task<ActionResult<Capability>> AddTopic(
-            [FromRoute] string id, 
-            [FromBody] AddTopicInput input
-        )
-        {
-            await _capabilityServiceClient.AddTopic(
-                capabilityId: id,
-                topicName: input.Name
-            );
-
-            return new ActionResult<Capability>(NoContent());
         }
     }
 

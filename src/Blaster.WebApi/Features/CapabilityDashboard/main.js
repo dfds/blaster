@@ -18,6 +18,7 @@ const TopicComponent = Vue.component("topic", {
     data: function() {
         return {
             showData: false,
+            showMessageContract: false,
             messages: [
                 {
                     "title": "aws_account_added_to_context",
@@ -38,22 +39,35 @@ const TopicComponent = Vue.component("topic", {
             this.showData = this.showData ? false : true;
         },
         getPublicStyling: function () {
-            return this.topic.public ? "green" : "red";
+            return this.topic.isPrivate ? "green" : "red";
         },
         getPublicText: function () {
-            return this.topic.public ? "✔" : "✖";
-        }
+            return this.topic.isPrivate ? "✔" : "✖";
+        },
+        toggleShowAddMessageContract: function() {
+            this.showMessageContract = this.showMessageContract ? false : true;
+        },
     },
     computed: {
 
     },
     template: `
         <div class="topic">
+            <message-contract-add :enable="showMessageContract" v-on:messagecontractadd-close="toggleShowAddMessageContract()"></message-contract-add>
             <h2 class="title" title="Click to expand" v-on:click="toggleShowData()" >{{ topic.name }}</h2>
             <div class="details" v-if="showData">
-                <span class="entry"><span class="entry-title">Public:</span> <div :class="this.getPublicStyling()">{{ this.getPublicText() }}</div></span>
+                <span class="entry"><span class="entry-title">Private:</span> <div :class="this.getPublicStyling()">{{ this.getPublicText() }}</div></span>
                 <span class="entry"><span class="entry-title">Description:</span> <p>{{ topic.description }}</p></span>
                 <span class="subtitle">"Message contracts":</span>
+
+                <div class="buttons is-right">
+                    <button
+                        type="button"
+                        v-on:click="toggleShowAddMessageContract()"
+                        class="button is-small is-primary">
+                        Add Message contract
+                    </button>   
+                </div>
 
                 <div v-for="message_contract in messages" :key="message_contract.id" class="entry" style="margin-bottom: 40px;">
                     <p style="word-wrap: break-word; width: 25%;"><span class="entry-title">Title:</span> {{ message_contract.title }}</p>
@@ -135,6 +149,69 @@ const TopicAddComponent = Vue.component("topic-add", {
     `
 })
 
+const MessageContractAddComponent = Vue.component("message-contract-add", {
+    props: ["enable"],
+    data: function() {
+        return {
+            mcType: "",
+            mcSchema: ""
+        }
+    },
+    computed: {
+        isEnabledStyling: function() {
+            return this.enable;
+        }
+    },
+    methods: {
+        disable: function() {
+            this.enable = false;
+        }
+    },
+    updated: function() {
+        if (!this.enable) {
+            this.mcType = "";
+            this.mcSchema = "";
+        }
+    },
+    template: `
+        <div class="modal" v-bind:class="{'is-active': this.isEnabledStyling}">
+            <div class="modal-background" v-on:click="$emit('messagecontractadd-close')"></div>
+            <div class="modal-content">
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Add Message contract to Topic</p>
+                        <button class="delete" aria-label="close" data-behavior="close" v-on:click="$emit('messagecontractadd-close')"></button>
+                    </header>
+                    <div class="modal-card-body">
+                        <div class="dialog-container"></div>
+                        <div class="form">
+                            <div class="field">
+                                <label class="label">Type</label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Select type" data-property="name" v-model="mcType">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Content</label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Schema" data-property="schema" v-model="mcSchema">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control has-text-centered">
+                                    <button class="button is-primary" data-behavior="save" v-on:click="$emit('messagecontractadd-new', mcType, mcSchema)">Save</button>
+                                    <button class="button is-info" aria-label="close" data-behavior="close" v-on:click="$emit('messagecontractadd-close')">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="modal-close is-large" aria-label="close"></button>
+        </div>
+    `
+})
+
 const app = new Vue({
     el: "#capabilitydashboard-app",
     data: {
@@ -149,6 +226,7 @@ const app = new Vue({
     components: {
         'topic': TopicComponent,
         'topic-add': TopicAddComponent,
+        'message-contract-add': MessageContractAddComponent
     },
     computed: {
         capabilityFound: function() {
@@ -230,14 +308,14 @@ const app = new Vue({
         toggleShowAddTopic: function() {
             this.showAddTopic = this.showAddTopic ? false : true;
         },
-        addTopic: function(name, description, isPublic) {
-            const payload = {name: name, description: description, public: isPublic, capabilityId: this.capability.id}
+        addTopic: function(name, description, isPrivate) {
+            const payload = {name: name, description: description, isPrivate: isPrivate}
 
             // TODO: Rework this to handle errors
-            topicService.add(payload)
+            capabilityService.addTopic(payload, this.capability.id)
                 .then(data => {
                     console.log(data);
-                    this.topics.push(data);
+                    this.capability.topics.push(data);
                 });
 
             this.showAddTopic = false;
@@ -321,8 +399,8 @@ const app = new Vue({
         jq.ready
             .then(() => capabilityService.get(capabilityIdParam))
             .then(capability => this.capability = capability)
-            .then(() => topicService.getByCapabilityId(this.capability.id))
-            .then(topics => this.topics = topics)
+            //.then(() => topicService.getByCapabilityId(this.capability.id))
+            //.then(topics => this.topics = topics)
             .catch(info => {
                 if (info.status != 200) {
                     AlertDialog.open({
