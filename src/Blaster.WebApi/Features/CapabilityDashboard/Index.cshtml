@@ -101,6 +101,7 @@
 
             <div class="container box">
                 <h1 class="title is-uppercase">Topics</h1>
+            
                 <div>
                     <p>
                          Listed below is the Kafka topics that are attached to this Capability.
@@ -108,10 +109,21 @@
                 </div>
                 <br>
 
+                <div class="buttons is-right">
+                         <button
+                            type="button"
+                            v-on:click="toggleShowAddTopic()"
+                            class="button is-small is-primary">
+                            Add Topic
+                        </button>   
+                </div>
+
+                <topic-add :enable="showAddTopic" v-on:addtopic-new-topic="addTopic" v-on:addtopic-close="toggleShowAddTopic()"></topic-add>               
+
                 <div class="topics">
                     <div v-for="topic in topics" :key="topic.id">
                         <!-- <h2 class="title">{{ topic.name }}</h2> -->
-                        <topic :topic="topic" />
+                        <topic :topic="topic"></topic>
                     </div>
                 </div>                
             </div>

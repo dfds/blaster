@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities;
 using Blaster.WebApi.Features.Topics.models;
@@ -22,6 +23,21 @@ namespace Blaster.WebApi.Features.Topics
             var content = await response.Content.ReadAsStringAsync();
 
             return _serializer.Deserialize<TopicsResponse>(content);
+        }
+
+        public async Task<Topic> CreateTopic(string name, string description, string capabilityId, bool isPublic)
+        {
+            var content = new StringContent(
+                content: _serializer.Serialize(new { Name = name, Description = description, Public = isPublic, CapabilityId = capabilityId}),
+                encoding: Encoding.UTF8,
+                mediaType: "application/json"
+            );
+
+            var response = await _client.PostAsync("/api/v1/topics", content);
+            response.EnsureSuccessStatusCode();
+
+            var receivedContent = await response.Content.ReadAsStringAsync();
+            return _serializer.Deserialize<Topic>(receivedContent);
         }
 
         public async Task<Topic> GetById(string id)

@@ -8,6 +8,10 @@ export default class TopicService {
         this.getAll = this.getAll.bind(this);
     }
 
+    add(payload) {
+        return this.client.post(this.baseUrl, payload).then(data => data || {});
+    }
+
     getAll() {
         return this.client.get(this.baseUrl)
             .then(data => data.items || []);

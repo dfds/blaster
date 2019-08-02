@@ -81,12 +81,14 @@ $navbar-padding-horizontal: 10em;
     flex-direction: column;
 
     h2 {
+        width: max-content;
         &.title {
             font-size: 1.6rem;
         }
 
         &:hover {
             cursor: pointer;
+            color: #939190;
         }
     }
 
@@ -111,6 +113,9 @@ $navbar-padding-horizontal: 10em;
                 padding-bottom: 8px;
                 padding-left: 12px;
                 padding-right: 12px;
+                p {
+                    white-space: pre-wrap;
+                }
             }
         }
 

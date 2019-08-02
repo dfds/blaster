@@ -27,6 +27,19 @@ namespace Blaster.WebApi.Features.Topics
             };
         }
 
+        [HttpPost("", Name = "CreateTopic")]
+        public async Task<ActionResult<Topic>> CreateTopic([FromBody] Topic input)
+        {
+            var topic = await _topicClient.CreateTopic(input.Name, input.Description, input.CapabilityId, input.Public);
+
+            if (topic != null)
+            {
+                return new ActionResult<Topic>(topic);
+            }
+            
+            return new ActionResult<Topic>(BadRequest());
+        }
+
         [HttpGet("{id}", Name = "GetTopicById")]
         public async Task<ActionResult<Topic>> GetById(string id)
         {

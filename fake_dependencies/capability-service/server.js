@@ -213,6 +213,33 @@ app.get("/api/v1/topics", (req, res) => {
         });
 });
 
+app.post("/api/v1/topics", (req, res) => {
+    const newTopic = req.body;
+    var newTopicInExpectedFormat = {
+        "name": newTopic.name,
+        "description": newTopic.description,
+        "id": new Date().getTime().toString(),
+        "capabilityId": newTopic.capabilityId,
+        "public": newTopic.public
+    }
+
+    readFile("./topic-data.json")
+    .then(data => JSON.parse(data))
+    .then(topics => {
+        topics.push(newTopicInExpectedFormat);
+        return topics;
+    })
+    .then(topics => JSON.stringify(topics, null, 2))
+    .then(json => writeFile("./topic-data.json", json))
+    .then(() => {
+        res.location(`/api/v1/topics/${newTopic.id}`);
+        res.status(201).send(newTopicInExpectedFormat);
+    })
+    .catch(err => {
+        res.status(500).json(err);
+    });
+});
+
 app.get("/api/v1/topics/:topicId", (req, res) => {
     const topicId = req.params.topicId;
 

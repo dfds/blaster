@@ -22,13 +22,13 @@ const TopicComponent = Vue.component("topic", {
                 {
                     "title": "aws_account_added_to_context",
                     "id": 2,
-                    "payload": "{\"version\":\"1\",\"eventName\":\"aws_context_account_created\",\"x-correlationId\":\"874ba750-ae81-446f-90c7-01b49228c327\",\"x-sender\":\"eg. FQDN of assembly\",\"payload\":{\"capabilityId\":\"bc3f3bbe-eeee-4230-8b2f-d0e1c327c59c\",\"capabilityName\":\"PAX Bookings\",\"capabilityRootId\":\"pax-bookings-A43aS\",\"contextId\":\"0d03e3ad-2118-46b7-970e-0ca87b59a202\",\"contextName\":\"blue\",\"accountId\":\"1234567890\",\"roleArn\":\"arn:aws:iam::1234567890:role/pax-bookings-A43aS\",\"roleEmail\":\"aws.pax-bookings-a43as@dfds.com\"}                    }    "
+                    "payload": "{\r\n    \"version\": \"1\",\r\n    \"eventName\": \"aws_context_account_created\",\r\n    \"x-correlationId\": \"874ba750-ae81-446f-90c7-01b49228c327\",\r\n    \"x-sender\": \"eg. FQDN of assembly\",\r\n    \"payload\": {\r\n        \"capabilityId\": \"bc3f3bbe-eeee-4230-8b2f-d0e1c327c59c\",\r\n        \"capabilityName\": \"PAX Bookings\",\r\n        \"capabilityRootId\": \"pax-bookings-A43aS\",\r\n        \"contextId\": \"0d03e3ad-2118-46b7-970e-0ca87b59a202\",\r\n        \"contextName\": \"blue\",\r\n        \"accountId\": \"1234567890\",\r\n        \"roleArn\": \"arn:aws:iam::1234567890:role\/pax-bookings-A43aS\",\r\n        \"roleEmail\": \"aws.pax-bookings-a43as@dfds.com\"\r\n    }\r\n}"
                 },
 
                 {
                     "title": "context_added_to_capability",
                     "id": 1,
-                    "payload": "{\"version\":\"1\",\"eventName\":\"context_added_to_capability\",\"x-correlationId\":\"<guid>|any string\",\"x-sender\":\"eg. FQDN of assembly\",\"payload\":{\"capabilityId\":\"bc3f3bbe-eeee-4230-8b2f-d0e1c327c59c\",\"contextId\":\"0d03e3ad-2118-46b7-970e-0ca87b59a202\",\"capabilityRootId\":\"pax-bookings-A43aS\",\"capabilityName\":\"PAX Bookings\",\"contextName\":\"blue\"}} "
+                    "payload": "{\r\n    \"version\": \"1\",\r\n    \"eventName\": \"context_added_to_capability\",\r\n    \"x-correlationId\": \"<guid>|any string\",\r\n    \"x-sender\": \"eg. FQDN of assembly\",\r\n    \"payload\": {\r\n        \"capabilityId\": \"bc3f3bbe-eeee-4230-8b2f-d0e1c327c59c\",\r\n        \"contextId\": \"0d03e3ad-2118-46b7-970e-0ca87b59a202\",\r\n        \"capabilityRootId\": \"pax-bookings-A43aS\",\r\n        \"capabilityName\": \"PAX Bookings\",\r\n        \"contextName\": \"blue\"\r\n    }\r\n}"
                 }
             ]
         }
@@ -64,6 +64,77 @@ const TopicComponent = Vue.component("topic", {
     `
 })
 
+const TopicAddComponent = Vue.component("topic-add", {
+    props: ["enable"],
+    data: function() {
+        return {
+            topicName: "",
+            topicDescription: "",
+            topicPublic: true
+        }
+    },
+    computed: {
+        isEnabledStyling: function() {
+            return this.enable;
+        }
+    },
+    methods: {
+        disable: function() {
+            this.enable = false;
+        }
+    },
+    updated: function() {
+        if (!this.enable) {
+            this.topicName = "";
+            this.topicDescription = "";
+            this.topicPublic = false;
+        }
+    },
+    template: `
+        <div class="modal" v-bind:class="{'is-active': this.isEnabledStyling}">
+            <div class="modal-background" v-on:click="$emit('addtopic-close')"></div>
+            <div class="modal-content">
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Add Topic</p>
+                        <button class="delete" aria-label="close" data-behavior="close" v-on:click="$emit('addtopic-close')"></button>
+                    </header>
+                    <div class="modal-card-body">
+                        <div class="dialog-container"></div>
+                        <div class="form">
+                            <div class="field">
+                                <label class="label">Name</label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Enter capability name" data-property="name" v-model="topicName">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Description</label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Description" data-property="description" v-model="topicDescription">
+                                </div>
+                            </div>
+                            <div class="field" style="display: inline-flex;">
+                                <label class="label">Public</label>
+                                <div class="control" style="margin-left: 6px;">
+                                    <input class="checkbox" type="checkbox" placeholder="Public" data-property="Public" v-model="topicPublic">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control has-text-centered">
+                                    <button class="button is-primary" data-behavior="save" v-on:click="$emit('addtopic-new-topic', topicName, topicDescription, topicPublic)">Save</button>
+                                    <button class="button is-info" aria-label="close" data-behavior="close" v-on:click="$emit('addtopic-close')">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="modal-close is-large" aria-label="close"></button>
+        </div>
+    `
+})
+
 const app = new Vue({
     el: "#capabilitydashboard-app",
     data: {
@@ -72,10 +143,12 @@ const app = new Vue({
         currentUser: currentUser,
         membershipRequested: false,
         contextRequested: false,
-        topics: null
+        topics: null,
+        showAddTopic: false
     },
     components: {
-        'topic': TopicComponent
+        'topic': TopicComponent,
+        'topic-add': TopicAddComponent,
     },
     computed: {
         capabilityFound: function() {
@@ -153,6 +226,21 @@ const app = new Vue({
             return members
                 .filter(member => member.email == this.currentUser.email)
                 .length > 0;
+        },
+        toggleShowAddTopic: function() {
+            this.showAddTopic = this.showAddTopic ? false : true;
+        },
+        addTopic: function(name, description, isPublic) {
+            const payload = {name: name, description: description, public: isPublic, capabilityId: this.capability.id}
+
+            // TODO: Rework this to handle errors
+            topicService.add(payload)
+                .then(data => {
+                    console.log(data);
+                    this.topics.push(data);
+                });
+
+            this.showAddTopic = false;
         },
         getAllTopics: function() {
             const topics = topicService.getAll();
