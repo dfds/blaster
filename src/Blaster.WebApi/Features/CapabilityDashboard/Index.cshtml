@@ -119,11 +119,11 @@
                 </div>
 
                 <topic-add :enable="showAddTopic" v-on:addtopic-new-topic="addTopic" v-on:addtopic-close="toggleShowAddTopic()"></topic-add>               
+                <message-contract-edit :enable="showMessageContractEdit" :initialdata="messageContractEditData" v-on:messagecontractedit-edit="handleMessageContractEdit" v-on:messagecontractedit-close="toggleShowMessageContractEdit"></message-contract-edit>
 
                 <div class="topics">
                     <div v-for="topic in capability.topics" :key="topic.id">
-                        <!-- <h2 class="title">{{ topic.name }}</h2> -->
-                        <topic :topic="topic"></topic>
+                        <topic :topic="topic" v-on:messagecontractedit-close="toggleShowMessageContractEdit"></topic>
                     </div>
                 </div>                
             </div>

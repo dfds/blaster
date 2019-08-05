@@ -7,6 +7,12 @@ import { currentUser } from "userservice";
 import AlertDialog from "./alert-dialog";
 import FeatureFlag from "featureflag";
 
+// Components
+import TopicComponent from "./TopicComponent";
+import TopicAddComponent from "./TopicAddComponent";
+import MessageContractAddComponent from "./MessageContractAddComponent";
+import MessageContractEditComponent from "./MessageContractEditComponent";
+
 const topicService = new TopicService();
 const capabilityService = new CapabilityService();
 FeatureFlag.setKeybinding();
@@ -221,12 +227,15 @@ const app = new Vue({
         membershipRequested: false,
         contextRequested: false,
         topics: null,
-        showAddTopic: false
+        showAddTopic: false,
+        showMessageContractEdit: false,
+        messageContractEditData: null
     },
     components: {
         'topic': TopicComponent,
         'topic-add': TopicAddComponent,
-        'message-contract-add': MessageContractAddComponent
+        'message-contract-add': MessageContractAddComponent,
+        'message-contract-edit': MessageContractEditComponent
     },
     computed: {
         capabilityFound: function() {
@@ -308,13 +317,24 @@ const app = new Vue({
         toggleShowAddTopic: function() {
             this.showAddTopic = this.showAddTopic ? false : true;
         },
+        toggleShowMessageContractEdit: function(data) {
+            if (this.showMessageContractEdit) {
+                this.messageContractEditData = null;
+                this.showMessageContractEdit = false;
+            } else {
+                this.messageContractEditData = data;
+                this.showMessageContractEdit = true;
+            }
+        },
+        handleMessageContractEdit: function(id, title, type, schema) {
+            // TODO: Waiting for contract to be finished.
+        },
         addTopic: function(name, description, isPrivate) {
             const payload = {name: name, description: description, isPrivate: isPrivate}
 
             // TODO: Rework this to handle errors
             capabilityService.addTopic(payload, this.capability.id)
                 .then(data => {
-                    console.log(data);
                     this.capability.topics.push(data);
                 });
 

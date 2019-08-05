@@ -96,9 +96,14 @@ $navbar-padding-horizontal: 10em;
         display: flex;
         flex-direction: column;
 
-        .entry {
+        .message-contract {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
+
+            .block {
+                display: flex;
+                flex-direction: row;
+            }
 
             .entry-title {
                 font-weight: 600;
@@ -106,7 +111,6 @@ $navbar-padding-horizontal: 10em;
             }
 
             .schema {
-                //color: #eeeeee;
                 color: #f1fa8c;
                 background-color: #282a36;
                 padding-top: 8px;
@@ -116,6 +120,17 @@ $navbar-padding-horizontal: 10em;
                 p {
                     white-space: pre-wrap;
                 }
+            }
+        }
+
+        .entry {
+            display: flex;
+            flex-direction: row;
+
+
+            .entry-title {
+                font-weight: 600;
+                margin-right: 5px;
             }
         }
 
