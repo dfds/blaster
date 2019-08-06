@@ -1,10 +1,10 @@
 import Vue from "vue";
 
 const MessageContractAddComponent = Vue.component("message-contract-add", {
-    props: ["enable"],
+    props: ["enable", "topicId"],
     data: function() {
         return {
-            mcTitle: "",
+            mcDescription: "",
             mcType: "",
             mcSchema: ""
         }
@@ -21,7 +21,7 @@ const MessageContractAddComponent = Vue.component("message-contract-add", {
     },
     updated: function() {
         if (!this.enable) {
-            this.mcTitle = "";
+            this.mcDescription = "";
             this.mcType = "";
             this.mcSchema = "";
         }
@@ -39,15 +39,15 @@ const MessageContractAddComponent = Vue.component("message-contract-add", {
                         <div class="dialog-container"></div>
                         <div class="form">
                         <div class="field">
-                                <label class="label">Title</label>
+                                <label class="label">Description</label>
                                 <div class="control">
-                                    <input class="input" type="text" placeholder="Title" data-property="title" v-model="mcTitle">
+                                    <input class="input" type="text" placeholder="Description" data-property="description" v-model="mcDescription">
                                 </div>
                             </div>                            
                             <div class="field">
                                 <label class="label">Type</label>
                                 <div class="control">
-                                    <input class="input" type="text" placeholder="Select type" data-property="type" v-model="mcType">
+                                    <input class="input" type="text" placeholder="Type" data-property="type" v-model="mcType">
                                 </div>
                             </div>
                             <div class="field">
@@ -58,7 +58,7 @@ const MessageContractAddComponent = Vue.component("message-contract-add", {
                             </div>
                             <div class="field">
                                 <div class="control has-text-centered">
-                                    <button class="button is-primary" data-behavior="save" v-on:click="$emit('messagecontractadd-new', mcTitle, mcType, mcSchema)">Save</button>
+                                    <button class="button is-primary" data-behavior="save" v-on:click="$emit('messagecontractadd-new', mcDescription, mcType, mcSchema, topicId)">Save</button>
                                     <button class="button is-info" aria-label="close" data-behavior="close" v-on:click="$emit('messagecontractadd-close')">Cancel</button>
                                 </div>
                             </div>

@@ -26,6 +26,23 @@ namespace Blaster.WebApi.Features.Capabilities
             return _serializer.Deserialize<CapabilitiesResponse>(content);
         }
 
+        public async Task<TopicsResponse> GetAllTopics()
+        {
+            var response = await _client.GetAsync("/api/v1/topics");
+            var content = await response.Content.ReadAsStringAsync();
+
+            return _serializer.Deserialize<TopicsResponse>(content);
+        }
+
+        public async Task<Topic> GetTopic(string id)
+        {
+            var response = await _client.GetAsync($"/api/v1/topics/{id}");
+            var content = await response.Content.ReadAsStringAsync();
+            response.EnsureSuccessStatusCode();
+
+            return _serializer.Deserialize<Topic>(content);
+        }
+
         public async Task<Capability> CreateCapability(string name, string description)
         {
             var content = new StringContent(
@@ -48,19 +65,45 @@ namespace Blaster.WebApi.Features.Capabilities
             return _serializer.Deserialize<Capability>(receivedContent);
         }
         
-        public async Task<Topic> CreateTopic(string name, string description, string capabilityId, bool isPrivate)
+        public async Task CreateTopic(string name, string description, string capabilityId, bool isPrivate)
         {
             var content = new StringContent(
-                content: _serializer.Serialize(new { Name = name, Description = description, IsPrivate = isPrivate}),
+                content: _serializer.Serialize(new { Name = name, Description = description, IsPrivate = isPrivate, MessageContract = new MessageContract[0]}),
                 encoding: Encoding.UTF8,
                 mediaType: "application/json"
             );
 
             var response = await _client.PostAsync($"/api/v1/capabilities/{capabilityId}/topics", content);
             response.EnsureSuccessStatusCode();
+        }
 
-            var receivedContent = await response.Content.ReadAsStringAsync();
-            return _serializer.Deserialize<Topic>(receivedContent);
+        public async Task CreateMessageContract(string type, string description, string content, string topicId)
+        {
+            var reqContent = new StringContent(
+                content: _serializer.Serialize(new { Type = type, Description = description, Content = content}),
+                encoding: Encoding.UTF8,
+                mediaType: "application/json"
+                );
+
+            var response = await _client.PostAsync($"/api/v1/topics/{topicId}/messageContracts", reqContent);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task RemoveMessageContract(string topicId, string type)
+        {
+            var response = await _client.DeleteAsync($"/api/v1/topics/{topicId}/messageContracts/{type}");
+            var content = await response.Content.ReadAsStringAsync();
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task<MessageContractsResponse> GetMessageContractsByTopicId(string topicId)
+        {
+            var response = await _client.GetAsync($"/api/v1/topics/{topicId}/messageContracts");
+            response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            return _serializer.Deserialize<MessageContractsResponse>(content);
         }
 
         public async Task<Capability> GetById(string id)

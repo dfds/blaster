@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -62,16 +63,18 @@ namespace Blaster.WebApi.Features.Capabilities
         }
         
         [HttpPost("{id}/topics", Name = "CreateTopic")]
-        public async Task<ActionResult<Topic>> CreateTopic(string id, [FromBody] Topic input)
+        public async Task<ActionResult<string>> CreateTopic(string id, [FromBody] Topic input)
         {
-            var topic = await _capabilityServiceClient.CreateTopic(input.Name, input.Description, id, input.IsPrivate);
-
-            if (topic != null)
+            try
             {
-                return new ActionResult<Topic>(topic);
+                await _capabilityServiceClient.CreateTopic(input.Name, input.Description, id, input.IsPrivate);
+            }
+            catch (HttpRequestException)
+            {
+                return new ActionResult<string>(BadRequest());
             }
             
-            return new ActionResult<Topic>(BadRequest());
+            return new ActionResult<string>(NoContent());
         }
 
         [HttpPost("{id}/members", Name = "JoinCapability")]

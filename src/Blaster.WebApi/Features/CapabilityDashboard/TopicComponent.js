@@ -34,13 +34,17 @@ const TopicComponent = Vue.component("topic", {
         toggleShowAddMessageContract: function() {
             this.showMessageContract = this.showMessageContract ? false : true;
         },
+        forwardNewMessageContract: function(description, type, schema, topicId) {
+            this.$emit("messagecontractadd-new", description, type, schema, topicId);
+            this.toggleShowAddMessageContract();
+        }
     },
     computed: {
 
     },
     template: `
         <div class="topic">
-            <message-contract-add :enable="showMessageContract" v-on:messagecontractadd-close="toggleShowAddMessageContract()"></message-contract-add>
+            <message-contract-add :enable="showMessageContract" :topicId="topic.id" v-on:messagecontractadd-new="forwardNewMessageContract" v-on:messagecontractadd-close="toggleShowAddMessageContract()"></message-contract-add>
             <h2 class="title" title="Click to expand" v-on:click="toggleShowData()" >{{ topic.name }}</h2>
             <div class="details" v-if="showData">
                 <span class="entry"><span class="entry-title">Private:</span> <div :class="this.getPublicStyling()">{{ this.getPublicText() }}</div></span>
@@ -56,10 +60,13 @@ const TopicComponent = Vue.component("topic", {
                     </button>   
                 </div>
 
-                <div v-for="message_contract in messages" :key="message_contract.id" class="message-contract" style="margin-bottom: 40px;">
+                <div v-for="message_contract in topic.messageContracts" :key="message_contract.type" class="message-contract" style="margin-bottom: 40px;">
+                    <div>
+                        <p><span class="entry-title">Type:</span> {{ message_contract.type }}</p>
+                        <p><span class="entry-title">Description:</span> {{ message_contract.description }}</p>
+                    </div>
                     <div class="block">
-                        <p style="word-wrap: break-word; width: 25%;"><span class="entry-title">Title:</span> {{ message_contract.title }}</p>
-                        <div class="schema" style="width: 75%;"><p style="word-wrap: break-word;">{{ message_contract.payload }}</p></div>
+                        <div class="schema" style="width: 100%;"><p style="word-wrap: break-word;">{{ message_contract.content }}</p></div>
                     </div>
 
                     <div class="block">
@@ -69,6 +76,12 @@ const TopicComponent = Vue.component("topic", {
                                 v-on:click="$emit('messagecontractedit-close', message_contract)"
                                 class="button is-small is-primary">
                                 Edit
+                            </button>   
+                            <button
+                                type="button"
+                                v-on:click="$emit('messagecontract-delete', topic.id, message_contract.type)"
+                                class="button is-small is-primary">
+                                Delete
                             </button>   
                         </div>                        
                     </div>

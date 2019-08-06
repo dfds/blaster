@@ -26,4 +26,17 @@ export default class TopicService {
         return this.client.get(`${this.baseUrl}/by-capability-id/${capabilityId}`)
             .then(data => data.items || []);
     }
+
+    getMessageContractsByTopicId(topicId) {
+        return this.client.get(`${this.baseUrl}/${topicId}/messageContracts`)
+            .then(data => data.items || []);
+    }
+
+    addMessageContract(topicId, payload) {
+        return this.client.post(`${this.baseUrl}/${topicId}/messageContracts`, payload);
+    }
+
+    deleteMessageContract(topicId, mcType) {
+        return this.client.delete(`${this.baseUrl}/${topicId}/messageContracts/${mcType}`);
+    }
 }

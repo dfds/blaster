@@ -326,17 +326,35 @@ const app = new Vue({
                 this.showMessageContractEdit = true;
             }
         },
-        handleMessageContractEdit: function(id, title, type, schema) {
+        handleMessageContractEdit: function(type, description, schema) {
             // TODO: Waiting for contract to be finished.
         },
+        handleMessageContractAdd: function(type, description, schema, topicId) {
+            topicService.addMessageContract(topicId, {"type": type, "description": description, "content": schema})
+                .then(() => {
+                    return capabilityService.get(this.capability.id);
+                })
+                .then(data => this.capability = data)
+                .catch(err => console.log(JSON.stringify(err)));
+        },
+        handleMessageContractDelete: function(topicId, type) {
+            topicService.deleteMessageContract(topicId, type)
+                .then(() => {
+                    return capabilityService.get(this.capability.id);
+                })
+                .then(data => this.capability = data)
+                .catch(err => console.log(JSON.stringify(err)));
+        },
         addTopic: function(name, description, isPrivate) {
-            const payload = {name: name, description: description, isPrivate: isPrivate}
+            const payload = {name: name, description: description, isPrivate: isPrivate, messageContracts: []}
 
             // TODO: Rework this to handle errors
             capabilityService.addTopic(payload, this.capability.id)
                 .then(data => {
-                    this.capability.topics.push(data);
-                });
+                    return capabilityService.get(this.capability.id);
+                })
+                .then(data => this.capability = data)
+                .catch(err => console.log("Error adding topic: " + JSON.stringify(err)));
 
             this.showAddTopic = false;
         },
@@ -419,8 +437,6 @@ const app = new Vue({
         jq.ready
             .then(() => capabilityService.get(capabilityIdParam))
             .then(capability => this.capability = capability)
-            //.then(() => topicService.getByCapabilityId(this.capability.id))
-            //.then(topics => this.topics = topics)
             .catch(info => {
                 if (info.status != 200) {
                     AlertDialog.open({

@@ -4,8 +4,7 @@ const MessageContractEditComponent = Vue.component("message-contract-edit", {
     props: ["enable", "initialdata"],
     data: function() {
         return {
-            mcId: "",
-            mcTitle: "",
+            mcDescription: "",
             mcType: "",
             mcSchema: ""
         }
@@ -22,8 +21,7 @@ const MessageContractEditComponent = Vue.component("message-contract-edit", {
     },
     updated: function() {
         if (!this.enable) {
-            this.mcId = "";
-            this.mcTitle = "";
+            this.mcDescription = "",
             this.mcType = "";
             this.mcSchema = "";
         }
@@ -31,10 +29,9 @@ const MessageContractEditComponent = Vue.component("message-contract-edit", {
     watch: {
         initialdata: function(newData, oldData) {
             if (newData) {
-                this.mcId = newData.id;
-                this.mcTitle = newData.title;
+                this.mcDescription = newData.description;
                 this.mcType = newData.type;
-                this.mcSchema = newData.payload;
+                this.mcSchema = newData.content;
             }
         }
     },
@@ -51,15 +48,15 @@ const MessageContractEditComponent = Vue.component("message-contract-edit", {
                         <div class="dialog-container"></div>
                         <div class="form">
                         <div class="field">
-                                <label class="label">Title</label>
+                                <label class="label">Type</label>
                                 <div class="control">
-                                    <input class="input" type="text" placeholder="Title" data-property="title" v-model="mcTitle">
+                                    <input class="input" type="text" placeholder="Type" data-property="type" v-model="mcType" readonly>
                                 </div>
                             </div>                            
                             <div class="field">
-                                <label class="label">Type</label>
+                                <label class="label">Description</label>
                                 <div class="control">
-                                    <input class="input" type="text" placeholder="Select type" data-property="type" v-model="mcType">
+                                    <input class="input" type="text" placeholder="Description" data-property="description" v-model="mcDescription">
                                 </div>
                             </div>
                             <div class="field">
@@ -70,7 +67,7 @@ const MessageContractEditComponent = Vue.component("message-contract-edit", {
                             </div>
                             <div class="field">
                                 <div class="control has-text-centered">
-                                    <button class="button is-primary" data-behavior="save" v-on:click="$emit('messagecontractedit-edit', mcId, mcTitle, mcType, mcSchema)">Save</button>
+                                    <button class="button is-primary" data-behavior="save" v-on:click="$emit('messagecontractedit-edit', mcType, mcDescription, mcSchema)">Save</button>
                                     <button class="button is-info" aria-label="close" data-behavior="close" v-on:click="$emit('messagecontractedit-close')">Cancel</button>
                                 </div>
                             </div>
