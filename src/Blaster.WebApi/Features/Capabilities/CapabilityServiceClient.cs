@@ -77,6 +77,19 @@ namespace Blaster.WebApi.Features.Capabilities
             response.EnsureSuccessStatusCode();
         }
 
+        public async Task UpdateTopic(string topicId, Topic input)
+        {
+            var reqContent = new StringContent(
+                content: _serializer.Serialize(new {Description = input.Description, Name = input.Name, IsPrivate = input.IsPrivate}),
+                encoding: Encoding.UTF8,
+                mediaType: "application/json"
+            );
+
+            var response = await _client.PutAsync($"/api/v1/topics/{topicId}", reqContent);
+            var content = await response.Content.ReadAsStringAsync();
+            response.EnsureSuccessStatusCode();
+        }
+
         public async Task CreateMessageContract(string type, string description, string content, string topicId)
         {
             var reqContent = new StringContent(
@@ -86,6 +99,18 @@ namespace Blaster.WebApi.Features.Capabilities
                 );
 
             var response = await _client.PostAsync($"/api/v1/topics/{topicId}/messageContracts", reqContent);
+            response.EnsureSuccessStatusCode();
+        }
+        
+        public async Task AddUpdateMessageContract(string type, string topicId, MessageContractInput input)
+        {
+            var reqContent = new StringContent(
+                content: _serializer.Serialize(new {Description = input.Description, Content = input.Content}),
+                encoding: Encoding.UTF8,
+                mediaType: "application/json"
+            );
+
+            var response = await _client.PutAsync($"/api/v1/topics/{topicId}/messageContracts/{type}", reqContent);
             response.EnsureSuccessStatusCode();
         }
 

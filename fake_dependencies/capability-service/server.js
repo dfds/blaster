@@ -263,6 +263,38 @@ app.get("/api/v1/topics/:topicId", (req, res) => {
         });
 });
 
+app.put("/api/v1/topics/:topicId", (req, res) => {
+    const topicId = req.params.topicId;
+    const topicInput = req.body;
+
+    readFile("./topic-data.json")
+        .then(data => JSON.parse(data))
+        .then(data => {
+            const topic = data.find(topic => new String(topic.id).valueOf() === new String(topicId).valueOf());
+            
+            if (!topic) {
+                return new Promise(resolve => {
+                    res
+                        .status(404)
+                        .send({message: `Topic with id ${topicId} could not be found`});
+                    resolve();
+                });
+            } else {
+                topic.name = topicInput.name === undefined ? topic.name : topicInput.name;
+                topic.description = topicInput.description === undefined ? topic.description : topicInput.description;
+                topic.isPrivate = topicInput.isPrivate === undefined ? topic.isPrivate : topicInput.isPrivate;
+
+                return Promise.resolve(serialize(data))
+                .then(json => writeFile("./topic-data.json", json))
+                .then(() => console.log(`Added/Updated Topic ${topicInput.name}`))
+                .then(() => res.sendStatus(204));
+            }
+        })
+        .catch(err => {
+            res.status(500).json(err);
+        });
+});
+
 app.get("/api/v1/topics/:topicId/messageContracts", (req, res) => {
     const topicId = req.params.topicId;
 
@@ -280,6 +312,8 @@ app.get("/api/v1/topics/:topicId/messageContracts", (req, res) => {
         })
 });
 
+
+// TODO: Made obsolete in recent API contract revision, to be removed.
 app.post("/api/v1/topics/:topicId/messageContracts", (req, res) => {
     const topicId = req.params.topicId;
     const newMessageContract = req.body;
@@ -307,6 +341,47 @@ app.post("/api/v1/topics/:topicId/messageContracts", (req, res) => {
         .catch(err => {
             res.status(500).json(err);
         });
+});
+
+// TODO: Recent addition, make sure it's available in blaster
+app.put("/api/v1/topics/:topicId/messageContracts/:messageContractType", (req, res) => {
+    const topicId = req.params.topicId;
+    const messageContractType = req.params.messageContractType;
+    const newMessageContract = req.body;
+
+    readFile("./topic-data.json")
+        .then(data => JSON.parse(data))
+        .then(data => {
+            const topic = data.find(topic => new String(topic.id).valueOf() === new String(topicId).valueOf());
+            
+            if (!topic) {
+                return new Promise(resolve => {
+                    res
+                        .status(404)
+                        .send({message: `Topic with id ${topicId} could not be found`});
+                    resolve();
+                });
+            } else {
+                const mc = topic.messageContracts.find(mc => new String(mc.type).valueOf() === new String(messageContractType).valueOf());
+
+                if (mc) {
+                    mc.description = newMessageContract.description === undefined ? mc.description : newMessageContract.description;
+                    mc.content = newMessageContract.content === undefined ? mc.content : newMessageContract.content;
+                } else {
+                    newMessageContract.type = messageContractType;
+                    topic.messageContracts.push(newMessageContract);
+                }
+
+                return Promise.resolve(serialize(data))
+                .then(json => writeFile("./topic-data.json", json))
+                .then(() => console.log(`Added/Updated MessageContract ${messageContractType} to topic ${topic.name}`))
+                .then(() => res.sendStatus(204));
+            }
+        })
+        .catch(err => {
+            res.status(500).json(err);
+        });
+
 });
 
 app.delete("/api/v1/topics/:topicId/messageContracts/:messageContractType", (req, res) => {

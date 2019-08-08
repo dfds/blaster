@@ -6,7 +6,8 @@ const MessageContractEditComponent = Vue.component("message-contract-edit", {
         return {
             mcDescription: "",
             mcType: "",
-            mcSchema: ""
+            mcSchema: "",
+            mcTopicId: ""
         }
     },
     computed: {
@@ -24,6 +25,7 @@ const MessageContractEditComponent = Vue.component("message-contract-edit", {
             this.mcDescription = "",
             this.mcType = "";
             this.mcSchema = "";
+            this.mcTopicId = "";
         }
     },
     watch: {
@@ -32,6 +34,7 @@ const MessageContractEditComponent = Vue.component("message-contract-edit", {
                 this.mcDescription = newData.description;
                 this.mcType = newData.type;
                 this.mcSchema = newData.content;
+                this.mcTopicId = newData.topicId;
             }
         }
     },
@@ -41,7 +44,7 @@ const MessageContractEditComponent = Vue.component("message-contract-edit", {
             <div class="modal-content">
                 <div class="modal-card">
                     <header class="modal-card-head">
-                        <p class="modal-card-title">Add Message contract to Topic</p>
+                        <p class="modal-card-title">Edit Message contract</p>
                         <button class="delete" aria-label="close" data-behavior="close" v-on:click="$emit('messagecontractedit-close')"></button>
                     </header>
                     <div class="modal-card-body">
@@ -67,7 +70,7 @@ const MessageContractEditComponent = Vue.component("message-contract-edit", {
                             </div>
                             <div class="field">
                                 <div class="control has-text-centered">
-                                    <button class="button is-primary" data-behavior="save" v-on:click="$emit('messagecontractedit-edit', mcType, mcDescription, mcSchema)">Save</button>
+                                    <button class="button is-primary" data-behavior="save" v-on:click="$emit('messagecontractedit-edit', mcType, mcDescription, mcSchema, mcTopicId)">Save</button>
                                     <button class="button is-info" aria-label="close" data-behavior="close" v-on:click="$emit('messagecontractedit-close')">Cancel</button>
                                 </div>
                             </div>

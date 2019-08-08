@@ -11,7 +11,9 @@ namespace Blaster.WebApi.Features.Capabilities
         Task<Topic> GetTopic(string id);
         Task<Capability> CreateCapability(string name, string description);
         Task CreateTopic(string title, string description, string capabilityId, bool isPrivate);
+        Task UpdateTopic(string topicId, Topic input);
         Task CreateMessageContract(string type, string description, string content, string topicId);
+        Task AddUpdateMessageContract(string type, string topicId, MessageContractInput input);
         Task RemoveMessageContract(string topicId, string type);
         Task<MessageContractsResponse> GetMessageContractsByTopicId(string topicId);
         Task<Capability> GetById(string id);

@@ -10,6 +10,7 @@ import FeatureFlag from "featureflag";
 // Components
 import TopicComponent from "./TopicComponent";
 import TopicAddComponent from "./TopicAddComponent";
+import TopicEditComponent from "./TopicEditComponent";
 import MessageContractAddComponent from "./MessageContractAddComponent";
 import MessageContractEditComponent from "./MessageContractEditComponent";
 
@@ -228,12 +229,15 @@ const app = new Vue({
         contextRequested: false,
         topics: null,
         showAddTopic: false,
+        showEditTopic: false,
         showMessageContractEdit: false,
-        messageContractEditData: null
+        messageContractEditData: null,
+        topicEditData: null
     },
     components: {
         'topic': TopicComponent,
         'topic-add': TopicAddComponent,
+        'topic-edit': TopicEditComponent,
         'message-contract-add': MessageContractAddComponent,
         'message-contract-edit': MessageContractEditComponent
     },
@@ -317,20 +321,36 @@ const app = new Vue({
         toggleShowAddTopic: function() {
             this.showAddTopic = this.showAddTopic ? false : true;
         },
-        toggleShowMessageContractEdit: function(data) {
+        toggleShowEditTopic: function(topic) {
+            if (this.showEditTopic) {
+                this.topicEditData = null;
+                this.showEditTopic = false;                
+            } else {
+                this.topicEditData = topic;
+                this.showEditTopic = true;
+            }
+        },
+        toggleShowMessageContractEdit: function(data, topicId) {
             if (this.showMessageContractEdit) {
                 this.messageContractEditData = null;
                 this.showMessageContractEdit = false;
             } else {
                 this.messageContractEditData = data;
+                this.messageContractEditData.topicId = topicId;
                 this.showMessageContractEdit = true;
             }
         },
-        handleMessageContractEdit: function(type, description, schema) {
-            // TODO: Waiting for contract to be finished.
+        handleMessageContractEdit: function(type, description, schema, topicId) {
+            topicService.addOrUpdateMessageContract(topicId, type, {"description": description, "content": schema})
+                .then(() => {
+                    return capabilityService.get(this.capability.id);
+                })
+                .then(data => this.capability = data)
+                .catch(err => console.log(JSON.stringify(err)));
+            this.toggleShowMessageContractEdit();
         },
-        handleMessageContractAdd: function(type, description, schema, topicId) {
-            topicService.addMessageContract(topicId, {"type": type, "description": description, "content": schema})
+        handleMessageContractAdd: function(description, type, schema, topicId) {
+            topicService.addOrUpdateMessageContract(topicId, type, {"description": description, "content": schema})
                 .then(() => {
                     return capabilityService.get(this.capability.id);
                 })
@@ -357,6 +377,17 @@ const app = new Vue({
                 .catch(err => console.log("Error adding topic: " + JSON.stringify(err)));
 
             this.showAddTopic = false;
+        },
+        editTopic: function(name, description, isPrivate, id) {
+            const payload = {name: name, description: description, isPrivate: isPrivate};
+
+            topicService.update(id, payload)
+                .then(() => {
+                    return capabilityService.get(this.capability.id);
+                })
+                .then(data => this.capability = data)
+                .catch(err => console.log(JSON.stringify(err)));
+            this.toggleShowEditTopic();
         },
         getAllTopics: function() {
             const topics = topicService.getAll();

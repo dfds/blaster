@@ -58,6 +58,13 @@ const TopicComponent = Vue.component("topic", {
                         class="button is-small is-primary">
                         Add Message contract
                     </button>   
+
+                    <button
+                        type="button"
+                        v-on:click="$emit('addtopic-close', topic)"
+                        class="button is-small is-primary">
+                        Edit Topic
+                    </button>   
                 </div>
 
                 <div v-for="message_contract in topic.messageContracts" :key="message_contract.type" class="message-contract" style="margin-bottom: 40px;">
@@ -73,7 +80,7 @@ const TopicComponent = Vue.component("topic", {
                         <div class="buttons is-right" style="width: 100%;">
                             <button
                                 type="button"
-                                v-on:click="$emit('messagecontractedit-close', message_contract)"
+                                v-on:click="$emit('messagecontractedit-close', message_contract, topic.id)"
                                 class="button is-small is-primary">
                                 Edit
                             </button>   

@@ -27,13 +27,22 @@ export default class TopicService {
             .then(data => data.items || []);
     }
 
+    update(topicId, payload) {
+        return this.client.put(`${this.baseUrl}/${topicId}`, payload);
+    }
+
     getMessageContractsByTopicId(topicId) {
         return this.client.get(`${this.baseUrl}/${topicId}/messageContracts`)
             .then(data => data.items || []);
     }
 
+    // TODO: Made obsolete in recent API contract revision, to be removed.
     addMessageContract(topicId, payload) {
         return this.client.post(`${this.baseUrl}/${topicId}/messageContracts`, payload);
+    }
+
+    addOrUpdateMessageContract(topicId, mcType, payload) {
+        return this.client.put(`${this.baseUrl}/${topicId}/messageContracts/${mcType}`, payload);
     }
 
     deleteMessageContract(topicId, mcType) {

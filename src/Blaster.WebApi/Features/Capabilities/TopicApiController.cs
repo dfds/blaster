@@ -40,6 +40,21 @@ namespace Blaster.WebApi.Features.Capabilities
                 return new ActionResult<Topic>(BadRequest());
             }
         }
+        
+        [HttpPut("{topicId}", Name = "UpdateTopic")]
+        public async Task<IActionResult> Update(string topicId, [FromBody] Topic input)
+        {
+            try
+            {
+                await _capabilityServiceClient.UpdateTopic(topicId, input);
+            }
+            catch (HttpRequestException)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
+        }
 
         [HttpGet("{topicId}/messageContracts", Name = "GetAllMessageContractsForTopic")]
         public async Task<ActionResult<MessageContractsResponse>> GetAllMessageContractsForTopic(string topicId)
@@ -52,6 +67,7 @@ namespace Blaster.WebApi.Features.Capabilities
             };
         }
 
+        // TODO: Made obsolete in recent API contract revision, to be removed.
         [HttpPost("{topicId}/messageContracts", Name = "CreateMessageContract")]
         public async Task<IActionResult> CreateMessageContract(string topicId, [FromBody] MessageContractInput input)
         {
@@ -68,12 +84,27 @@ namespace Blaster.WebApi.Features.Capabilities
             return NoContent();
         }
 
-        [HttpDelete("{topicId}/messageContracts/{type}")]
+        [HttpDelete("{topicId}/messageContracts/{type}", Name = "DeleteMessageContract")]
         public async Task<IActionResult> DeleteMessageContract(string topicId, string type)
         {
             try
             {
                 await _capabilityServiceClient.RemoveMessageContract(topicId, type);
+            }
+            catch (HttpRequestException)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
+        }
+
+        [HttpPut("{topicId}/messageContracts/{type}", Name = "AddUpdateMessageContract")]
+        public async Task<IActionResult> AddUpdateMessageContract(string topicId, string type, [FromBody] MessageContractInput input)
+        {
+            try
+            {
+                await _capabilityServiceClient.AddUpdateMessageContract(type, topicId, input);
             }
             catch (HttpRequestException)
             {
