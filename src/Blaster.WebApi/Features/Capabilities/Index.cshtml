@@ -46,7 +46,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="capability in items" v-bind:data-id="capability.id">
-                        <td><a :href="capability.id | capabilitydetails">{{capability.name}}</a></td>
+                        <td><a :href="capability.id | capabilitydetails">{{capability.name}}<span v-if="capability.rootId">*</span></a></td>
                         <td>
                             <div class="tags">
                                 <span v-if="getMembershipStatusFor(capability.id) == 'member'" class="tag is-primary">Joined</span>
@@ -68,6 +68,7 @@
                     </tr>
                 </tbody>
             </table>
+        <div style="font-size: 10px;">* Considered discontinued capabilties.</div>
         </div>
     </section>
 
