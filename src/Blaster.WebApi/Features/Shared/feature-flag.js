@@ -10,7 +10,7 @@ export default class FeatureFlag {
     }
 
     flagExists(name) {
-        return this.flags[name] !== null;
+        return this.flags[name] !== undefined;
     }
 
     addFlag(flag) {
