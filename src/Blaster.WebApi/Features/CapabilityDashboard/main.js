@@ -5,10 +5,12 @@ import TopicService from "topicservice"
 import jq from "jquery";
 import { currentUser } from "userservice";
 import AlertDialog from "./alert-dialog";
+import FeatureFlag from "featureflag";
 
 const topicService = new TopicService();
 const capabilityService = new CapabilityService();
 
+Vue.prototype.$featureFlag = new FeatureFlag();
 const app = new Vue({
     el: "#capabilitydashboard-app",
     data: {

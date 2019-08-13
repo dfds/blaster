@@ -24,6 +24,7 @@ module.exports = {
             modeleditor$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/model-editor.js"),
             capabilityservice$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/capabilityservice.js"),
             topicservice$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/topicservice.js"),
+            featureflag$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/feature-flag.js"),
         },
         extensions: [".js", ".scss"]
     },
