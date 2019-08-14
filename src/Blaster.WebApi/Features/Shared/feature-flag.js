@@ -11,9 +11,6 @@ export default class FeatureFlag {
     setupFlags() {
          this.addFlag(new FlagTestFilter());
          this.addFlag(new FlagTopics());
-
-         console.log(this.flagExists('testfilter'));
-         console.log(this.flagExists('testfilterxx'));
     }
 
     init() {
