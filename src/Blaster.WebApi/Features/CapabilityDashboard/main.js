@@ -9,6 +9,7 @@ import FeatureFlag from "featureflag";
 
 const topicService = new TopicService();
 const capabilityService = new CapabilityService();
+FeatureFlag.setKeybinding();
 
 Vue.prototype.$featureFlag = new FeatureFlag();
 const app = new Vue({

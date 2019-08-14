@@ -8,6 +8,7 @@ import FeatureFlag from "featureflag";
 import TestCapabilitiesFiltered from './test-filter';
 
 const capabilityService = new CapabilityService();
+FeatureFlag.setKeybinding();
 
 Vue.prototype.$featureFlag = new FeatureFlag();
 const app = new Vue({

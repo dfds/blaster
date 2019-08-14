@@ -1,4 +1,5 @@
 import Cookies from "js-cookie";
+import konami from "konami";
 
 export default class FeatureFlag {
     constructor() {
@@ -24,6 +25,10 @@ export default class FeatureFlag {
                 }
             })
         }
+    }
+
+    static setKeybinding() {
+        new konami('/featureflags');
     }
 
     flagExists(name) {
