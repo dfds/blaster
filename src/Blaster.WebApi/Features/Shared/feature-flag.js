@@ -11,6 +11,9 @@ export default class FeatureFlag {
     setupFlags() {
          this.addFlag(new FlagTestFilter());
          this.addFlag(new FlagTopics());
+
+         console.log(this.flagExists('testfilter'));
+         console.log(this.flagExists('testfilterxx'));
     }
 
     init() {
@@ -32,7 +35,7 @@ export default class FeatureFlag {
     }
 
     flagExists(name) {
-        return this.flags[name] !== undefined;
+        return name in this.flags;
     }
 
     addFlag(flag) {
