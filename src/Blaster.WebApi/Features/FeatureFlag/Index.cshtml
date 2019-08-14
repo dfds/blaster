@@ -1,0 +1,50 @@
+﻿@section Scripts
+{
+    <script src="~/featureflags.bundle.js"></script>
+}
+
+<div id="capabilities-app" v-cloak>
+    <section class="section">
+        <div class="container">
+            <div class="level">
+                <div class="level-left">
+                    <div class="level-item">
+                        <h1 class="title">Feature flags</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="container">
+
+            <div id="global-dialog-container"></div>
+
+            <div class="has-text-centered" v-if="initializing">
+                Loading...
+            </div>
+            <div>
+                <p>Toggle experimental/debugging features</p>
+            </div>
+
+            <table class="table is-fullwidth is-hoverable" v-if="hasFlags">
+                <thead>
+                    <tr>
+                        <th style="width: 30px;">Enabled</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="flag in flags" v-bind:data-id="flag.name">
+                        <td style="text-align:center;"><input class="checkbox" type="checkbox" placeholder="Enabled" data-property="Enabled" v-model="flag.enabled"></td>
+                        <td>{{flag.name}}</td>
+                        <td>{{flag.description}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>

@@ -9,6 +9,7 @@ module.exports = {
         topics: "./Blaster.WebApi/Features/Topic/main.js",
         capabilitydashboard: "./Blaster.WebApi/Features/CapabilityDashboard/main.js",
         topicdetails: "./Blaster.WebApi/Features/TopicDetails/main.js",
+        featureflags: "./Blaster.WebApi/Features/FeatureFlag/main.js",
 
     },
     output: {
