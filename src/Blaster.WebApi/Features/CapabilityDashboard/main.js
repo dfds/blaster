@@ -46,7 +46,7 @@ const app = new Vue({
                     msg = msg + "You haven't joined this Capability." + "\n";
                 }
                 if (this.isLegacyComputed) {
-                    msg = msg + "This Capability is discontinued. Consider creating a new Capability." + "\n";
+                    msg = msg + "This Capability is legacy and won't recieve future updates. Consider creating a new Capability." + "\n";
                 }
             } 
             return msg;
