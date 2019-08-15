@@ -9,6 +9,7 @@ module.exports = {
         topics: "./Blaster.WebApi/Features/Topic/main.js",
         capabilitydashboard: "./Blaster.WebApi/Features/CapabilityDashboard/main.js",
         topicdetails: "./Blaster.WebApi/Features/TopicDetails/main.js",
+        featureflags: "./Blaster.WebApi/Features/FeatureFlag/main.js",
 
     },
     output: {
@@ -24,6 +25,7 @@ module.exports = {
             modeleditor$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/model-editor.js"),
             capabilityservice$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/capabilityservice.js"),
             topicservice$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/topicservice.js"),
+            featureflag$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/feature-flag.js"),
         },
         extensions: [".js", ".scss"]
     },

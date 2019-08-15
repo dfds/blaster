@@ -4,10 +4,13 @@ import AlertDialog from "./alert-dialog";
 import ModelEditor from "modeleditor";
 import jq from "jquery";
 import { currentUser } from "userservice";
+import FeatureFlag from "featureflag";
 import TestCapabilitiesFiltered from './test-filter';
 
 const capabilityService = new CapabilityService();
+FeatureFlag.setKeybinding();
 
+Vue.prototype.$featureFlag = new FeatureFlag();
 const app = new Vue({
     el: "#capabilities-app",
     data: {
@@ -96,14 +99,11 @@ const app = new Vue({
         }
     },
     mounted: function () {
-        const featureflag_testFilter_queryParam = new URLSearchParams(window.location.search).get('ff_testfilter');
-        const featureflag_testFilter = featureflag_testFilter_queryParam !== null;
-
         jq.ready
             .then(() => capabilityService.getAll())
             .then(capabilities => capabilities.forEach(capability => this.items.push(capability)))
             .then(() => {
-                if (!featureflag_testFilter) {
+                if (!this.$featureFlag.getFlag("testfilter").enabled) {
                     this.items = this.items.filter(item => !TestCapabilitiesFiltered.has(item.id));
                 }
             })

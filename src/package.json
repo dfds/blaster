@@ -28,6 +28,8 @@
     "style-loader": "^0.23.1",
     "vue": "^2.6.10",
     "webpack": "^4.30.0",
-    "webpack-cli": "^3.3.1"
+    "webpack-cli": "^3.3.1",
+    "js-cookie": "^2.2.1",
+    "konami": "^1.6.2"
   }
 }
