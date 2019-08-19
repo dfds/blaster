@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import konami from "konami";
+import {Konami, PATTERN_KONAMI, PATTERN_IDKFA} from "keypattern-shortcut";
 
 export default class FeatureFlag {
     constructor() {
@@ -28,7 +28,8 @@ export default class FeatureFlag {
     }
 
     static setKeybinding() {
-        new konami('/featureflags');
+        new Konami('/featureflags', PATTERN_IDKFA);
+        new Konami('/featureflags', PATTERN_KONAMI);
     }
 
     flagExists(name) {
