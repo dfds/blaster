@@ -20,205 +20,6 @@ FeatureFlag.setKeybinding();
 
 Vue.prototype.$featureFlag = new FeatureFlag();
 
-const TopicComponent = Vue.component("topic", {
-    props: ["topic"],
-    data: function() {
-        return {
-            showData: false,
-            showMessageContract: false,
-            messages: [
-                {
-                    "title": "aws_account_added_to_context",
-                    "id": 2,
-                    "payload": "{\r\n    \"version\": \"1\",\r\n    \"eventName\": \"aws_context_account_created\",\r\n    \"x-correlationId\": \"874ba750-ae81-446f-90c7-01b49228c327\",\r\n    \"x-sender\": \"eg. FQDN of assembly\",\r\n    \"payload\": {\r\n        \"capabilityId\": \"bc3f3bbe-eeee-4230-8b2f-d0e1c327c59c\",\r\n        \"capabilityName\": \"PAX Bookings\",\r\n        \"capabilityRootId\": \"pax-bookings-A43aS\",\r\n        \"contextId\": \"0d03e3ad-2118-46b7-970e-0ca87b59a202\",\r\n        \"contextName\": \"blue\",\r\n        \"accountId\": \"1234567890\",\r\n        \"roleArn\": \"arn:aws:iam::1234567890:role\/pax-bookings-A43aS\",\r\n        \"roleEmail\": \"aws.pax-bookings-a43as@dfds.com\"\r\n    }\r\n}"
-                },
-
-                {
-                    "title": "context_added_to_capability",
-                    "id": 1,
-                    "payload": "{\r\n    \"version\": \"1\",\r\n    \"eventName\": \"context_added_to_capability\",\r\n    \"x-correlationId\": \"<guid>|any string\",\r\n    \"x-sender\": \"eg. FQDN of assembly\",\r\n    \"payload\": {\r\n        \"capabilityId\": \"bc3f3bbe-eeee-4230-8b2f-d0e1c327c59c\",\r\n        \"contextId\": \"0d03e3ad-2118-46b7-970e-0ca87b59a202\",\r\n        \"capabilityRootId\": \"pax-bookings-A43aS\",\r\n        \"capabilityName\": \"PAX Bookings\",\r\n        \"contextName\": \"blue\"\r\n    }\r\n}"
-                }
-            ]
-        }
-    },
-    methods: {
-        toggleShowData: function () {
-            this.showData = this.showData ? false : true;
-        },
-        getPublicStyling: function () {
-            return this.topic.isPrivate ? "green" : "red";
-        },
-        getPublicText: function () {
-            return this.topic.isPrivate ? "✔" : "✖";
-        },
-        toggleShowAddMessageContract: function() {
-            this.showMessageContract = this.showMessageContract ? false : true;
-        },
-    },
-    computed: {
-
-    },
-    template: `
-        <div class="topic">
-            <message-contract-add :enable="showMessageContract" v-on:messagecontractadd-close="toggleShowAddMessageContract()"></message-contract-add>
-            <h2 class="title" title="Click to expand" v-on:click="toggleShowData()" >{{ topic.name }}</h2>
-            <div class="details" v-if="showData">
-                <span class="entry"><span class="entry-title">Private:</span> <div :class="this.getPublicStyling()">{{ this.getPublicText() }}</div></span>
-                <span class="entry"><span class="entry-title">Description:</span> <p>{{ topic.description }}</p></span>
-                <span class="subtitle">"Message contracts":</span>
-
-                <div class="buttons is-right">
-                    <button
-                        type="button"
-                        v-on:click="toggleShowAddMessageContract()"
-                        class="button is-small is-primary">
-                        Add Message contract
-                    </button>   
-                </div>
-
-                <div v-for="message_contract in messages" :key="message_contract.id" class="entry" style="margin-bottom: 40px;">
-                    <p style="word-wrap: break-word; width: 25%;"><span class="entry-title">Title:</span> {{ message_contract.title }}</p>
-                    <div class="schema" style="width: 75%;"><p style="word-wrap: break-word;">{{ message_contract.payload }}</p></div>
-                </div>               
-            </div>
-        </div>
-    `
-})
-
-const TopicAddComponent = Vue.component("topic-add", {
-    props: ["enable"],
-    data: function() {
-        return {
-            topicName: "",
-            topicDescription: "",
-            topicPublic: true
-        }
-    },
-    computed: {
-        isEnabledStyling: function() {
-            return this.enable;
-        }
-    },
-    methods: {
-        disable: function() {
-            this.enable = false;
-        }
-    },
-    updated: function() {
-        if (!this.enable) {
-            this.topicName = "";
-            this.topicDescription = "";
-            this.topicPublic = false;
-        }
-    },
-    template: `
-        <div class="modal" v-bind:class="{'is-active': this.isEnabledStyling}">
-            <div class="modal-background" v-on:click="$emit('addtopic-close')"></div>
-            <div class="modal-content">
-                <div class="modal-card">
-                    <header class="modal-card-head">
-                        <p class="modal-card-title">Add Topic</p>
-                        <button class="delete" aria-label="close" data-behavior="close" v-on:click="$emit('addtopic-close')"></button>
-                    </header>
-                    <div class="modal-card-body">
-                        <div class="dialog-container"></div>
-                        <div class="form">
-                            <div class="field">
-                                <label class="label">Name</label>
-                                <div class="control">
-                                    <input class="input" type="text" placeholder="Enter capability name" data-property="name" v-model="topicName">
-                                </div>
-                            </div>
-                            <div class="field">
-                                <label class="label">Description</label>
-                                <div class="control">
-                                    <input class="input" type="text" placeholder="Description" data-property="description" v-model="topicDescription">
-                                </div>
-                            </div>
-                            <div class="field" style="display: inline-flex;">
-                                <label class="label">Public</label>
-                                <div class="control" style="margin-left: 6px;">
-                                    <input class="checkbox" type="checkbox" placeholder="Public" data-property="Public" v-model="topicPublic">
-                                </div>
-                            </div>
-                            <div class="field">
-                                <div class="control has-text-centered">
-                                    <button class="button is-primary" data-behavior="save" v-on:click="$emit('addtopic-new-topic', topicName, topicDescription, topicPublic)">Save</button>
-                                    <button class="button is-info" aria-label="close" data-behavior="close" v-on:click="$emit('addtopic-close')">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button class="modal-close is-large" aria-label="close"></button>
-        </div>
-    `
-})
-
-const MessageContractAddComponent = Vue.component("message-contract-add", {
-    props: ["enable"],
-    data: function() {
-        return {
-            mcType: "",
-            mcSchema: ""
-        }
-    },
-    computed: {
-        isEnabledStyling: function() {
-            return this.enable;
-        }
-    },
-    methods: {
-        disable: function() {
-            this.enable = false;
-        }
-    },
-    updated: function() {
-        if (!this.enable) {
-            this.mcType = "";
-            this.mcSchema = "";
-        }
-    },
-    template: `
-        <div class="modal" v-bind:class="{'is-active': this.isEnabledStyling}">
-            <div class="modal-background" v-on:click="$emit('messagecontractadd-close')"></div>
-            <div class="modal-content">
-                <div class="modal-card">
-                    <header class="modal-card-head">
-                        <p class="modal-card-title">Add Message contract to Topic</p>
-                        <button class="delete" aria-label="close" data-behavior="close" v-on:click="$emit('messagecontractadd-close')"></button>
-                    </header>
-                    <div class="modal-card-body">
-                        <div class="dialog-container"></div>
-                        <div class="form">
-                            <div class="field">
-                                <label class="label">Type</label>
-                                <div class="control">
-                                    <input class="input" type="text" placeholder="Select type" data-property="name" v-model="mcType">
-                                </div>
-                            </div>
-                            <div class="field">
-                                <label class="label">Content</label>
-                                <div class="control">
-                                    <input class="input" type="text" placeholder="Schema" data-property="schema" v-model="mcSchema">
-                                </div>
-                            </div>
-                            <div class="field">
-                                <div class="control has-text-centered">
-                                    <button class="button is-primary" data-behavior="save" v-on:click="$emit('messagecontractadd-new', mcType, mcSchema)">Save</button>
-                                    <button class="button is-info" aria-label="close" data-behavior="close" v-on:click="$emit('messagecontractadd-close')">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button class="modal-close is-large" aria-label="close"></button>
-        </div>
-    `
-})
-
 const app = new Vue({
     el: "#capabilitydashboard-app",
     data: {
@@ -232,7 +33,8 @@ const app = new Vue({
         showEditTopic: false,
         showMessageContractEdit: false,
         messageContractEditData: null,
-        topicEditData: null
+        topicEditData: null,
+        topicsEnabled: false
     },
     components: {
         'topic': TopicComponent,
@@ -464,6 +266,8 @@ const app = new Vue({
     },
     mounted: function () {
         const capabilityIdParam = new URLSearchParams(window.location.search).get('capabilityId');
+        this.topicsEnabled = this.$featureFlag.flagExists("topics") ? this.$featureFlag.getFlag("topics").enabled : false;
+        //this.topicsEnabled = this.$featureFlag.getFlag("topics");
         // TODO Handle no or empty capabilityId
         jq.ready
             .then(() => capabilityService.get(capabilityIdParam))
