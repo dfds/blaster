@@ -19,7 +19,47 @@ namespace Blaster.Tests.TestDoubles
             throw _error;
         }
 
+        public Task<TopicsResponse> GetAllTopics()
+        {
+            throw _error;
+        }
+
+        public Task<Topic> GetTopic(string id)
+        {
+            throw _error;
+        }
+
         public Task<Capability> CreateCapability(string name, string description)
+        {
+            throw _error;
+        }
+
+        public Task CreateTopic(string title, string description, string capabilityId, bool isPrivate)
+        {
+            throw _error;
+        }
+
+        public Task UpdateTopic(string topicId, Topic input)
+        {
+            throw _error;
+        }
+
+        public Task CreateMessageContract(string type, string description, string content, string topicId)
+        {
+            throw _error;
+        }
+
+        public Task AddUpdateMessageContract(string type, string topicId, MessageContractInput input)
+        {
+            throw _error;
+        }
+
+        public Task RemoveMessageContract(string topicId, string type)
+        {
+            throw _error;
+        }
+
+        public Task<MessageContractsResponse> GetMessageContractsByTopicId(string topicId)
         {
             throw _error;
         }
