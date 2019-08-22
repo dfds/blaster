@@ -76,16 +76,6 @@ namespace Blaster.WebApi
                 .AddHttpMessageHandler<CorrelationIdMessageHandler>();
         }
 
-//        private void ConfigureTopicFeature(IServiceCollection services)
-//        {
-//            services
-//                .AddHttpClient<ITopicClient, TopicClient>(client =>
-//                {
-//                    client.BaseAddress = new Uri(Configuration["BLASTER_CAPABILITYSERVICE_API_URL"]);
-//                })
-//                .AddHttpMessageHandler<CorrelationIdMessageHandler>();
-//        }
-
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
