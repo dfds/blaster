@@ -1,14 +1,42 @@
 [
   {
-    "name": "Foo",
-    "description": "FooDescription",
-    "visibility" : "private",
-    "messageExamples": [
-      {
-        "id": "1",
-        "messageType" : "foo_created",
-        "text" : "{\"messageType\" : \"capability_created\"}"
-      }
+    "name": "ship.livedata",
+    "id": "7699d5fa-fa82-4d5b-b8fd-09359a8e13d8",
+    "isPrivate": true,
+    "capabilityId": "1",
+    "description": "Events concerning up-to-date data aboout ships",
+    "messageContracts": [
+                {
+                    "description": "xaxa",
+                    "type": "aws_account_added_to_context",
+                    "content": "{\r\n    \"version\": \"1\",\r\n    \"eventName\": \"aws_context_account_created\",\r\n    \"x-correlationId\": \"874ba750-ae81-446f-90c7-01b49228c327\",\r\n    \"x-sender\": \"eg. FQDN of assembly\",\r\n    \"payload\": {\r\n        \"capabilityId\": \"bc3f3bbe-eeee-4230-8b2f-d0e1c327c59c\",\r\n        \"capabilityName\": \"PAX Bookings\",\r\n        \"capabilityRootId\": \"pax-bookings-A43aS\",\r\n        \"contextId\": \"0d03e3ad-2118-46b7-970e-0ca87b59a202\",\r\n        \"contextName\": \"blue\",\r\n        \"accountId\": \"1234567890\",\r\n        \"roleArn\": \"arn:aws:iam::1234567890:role\/pax-bookings-A43aS\",\r\n        \"roleEmail\": \"aws.pax-bookings-a43as@dfds.com\"\r\n    }\r\n}"
+                },
+
+                {
+                    "description": "Insert super descriptive text here.",
+                    "type": "context_added_to_capability",
+                    "content": "{\r\n    \"version\": \"1\",\r\n    \"eventName\": \"context_added_to_capability\",\r\n    \"x-correlationId\": \"<guid>|any string\",\r\n    \"x-sender\": \"eg. FQDN of assembly\",\r\n    \"payload\": {\r\n        \"capabilityId\": \"bc3f3bbe-eeee-4230-8b2f-d0e1c327c59c\",\r\n        \"contextId\": \"0d03e3ad-2118-46b7-970e-0ca87b59a202\",\r\n        \"capabilityRootId\": \"pax-bookings-A43aS\",\r\n        \"capabilityName\": \"PAX Bookings\",\r\n        \"contextName\": \"blue\"\r\n    }\r\n}"
+                }
+    ]
+  },
+  {
+    "name": "stuff.dunno",
+    "id": "f013d566-93cd-40fc-a80f-a0b3098dfcf8",
+    "capabilityId": "2",
+    "isPrivate": false,
+    "description": "Dunno.",
+    "messageContracts": [
+      
+    ]
+  },
+  {
+    "name": "ship.behindthescenes",
+    "id": "3c84f88c-bf41-4e7c-8266-d75f3026bb61",
+    "capabilityId": "1",
+    "isPrivate": false,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse porttitor rutrum nisl. Nulla enim dui, facilisis ut dictum vitae, elementum sed ligula. Fusce faucibus bibendum quam vel congue. Duis tempus aliquam consequat. Etiam vehicula dapibus leo ut pretium. Praesent quis commodo ligula. Nulla efficitur rutrum odio sit amet pellentesque. Mauris commodo iaculis diam, sed egestas ante pellentesque eget. Integer arcu nisl, pulvinar vitae ultricies quis, bibendum ac mauris. Sed quis arcu ac eros luctus dictum vel ac justo. Vestibulum at interdum nunc. Donec ac diam felis. Vivamus id convallis lectus, at pharetra magna. Sed non egestas enim. ",
+    "messageContracts": [
+      
     ]
   }
-] 
+]

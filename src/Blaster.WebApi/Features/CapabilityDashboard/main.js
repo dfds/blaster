@@ -7,11 +7,19 @@ import { currentUser } from "userservice";
 import AlertDialog from "./alert-dialog";
 import FeatureFlag from "featureflag";
 
+// Components
+import TopicComponent from "./TopicComponent";
+import TopicAddComponent from "./TopicAddComponent";
+import TopicEditComponent from "./TopicEditComponent";
+import MessageContractAddComponent from "./MessageContractAddComponent";
+import MessageContractEditComponent from "./MessageContractEditComponent";
+
 const topicService = new TopicService();
 const capabilityService = new CapabilityService();
 FeatureFlag.setKeybinding();
 
 Vue.prototype.$featureFlag = new FeatureFlag();
+
 const app = new Vue({
     el: "#capabilitydashboard-app",
     data: {
@@ -19,7 +27,21 @@ const app = new Vue({
         initializing: true,
         currentUser: currentUser,
         membershipRequested: false,
-        contextRequested: false
+        contextRequested: false,
+        topics: null,
+        showAddTopic: false,
+        showEditTopic: false,
+        showMessageContractEdit: false,
+        messageContractEditData: null,
+        topicEditData: null,
+        topicsEnabled: false
+    },
+    components: {
+        'topic': TopicComponent,
+        'topic-add': TopicAddComponent,
+        'topic-edit': TopicEditComponent,
+        'message-contract-add': MessageContractAddComponent,
+        'message-contract-edit': MessageContractEditComponent
     },
     computed: {
         capabilityFound: function() {
@@ -98,6 +120,81 @@ const app = new Vue({
                 .filter(member => member.email == this.currentUser.email)
                 .length > 0;
         },
+        toggleShowAddTopic: function() {
+            this.showAddTopic = this.showAddTopic ? false : true;
+        },
+        toggleShowEditTopic: function(topic) {
+            if (this.showEditTopic) {
+                this.topicEditData = null;
+                this.showEditTopic = false;                
+            } else {
+                this.topicEditData = topic;
+                this.showEditTopic = true;
+            }
+        },
+        toggleShowMessageContractEdit: function(data, topicId) {
+            if (this.showMessageContractEdit) {
+                this.messageContractEditData = null;
+                this.showMessageContractEdit = false;
+            } else {
+                this.messageContractEditData = data;
+                this.messageContractEditData.topicId = topicId;
+                this.showMessageContractEdit = true;
+            }
+        },
+        handleMessageContractEdit: function(type, description, schema, topicId) {
+            topicService.addOrUpdateMessageContract(topicId, type, {"description": description, "content": schema})
+                .then(() => {
+                    return capabilityService.get(this.capability.id);
+                })
+                .then(data => this.capability = data)
+                .catch(err => console.log(JSON.stringify(err)));
+            this.toggleShowMessageContractEdit();
+        },
+        handleMessageContractAdd: function(description, type, schema, topicId) {
+            topicService.addOrUpdateMessageContract(topicId, type, {"description": description, "content": schema})
+                .then(() => {
+                    return capabilityService.get(this.capability.id);
+                })
+                .then(data => this.capability = data)
+                .catch(err => console.log(JSON.stringify(err)));
+        },
+        handleMessageContractDelete: function(topicId, type) {
+            topicService.deleteMessageContract(topicId, type)
+                .then(() => {
+                    return capabilityService.get(this.capability.id);
+                })
+                .then(data => this.capability = data)
+                .catch(err => console.log(JSON.stringify(err)));
+        },
+        addTopic: function(name, description, isPrivate) {
+            const payload = {name: name, description: description, isPrivate: isPrivate, messageContracts: []}
+
+            // TODO: Rework this to handle errors
+            capabilityService.addTopic(payload, this.capability.id)
+                .then(data => {
+                    return capabilityService.get(this.capability.id);
+                })
+                .then(data => this.capability = data)
+                .catch(err => console.log("Error adding topic: " + JSON.stringify(err)));
+
+            this.showAddTopic = false;
+        },
+        editTopic: function(name, description, isPrivate, id) {
+            const payload = {name: name, description: description, isPrivate: isPrivate};
+
+            topicService.update(id, payload)
+                .then(() => {
+                    return capabilityService.get(this.capability.id);
+                })
+                .then(data => this.capability = data)
+                .catch(err => console.log(JSON.stringify(err)));
+            this.toggleShowEditTopic();
+        },
+        getAllTopics: function() {
+            const topics = topicService.getAll();
+            return topics;
+        },
         joinCapability: function() {
             this.membershipRequested = true;
             capabilityService.join(this.capability.id)
@@ -169,6 +266,8 @@ const app = new Vue({
     },
     mounted: function () {
         const capabilityIdParam = new URLSearchParams(window.location.search).get('capabilityId');
+        this.topicsEnabled = this.$featureFlag.flagExists("topics") ? this.$featureFlag.getFlag("topics").enabled : false;
+        //this.topicsEnabled = this.$featureFlag.getFlag("topics");
         // TODO Handle no or empty capabilityId
         jq.ready
             .then(() => capabilityService.get(capabilityIdParam))

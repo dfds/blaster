@@ -126,32 +126,6 @@ app.post("/api/v1/capabilities/:capabilityid/contexts", (req, res) => {
         });
 });
 
-app.post("/api/v1/capabilities/:capabilityid/topics", (req, res) => {
-    const capabilityid = req.params.capabilityid;
-    const newTopic =req.body;
-
-    readFile("./capability-data.json")
-        .then(data => JSON.parse(data))
-        .then(capabilities => {
-            const capability = capabilities.find(capability => capability.id == capabilityid);
-            
-            if (!capability) {
-                return new Promise(resolve => {
-                    res
-                        .status(404)
-                        .send({message: `Capability with id ${capabilityid} could not be found`});
-                    resolve();
-                });
-            } else {
-                capability.topics = capability.topics || [];
-                capability.topics.push(newTopic);
-                return Promise.resolve(serialize(capabilities))
-                    .then(json => writeFile("./capability-data.json", json))
-                    .then(() => console.log(`Added topic ${newTopic.name} to capability ${capability.name}`))
-                    .then(() => res.sendStatus(200));
-            }
-        });
-});
 app.delete("/api/v1/capabilities/:teamid/members/:memberemail", (req, res) => {
     const teamId = req.params.teamid;
     const memberEmail = req.params.memberemail;
@@ -198,87 +172,249 @@ app.get("/api/v1/capabilities/:capabilityid", (req, res) => {
                     resolve();
                 });
             } else {
-                return res.json(capability);
+                return capability;
             }
-        });
-});
+        })
+        .then(capability => {
+            if (capability.id)
+            {
+                readFile("./topic-data.json")
+                .then(data => JSON.parse(data))
+                .then(topics => {
+                    const cap_topics = topics.filter(topic => topic.capabilityId === capability.id)
+                    capability.topics = cap_topics;
+                    return res.json(capability);
+                })
+            }
 
-app.get("/api/v1/topics/:topicName", (req, res) => {
-    const topicName = req.params.topicName;
-    readFile("./topic-data.json")
-        .then(data => JSON.parse(data))
-        .then(topics => {
-            const topic = topics.find(top => top.name === topicName)
-            if (!topic) {
-                return new Promise(resolve => {
-                    res
-                        .status(404)
-                        .send({message: `Topic with name: ${topicName} could not be found`});
-                    resolve();
-                });
-            } else {
-                return res.json(topic);
-            }
         });
 });
 
 
-app.post("/api/v1/topics/:topicName/messageexamples", (req, res) => {
-    const topicName = req.params.topicName;
+app.post("/api/v1/capabilities/:capabilityId/topics", (req, res) => {
+    const capabilityId = req.params.capabilityId;
+    const newTopic = req.body;
+    var newTopicInExpectedFormat = {
+        "name": newTopic.name,
+        "description": newTopic.description,
+        "id": new Date().getTime().toString(),
+        "capabilityId": capabilityId,
+        "isPrivate": newTopic.isPrivate,
+        "messageContracts": []
+    }
 
-    const messageExample = Object.assign({
-        id: require('crypto').randomBytes(16).toString('hex'),
-    }, req.body);
+    readFile("./topic-data.json")
+    .then(data => JSON.parse(data))
+    .then(topics => {
+        topics.push(newTopicInExpectedFormat);
+        return topics;
+    })
+    .then(topics => JSON.stringify(topics, null, 2))
+    .then(json => writeFile("./topic-data.json", json))
+    .then(() => {
+        //res.location(`/api/v1/topics/${newTopic.id}`);
+        res.status(200).send();
+    })
+    .catch(err => {
+        res.status(500).json(err);
+    });
+});
+
+app.get("/api/v1/capabilities/:capabilityId/topics", (req, res) => {
+    const capabilityId = req.params.capabilityId;
 
     readFile("./topic-data.json")
         .then(data => JSON.parse(data))
+        .then(data => {
+            return data.filter(topic => new String(topic.capabilityId).valueOf() === new String(capabilityId).valueOf());
+        })
         .then(topics => {
-            const topic = topics.find(top => top.name === topicName)
+            res.json({
+                items: topics
+            });
+        });
+});
+
+
+// ENDPOINT: /topics
+
+app.get("/api/v1/topics", (req, res) => {
+    readFile("./topic-data.json")
+        .then(data => JSON.parse(data))
+        .then(topics => {
+            res.json({
+                items: topics
+            });
+        });
+});
+
+app.get("/api/v1/topics/:topicId", (req, res) => {
+    const topicId = req.params.topicId;
+
+    readFile("./topic-data.json")
+        .then(data => JSON.parse(data))
+        .then(data => {
+            return data.filter(topic => new String(topic.id).valueOf() === new String(topicId).valueOf());
+        })
+        .then(topics => {
+            res.json({
+                items: topics
+            });
+        });
+});
+
+app.put("/api/v1/topics/:topicId", (req, res) => {
+    const topicId = req.params.topicId;
+    const topicInput = req.body;
+
+    readFile("./topic-data.json")
+        .then(data => JSON.parse(data))
+        .then(data => {
+            const topic = data.find(topic => new String(topic.id).valueOf() === new String(topicId).valueOf());
+            
             if (!topic) {
                 return new Promise(resolve => {
                     res
                         .status(404)
-                        .send({message: `Topic with name: ${topicName} could not be found`});
+                        .send({message: `Topic with id ${topicId} could not be found`});
                     resolve();
                 });
             } else {
-                topic.messageExamples.push(messageExample);
-               
-                return Promise.resolve(serialize(topics))
+                topic.name = topicInput.name === undefined ? topic.name : topicInput.name;
+                topic.description = topicInput.description === undefined ? topic.description : topicInput.description;
+                topic.isPrivate = topicInput.isPrivate === undefined ? topic.isPrivate : topicInput.isPrivate;
+
+                return Promise.resolve(serialize(data))
                 .then(json => writeFile("./topic-data.json", json))
-                .then(() => console.log(`Added message example with type: ${messageExample.messageType} to topic ${topic.name}`))
-                .then(() => res.sendStatus(200));
+                .then(() => console.log(`Added/Updated Topic ${topicInput.name}`))
+                .then(() => res.sendStatus(204));
             }
-        });
-});
-
-
-app.post("/api/v1/topics", (req, res) => {
-    const newTopic = Object.assign({
-        messageExamples: []
-    }, req.body);
-
-    newTopic.description = newTopic.description || "generic description";
-    newTopic.visibility = newTopic.visibility || "private";
-
-    readFile("./topic-data.json")
-        .then(data => JSON.parse(data))
-        .then(topics => {
-            topics.push(newTopic);
-            return topics;
         })
-        .then(topics => JSON.stringify(topics, null, 2))
-        .then(json => writeFile("./topic-data.json", json))
-        .then(() => {
-            res.location(`/api/v1/topics/${newTopic.name}`);
-            res.status(201).send(newTopic);
-        })
-        .then(() => console.log(`Added topic ${newTopic.name}`))
-
         .catch(err => {
             res.status(500).json(err);
         });
 });
+
+app.get("/api/v1/topics/:topicId/messageContracts", (req, res) => {
+    const topicId = req.params.topicId;
+
+    readFile("./topic-data.json")
+        .then(data => JSON.parse(data))
+        .then(data => {
+            return data.filter(topic => new String(topic.id).valueOf() === new String(topicId).valueOf());
+        })
+        .then(filtered_topics => {
+            if (filtered_topics.length > 0) {
+                res.status(200).json({"items": filtered_topics[0].messageContracts});
+            } else {
+                res.status(404).send();
+            }
+        })
+});
+
+
+// TODO: Made obsolete in recent API contract revision, to be removed.
+app.post("/api/v1/topics/:topicId/messageContracts", (req, res) => {
+    const topicId = req.params.topicId;
+    const newMessageContract = req.body;
+
+    readFile("./topic-data.json")
+        .then(data => JSON.parse(data))
+        .then(data => {
+            const topic = data.find(topic => new String(topic.id).valueOf() === new String(topicId).valueOf());
+            
+            if (!topic) {
+                return new Promise(resolve => {
+                    res
+                        .status(404)
+                        .send({message: `Topic with id ${topicId} could not be found`});
+                    resolve();
+                });
+            } else {
+                topic.messageContracts.push(newMessageContract);
+                return Promise.resolve(serialize(data))
+                .then(json => writeFile("./topic-data.json", json))
+                .then(() => console.log(`Added MessageContract ${newMessageContract.type} to topic ${topic.name}`))
+                .then(() => res.sendStatus(200));
+            }
+        })
+        .catch(err => {
+            res.status(500).json(err);
+        });
+});
+
+// TODO: Recent addition, make sure it's available in blaster
+app.put("/api/v1/topics/:topicId/messageContracts/:messageContractType", (req, res) => {
+    const topicId = req.params.topicId;
+    const messageContractType = req.params.messageContractType;
+    const newMessageContract = req.body;
+
+    readFile("./topic-data.json")
+        .then(data => JSON.parse(data))
+        .then(data => {
+            const topic = data.find(topic => new String(topic.id).valueOf() === new String(topicId).valueOf());
+            
+            if (!topic) {
+                return new Promise(resolve => {
+                    res
+                        .status(404)
+                        .send({message: `Topic with id ${topicId} could not be found`});
+                    resolve();
+                });
+            } else {
+                const mc = topic.messageContracts.find(mc => new String(mc.type).valueOf() === new String(messageContractType).valueOf());
+
+                if (mc) {
+                    mc.description = newMessageContract.description === undefined ? mc.description : newMessageContract.description;
+                    mc.content = newMessageContract.content === undefined ? mc.content : newMessageContract.content;
+                } else {
+                    newMessageContract.type = messageContractType;
+                    topic.messageContracts.push(newMessageContract);
+                }
+
+                return Promise.resolve(serialize(data))
+                .then(json => writeFile("./topic-data.json", json))
+                .then(() => console.log(`Added/Updated MessageContract ${messageContractType} to topic ${topic.name}`))
+                .then(() => res.sendStatus(204));
+            }
+        })
+        .catch(err => {
+            res.status(500).json(err);
+        });
+
+});
+
+app.delete("/api/v1/topics/:topicId/messageContracts/:messageContractType", (req, res) => {
+    const topicId = req.params.topicId;
+    const messageContractType = req.params.messageContractType;
+
+    readFile("./topic-data.json")
+        .then(data => JSON.parse(data))
+        .then(data => {
+            const topic = data.find(topic => new String(topic.id).valueOf() === new String(topicId).valueOf());
+
+            if (!topic) {
+                return new Promise(resolve => {
+                    res
+                        .status(404)
+                        .send({message: `Topic with id ${topicId} could not be found`});
+                    resolve();
+                });
+            } else {
+                const desiredMessageContracts = topic.messageContracts.filter(mc => mc.type !== messageContractType);
+                topic.messageContracts = desiredMessageContracts;
+                return Promise.resolve(serialize(data))
+                .then(json => writeFile("./topic-data.json", json))
+                .then(() => console.log(`Removed MessageContract ${messageContractType} from topic ${topic.name}`))
+                .then(() => res.sendStatus(200));
+            }
+        })
+        .catch(err => {
+            console.log("Error: " + err);
+            res.status(500).json(err);
+        });
+});
+
 
 
 app.listen(port, () => {

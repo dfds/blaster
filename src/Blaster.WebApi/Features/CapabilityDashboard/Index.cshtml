@@ -98,6 +98,40 @@
                         </div>
                 </div>
             </div>
+
+            <div class="container box" v-if="topicsEnabled">
+                <h1 class="title is-uppercase">Topics</h1>
+            
+                <div>
+                    <p>
+                         Listed below is the Kafka topics that are attached to this Capability.
+                    </p>
+                </div>
+                <br>
+
+                <div class="buttons is-right">
+                         <button
+                            type="button"
+                            v-on:click="toggleShowAddTopic()"
+                            class="button is-small is-primary">
+                            Add Topic
+                        </button>                            
+                </div>
+
+                <topic-add :enable="showAddTopic" v-on:addtopic-new-topic="addTopic" v-on:addtopic-close="toggleShowAddTopic()"></topic-add>               
+                <topic-edit :enable="showEditTopic" :initialdata="topicEditData" v-on:edittopic-edit="editTopic" v-on:edittopic-close="toggleShowEditTopic()"></topic-edit>               
+                <message-contract-edit :enable="showMessageContractEdit" :initialdata="messageContractEditData" v-on:messagecontractedit-edit="handleMessageContractEdit" v-on:messagecontractedit-close="toggleShowMessageContractEdit"></message-contract-edit>
+
+                <div class="topics">
+                    <div v-for="topic in capability.topics" :key="topic.id">
+                        <topic :topic="topic" 
+                        v-on:messagecontractadd-new="handleMessageContractAdd" 
+                        v-on:messagecontractedit-close="toggleShowMessageContractEdit"
+                        v-on:messagecontract-delete="handleMessageContractDelete"
+                        v-on:addtopic-close="toggleShowEditTopic"></topic>
+                    </div>
+                </div>                
+            </div>
        
         <!--- Summary section --->
             <div class="container box" style="display:none">
