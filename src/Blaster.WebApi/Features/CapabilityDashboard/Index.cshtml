@@ -99,9 +99,16 @@
                 </div>
             </div>
 
+            <div class="container box">
+                <h1 class="title is-uppercase">LOGS</h1>
+                <p>
+                    Access all logs related to your namespace in <a href="https://search-dfds-prod-wtl5643bwepapwo3we76x7jkse.eu-central-1.es.amazonaws.com/_plugin/kibana/goto/2962a60ad16a0af78ae22f0e96c2c6c6">Kibana</a>.
+                </p>
+            </div>
+
             <div class="container box" v-if="topicsEnabled">
                 <h1 class="title is-uppercase">Topics</h1>
-            
+
                 <div>
                     <p>
                          Listed below is the Kafka topics that are attached to this Capability.
@@ -115,24 +122,24 @@
                             v-on:click="toggleShowAddTopic()"
                             class="button is-small is-primary">
                             Add Topic
-                        </button>                            
+                        </button>
                 </div>
 
-                <topic-add :enable="showAddTopic" v-on:addtopic-new-topic="addTopic" v-on:addtopic-close="toggleShowAddTopic()"></topic-add>               
-                <topic-edit :enable="showEditTopic" :initialdata="topicEditData" v-on:edittopic-edit="editTopic" v-on:edittopic-close="toggleShowEditTopic()"></topic-edit>               
+                <topic-add :enable="showAddTopic" v-on:addtopic-new-topic="addTopic" v-on:addtopic-close="toggleShowAddTopic()"></topic-add>
+                <topic-edit :enable="showEditTopic" :initialdata="topicEditData" v-on:edittopic-edit="editTopic" v-on:edittopic-close="toggleShowEditTopic()"></topic-edit>
                 <message-contract-edit :enable="showMessageContractEdit" :initialdata="messageContractEditData" v-on:messagecontractedit-edit="handleMessageContractEdit" v-on:messagecontractedit-close="toggleShowMessageContractEdit"></message-contract-edit>
 
                 <div class="topics">
                     <div v-for="topic in capability.topics" :key="topic.id">
-                        <topic :topic="topic" 
-                        v-on:messagecontractadd-new="handleMessageContractAdd" 
+                        <topic :topic="topic"
+                        v-on:messagecontractadd-new="handleMessageContractAdd"
                         v-on:messagecontractedit-close="toggleShowMessageContractEdit"
                         v-on:messagecontract-delete="handleMessageContractDelete"
                         v-on:addtopic-close="toggleShowEditTopic"></topic>
                     </div>
-                </div>                
+                </div>
             </div>
-       
+
         <!--- Summary section --->
             <div class="container box" style="display:none">
                 <h1 class="title is-uppercase">Capability summary</h1>
@@ -163,10 +170,10 @@
                     </div>
                 </nav>
             </div>
-                  
-        
+
+
         <!--- Topic section --->
-        <!--- 
+        <!---
         <div class="container box">
             <h1 class="title is-uppercase">Topics</h1>
             <button type="button" class="button is-primary" v-on:click="newTopic()">Add</button>
@@ -197,7 +204,7 @@
         </article>
     </div>
         </div>
-   
+
     </section>
  </div>
 
@@ -220,7 +227,7 @@
         <strong class="error-title"></strong> <span class="error-message"></span>
     </div>
     <p>
-        You are about to leave the capability <strong>{{capabilityName}}</strong>. Changes can take up 
+        You are about to leave the capability <strong>{{capabilityName}}</strong>. Changes can take up
         to 30 minutes to take effect. Please confirm?
     </p>
     <br>
@@ -231,7 +238,7 @@
     </div>
   </div>
 </article>
-            
+
         </div>
     </div>
 </script>
@@ -260,7 +267,7 @@
     </div>
   </div>
 </article>
-            
+
         </div>
     </div>
 </script>
@@ -317,8 +324,8 @@
                             <button class="button is-info" aria-label="close" data-behavior="close">Cancel</button>
                         </div>
                     </div>
-                    <div> 
-                        
+                    <div>
+
                 </div>
             </div>
         </div>
