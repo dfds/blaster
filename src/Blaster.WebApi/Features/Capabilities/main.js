@@ -23,7 +23,7 @@ const app = new Vue({
         hasCapabilities: function () {
             return this.items.length > 0;
         }
-    },   
+    },
     methods: {
         newCapability: function() {
             const editor = ModelEditor.open({
@@ -33,11 +33,11 @@ const app = new Vue({
                     description: "",
                 },
                 onClose: () => editor.close(),
-                onSave: (capabilityData) => { 
+                onSave: (capabilityData) => {
                     return capabilityService.add(capabilityData)
                         .then(capability => this.items.push(capability))
                         .then(() => editor.close())
-                        .catch(err => {                            
+                        .catch(err => {
                             if (err.status == 400) {
                                 const dialog = AlertDialog.open({
                                     template: document.getElementById("error-dialog-template"),
@@ -89,7 +89,7 @@ const app = new Vue({
 
             const members = capability.members || [];
             return members
-                .filter(member => member.email == this.currentUser.email)
+                .filter(member => member.email.toLowerCase() == this.currentUser.email.toLowerCase())
                 .length > 0;
         }
     },
