@@ -70,7 +70,7 @@ const app = new Vue({
                 if (this.isLegacyComputed) {
                     msg = msg + "This Capability is legacy and won't recieve future updates. Consider creating a new Capability." + "\n";
                 }
-            } 
+            }
             return msg;
         }
     },
@@ -81,14 +81,14 @@ const app = new Vue({
     },
     methods: {
         isCurrentUser: function(memberEmail) {
-            return this.currentUser.email === memberEmail;
+            return this.currentUser.email.toLowerCase() === memberEmail.toLowerCase();
         },
         hasMembers: function(){
           const cap = this.capability;
-          
+
           if (cap == null || cap.members == null || cap.members.length < 1)
               return false;
-          
+
           return true;
         },
         getMembershipStatusFor: function() {
@@ -117,7 +117,7 @@ const app = new Vue({
             }
             const members = capability.members || [];
             return members
-                .filter(member => member.email == this.currentUser.email)
+                .filter(member => member.email.toLowerCase() == this.currentUser.email.toLowerCase())
                 .length > 0;
         },
         toggleShowAddTopic: function() {
@@ -126,7 +126,7 @@ const app = new Vue({
         toggleShowEditTopic: function(topic) {
             if (this.showEditTopic) {
                 this.topicEditData = null;
-                this.showEditTopic = false;                
+                this.showEditTopic = false;
             } else {
                 this.topicEditData = topic;
                 this.showEditTopic = true;

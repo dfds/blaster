@@ -35,7 +35,7 @@ namespace Blaster.WebApi.Security
                 email = DecodeBase64(headerEmail);
             }
 
-            return new User(name, email);
+            return new User(name, email.ToLower());
         }
 
         public class User
@@ -54,7 +54,7 @@ namespace Blaster.WebApi.Security
         {
             byte[] decodedBytes = Convert.FromBase64String(base64String);
             string decodedText = System.Text.Encoding.UTF8.GetString(decodedBytes);
-            
+
             return decodedText;
         }
     }
