@@ -29,7 +29,12 @@ app.post("/api/v1/capabilities", (req, res) => {
     const newTeam = Object.assign({
         id: new Date().getTime().toString(),
         members: [],
-        contexts: []
+        contexts: [],
+        topicPrefixes: {
+            "self": "",
+            "businessArea": "",
+            "type": ""
+        }
 
     }, req.body);
 

@@ -144,7 +144,10 @@
                 <div class="buttons is-right">
                          <button
                             type="button"
-                            v-on:click="toggleShowAddTopic()"
+                            v-on:click="addTopicFlow()"
+                            v-bind:class="{tooltip: !isJoinedComputed, 'is-tooltip-bottom': !isJoinedComputed, 'is-tooltip-multiline': !isJoinedComputed }"
+                            :disabled='!isJoinedComputed'
+                            data-tooltip="You haven't joined this Capability"
                             class="button is-small is-primary">
                             Add Topic
                         </button>
@@ -152,6 +155,7 @@
 
                 <topic-add :enable="showAddTopic" v-on:addtopic-new-topic="addTopic" v-on:addtopic-close="toggleShowAddTopic()"></topic-add>
                 <topic-edit :enable="showEditTopic" :initialdata="topicEditData" v-on:edittopic-edit="editTopic" v-on:edittopic-close="toggleShowEditTopic()"></topic-edit>
+                <topic-prefix :enable="showTopicPrefix" :initialdata="capability.name" v-on:topicprefix-close="toggleShowTopicPrefix()"></topic-prefix>
                 <message-contract-edit :enable="showMessageContractEdit" :initialdata="messageContractEditData" v-on:messagecontractedit-edit="handleMessageContractEdit" v-on:messagecontractedit-close="toggleShowMessageContractEdit"></message-contract-edit>
 
                 <div class="topics">

@@ -10,7 +10,12 @@
         ],
         "contexts": [],
         "Topics": [],
-        "RootId": "foo-1"
+        "RootId": "foo-1",
+        "topicPrefixes": {
+          "businessArea:": "build",
+          "self": "foo",
+          "type": "events"
+        }
     },
     {
       "id": "2",

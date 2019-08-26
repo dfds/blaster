@@ -18,6 +18,7 @@ import CapabilityDeleteComponent from "./CapabilityDeleteComponent";
 import TopicComponent from "./TopicComponent";
 import TopicAddComponent from "./TopicAddComponent";
 import TopicEditComponent from "./TopicEditComponent";
+import TopicPrefixComponent from "./TopicPrefixComponent";
 import MessageContractAddComponent from "./MessageContractAddComponent";
 import MessageContractEditComponent from "./MessageContractEditComponent";
 import {ChannelPickerComponent, ChannelMinimalComponent, ChannelListComponent, BannerComponent, isIE} from "../Shared/components/Shared";
@@ -43,6 +44,7 @@ const app = new Vue({
         showDeleteCapability: false,
         showAddTopic: false,
         showEditTopic: false,
+        showTopicPrefix: false,
         showMessageContractEdit: false,
         messageContractEditData: null,
         topicEditData: null,
@@ -55,6 +57,7 @@ const app = new Vue({
         'topic': TopicComponent,
         'topic-add': TopicAddComponent,
         'topic-edit': TopicEditComponent,
+        'topic-prefix': TopicPrefixComponent,
         'message-contract-add': MessageContractAddComponent,
         'message-contract-edit': MessageContractEditComponent,
         'capability-edit': CapabilityEditComponent,
@@ -83,6 +86,9 @@ const app = new Vue({
             var isLegacy = this.isLegacyComputed;
             var isJoined = this.isJoinedComputed;
             return !(isLegacy == false && isJoined == true);
+        },
+        isReadyForTopicCreation: function() {
+            return !((this.capability.topicPrefixes.businessArea === "") || (this.capability.topicPrefixes.self === ""));
         },
         disabledContextButtonReasonComputed: function() {
             var msg = "";
@@ -163,6 +169,23 @@ const app = new Vue({
             return members
                 .filter(member => member.email.toLowerCase() == this.currentUser.email.toLowerCase())
                 .length > 0;
+        },
+        addTopicFlow: function() {
+            if (this.isReadyForTopicCreation) {
+                this.toggleShowAddTopic();
+            } else {
+                this.toggleShowTopicPrefix();
+            }
+        },
+        toggleShowTopicPrefix: function(prefixes) {
+            if (this.showTopicPrefix) {
+                this.topicEditData = null;
+                this.showTopicPrefix = false;
+            } else {
+                this.topicEditData = this.capability.topicPrefixes;
+                this.showTopicPrefix = true;
+            }
+            //this.showTopicPrefix = this.showTopicPrefix ? false : true;
         },
         toggleShowAddTopic: function() {
             this.showAddTopic = this.showAddTopic ? false : true;
