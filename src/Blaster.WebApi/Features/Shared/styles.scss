@@ -62,6 +62,10 @@ $navbar-padding-horizontal: 10em;
     }
 }
 
+.container {
+    position: static;
+}
+
 .button {
     border-radius: 0;
 }
@@ -156,7 +160,7 @@ $navbar-padding-horizontal: 10em;
             background-color: rgb(204, 102, 89);
             color: #f1f1f1;
             padding-left: 5px;
-            padding-right: 5px;   
+            padding-right: 5px;
             user-select: none;
             -moz-user-select: none;
             -webkit-user-select: none;
