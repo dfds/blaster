@@ -47,6 +47,10 @@ export default class CapabilityService {
     addTopic(payload, capabilityId) {
         return this.client.post(`${this.baseUrl}/${capabilityId}/topics`, payload);
     }
+
+    setCommonPrefix(payload, capabilityId) {
+        return this.client.post(`${this.baseUrl}/${capabilityId}/commonprefix`, payload);
+    }
     
     leave(capabilityId) {
         return this.client.delete(`${this.baseUrl}/${capabilityId}/members/${currentUser.email}`);

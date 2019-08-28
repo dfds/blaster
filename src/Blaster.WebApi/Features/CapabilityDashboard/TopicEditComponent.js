@@ -53,7 +53,7 @@ const TopicEditComponent = Vue.component("topic-edit", {
                             <div class="field">
                                 <label class="label">Name</label>
                                 <div class="control">
-                                    <input class="input" type="text" placeholder="Enter capability name" data-property="name" v-model="topicName">
+                                    <input class="input" type="text" placeholder="Enter topic name" data-property="name" v-model="topicName">
                                 </div>
                             </div>
                             <div class="field">

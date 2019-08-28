@@ -11,11 +11,7 @@
         "contexts": [],
         "Topics": [],
         "RootId": "foo-1",
-        "topicPrefixes": {
-          "businessArea:": "build",
-          "self": "foo",
-          "type": "events"
-        }
+        "topicCommonPrefix": "foo"
     },
     {
       "id": "2",

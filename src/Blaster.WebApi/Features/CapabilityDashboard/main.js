@@ -88,7 +88,7 @@ const app = new Vue({
             return !(isLegacy == false && isJoined == true);
         },
         isReadyForTopicCreation: function() {
-            return !((this.capability.topicPrefixes.businessArea === "") || (this.capability.topicPrefixes.self === ""));
+            return !((this.capability.topicCommonPrefix === "") || (this.capability.topicCommonPrefix === null));
         },
         disabledContextButtonReasonComputed: function() {
             var msg = "";
@@ -225,6 +225,9 @@ const app = new Vue({
         },
         handleCapabilityEdit: function(capability) {
             capabilityService.update(this.capability.id, capability)
+        },
+        handleCapabilityTopicCommonPrefix: function(commonPrefix) {
+            capabilityService.setCommonPrefix({commonPrefix: commonPrefix}, this.capability.id)
                 .then(() => {
                     return capabilityService.get(this.capability.id);
                 })
@@ -250,6 +253,7 @@ const app = new Vue({
             .then(() => connectionService.getByCapabilityId(this.capability.id))
             .then(data => this.connections = data)
             .catch(err => console.log(JSON.stringify(err)));
+            this.toggleShowTopicPrefix();
         },
         handleMessageContractEdit: function(type, description, schema, topicId) {
             topicService.addOrUpdateMessageContract(topicId, type, {"description": description, "content": schema})

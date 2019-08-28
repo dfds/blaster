@@ -97,6 +97,23 @@ namespace Blaster.WebApi.Features.Capabilities
 
             return NoContent();
         }
+
+        [HttpPost("{id}/commonprefix", Name = "SetTopicCommonPrefix")]
+        public async Task<IActionResult> SetTopicCommonPrefix(string id, [FromBody] CapabilityCommonPrefixInput input)
+        {
+            try
+            {
+                await _capabilityServiceClient.SetCapabilityTopicCommonPrefix(input.CommonPrefix, id);
+                return NoContent();
+            }
+            catch (CapabilityTopicValidationException ex)
+            {
+                return BadRequest(new
+                {
+                    Message = ex.Message
+                });
+            }
+        }
         
         [HttpPost("{id}/topics", Name = "CreateTopic")]
         public async Task<ActionResult<string>> CreateTopic(string id, [FromBody] Topic input)
@@ -205,6 +222,14 @@ namespace Blaster.WebApi.Features.Capabilities
         public CapabilityValidationException(string message) : base(message)
         {
 
+        }
+    }
+
+    public class CapabilityTopicValidationException : Exception
+    {
+        public CapabilityTopicValidationException(string message) : base(message)
+        {
+            
         }
     }
 

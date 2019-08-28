@@ -32,7 +32,6 @@ const TopicPrefixComponent = Vue.component("topic-prefix", {
         }
     },
     mounted: function() {
-        console.log(this.initialdata);
         this.commonPrefix = this.initialdata;
     },
     watch: {
@@ -46,15 +45,15 @@ const TopicPrefixComponent = Vue.component("topic-prefix", {
     template: `
         <div class="modal" v-bind:class="{'is-active': this.isEnabledStyling}">
             <div class="modal-background" v-on:click="$emit('topicprefix-close')"></div>
-            <div class="modal-content" style="width: 913px;">
-                <div class="modal-card" style="width: 913px;">
+            <div class="modal-content" style="width: 80%;">
+                <div class="modal-card" style="width: 100%;">
                     <header class="modal-card-head">
                         <p class="modal-card-title">Set Topic prefix</p>
                         <button class="delete" aria-label="close" data-behavior="close" v-on:click="$emit('topicprefix-close')"></button>
                     </header>
                     <div class="modal-card-body">
                         <div class="dialog-container">
-                        <p class>Before a Topic can be created, a common prefix for this Capability must be set. Said prefix will in combination with other prefixes make for more coherent naming, making it easier for other teams to get an overview.</p>                        
+                        <p class="line-height: 2">Before a Topic can be created, a common prefix for this Capability must be set. Said prefix will in combination with other prefixes make for more coherent naming, making it easier for other teams to get an overview.</p>                        
                         </div>
                         <div class="form">
                             <div class="field">
@@ -73,17 +72,17 @@ const TopicPrefixComponent = Vue.component("topic-prefix", {
                                 <p>Listed below is a few examples of how a final Topic name could end up looking with the common prefix set above.</p>
                                 <div style="display: flex; flex-direction: column; margin-left: 20px; margin-top: 10px; margin-bottom: 10px;">
                                     <p style="font-size: 1.2rem;">
-                                        build.{{ toSnakeCase(commonPrefix) }}.events.pelle
+                                        build.<span style="color: #242424; font-weight: 700;">{{ toSnakeCase(commonPrefix) }}</span>.events.pelle
                                         <br />
-                                        logistics.{{ toSnakeCase(commonPrefix) }}.logging
+                                        logistics.<span style="color: #242424; font-weight: 700;">{{ toSnakeCase(commonPrefix) }}</span>.logging
                                         <br />
-                                        shipping.{{ toSnakeCase(commonPrefix) }}.events.pelle.subpelle
+                                        shipping.<span style="color: #242424; font-weight: 700;">{{ toSnakeCase(commonPrefix) }}</span>.events.pelle.subpelle
                                         <br />
-                                        pax.{{ toSnakeCase(commonPrefix) }}.pelle
+                                        pax.<span style="color: #242424; font-weight: 700;">{{ toSnakeCase(commonPrefix) }}</span>.pelle
                                     </p>
                                 </div>
                                 <p>Do note that they examples shown above are just that, examples. The only thing you will be setting at this moment in time is the "common prefix".</p>
-                                <p style="margin-top: 15px;">As you may have noticed, there is similar wording in some of the prefixes. According to the set naming convention, there is a few requirements as well as suggestions for naming a Topic. They are as following:
+                                <p style="margin-top: 15px; line-height: 2;">As you may have noticed, there is similar wording in some of the prefixes. According to the set naming convention, there is a few requirements as well as suggestions for naming a Topic. They are as following:
                                    <br />
                                     <ol style="margin-left: 40px;">
                                         <li>All topics start with a prefix denoting "business area": logistics, pax, shipping, build, other</li>
@@ -95,7 +94,7 @@ const TopicPrefixComponent = Vue.component("topic-prefix", {
                             </div>
                             <div class="field">
                                 <div class="control has-text-centered">
-                                    <button class="button is-primary" data-behavior="save" v-on:click="$emit('topicprefix-close', businessArea, self, type)">Save</button>
+                                    <button class="button is-primary" data-behavior="save" v-on:click="$emit('topicprefix-save', commonPrefix)">Save</button>
                                     <button class="button is-info" aria-label="close" data-behavior="close" v-on:click="$emit('topicprefix-close')">Cancel</button>
                                 </div>
                             </div>

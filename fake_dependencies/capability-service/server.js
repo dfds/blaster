@@ -23,19 +23,19 @@ app.get("/api/v1/capabilities", (req, res) => {
         });
 });
 
-
+var setErrorMsg = (condition, message, messages, trigger) => {
+    if (condition) {
+        messages.push(message);
+        trigger = true;
+    }
+}
 
 app.post("/api/v1/capabilities", (req, res) => {   
     const newTeam = Object.assign({
         id: new Date().getTime().toString(),
         members: [],
         contexts: [],
-        topicPrefixes: {
-            "self": "",
-            "businessArea": "",
-            "type": ""
-        }
-
+        topicCommonPrefix: ""
     }, req.body);
 
     const nameValidationMessage = "Name must be a string of length 3 to 255. consisting of only alphanumeric ASCII characters, starting with a capital letter. Hyphens is allowed.";
@@ -74,6 +74,56 @@ app.post("/api/v1/capabilities", (req, res) => {
         .catch(err => {
             res.status(500).json(err);
         });
+});
+
+// TO BE ADDED TO API CONTRACT
+app.post("/api/v1/capabilities/:capabilityid/commonprefix", (req, res) => {
+    const capabilityid = req.params.capabilityid;
+    const payload = req.body;
+
+    readFile("./capability-data.json")
+    .then(data => JSON.parse(data))
+    .then(capabilities => {
+        const capability = capabilities.find(capability => capability.id == capabilityid);
+        if (!capability) {
+            return new Promise(resolve => {
+                res
+                    .status(404)
+                    .send({message: `Capability with id ${capabilityid} could not be found`});
+                resolve();
+            });
+        } else {
+            var triggerError = false;
+            var errorMessages = [];
+            setErrorMsg((payload.commonPrefix === ""), "Common prefix is empty", errorMessages, triggerError);
+            setErrorMsg((payload.commonPrefix.length > 32), "Common prefix length exceeds 32 characters", errorMessages, triggerError);
+
+            if (triggerError) {
+                var msg = "An error occurred:\n";
+                errorMessages.forEach(errorMsg => {
+                    msg = msg + errorMsg + "\n";
+                });
+                res
+                    .status(400)
+                    .send({message: msg});
+                resolve();
+            } else {
+                const commonPrefix_snake_case = payload.commonPrefix.replace(/\W+/g, " ")
+                    .split(/ |\B(?=[A-Z])/)
+                    .map(word => word.toLowerCase())
+                    .join('_');
+                capability.topicCommonPrefix = commonPrefix_snake_case;
+
+                return Promise.resolve(serialize(capabilities))
+                    .then(json => writeFile("./capability-data.json", json))
+                    .then(() => console.log(`Common topic prefix ${payload.commonPrefix} added to Capability ${capability.name}`))
+                    .then(() => res.sendStatus(200));
+            }
+        }
+    })
+    .catch(err => {
+        console.log("ERROR! " + JSON.stringify(err));
+    });
 });
 
 app.post("/api/v1/capabilities/:teamid/members", (req, res) => {
@@ -480,4 +530,4 @@ app.delete("/api/v1/topics/:topicId/messageContracts/:messageContractType", (req
 
 app.listen(port, () => {
     console.log("Fake team service is listening on port " + port);
-});
+}); 

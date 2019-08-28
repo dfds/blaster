@@ -95,6 +95,23 @@ namespace Blaster.WebApi.Features.Capabilities
                 throw new Exception($"Error! Capability was not updated in external service. Service returned ({response.StatusCode} - {response.ReasonPhrase})");
             }
             
+        public async Task SetCapabilityTopicCommonPrefix(string commonPrefix, string capabilityId)
+        {
+            var content = new StringContent(
+                content: _serializer.Serialize(new { CommonPrefix = commonPrefix}),
+                encoding: Encoding.UTF8,
+                mediaType: "application/json"
+            );
+            
+            var response = await _client.PostAsync($"/api/v1/capabilities/{capabilityId}/commonPrefix", content);
+            if (response.StatusCode == HttpStatusCode.BadRequest) {
+                var errorObj = _serializer.Deserialize<ErrorObject>(await response.Content.ReadAsStringAsync());
+                throw new CapabilityTopicValidationException(errorObj.Message);
+            }
+            else if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new Exception($"Error! Topic common prefix was not set. Service returned ({response.StatusCode} - {response.ReasonPhrase})");
+            }
         }
         
         public async Task CreateTopic(string name, string description, string capabilityId, bool isPrivate)
