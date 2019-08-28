@@ -1,17 +1,26 @@
 import Vue from "vue";
 
 const TopicAddComponent = Vue.component("topic-add", {
-    props: ["enable"],
+    props: ["enable", "commonprefix"],
     data: function() {
         return {
             topicName: "",
             topicDescription: "",
-            topicPublic: true
+            topicPublic: true,
+            topicBusinessArea: "",
+            topicType: "",
+            topicFree: ""
         }
     },
     computed: {
         isEnabledStyling: function() {
             return this.enable;
+        },
+        isTypeInUse: function() {
+            return this.topicType !== "";
+        },
+        isFreeInUse: function() {
+            return this.topicFree !== "";
         }
     },
     methods: {
@@ -29,8 +38,8 @@ const TopicAddComponent = Vue.component("topic-add", {
     template: `
         <div class="modal" v-bind:class="{'is-active': this.isEnabledStyling}">
             <div class="modal-background" v-on:click="$emit('addtopic-close')"></div>
-            <div class="modal-content">
-                <div class="modal-card">
+            <div class="modal-content" style="width: 80%; max-width: 950px;">
+                <div class="modal-card" style="width: 100%;">
                     <header class="modal-card-head">
                         <p class="modal-card-title">Add Topic</p>
                         <button class="delete" aria-label="close" data-behavior="close" v-on:click="$emit('addtopic-close')"></button>
@@ -40,8 +49,21 @@ const TopicAddComponent = Vue.component("topic-add", {
                         <div class="form">
                             <div class="field">
                                 <label class="label">Name</label>
-                                <div class="control">
-                                    <input class="input" type="text" placeholder="Enter capability name" data-property="name" v-model="topicName">
+                                <div style="display:flex; align-items: flex-end;">
+                                    <input style="width: 180px;" class="input" type="text" placeholder="Business area" data-property="businessArea" v-model="topicBusinessArea"><span style="font-weight: 700;">.</span>{{commonprefix}}.
+                                    <select style="width: 180px;" class="input" placeholder="Type" data-property="type" v-model="topicType">
+                                        <option value="events">Events</option>
+                                        <option value="streaming">Streaming</option>
+                                        <option value="tracking">Tracking</option>
+                                        <option value="logging">Logging</option>
+                                        <option value=""></option>
+                                    </select>.
+                                    <input style="width: 180px;" class="input" type="text" placeholder="Optional" data-property="free" v-model="topicFree">
+                                </div>
+                                <div style="display:flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 20px; margin-bottom: 10px;">
+                                    <h3 style="font-size: 1.2rem; font-weight: 700;">Preview of name</h3>
+                                    <br />
+                                    <div style="display: flex; flex-direction: row;">{{topicBusinessArea.toLocaleLowerCase()}}.{{commonprefix}}<span v-if="isTypeInUse">.{{topicType.toLocaleLowerCase()}}</span><span v-if="isFreeInUse">.{{topicFree.toLocaleLowerCase()}}</span></div>
                                 </div>
                             </div>
                             <div class="field">
