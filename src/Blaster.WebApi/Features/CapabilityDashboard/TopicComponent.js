@@ -1,7 +1,7 @@
 import Vue from "vue";
 
 const TopicComponent = Vue.component("topic", {
-    props: ["topic"],
+    props: ["topic", "commonprefix"],
     data: function() {
         return {
             showData: false,
@@ -37,7 +37,20 @@ const TopicComponent = Vue.component("topic", {
         forwardNewMessageContract: function(description, type, schema, topicId) {
             this.$emit("messagecontractadd-new", description, type, schema, topicId);
             this.toggleShowAddMessageContract();
-        }
+        },
+        topicName: function(businessArea, commonPrefix, topicType, topicFree) {
+            var name = "";
+            name = businessArea + "." + commonPrefix;
+            if (topicType !== "") {
+                name = name + "." + topicType;
+            }
+
+            if (topicFree !== "") {
+                name = name + "." + topicFree;
+            }            
+
+            return name;            
+        },
     },
     computed: {
 
@@ -45,7 +58,7 @@ const TopicComponent = Vue.component("topic", {
     template: `
         <div class="topic">
             <message-contract-add :enable="showMessageContract" :topicId="topic.id" v-on:messagecontractadd-new="forwardNewMessageContract" v-on:messagecontractadd-close="toggleShowAddMessageContract()"></message-contract-add>
-            <h2 class="title" title="Click to expand" v-on:click="toggleShowData()" >{{ topic.name }}</h2>
+            <h2 class="title" title="Click to expand" v-on:click="toggleShowData()" >{{ topicName(topic.nameBusinessArea, commonprefix, topic.nameType, topic.nameMisc) }}</h2>
             <div class="details" v-if="showData">
                 <span class="entry"><span class="entry-title">Private:</span> <div :class="this.getPublicStyling()">{{ this.getPublicText() }}</div></span>
                 <span class="entry"><span class="entry-title">Description:</span> <p>{{ topic.description }}</p></span>

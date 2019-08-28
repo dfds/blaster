@@ -1,6 +1,9 @@
 [
   {
     "name": "ship.livedata",
+    "nameBusinessArea": "ship",
+    "nameType": "events",
+    "nameMisc": "livedata",
     "id": "7699d5fa-fa82-4d5b-b8fd-09359a8e13d8",
     "isPrivate": true,
     "capabilityId": "1",
@@ -21,6 +24,9 @@
   },
   {
     "name": "stuff.dunno",
+    "nameBusinessArea": "stuff",
+    "nameType": "",
+    "nameMisc": "dunno",
     "id": "f013d566-93cd-40fc-a80f-a0b3098dfcf8",
     "capabilityId": "2",
     "isPrivate": false,
@@ -31,6 +37,9 @@
   },
   {
     "name": "ship.behindthescenes",
+    "nameBusinessArea": "ship",
+    "nameType": "",
+    "nameMisc": "behindthescenes",
     "id": "3c84f88c-bf41-4e7c-8266-d75f3026bb61",
     "capabilityId": "1",
     "isPrivate": false,

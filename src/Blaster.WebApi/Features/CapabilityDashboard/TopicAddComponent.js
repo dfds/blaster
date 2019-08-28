@@ -4,7 +4,6 @@ const TopicAddComponent = Vue.component("topic-add", {
     props: ["enable", "commonprefix"],
     data: function() {
         return {
-            topicName: "",
             topicDescription: "",
             topicPublic: true,
             topicBusinessArea: "",
@@ -21,6 +20,19 @@ const TopicAddComponent = Vue.component("topic-add", {
         },
         isFreeInUse: function() {
             return this.topicFree !== "";
+        },
+        topicName: function() {
+            var name = "";
+            name = this.topicBusinessArea + "." + this.commonprefix;
+            if (this.isTypeInUse) {
+                name = name + "." + this.topicType;
+            }
+
+            if (this.isFreeInUse) {
+                name = name + "." + this.topicFree;
+            }            
+
+            return name;
         }
     },
     methods: {
@@ -50,20 +62,30 @@ const TopicAddComponent = Vue.component("topic-add", {
                             <div class="field">
                                 <label class="label">Name</label>
                                 <div style="display:flex; align-items: flex-end;">
-                                    <input style="width: 180px;" class="input" type="text" placeholder="Business area" data-property="businessArea" v-model="topicBusinessArea"><span style="font-weight: 700;">.</span>{{commonprefix}}.
-                                    <select style="width: 180px;" class="input" placeholder="Type" data-property="type" v-model="topicType">
-                                        <option value="events">Events</option>
-                                        <option value="streaming">Streaming</option>
-                                        <option value="tracking">Tracking</option>
-                                        <option value="logging">Logging</option>
-                                        <option value=""></option>
-                                    </select>.
-                                    <input style="width: 180px;" class="input" type="text" placeholder="Optional" data-property="free" v-model="topicFree">
+                                    <div style="display: flex; flex-direction: column; align-items: center;">
+                                        <span style="font-weight: 700;">Business area</span>
+                                        <input style="width: 180px;" class="input" type="text" placeholder="Business area" data-property="businessArea" v-model="topicBusinessArea">
+                                    </div>
+                                    <span style="font-weight: 700;">.</span>{{commonprefix}}<span style="font-weight: 700;">.</span>
+                                    <div style="display: flex; flex-direction: column; align-items: center;">
+                                        <span style="font-weight: 700;">Type<span style="font-size: 0.8rem; font-weight: 300"> (optional)</span></span>
+                                        <select style="width: 180px;" class="input" placeholder="Type" data-property="type" v-model="topicType">
+                                            <option value=""></option>
+                                            <option value="events">Events</option>
+                                            <option value="streaming">Streaming</option>
+                                            <option value="tracking">Tracking</option>
+                                            <option value="logging">Logging</option>
+                                        </select>
+                                    </div><span style="font-weight: 700;">.</span>
+                                    <div style="display: flex; flex-direction: column; align-items: center;">
+                                    <span style="font-weight: 700;">Misc<span style="font-size: 0.8rem; font-weight: 300"> (optional)</span></span>
+                                        <input style="width: 180px;" class="input" type="text" placeholder="Optional" data-property="free" v-model="topicFree">
+                                    </div>
                                 </div>
                                 <div style="display:flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 20px; margin-bottom: 10px;">
                                     <h3 style="font-size: 1.2rem; font-weight: 700;">Preview of name</h3>
                                     <br />
-                                    <div style="display: flex; flex-direction: row;">{{topicBusinessArea.toLocaleLowerCase()}}.{{commonprefix}}<span v-if="isTypeInUse">.{{topicType.toLocaleLowerCase()}}</span><span v-if="isFreeInUse">.{{topicFree.toLocaleLowerCase()}}</span></div>
+                                    <div style="display: flex; flex-direction: row; font-size: 1.2rem;">{{ topicName }}</div>
                                 </div>
                             </div>
                             <div class="field">

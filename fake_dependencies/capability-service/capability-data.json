@@ -25,7 +25,8 @@
       "contexts": [],
       "Topics": [
         {"name" : "Foo"}
-      ]
+      ],
+      "topicCommonPrefix": "baa"
   },
   {
     "id": "3",
