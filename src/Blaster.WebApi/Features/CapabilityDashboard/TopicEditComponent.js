@@ -67,8 +67,8 @@ const TopicEditComponent = Vue.component("topic-edit", {
     template: `
         <div class="modal" v-bind:class="{'is-active': this.isEnabledStyling}">
             <div class="modal-background" v-on:click="$emit('edittopic-close')"></div>
-            <div class="modal-content">
-                <div class="modal-card">
+            <div class="modal-content" style="width: 80%; max-width: 950px;">
+                <div class="modal-card" style="width: 100%;">
                     <header class="modal-card-head">
                         <p class="modal-card-title">Edit Topic</p>
                         <button class="delete" aria-label="close" data-behavior="close" v-on:click="$emit('edittopic-close')"></button>
