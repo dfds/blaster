@@ -397,6 +397,9 @@ app.put("/api/v1/topics/:topicId", (req, res) => {
                 topic.name = topicInput.name === undefined ? topic.name : topicInput.name;
                 topic.description = topicInput.description === undefined ? topic.description : topicInput.description;
                 topic.isPrivate = topicInput.isPrivate === undefined ? topic.isPrivate : topicInput.isPrivate;
+                topic.nameBusinessArea = topicInput.nameBusinessArea === undefined ? topic.nameBusinessArea : topicInput.nameBusinessArea;
+                topic.nameType = topicInput.nameType === undefined ? topic.nameType : topicInput.nameType;
+                topic.nameMisc = topicInput.nameMisc === undefined ? topic.nameMisc : topicInput.nameMisc;
 
                 return Promise.resolve(serialize(data))
                 .then(json => writeFile("./topic-data.json", json))

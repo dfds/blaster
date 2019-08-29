@@ -133,7 +133,11 @@ namespace Blaster.WebApi.Features.Capabilities
         public async Task UpdateTopic(string topicId, Topic input)
         {
             var reqContent = new StringContent(
-                content: _serializer.Serialize(new {Description = input.Description, Name = input.Name, IsPrivate = input.IsPrivate}),
+                content: _serializer.Serialize(new
+                {
+                    Description = input.Description, Name = input.Name, IsPrivate = input.IsPrivate,
+                    NameBusinessArea = input.NameBusinessArea, NameType = input.NameType, NameMisc = input.NameMisc
+                }),
                 encoding: Encoding.UTF8,
                 mediaType: "application/json"
             );

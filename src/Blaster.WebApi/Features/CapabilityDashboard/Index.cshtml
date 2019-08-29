@@ -154,7 +154,7 @@
                 </div>
 
                 <topic-add :enable="showAddTopic" :commonprefix="capability.topicCommonPrefix" v-on:addtopic-new-topic="addTopic" v-on:addtopic-close="toggleShowAddTopic()"></topic-add>
-                <topic-edit :enable="showEditTopic" :initialdata="topicEditData" v-on:edittopic-edit="editTopic" v-on:edittopic-close="toggleShowEditTopic()"></topic-edit>
+                <topic-edit :enable="showEditTopic" :commonprefix="capability.topicCommonPrefix" :initialdata="topicEditData" v-on:edittopic-edit="editTopic" v-on:edittopic-close="toggleShowEditTopic()"></topic-edit>
                 <topic-prefix :enable="showTopicPrefix" :initialdata="capability.name" v-on:topicprefix-close="toggleShowTopicPrefix()" v-on:topicprefix-save="handleCapabilityTopicCommonPrefix"></topic-prefix>
                 <message-contract-edit :enable="showMessageContractEdit" :initialdata="messageContractEditData" v-on:messagecontractedit-edit="handleMessageContractEdit" v-on:messagecontractedit-close="toggleShowMessageContractEdit"></message-contract-edit>
 

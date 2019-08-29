@@ -116,6 +116,7 @@ namespace Blaster.WebApi.Features.Capabilities
             }
         }
         
+        // UPDATE API CONTRACT
         [HttpPost("{id}/topics", Name = "CreateTopic")]
         public async Task<ActionResult<string>> CreateTopic(string id, [FromBody] Topic input)
         {

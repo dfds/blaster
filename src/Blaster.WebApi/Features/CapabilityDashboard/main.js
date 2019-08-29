@@ -293,8 +293,8 @@ const app = new Vue({
 
             this.showAddTopic = false;
         },
-        editTopic: function(name, description, isPrivate, id) {
-            const payload = {name: name, description: description, isPrivate: isPrivate};
+        editTopic: function(name, description, isPrivate, id, businessArea, type, misc) {
+            const payload = {name: name, description: description, isPrivate: isPrivate, nameBusinessArea: businessArea, nameType: type, nameMisc: misc};
 
             topicService.update(id, payload)
                 .then(() => {

@@ -44,6 +44,9 @@ const TopicAddComponent = Vue.component("topic-add", {
         if (!this.enable) {
             this.topicDescription = "";
             this.topicPublic = true;
+            this.topicBusinessArea = "";
+            this.topicType = "";
+            this.topicMisc = "";
         }
     },
     template: `
