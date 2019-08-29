@@ -13,7 +13,7 @@ namespace Blaster.WebApi.Features.Capabilities
         Task DeleteCapability(string capabilityId);
         Task UpdateCapability(string capabilityId, string name, string description);
         Task SetCapabilityTopicCommonPrefix(string commonPrefix, string capabilityId);
-        Task CreateTopic(string title, string description, string capabilityId, bool isPrivate);
+        Task CreateTopic(string title, string description, string capabilityId, bool isPrivate, string businessArea, string type, string misc);
         Task UpdateTopic(string topicId, Topic input);
         Task CreateMessageContract(string type, string description, string content, string topicId);
         Task AddUpdateMessageContract(string type, string topicId, MessageContractInput input);

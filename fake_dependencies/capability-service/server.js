@@ -311,7 +311,10 @@ app.post("/api/v1/capabilities/:capabilityId/topics", (req, res) => {
         "id": new Date().getTime().toString(),
         "capabilityId": capabilityId,
         "isPrivate": newTopic.isPrivate,
-        "messageContracts": []
+        "messageContracts": [],
+        "nameBusinessArea": newTopic.nameBusinessArea,
+        "nameType": newTopic.nameType,
+        "nameMisc": newTopic.nameMisc
     }
 
     readFile("./topic-data.json")

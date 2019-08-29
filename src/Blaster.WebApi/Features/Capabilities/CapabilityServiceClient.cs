@@ -114,10 +114,14 @@ namespace Blaster.WebApi.Features.Capabilities
             }
         }
         
-        public async Task CreateTopic(string name, string description, string capabilityId, bool isPrivate)
+        public async Task CreateTopic(string name, string description, string capabilityId, bool isPrivate, string businessArea, string type, string misc)
         {
             var content = new StringContent(
-                content: _serializer.Serialize(new { Name = name, Description = description, IsPrivate = isPrivate, MessageContract = new MessageContract[0]}),
+                content: _serializer.Serialize(new
+                {
+                    Name = name, Description = description, IsPrivate = isPrivate, MessageContract = new MessageContract[0],
+                    NameBusinessArea = businessArea, NameType = type, NameMisc = misc
+                }),
                 encoding: Encoding.UTF8,
                 mediaType: "application/json"
             );

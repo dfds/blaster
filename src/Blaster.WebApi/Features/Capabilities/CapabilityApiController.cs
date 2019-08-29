@@ -98,6 +98,7 @@ namespace Blaster.WebApi.Features.Capabilities
             return NoContent();
         }
 
+        // UPDATE API CONTRACT
         [HttpPost("{id}/commonprefix", Name = "SetTopicCommonPrefix")]
         public async Task<IActionResult> SetTopicCommonPrefix(string id, [FromBody] CapabilityCommonPrefixInput input)
         {
@@ -120,7 +121,7 @@ namespace Blaster.WebApi.Features.Capabilities
         {
             try
             {
-                await _capabilityServiceClient.CreateTopic(input.Name, input.Description, id, input.IsPrivate);
+                await _capabilityServiceClient.CreateTopic(input.Name, input.Description, id, input.IsPrivate, input.NameBusinessArea, input.NameType, input.NameMisc);
             }
             catch (HttpRequestException)
             {

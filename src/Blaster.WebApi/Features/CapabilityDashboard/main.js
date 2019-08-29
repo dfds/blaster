@@ -280,8 +280,8 @@ const app = new Vue({
                 .then(data => this.capability = data)
                 .catch(err => console.log(JSON.stringify(err)));
         },
-        addTopic: function(name, description, isPrivate) {
-            const payload = {name: name, description: description, isPrivate: isPrivate, messageContracts: []}
+        addTopic: function(name, description, isPrivate, businessArea, type, misc) {
+            const payload = {name: name, description: description, isPrivate: isPrivate, messageContracts: [], nameBusinessArea: businessArea, nameType: type, nameMisc: misc}
 
             // TODO: Rework this to handle errors
             capabilityService.addTopic(payload, this.capability.id)

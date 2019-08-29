@@ -8,7 +8,7 @@ const TopicAddComponent = Vue.component("topic-add", {
             topicPublic: true,
             topicBusinessArea: "",
             topicType: "",
-            topicFree: ""
+            topicMisc: ""
         }
     },
     computed: {
@@ -18,8 +18,8 @@ const TopicAddComponent = Vue.component("topic-add", {
         isTypeInUse: function() {
             return this.topicType !== "";
         },
-        isFreeInUse: function() {
-            return this.topicFree !== "";
+        isMiscInUse: function() {
+            return this.topicMisc !== "";
         },
         topicName: function() {
             var name = "";
@@ -28,8 +28,8 @@ const TopicAddComponent = Vue.component("topic-add", {
                 name = name + "." + this.topicType;
             }
 
-            if (this.isFreeInUse) {
-                name = name + "." + this.topicFree;
+            if (this.isMiscInUse) {
+                name = name + "." + this.topicMisc;
             }            
 
             return name;
@@ -42,7 +42,6 @@ const TopicAddComponent = Vue.component("topic-add", {
     },
     updated: function() {
         if (!this.enable) {
-            this.topicName = "";
             this.topicDescription = "";
             this.topicPublic = true;
         }
@@ -79,7 +78,7 @@ const TopicAddComponent = Vue.component("topic-add", {
                                     </div><span style="font-weight: 700;">.</span>
                                     <div style="display: flex; flex-direction: column; align-items: center;">
                                     <span style="font-weight: 700;">Misc<span style="font-size: 0.8rem; font-weight: 300"> (optional)</span></span>
-                                        <input style="width: 180px;" class="input" type="text" placeholder="Optional" data-property="free" v-model="topicFree">
+                                        <input style="width: 180px;" class="input" type="text" placeholder="Optional" data-property="free" v-model="topicMisc">
                                     </div>
                                 </div>
                                 <div style="display:flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 20px; margin-bottom: 10px;">
@@ -102,7 +101,7 @@ const TopicAddComponent = Vue.component("topic-add", {
                             </div>
                             <div class="field">
                                 <div class="control has-text-centered">
-                                    <button class="button is-primary" data-behavior="save" v-on:click="$emit('addtopic-new-topic', topicName, topicDescription, topicPublic)">Save</button>
+                                    <button class="button is-primary" data-behavior="save" v-on:click="$emit('addtopic-new-topic', topicName, topicDescription, topicPublic, topicBusinessArea, topicType, topicMisc)">Save</button>
                                     <button class="button is-info" aria-label="close" data-behavior="close" v-on:click="$emit('addtopic-close')">Cancel</button>
                                 </div>
                             </div>
