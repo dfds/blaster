@@ -30,6 +30,7 @@ var setErrorMsg = (condition, message, messages, trigger) => {
     }
 }
 
+// TODO: Update capability-service with this
 app.post("/api/v1/capabilities", (req, res) => {   
     const newTeam = Object.assign({
         id: new Date().getTime().toString(),
@@ -76,7 +77,7 @@ app.post("/api/v1/capabilities", (req, res) => {
         });
 });
 
-// TO BE ADDED TO API CONTRACT
+// TODO: Add to capability-service
 app.post("/api/v1/capabilities/:capabilityid/commonprefix", (req, res) => {
     const capabilityid = req.params.capabilityid;
     const payload = req.body;
@@ -117,7 +118,7 @@ app.post("/api/v1/capabilities/:capabilityid/commonprefix", (req, res) => {
                 return Promise.resolve(serialize(capabilities))
                     .then(json => writeFile("./capability-data.json", json))
                     .then(() => console.log(`Common topic prefix ${payload.commonPrefix} added to Capability ${capability.name}`))
-                    .then(() => res.sendStatus(200));
+                    .then(() => res.sendStatus(204));
             }
         }
     })

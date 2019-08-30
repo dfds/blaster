@@ -108,7 +108,7 @@ namespace Blaster.WebApi.Features.Capabilities
                 var errorObj = _serializer.Deserialize<ErrorObject>(await response.Content.ReadAsStringAsync());
                 throw new CapabilityTopicValidationException(errorObj.Message);
             }
-            else if (response.StatusCode != HttpStatusCode.OK)
+            else if (response.StatusCode != HttpStatusCode.NoContent)
             {
                 throw new Exception($"Error! Topic common prefix was not set. Service returned ({response.StatusCode} - {response.ReasonPhrase})");
             }
