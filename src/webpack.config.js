@@ -4,11 +4,11 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
     entry: {
-        main: "./Blaster.WebApi/Features/Shared/index.js",
-        capabilities: "./Blaster.WebApi/Features/Capabilities/main.js",
+        main: ["./Blaster.WebApi/Features/Shared/polyfills.js", "./Blaster.WebApi/Features/Shared/index.js"],
+        capabilities: ["./Blaster.WebApi/Features/Shared/polyfills.js", "./Blaster.WebApi/Features/Capabilities/main.js"],
 //        topics: "./Blaster.WebApi/Features/Topic/main.js",
-        capabilitydashboard: "./Blaster.WebApi/Features/CapabilityDashboard/main.js",
-        featureflags: "./Blaster.WebApi/Features/FeatureFlag/main.js"
+        capabilitydashboard: ["./Blaster.WebApi/Features/Shared/polyfills.js", "./Blaster.WebApi/Features/CapabilityDashboard/main.js"],
+        featureflags: ["./Blaster.WebApi/Features/Shared/polyfills.js", "./Blaster.WebApi/Features/FeatureFlag/main.js"]
 //        topicdetails: "./Blaster.WebApi/Features/TopicDetails/main.js",
     },
     output: {
