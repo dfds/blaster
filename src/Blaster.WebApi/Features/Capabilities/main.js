@@ -6,6 +6,7 @@ import jq from "jquery";
 import { currentUser } from "userservice";
 import FeatureFlag from "featureflag";
 import TestCapabilitiesFiltered from './test-filter';
+import "@babel/polyfill";
 
 const capabilityService = new CapabilityService();
 FeatureFlag.setKeybinding();
