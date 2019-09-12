@@ -6,8 +6,9 @@ import jq from "jquery";
 import { currentUser } from "userservice";
 import AlertDialog from "./alert-dialog";
 import FeatureFlag from "featureflag";
-import URLSearchParams from '@ungap/url-search-params'
-import "@babel/polyfill";
+import "core-js/features/url-search-params"
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
 // Components
 import TopicComponent from "./TopicComponent";
