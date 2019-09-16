@@ -24,6 +24,10 @@ export default class CapabilityService {
         return this.client.post(this.baseUrl, capability);
     }
 
+    update(capabilityId, capability) {
+        return this.client.put(`${this.baseUrl}/${capabilityId}`, capability);
+    }
+
     join(capabilityId) {
         const payload = {
             email: currentUser.email

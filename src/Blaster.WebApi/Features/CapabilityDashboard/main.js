@@ -11,6 +11,7 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 
 // Components
+import CapabilityEditComponent from "./CapabilityEditComponent";
 import TopicComponent from "./TopicComponent";
 import TopicAddComponent from "./TopicAddComponent";
 import TopicEditComponent from "./TopicEditComponent";
@@ -32,6 +33,7 @@ const app = new Vue({
         membershipRequested: false,
         contextRequested: false,
         topics: null,
+        showEditCapability: false,
         showAddTopic: false,
         showEditTopic: false,
         showMessageContractEdit: false,
@@ -44,7 +46,8 @@ const app = new Vue({
         'topic-add': TopicAddComponent,
         'topic-edit': TopicEditComponent,
         'message-contract-add': MessageContractAddComponent,
-        'message-contract-edit': MessageContractEditComponent
+        'message-contract-edit': MessageContractEditComponent,
+        'capability-edit': CapabilityEditComponent
     },
     computed: {
         capabilityFound: function() {
@@ -126,6 +129,13 @@ const app = new Vue({
         toggleShowAddTopic: function() {
             this.showAddTopic = this.showAddTopic ? false : true;
         },
+        toggleShowEditCapability: function() {
+            if (this.showEditCapability) {
+                this.showEditCapability = false;
+            } else {
+                this.showEditCapability = true;
+            }
+        },
         toggleShowEditTopic: function(topic) {
             if (this.showEditTopic) {
                 this.topicEditData = null;
@@ -144,6 +154,15 @@ const app = new Vue({
                 this.messageContractEditData.topicId = topicId;
                 this.showMessageContractEdit = true;
             }
+        },
+        handleCapabilityEdit: function(capability) {
+            capabilityService.update(this.capability.id, capability)
+                .then(() => {
+                    return capabilityService.get(this.capability.id);
+                })
+                .then(data => this.capability = data)
+                .catch(err => console.log(JSON.stringify(err)));
+            this.toggleShowEditCapability();
         },
         handleMessageContractEdit: function(type, description, schema, topicId) {
             topicService.addOrUpdateMessageContract(topicId, type, {"description": description, "content": schema})

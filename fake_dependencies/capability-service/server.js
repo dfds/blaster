@@ -190,6 +190,38 @@ app.get("/api/v1/capabilities/:capabilityid", (req, res) => {
         });
 });
 
+app.put("/api/v1/capabilities/:capabilityId", (req, res) => {
+    const capabilityId = req.params.capabilityId;
+    const capabilityInput = req.body;
+
+    readFile("./capability-data.json")
+        .then(data => JSON.parse(data))
+        .then(data => {
+            const capability = data.find(capability => new String(capability.id).valueOf() === new String(capabilityId).valueOf());
+            
+            if (!capability) {
+                return new Promise(resolve => {
+                    res
+                        .status(404)
+                        .send({message: `Capability with id ${capabilityId} could not be found`});
+                    resolve();
+                });
+            } else {
+                capability.name = capabilityInput.name === undefined ? capability.name : capabilityInput.name;
+                capability.description = capabilityInput.description === undefined ? capability.description : capabilityInput.description;
+
+                return Promise.resolve(serialize(data))
+                .then(json => writeFile("./capability-data.json", json))
+                .then(() => console.log(`Updated Capability ${capability.name}`))
+                .then(() => res.sendStatus(200));
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        });    
+});
+
 
 app.post("/api/v1/capabilities/:capabilityId/topics", (req, res) => {
     const capabilityId = req.params.capabilityId;

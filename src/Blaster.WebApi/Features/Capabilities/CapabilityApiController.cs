@@ -61,6 +61,23 @@ namespace Blaster.WebApi.Features.Capabilities
                 });
             }
         }
+
+        // This method on purpose only updates "description" at the moment. Public access to updating all of a Capability is yet to be decided.
+        [HttpPut("{id}", Name = "UpdateCapability")]
+        public async Task<IActionResult> UpdateCapability(string id, [FromBody] CapabilityInput input)
+        {
+            try
+            {
+                var currentCapability = await _capabilityServiceClient.GetById(id);
+                await _capabilityServiceClient.UpdateCapability(id, currentCapability.Name, input.Description);
+            }
+            catch (HttpRequestException)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
+        }
         
         [HttpPost("{id}/topics", Name = "CreateTopic")]
         public async Task<ActionResult<string>> CreateTopic(string id, [FromBody] Topic input)
