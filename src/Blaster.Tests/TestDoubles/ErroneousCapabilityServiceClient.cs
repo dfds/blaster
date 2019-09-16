@@ -34,6 +34,11 @@ namespace Blaster.Tests.TestDoubles
             throw _error;
         }
 
+        public Task UpdateCapability(string capabilityId, string name, string description)
+        {
+            throw _error;
+        }
+
         public Task CreateTopic(string title, string description, string capabilityId, bool isPrivate)
         {
             throw _error;

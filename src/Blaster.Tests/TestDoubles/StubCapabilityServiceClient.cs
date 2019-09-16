@@ -46,6 +46,11 @@ namespace Blaster.Tests.TestDoubles
             return Task.FromResult(_capabilities.First());
         }
 
+        public Task UpdateCapability(string capabilityId, string name, string description)
+        {
+            return Task.CompletedTask;
+        }
+
         public Task CreateTopic(string title, string description, string capabilityId, bool isPrivate)
         {
             return Task.CompletedTask;
