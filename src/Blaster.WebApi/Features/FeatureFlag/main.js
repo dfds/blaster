@@ -1,7 +1,8 @@
 import Vue from "vue";
 import FeatureFlag from "featureflag";
 import Cookies from "js-cookie";
-import "@babel/polyfill";
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
 Vue.prototype.$featureFlag = new FeatureFlag();
 const app = new Vue({
