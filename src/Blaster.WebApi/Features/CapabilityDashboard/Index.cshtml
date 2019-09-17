@@ -112,6 +112,8 @@
                 </p>
             </div>
 
+            <capability-edit :enable="showEditCapability" :initialdata="capability" v-on:capability-edit-save="handleCapabilityEdit" v-on:capability-edit-close="toggleShowEditCapability()"></capability-edit>
+
             <div class="container box" v-if="topicsEnabled">
                 <h1 class="title is-uppercase">Topics</h1>
 
@@ -131,7 +133,6 @@
                         </button>
                 </div>
 
-                <capability-edit :enable="showEditCapability" :initialdata="capability" v-on:capability-edit-save="handleCapabilityEdit" v-on:capability-edit-close="toggleShowEditCapability()"></capability-edit>
                 <topic-add :enable="showAddTopic" v-on:addtopic-new-topic="addTopic" v-on:addtopic-close="toggleShowAddTopic()"></topic-add>
                 <topic-edit :enable="showEditTopic" :initialdata="topicEditData" v-on:edittopic-edit="editTopic" v-on:edittopic-close="toggleShowEditTopic()"></topic-edit>
                 <message-contract-edit :enable="showMessageContractEdit" :initialdata="messageContractEditData" v-on:messagecontractedit-edit="handleMessageContractEdit" v-on:messagecontractedit-close="toggleShowMessageContractEdit"></message-contract-edit>
