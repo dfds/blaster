@@ -17,6 +17,7 @@ import TopicAddComponent from "./TopicAddComponent";
 import TopicEditComponent from "./TopicEditComponent";
 import MessageContractAddComponent from "./MessageContractAddComponent";
 import MessageContractEditComponent from "./MessageContractEditComponent";
+import ChannelPickerComponent from "../Shared/components/ChannelPickerComponent";
 
 const topicService = new TopicService();
 const capabilityService = new CapabilityService();
@@ -47,7 +48,8 @@ const app = new Vue({
         'topic-edit': TopicEditComponent,
         'message-contract-add': MessageContractAddComponent,
         'message-contract-edit': MessageContractEditComponent,
-        'capability-edit': CapabilityEditComponent
+        'capability-edit': CapabilityEditComponent,
+        'channel-picker': ChannelPickerComponent,
     },
     computed: {
         capabilityFound: function() {

@@ -112,6 +112,11 @@
                 </p>
             </div>
 
+            <div class="container box">
+                <h1 class="title is-uppercase">WIP Slack channel picker</h1>
+                <channel-picker></channel-picker>
+            </div>            
+
             <capability-edit :enable="showEditCapability" :initialdata="capability" v-on:capability-edit-save="handleCapabilityEdit" v-on:capability-edit-close="toggleShowEditCapability()"></capability-edit>
 
             <div class="container box" v-if="topicsEnabled">
