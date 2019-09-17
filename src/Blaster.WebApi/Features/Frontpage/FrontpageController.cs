@@ -18,6 +18,12 @@ namespace Blaster.WebApi.Features.Frontpage
             return View();
         }
 
+        [Route("/sharedcomponents")]
+        public IActionResult SharedComponents()
+        {
+            return View();
+        }
+
         [HttpGet("/downloads/kubeconfig")]
         public async Task<IActionResult> DownloadKubeConfig()
         {
