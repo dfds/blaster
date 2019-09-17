@@ -25,7 +25,7 @@ restore_dependencies() {
 
 build_projects() {
     echo "Building projects..."
-    NODE_ENV=production npm run build
+    npm run build
     dotnet build -c Release Blaster.sln
 }
 

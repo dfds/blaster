@@ -17,7 +17,7 @@ module.exports = {
     },
     resolve: {
         alias: {
-            vue: process.env.NODE_ENV == 'production' ? 'vue/dist/vue.min.js' : 'vue/dist/vue.js',
+            vue: 'vue/dist/vue.js',
             httpclient$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/httpclient.js"),
             userservice$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/userservice.js"),
             alertdialog$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/alert-dialog.js"),
