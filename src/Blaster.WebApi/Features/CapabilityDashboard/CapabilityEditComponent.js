@@ -23,11 +23,6 @@ const CapabilityEditComponent = Vue.component("capability-edit", {
             }
         }
     },
-    updated: function() {
-        if (!this.enable) {
-            this.description = "";
-        }
-    },
     watch: {
         initialdata: function(newData, oldData) {
             if (newData) {
