@@ -15,8 +15,8 @@ const ChannelPickerComponent = Vue.component("channel-picker", {
     data: function() {
         return {
             inputText: "",
-            slackChannels: [],
-            selectedSlackChannels: [],
+            channels: [],
+            selectedChannels: [],
             dropdownVisibility: false
         }
     },
@@ -24,7 +24,7 @@ const ChannelPickerComponent = Vue.component("channel-picker", {
         getChannels: function() {
             channelService.getAll()
                 .then((items) => {
-                    this.slackChannels = items;
+                    this.channels = items;
                 });
         },
         inputUpdatedQuery: function(query) {
@@ -34,9 +34,9 @@ const ChannelPickerComponent = Vue.component("channel-picker", {
     computed: {
         dropdownChannels: function() {
             if (this.inputText === "") {
-                return this.slackChannels;
+                return this.channels;
             } else {
-                return this.slackChannels.filter(ch => ch.name.toLowerCase().includes(this.inputText.toLowerCase()));
+                return this.channels.filter(ch => ch.name.toLowerCase().includes(this.inputText.toLowerCase()));
             }
         }
     },
