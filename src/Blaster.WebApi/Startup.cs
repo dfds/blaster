@@ -40,6 +40,7 @@ namespace Blaster.WebApi
 
             /* configure each feature */
             ConfigureCapabilityFeature(services);
+            ConfigureHaraldFeature(services);
             ConfigureFrontpageFeature(services);
             //ConfigureTopicFeature(services);
         }
@@ -62,6 +63,16 @@ namespace Blaster.WebApi
                 .AddHttpClient<ICapabilityServiceClient, CapabilityServiceClient>(client =>
                 {
                     client.BaseAddress = new Uri(Configuration["BLASTER_CAPABILITYSERVICE_API_URL"]);
+                })
+                .AddHttpMessageHandler<CorrelationIdMessageHandler>();
+        }
+
+        private void ConfigureHaraldFeature(IServiceCollection services)
+        {
+            services
+                .AddHttpClient<IHaraldClient, HaraldClient>(client =>
+                {
+                    client.BaseAddress = new Uri(Configuration["BLASTER_HARALD_API_URL"]);
                 })
                 .AddHttpMessageHandler<CorrelationIdMessageHandler>();
         }

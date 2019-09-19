@@ -5,25 +5,12 @@ const ChannelInputComponent = Vue.component("channel-input", {
     data: function() {
         return {
             inputText: "",
-            slackChannels: []
         }
     },
     methods: {
         onInput: function() {
             this.$emit('input-updated-query', this.inputText);
-        },
-        getChannels: function() {
-            return [{name: "ded-infrastructure", id: "1"}, {name: "dev-excellence", id: "2"}, {name: "kubernetes", id: "3"}];
         }
-    },
-    computed: {
-        dropdownChannels: function() {
-            return this.slackChannels.filter(ch => ch.name.toLowerCase().includes(this.inputText.toLowerCase()));
-        }
-    },
-    beforeMount: function() {
-        // GET list of usable Slack channels
-        this.slackChannels = this.getChannels();
     },
     template: `
         <div class="channelInput">

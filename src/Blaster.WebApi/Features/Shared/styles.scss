@@ -83,6 +83,8 @@ $navbar-padding-horizontal: 10em;
         font-size: 1.2rem;
         padding-top: 4px;
         padding-bottom: 4px;
+        display: flex;
+        align-items: center;
 
         &:hover {
             background: rgb(223, 213, 213);

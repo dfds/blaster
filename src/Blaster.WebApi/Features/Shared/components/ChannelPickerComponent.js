@@ -2,6 +2,9 @@ import Vue from "vue";
 
 import ChannelInputComponent from "./ChannelInputComponent";
 import ChannelDropdownComponent from "./ChannelDropdownComponent";
+import ChannelService from "channelservice";
+
+const channelService = new ChannelService();
 
 const ChannelPickerComponent = Vue.component("channel-picker", {
     props: [],
@@ -19,7 +22,10 @@ const ChannelPickerComponent = Vue.component("channel-picker", {
     },
     methods: {
         getChannels: function() {
-            return [{name: "ded-infrastructure", id: "1"}, {name: "dev-excellence", id: "2"}, {name: "kubernetes", id: "3"}];
+            channelService.getAll()
+                .then((items) => {
+                    this.slackChannels = items;
+                });
         },
         inputUpdatedQuery: function(query) {
             this.inputText = query;
@@ -35,8 +41,7 @@ const ChannelPickerComponent = Vue.component("channel-picker", {
         }
     },
     beforeMount: function() {
-        // GET list of usable Slack channels
-        this.slackChannels = this.getChannels();
+        this.getChannels();
     },
     template: `
         <div class="channelPicker">
