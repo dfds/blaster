@@ -14,12 +14,12 @@ const ChannelDropdownComponent = Vue.component("channel-dropdown", {
     },
     methods: {
         onChannelClick: function (channel) {
-            console.log(channel.name + " was clicked on");
+            this.$emit('capability-join-channel', channel);
         }
     },
     template: `
-        <div class="channelDropdown">
-            <channel-minimal v-for="channel in channels" :key="channel.id" :channel="channel" v-on:click.native="onChannelClick(channel)"></channel-minimal>
+        <div class="channelDropdown" @focus="$emit('dropdown-focus')" @blur="$emit('dropdown-blur')">
+            <channel-minimal v-for="channel in channels" :key="channel.id" :channel="channel" @click.native="onChannelClick(channel)"></channel-minimal>
         </div>
     `
 });

@@ -114,11 +114,12 @@
 
             <div class="container box">
                 <h1 class="title is-uppercase">WIP communication channel picker</h1>
-                <channel-picker></channel-picker>
+                <channel-picker :capabilitychannels="channels"></channel-picker>
             </div>        
 
             <div class="container box">
                 <h1 class="title is-uppercase">WIP communication channel list view</h1>
+                <channel-minimal v-for="channel in channels" :key="channel.id" :channel="channel" @@click.native="onChannelClick(channel)"></channel-minimal>
             </div>                     
 
             <capability-edit :enable="showEditCapability" :initialdata="capability" v-on:capability-edit-save="handleCapabilityEdit" v-on:capability-edit-close="toggleShowEditCapability()"></capability-edit>

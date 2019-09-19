@@ -18,6 +18,7 @@ import TopicEditComponent from "./TopicEditComponent";
 import MessageContractAddComponent from "./MessageContractAddComponent";
 import MessageContractEditComponent from "./MessageContractEditComponent";
 import ChannelPickerComponent from "../Shared/components/ChannelPickerComponent";
+import ChannelMinimalComponent from "../Shared/components/ChannelMinimalComponent";
 
 const topicService = new TopicService();
 const capabilityService = new CapabilityService();
@@ -40,7 +41,12 @@ const app = new Vue({
         showMessageContractEdit: false,
         messageContractEditData: null,
         topicEditData: null,
-        topicsEnabled: false
+        topicsEnabled: false,
+        channels: [{
+            "type": "slack",
+            "name": "dev-excellence",
+            "id": "1"
+        }]
     },
     components: {
         'topic': TopicComponent,
@@ -50,6 +56,7 @@ const app = new Vue({
         'message-contract-edit': MessageContractEditComponent,
         'capability-edit': CapabilityEditComponent,
         'channel-picker': ChannelPickerComponent,
+        'channel-minimal': ChannelMinimalComponent,
     },
     computed: {
         capabilityFound: function() {

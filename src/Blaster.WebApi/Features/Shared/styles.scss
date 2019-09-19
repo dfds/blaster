@@ -77,18 +77,18 @@ $navbar-padding-horizontal: 10em;
     max-height: 240px;
     width: 240px;
     background: #e6eaf7;
+}
 
-    .channel {
-        padding-left: 7px;
-        font-size: 1.2rem;
-        padding-top: 4px;
-        padding-bottom: 4px;
-        display: flex;
-        align-items: center;
+.channel {
+    padding-left: 7px;
+    font-size: 1.2rem;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    display: flex;
+    align-items: center;
 
-        &:hover {
-            background: #d9dce9;
-        }
+    &:hover {
+        background: #d9dce9;
     }
 }
 
