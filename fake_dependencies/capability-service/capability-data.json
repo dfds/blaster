@@ -79,5 +79,20 @@
     ],
     "contexts": [],
     "RootId": ""
+  },
+  {
+    "id": "0d03e3ad-2118-46b7-970e-0ca87b59a202",
+    "name": "Team One",
+    "description": "The team that came first",
+    "members": [
+      {
+        "email": "highlander@me.com"
+      },
+      {
+        "email": "jdog@me.com"
+      }
+    ],
+    "contexts": [],
+    "RootId": ""
   }
 ] 
