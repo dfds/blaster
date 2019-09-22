@@ -156,14 +156,14 @@
                 <table class="table is-fullwidth is-hoverable">
                     <thead>
                         <tr>
-                            <th>Channel id </th>
+                            <th>Channel Name </th>
                             <th>channel type</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="connection in communicationConnections" v-bind:data-id="connection.channelId">
                             <td>
-                              {{connection.channelId}}
+                              {{connection.channelName}}
                             </td>
                             <td>
                                {{connection.channelType}}
