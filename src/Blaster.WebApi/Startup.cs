@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities;
+using Blaster.WebApi.Features.Channels;
 using Blaster.WebApi.Features.Frontpage;
 using Blaster.WebApi.Security;
 using CorrelationId;

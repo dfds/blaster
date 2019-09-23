@@ -1,6 +1,7 @@
 import Vue from "vue";
 import ModelEditor from "modeleditor";
 import CapabilityService from "capabilityservice"
+import ConnectionService from "connectionservice";
 import TopicService from "topicservice"
 import jq from "jquery";
 import { currentUser } from "userservice";
@@ -21,6 +22,7 @@ import {ChannelPickerComponent, ChannelMinimalComponent, ChannelListComponent} f
 
 const topicService = new TopicService();
 const capabilityService = new CapabilityService();
+const connectionService = new ConnectionService();
 FeatureFlag.setKeybinding();
 
 Vue.prototype.$featureFlag = new FeatureFlag();
@@ -42,11 +44,7 @@ const app = new Vue({
         topicEditData: null,
         topicsEnabled: false,
         channelsEnabled: false,
-        channels: [{
-            "type": "slack",
-            "name": "dev-excellence",
-            "id": "1"
-        }]
+        connections: []
     },
     components: {
         'topic': TopicComponent,
@@ -88,6 +86,19 @@ const app = new Vue({
                 }
             }
             return msg;
+        },
+        channels: function() {
+            if (this.connections) {
+                return this.connections.map(ch => {
+                    return {
+                        type: ch.channelType,
+                        name: ch.channelName,
+                        id: ch.channelId
+                    }
+                })
+            } else {
+                return [];
+            }
         }
     },
     filters: {
@@ -313,6 +324,16 @@ const app = new Vue({
         jq.ready
             .then(() => capabilityService.get(capabilityIdParam))
             .then(capability => this.capability = capability)
+            .then(capability => {
+                console.log(capability);
+                jq.ready
+                    .then(() => connectionService.getByCapabilityId(capability.id))
+                    .then((connections) => {
+                        console.log(connections);
+                        this.connections = connections;
+                    })
+                    .done();
+            })
             .catch(info => {
                 if (info.status != 200) {
                     AlertDialog.open({

@@ -81,7 +81,7 @@ app.post("/api/v1/channel/join", (req, res) => {
                 });
             } else {
                 const desiredRelations = data.items;
-                desiredRelations.push({senderId: reqPayload.senderId, channelId: reqPayload.channelId});
+                desiredRelations.push({senderId: reqPayload.senderId, channelId: reqPayload.channelId, channelName: reqPayload.channelName});
 
                 data.items = desiredRelations;
 
@@ -127,7 +127,7 @@ app.get("/api/v1/connections", (req, res) => {
 
             return data;
         })
-        .then(data => res.json(data))
+        .then(data => res.json({items: data}))
         .catch(err => {
             console.log("Error: " + err);
             res.status(500).json(err);
