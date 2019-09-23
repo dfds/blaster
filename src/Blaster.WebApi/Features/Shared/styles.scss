@@ -77,6 +77,7 @@ $navbar-padding-horizontal: 10em;
     max-height: 240px;
     width: 240px;
     background: #e6eaf7;
+    z-index: 999; // It's kinda hacky and I don't like it, not one bit.
 }
 
 .channel {

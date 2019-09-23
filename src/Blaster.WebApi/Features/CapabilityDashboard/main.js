@@ -19,6 +19,7 @@ import MessageContractAddComponent from "./MessageContractAddComponent";
 import MessageContractEditComponent from "./MessageContractEditComponent";
 import ChannelPickerComponent from "../Shared/components/ChannelPickerComponent";
 import ChannelMinimalComponent from "../Shared/components/ChannelMinimalComponent";
+import ChannelListComponent from "../Shared//components/ChannelListComponent";
 
 const topicService = new TopicService();
 const capabilityService = new CapabilityService();
@@ -57,6 +58,7 @@ const app = new Vue({
         'capability-edit': CapabilityEditComponent,
         'channel-picker': ChannelPickerComponent,
         'channel-minimal': ChannelMinimalComponent,
+        'channel-list': ChannelListComponent
     },
     computed: {
         capabilityFound: function() {
@@ -172,6 +174,14 @@ const app = new Vue({
                 .then(data => this.capability = data)
                 .catch(err => console.log(JSON.stringify(err)));
             this.toggleShowEditCapability();
+        },
+        handleCapabilityJoinChannel: function(channel) {
+            this.channels.push(channel);
+        },
+        handleCapabilityLeaveChannel: function(channel) {
+            this.channels = this.channels.filter(ch => {
+                return ch.id.valueOf() !== channel.id.valueOf();
+            });
         },
         handleMessageContractEdit: function(type, description, schema, topicId) {
             topicService.addOrUpdateMessageContract(topicId, type, {"description": description, "content": schema})
