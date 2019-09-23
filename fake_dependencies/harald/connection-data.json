@@ -1,0 +1,28 @@
+{
+    "items": [
+        {
+            "senderType": "capability",
+            "senderName": "",
+            "senderId": "1",
+            "channelType": "slack",
+            "channelName": "",
+            "channelId": "1"
+        },
+        {
+            "senderType": "capability",
+            "senderName": "",
+            "senderId": "1",
+            "channelType": "slack",
+            "channelName": "",
+            "channelId": "2"
+        },
+        {
+            "senderType": "capability",
+            "senderName": "",
+            "senderId": "2",
+            "channelType": "slack",
+            "channelName": "",
+            "channelId": "5"
+        }
+    ]
+}
