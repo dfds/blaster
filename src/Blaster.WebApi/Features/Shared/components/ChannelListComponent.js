@@ -21,7 +21,7 @@ const ChannelListComponent = Vue.component("channel-list", {
         <div class="channelList" style="display: flex; flex-direction: column;">
             <div style="display: flex; flex-direction: row; align-items: center;" v-for="channel in channels" :key="channel.id">
                 <a class="delete" style="margin-right: 5px;" @click="leaveChannel(channel)"></a>            
-                <channel-minimal :channel="channel"></channel-minimal> 
+                <channel-minimal :channel="channel" :enablehover=false></channel-minimal> 
             </div>
         </div>
     `

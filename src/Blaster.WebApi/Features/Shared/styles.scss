@@ -87,7 +87,9 @@ $navbar-padding-horizontal: 10em;
     padding-bottom: 4px;
     display: flex;
     align-items: center;
+}
 
+.channelhightlight {
     &:hover {
         background: #d9dce9;
     }

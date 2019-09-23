@@ -19,7 +19,7 @@ const ChannelDropdownComponent = Vue.component("channel-dropdown", {
     },
     template: `
         <div class="channelDropdown" @focus="$emit('dropdown-focus')" @blur="$emit('dropdown-blur')">
-            <channel-minimal v-for="channel in channels" :key="channel.id" :channel="channel" @click.native="onChannelClick(channel)"></channel-minimal>
+            <channel-minimal v-for="channel in channels" :key="channel.id" :channel="channel" :enablehover=true @click.native="onChannelClick(channel)"></channel-minimal>
         </div>
     `
 });
