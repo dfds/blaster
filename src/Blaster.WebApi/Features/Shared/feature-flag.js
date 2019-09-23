@@ -11,6 +11,7 @@ export default class FeatureFlag {
     setupFlags() {
          this.addFlag(new FlagTestFilter());
          this.addFlag(new FlagTopics());
+         this.addFlag(new FlagChannels());
     }
 
     init() {
@@ -66,6 +67,14 @@ class FlagTopics extends Flag {
         super();
         this.name = 'topics';
         this.description = "Show Topic functionality on a Capability page";
+    }
+}
+
+class FlagChannels extends Flag {
+    constructor() {
+        super();
+        this.name = 'channels';
+        this.description = "Show Channels functionality provided in conjunction with Harald";
     }
 }
 

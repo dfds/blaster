@@ -112,12 +112,12 @@
                 </p>
             </div>
 
-            <div class="container box">
+            <div class="container box" v-if="channelsEnabled">
                 <h1 class="title is-uppercase">WIP communication channel picker</h1>
                 <channel-picker :capabilitychannels="channels" v-on:capability-join-channel="handleCapabilityJoinChannel"></channel-picker>
             </div>        
 
-            <div class="container box">
+            <div class="container box" v-if="channelsEnabled">
                 <h1 class="title is-uppercase">WIP communication channel list view</h1>
                 <channel-list :channels="channels" v-on:capability-leave-channel="handleCapabilityLeaveChannel"></channel-list>
             </div>                     
