@@ -17,9 +17,7 @@ import TopicAddComponent from "./TopicAddComponent";
 import TopicEditComponent from "./TopicEditComponent";
 import MessageContractAddComponent from "./MessageContractAddComponent";
 import MessageContractEditComponent from "./MessageContractEditComponent";
-import ChannelPickerComponent from "../Shared/components/ChannelPickerComponent";
-import ChannelMinimalComponent from "../Shared/components/ChannelMinimalComponent";
-import ChannelListComponent from "../Shared//components/ChannelListComponent";
+import {ChannelPickerComponent, ChannelMinimalComponent, ChannelListComponent} from "../Shared/components/Shared";
 
 const topicService = new TopicService();
 const capabilityService = new CapabilityService();

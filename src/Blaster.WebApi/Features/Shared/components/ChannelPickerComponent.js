@@ -1,7 +1,6 @@
 import Vue from "vue";
 
-import ChannelInputComponent from "./ChannelInputComponent";
-import ChannelDropdownComponent from "./ChannelDropdownComponent";
+import {ChannelInputComponent, ChannelDropdownComponent} from "./Shared";
 import ChannelService from "channelservice";
 
 const channelService = new ChannelService();
