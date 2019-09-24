@@ -21,7 +21,7 @@ namespace Blaster.WebApi.Features.CommunicationChannels
 
         public async Task<ConnectionsResponse> GetConnectionsByCapabilityIdAsync(string capabilityId)
         {
-            var response = await _client.GetAsync($"/api/v1/connections?senderType=capability&senderId={capabilityId}");
+            var response = await _client.GetAsync($"/api/v1/connections?clientType=capability&clientId={capabilityId}");
             
             var content = await response.Content.ReadAsStringAsync();
             response.EnsureSuccessStatusCode();
