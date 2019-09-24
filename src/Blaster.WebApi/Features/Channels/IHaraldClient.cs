@@ -6,8 +6,8 @@ namespace Blaster.WebApi.Features.Channels
     public interface IHaraldClient
     {
         Task<ChannelsResponse> GetAllChannels();
-        Task JoinChannel(string channelId, string channelName, string senderId);
-        Task LeaveChannel(string channelId, string senderId);
-        Task<ConnectionsResponse> GetAllConnections(string senderName, string senderType, string senderId, string channelName, string channelType, string channelId);
+        Task JoinChannel(string channelId, string channelName, string clientId);
+        Task LeaveChannel(string channelId, string clientId);
+        Task<ConnectionsResponse> GetAllConnections(string clientName, string clientType, string clientId, string channelName, string channelType, string channelId);
     }
 }

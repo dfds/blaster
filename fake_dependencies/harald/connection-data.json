@@ -1,25 +1,25 @@
 {
     "items": [
         {
-            "senderType": "capability",
-            "senderName": "",
-            "senderId": "1",
+            "clientType": "capability",
+            "clientName": "",
+            "clientId": "1",
             "channelType": "slack",
             "channelName": "dev-excellence",
             "channelId": "1"
         },
         {
-            "senderType": "capability",
-            "senderName": "",
-            "senderId": "1",
+            "clientType": "capability",
+            "clientName": "",
+            "clientId": "1",
             "channelType": "slack",
             "channelName": "ded-infrastructure",
             "channelId": "2"
         },
         {
-            "senderType": "capability",
-            "senderName": "",
-            "senderId": "2",
+            "clientType": "capability",
+            "clientName": "",
+            "clientId": "2",
             "channelType": "slack",
             "channelName": "AWMAGAWSH",
             "channelId": "5"

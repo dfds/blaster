@@ -15,7 +15,7 @@ export default class ChannelService {
     }
 
     getByCapabilityId(id) {
-        return this.client.get(`${this.baseUrl}?senderId=${id}`)
+        return this.client.get(`${this.baseUrl}?clientId=${id}`)
             .then(data => data.items || []);
     }
 }

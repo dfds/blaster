@@ -19,9 +19,9 @@ namespace Blaster.WebApi.Features.Connections
         }
 
         [HttpGet("", Name = "GetAllConnections")]
-        public async Task<ActionResult<ConnectionsResponse>> GetAll(string senderName, string senderType, string senderId, string channelName, string channelType, string channelId)
+        public async Task<ActionResult<ConnectionsResponse>> GetAll(string clientName, string clientType, string clientId, string channelName, string channelType, string channelId)
         {
-            var channels = await _haraldClient.GetAllConnections(senderName, senderType, senderId, channelName, channelType, channelId);
+            var channels = await _haraldClient.GetAllConnections(clientName, clientType, clientId, channelName, channelType, channelId);
 
             return channels ?? new ConnectionsResponse()
             {

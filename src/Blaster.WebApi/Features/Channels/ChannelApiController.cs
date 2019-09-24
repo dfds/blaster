@@ -22,7 +22,7 @@ namespace Blaster.WebApi.Features.Channels
         {
             try
             {
-                await _haraldClient.JoinChannel(channelConnectionRequest.ChannelId, channelConnectionRequest.ChannelName, channelConnectionRequest.SenderId);
+                await _haraldClient.JoinChannel(channelConnectionRequest.ChannelId, channelConnectionRequest.ChannelName, channelConnectionRequest.ClientId);
             }
             catch (HttpRequestException)
             {
@@ -37,7 +37,7 @@ namespace Blaster.WebApi.Features.Channels
         {
             try
             {
-                await _haraldClient.LeaveChannel(channelConnectionRequest.ChannelId, channelConnectionRequest.SenderId);
+                await _haraldClient.LeaveChannel(channelConnectionRequest.ChannelId, channelConnectionRequest.ClientId);
             }
             catch (HttpRequestException)
             {

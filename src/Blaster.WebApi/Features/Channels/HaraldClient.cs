@@ -27,10 +27,10 @@ namespace Blaster.WebApi.Features.Channels
             return _serializer.Deserialize<ChannelsResponse>(content);
         }
 
-        public async Task JoinChannel(string channelId, string channelName, string senderId)
+        public async Task JoinChannel(string channelId, string channelName, string clientId)
         {
             var content = new StringContent(
-                content: _serializer.Serialize(new { ChannelId = channelId, ChannelName = channelName, SenderId = senderId}),
+                content: _serializer.Serialize(new { ChannelId = channelId, ChannelName = channelName, ClientId = clientId}),
                 encoding: Encoding.UTF8,
                 mediaType: "application/json"
             );
@@ -38,10 +38,10 @@ namespace Blaster.WebApi.Features.Channels
             response.EnsureSuccessStatusCode();
         }
         
-        public async Task LeaveChannel(string channelId, string senderId)
+        public async Task LeaveChannel(string channelId, string clientId)
         {
             var content = new StringContent(
-                content: _serializer.Serialize(new { ChannelId = channelId, SenderId = senderId}),
+                content: _serializer.Serialize(new { ChannelId = channelId, ClientId = clientId}),
                 encoding: Encoding.UTF8,
                 mediaType: "application/json"
             );
@@ -49,12 +49,12 @@ namespace Blaster.WebApi.Features.Channels
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<ConnectionsResponse> GetAllConnections(string senderName, string senderType, string senderId, string channelName, string channelType, string channelId)
+        public async Task<ConnectionsResponse> GetAllConnections(string clientName, string clientType, string clientId, string channelName, string channelType, string channelId)
         {
             var query = HttpUtility.ParseQueryString(String.Empty);
-            query["senderName"] = senderName;
-            query["senderType"] = senderType;
-            query["senderId"] = senderId;
+            query["clientName"] = clientName;
+            query["clientType"] = clientType;
+            query["clientId"] = clientId;
             query["channelName"] = channelName;
             query["channelType"] = channelType;
             query["channelId"] = channelId;

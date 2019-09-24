@@ -25,7 +25,7 @@ app.post("/api/v1/channel/leave", (req, res) => {
         .then(data => JSON.parse(data))
         .then(data => {
             const relation = data.items.find(rel => 
-                new String(rel.senderId).valueOf() === new String(reqPayload.senderId).valueOf()
+                new String(rel.clientId).valueOf() === new String(reqPayload.clientId).valueOf()
                 &&
                 new String(rel.channelId).valueOf() === new String(reqPayload.channelId).valueOf()
                 );
@@ -34,12 +34,12 @@ app.post("/api/v1/channel/leave", (req, res) => {
                 return new Promise(resolve => {
                     res
                         .status(422)
-                        .send({message: `Capability with id ${reqPayload.senderId} hasn't joined Channel with id ${reqPayload.channelId}`});
+                        .send({message: `Capability with id ${reqPayload.clientId} hasn't joined Channel with id ${reqPayload.channelId}`});
                     resolve();
                 });
             } else {
                 const desiredRelations = data.items.filter(rel => 
-                    rel.senderId.valueOf() === relation.senderId.valueOf() 
+                    rel.clientId.valueOf() === relation.clientId.valueOf() 
                     ?
                     rel.channelId.valueOf() !== relation.channelId.valueOf()
                     :
@@ -50,7 +50,7 @@ app.post("/api/v1/channel/leave", (req, res) => {
 
                 return Promise.resolve(serialize(data))
                     .then(json => writeFile("./connection-data.json", json))
-                    .then(() => console.log(`Capability with id ${reqPayload.senderId} has left Channel with id ${reqPayload.channelId}`))
+                    .then(() => console.log(`Capability with id ${reqPayload.clientId} has left Channel with id ${reqPayload.channelId}`))
                     .then(() => res.sendStatus(200));
             }
         })
@@ -67,7 +67,7 @@ app.post("/api/v1/channel/join", (req, res) => {
         .then(data => JSON.parse(data))
         .then(data => {
             const relation = data.items.find(rel => 
-                new String(rel.senderId).valueOf() === new String(reqPayload.senderId).valueOf()
+                new String(rel.clientId).valueOf() === new String(reqPayload.clientId).valueOf()
                 &&
                 new String(rel.channelId).valueOf() === new String(reqPayload.channelId).valueOf()
                 );
@@ -76,19 +76,19 @@ app.post("/api/v1/channel/join", (req, res) => {
                 return new Promise(resolve => {
                     res
                         .status(422)
-                        .send({message: `Capability with id ${reqPayload.senderId} has already joined Channel with id ${reqPayload.channelId}`});
+                        .send({message: `Capability with id ${reqPayload.clientId} has already joined Channel with id ${reqPayload.channelId}`});
                     resolve();
                 });
             } else {
                 const desiredRelations = data.items;
                 // Harcoding a channelType of "slack" until a more concrete API contract/implementation has been made.
-                desiredRelations.push({senderId: reqPayload.senderId, channelId: reqPayload.channelId, channelName: reqPayload.channelName, channelType: "slack"});
+                desiredRelations.push({clientId: reqPayload.clientId, channelId: reqPayload.channelId, channelName: reqPayload.channelName, channelType: "slack"});
 
                 data.items = desiredRelations;
 
                 return Promise.resolve(serialize(data))
                 .then(json => writeFile("./connection-data.json", json))
-                .then(() => console.log(`Capability with id ${reqPayload.senderId} has joined Channel with id ${reqPayload.channelId}`))
+                .then(() => console.log(`Capability with id ${reqPayload.clientId} has joined Channel with id ${reqPayload.channelId}`))
                 .then(() => res.sendStatus(200));
             }
         })
@@ -99,8 +99,8 @@ app.post("/api/v1/channel/join", (req, res) => {
 });
 
 app.get("/api/v1/connections", (req, res) => {
-    const queryParamSenderType = req.query.senderType;
-    const queryParamSenderId = req.query.senderId;
+    const queryParamClientType = req.query.clientType;
+    const queryParamClientId = req.query.clientId;
     const queryParamChannelType = req.query.channelType;
     const queryParamChannelId = req.query.channelId;
 
@@ -109,7 +109,7 @@ app.get("/api/v1/connections", (req, res) => {
         .then(data => JSON.parse(data))
         .then(data => {
             // TODO
-            if (queryParamSenderType) {
+            if (queryParamClientType) {
 
             }
 
@@ -118,8 +118,8 @@ app.get("/api/v1/connections", (req, res) => {
 
             }
 
-            if (queryParamSenderId) {
-                data = data.items.filter(connection => connection.senderId.valueOf() === queryParamSenderId.valueOf());
+            if (queryParamClientId) {
+                data = data.items.filter(connection => connection.clientId.valueOf() === queryParamClientId.valueOf());
             }            
 
             if (queryParamChannelId) {
