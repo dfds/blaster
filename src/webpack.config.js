@@ -27,6 +27,7 @@ module.exports = {
             featureflag$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/feature-flag.js"),
             channelservice$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/channelservice.js"),
             connectionservice$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/connectionservice.js"),
+            connectionsService$: path.resolve(__dirname, "Blaster.WebApi/Features/CommunicationChannels/connectionsService.js"),
             "keypattern-shortcut$": path.resolve(__dirname, "Blaster.WebApi/Features/Shared/keypattern_shortcut.js")
         },
         extensions: [".js", ".scss"]

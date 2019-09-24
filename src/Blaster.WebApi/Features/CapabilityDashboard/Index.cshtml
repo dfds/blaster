@@ -158,6 +158,32 @@
                 </div>
             </div>
 
+        <!--- Communication channel section --->
+
+
+            <div class="container box">
+                <h1 class="title is-uppercase">Slack Channels</h1>
+                <table class="table is-fullwidth is-hoverable">
+                    <thead>
+                        <tr>
+                            <th>Channel Name </th>
+                            <th>channel type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="connection in communicationConnections" v-bind:data-id="connection.channelId">
+                            <td>
+                              {{connection.channelName}}
+                            </td>
+                            <td>
+                               {{connection.channelType}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
         <!--- Summary section --->
             <div class="container box" style="display:none">
                 <h1 class="title is-uppercase">Capability summary</h1>
