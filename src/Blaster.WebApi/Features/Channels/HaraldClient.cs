@@ -30,7 +30,7 @@ namespace Blaster.WebApi.Features.Channels
         public async Task JoinChannel(string channelId, string channelName, string senderId)
         {
             var content = new StringContent(
-                content: _serializer.Serialize(new { ChannelId = channelId, Channelname = channelName, SenderId = senderId}),
+                content: _serializer.Serialize(new { ChannelId = channelId, ChannelName = channelName, SenderId = senderId}),
                 encoding: Encoding.UTF8,
                 mediaType: "application/json"
             );

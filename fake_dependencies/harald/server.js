@@ -81,7 +81,8 @@ app.post("/api/v1/channel/join", (req, res) => {
                 });
             } else {
                 const desiredRelations = data.items;
-                desiredRelations.push({senderId: reqPayload.senderId, channelId: reqPayload.channelId, channelName: reqPayload.channelName});
+                // Harcoding a channelType of "slack" until a more concrete API contract/implementation has been made.
+                desiredRelations.push({senderId: reqPayload.senderId, channelId: reqPayload.channelId, channelName: reqPayload.channelName, channelType: "slack"});
 
                 data.items = desiredRelations;
 

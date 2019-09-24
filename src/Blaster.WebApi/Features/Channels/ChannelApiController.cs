@@ -17,7 +17,7 @@ namespace Blaster.WebApi.Features.Channels
             _haraldClient = haraldClient;
         }
 
-        [HttpPost("", Name = "JoinChannel")]
+        [HttpPost("join", Name = "JoinChannel")]
         public async Task<IActionResult> Join([FromBody] ChannelConnectionRequest channelConnectionRequest)
         {
             try
@@ -29,10 +29,10 @@ namespace Blaster.WebApi.Features.Channels
                 return new BadRequestResult();
             }
 
-            return new OkResult();
+            return new NoContentResult();
         }
         
-        [HttpPost("", Name = "LeaveChannel")]
+        [HttpPost("leave", Name = "LeaveChannel")]
         public async Task<IActionResult> Leave([FromBody] ChannelConnectionRequest channelConnectionRequest)
         {
             try
@@ -44,7 +44,7 @@ namespace Blaster.WebApi.Features.Channels
                 return new BadRequestResult();
             }
 
-            return new OkResult();
+            return new NoContentResult();
         }
     }
 }

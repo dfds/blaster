@@ -188,22 +188,16 @@ const app = new Vue({
             this.toggleShowEditCapability();
         },
         handleCapabilityJoinChannel: function(channel) {
-            channelService.join({senderId: this.capability.id, channelId: channel.id})
-                .then((data) => {
-                    this.capability = capabilityService.get(this.capability.id);
-                })
+            channelService.join({senderId: this.capability.id, channelId: channel.id, channelName: channel.name})
+                .then(() => connectionService.getByCapabilityId(this.capability.id))
+                .then(data => this.connections = data)
                 .catch(err => console.log(JSON.stringify(err)));
-            //this.channels.push(channel);
         },
         handleCapabilityLeaveChannel: function(channel) {
-            // this.channels = this.channels.filter(ch => {
-            //     return ch.id.valueOf() !== channel.id.valueOf();
-            // });
             channelService.leave({senderId: this.capability.id, channelId: channel.id})
-                .then((data) => {
-                    this.capability = capabilityService.get(this.capability.id);
-                })
-                .catch(err => console.log(JSON.stringify(err)));
+            .then(() => connectionService.getByCapabilityId(this.capability.id))
+            .then(data => this.connections = data)
+            .catch(err => console.log(JSON.stringify(err)));
         },
         handleMessageContractEdit: function(type, description, schema, topicId) {
             topicService.addOrUpdateMessageContract(topicId, type, {"description": description, "content": schema})
@@ -341,7 +335,6 @@ const app = new Vue({
                 jq.ready
                     .then(() => connectionService.getByCapabilityId(capability.id))
                     .then((connections) => {
-                        console.log(connections);
                         this.connections = connections;
                     })
                     .done();
