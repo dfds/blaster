@@ -2,6 +2,7 @@ import Vue from "vue";
 import ModelEditor from "modeleditor";
 import CapabilityService from "capabilityservice"
 import ConnectionService from "connectionservice";
+import ChannelService from "channelservice";
 import TopicService from "topicservice"
 import jq from "jquery";
 import { currentUser } from "userservice";
@@ -23,6 +24,7 @@ import {ChannelPickerComponent, ChannelMinimalComponent, ChannelListComponent} f
 const topicService = new TopicService();
 const capabilityService = new CapabilityService();
 const connectionService = new ConnectionService();
+const channelService = new ChannelService();
 FeatureFlag.setKeybinding();
 
 Vue.prototype.$featureFlag = new FeatureFlag();
@@ -186,12 +188,22 @@ const app = new Vue({
             this.toggleShowEditCapability();
         },
         handleCapabilityJoinChannel: function(channel) {
-            this.channels.push(channel);
+            channelService.join({senderId: this.capability.id, channelId: channel.id})
+                .then((data) => {
+                    this.capability = capabilityService.get(this.capability.id);
+                })
+                .catch(err => console.log(JSON.stringify(err)));
+            //this.channels.push(channel);
         },
         handleCapabilityLeaveChannel: function(channel) {
-            this.channels = this.channels.filter(ch => {
-                return ch.id.valueOf() !== channel.id.valueOf();
-            });
+            // this.channels = this.channels.filter(ch => {
+            //     return ch.id.valueOf() !== channel.id.valueOf();
+            // });
+            channelService.leave({senderId: this.capability.id, channelId: channel.id})
+                .then((data) => {
+                    this.capability = capabilityService.get(this.capability.id);
+                })
+                .catch(err => console.log(JSON.stringify(err)));
         },
         handleMessageContractEdit: function(type, description, schema, topicId) {
             topicService.addOrUpdateMessageContract(topicId, type, {"description": description, "content": schema})
