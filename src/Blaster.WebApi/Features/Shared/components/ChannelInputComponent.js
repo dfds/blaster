@@ -1,7 +1,7 @@
 import Vue from "vue";
 
 const ChannelInputComponent = Vue.component("channel-input", {
-    props: [],
+    props: ["is_enabled"],
     data: function() {
         return {
             inputText: "",
@@ -14,7 +14,7 @@ const ChannelInputComponent = Vue.component("channel-input", {
     },
     template: `
         <div class="channelInput">
-            <input type="text" v-model="inputText" @input="onInput" @focus="$emit('input-focus')" @blur="$emit('input-blur')">
+            <input :disabled="!is_enabled" type="text" v-model="inputText" @input="onInput" @focus="$emit('input-focus')" @blur="$emit('input-blur')">
         </div>
     `
 });

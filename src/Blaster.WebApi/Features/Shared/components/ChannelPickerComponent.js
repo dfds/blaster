@@ -7,7 +7,7 @@ import ChannelService from "channelservice";
 const channelService = new ChannelService();
 
 const ChannelPickerComponent = Vue.component("channel-picker", {
-    props: ["capabilitychannels"],
+    props: ["capabilitychannels", "is_enabled"],
     components: {
         'channel-input': ChannelInputComponent,
         'channel-dropdown': ChannelDropdownComponent,
@@ -76,6 +76,7 @@ const ChannelPickerComponent = Vue.component("channel-picker", {
     template: `
         <div class="channelPicker">
             <channel-input
+                :is_enabled="is_enabled" 
                 v-on:input-updated-query="inputUpdatedQuery"
                 v-on:input-focus="inputFocus = true"
                 v-on:input-blur="onInputBlur">
@@ -83,6 +84,7 @@ const ChannelPickerComponent = Vue.component("channel-picker", {
             <channel-dropdown
                 v-bind:style="{ display: showDropdown }"
                 v-on:capability-join-channel="onChannelClick"
+                v-if="is_enabled"
                 :channels="dropdownChannels">
             </channel-dropdown>
         </div>

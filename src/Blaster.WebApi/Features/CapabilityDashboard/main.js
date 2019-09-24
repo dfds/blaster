@@ -104,6 +104,10 @@ const app = new Vue({
             } else {
                 return [];
             }
+        },
+        shouldChannelPickerBeEnabled: function() {
+            // Due to the backend currently only supporting one communication channel at a time, the channel-picker is artificially limited to only work when a Capability has 0 communication channels.
+            return this.connections.length === 0;
         }
     },
     filters: {
@@ -334,7 +338,6 @@ const app = new Vue({
             .then(() => capabilityService.get(capabilityIdParam))
             .then(capability => this.capability = capability)
             .then(capability => {
-                console.log(capability);
                 jq.ready
                     .then(() => connectionService.getByCapabilityId(capability.id))
                     .then((connections) => {

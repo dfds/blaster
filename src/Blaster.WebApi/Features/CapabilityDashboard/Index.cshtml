@@ -112,15 +112,12 @@
                 </p>
             </div>
 
+        <!--- Communication channel section --->
             <div class="container box" v-if="channelsEnabled">
-                <h1 class="title is-uppercase">WIP communication channel picker</h1>
-                <channel-picker :capabilitychannels="channels" v-on:capability-join-channel="handleCapabilityJoinChannel"></channel-picker>
-            </div>        
-
-            <div class="container box" v-if="channelsEnabled">
-                <h1 class="title is-uppercase">WIP communication channel list view</h1>
+                <h1 class="title is-uppercase">Communication channels</h1>
+                <channel-picker :is_enabled="shouldChannelPickerBeEnabled" :capabilitychannels="channels" v-on:capability-join-channel="handleCapabilityJoinChannel"></channel-picker>
                 <channel-list :channels="channels" v-on:capability-leave-channel="handleCapabilityLeaveChannel"></channel-list>
-            </div>                     
+            </div>                          
 
             <capability-edit :enable="showEditCapability" :initialdata="capability" v-on:capability-edit-save="handleCapabilityEdit" v-on:capability-edit-close="toggleShowEditCapability()"></capability-edit>
 
@@ -157,32 +154,6 @@
                     </div>
                 </div>
             </div>
-
-        <!--- Communication channel section --->
-
-
-            <div class="container box">
-                <h1 class="title is-uppercase">Slack Channels</h1>
-                <table class="table is-fullwidth is-hoverable">
-                    <thead>
-                        <tr>
-                            <th>Channel Name </th>
-                            <th>channel type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="connection in communicationConnections" v-bind:data-id="connection.channelId">
-                            <td>
-                              {{connection.channelName}}
-                            </td>
-                            <td>
-                               {{connection.channelType}}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
 
         <!--- Summary section --->
             <div class="container box" style="display:none">
