@@ -27,7 +27,7 @@ export default class ModelEditor {
     nameValidation(evt) {
         const input = jq("[data-property=name]");
         const capNameValid = jq("#capNameValid");
-        const nameValidationRegex = new RegExp('^[A-Z][a-zA-Z0-9\\-]{2,20}$');
+        const nameValidationRegex = new RegExp('^[A-Z][a-zA-Z0-9\\-]{2,254}$');
 
         if (input.val().match(nameValidationRegex) == null) {
             capNameValid.css("color", "#f5426c");

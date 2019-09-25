@@ -33,14 +33,14 @@ app.post("/api/v1/capabilities", (req, res) => {
 
     }, req.body);
 
-    const nameValidationMessage = "Name must be a string of length 3 to 21. consisting of only alphanumeric ASCII characters, starting with a capital letter. Hyphens is allowed.";
+    const nameValidationMessage = "Name must be a string of length 3 to 255. consisting of only alphanumeric ASCII characters, starting with a capital letter. Hyphens is allowed.";
 
     if (newTeam.name === "failme") {
         res.status(400).send({message: nameValidationMessage});
         return;
     }
 
-    const nameValidationRegex = new RegExp('^[A-Z][a-zA-Z0-9\\-]{2,20}$');
+    const nameValidationRegex = new RegExp('^[A-Z][a-zA-Z0-9\\-]{2,254}$');
     if (newTeam.name.match(nameValidationRegex) == null) {
         res.status(400).send({message: nameValidationMessage});
         return;
