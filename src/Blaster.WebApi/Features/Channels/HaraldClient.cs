@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -63,6 +64,11 @@ namespace Blaster.WebApi.Features.Channels
             var content = await response.Content.ReadAsStringAsync();
 
             return _serializer.Deserialize<ConnectionsResponse>(content);            
+        }
+
+        public async Task<ConnectionsResponse> GetConnectionsByCapabilityId(string id)
+        {
+            return await GetAllConnections(null, null, id, null, null, null);
         }
     }
 }

@@ -9,5 +9,6 @@ namespace Blaster.WebApi.Features.Channels
         Task JoinChannel(string channelId, string channelName, string clientId);
         Task LeaveChannel(string channelId, string clientId);
         Task<ConnectionsResponse> GetAllConnections(string clientName, string clientType, string clientId, string channelName, string channelType, string channelId);
+        Task<ConnectionsResponse> GetConnectionsByCapabilityId(string id);
     }
 }

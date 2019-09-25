@@ -4,7 +4,6 @@ import CapabilityService from "capabilityservice"
 import ConnectionService from "connectionservice";
 import ChannelService from "channelservice";
 import TopicService from "topicservice"
-import ConnectionsService from "connectionsService"
 import jq from "jquery";
 import { currentUser } from "userservice";
 import AlertDialog from "./alert-dialog";
@@ -26,7 +25,6 @@ const topicService = new TopicService();
 const capabilityService = new CapabilityService();
 const connectionService = new ConnectionService();
 const channelService = new ChannelService();
-const connectionsService = new ConnectionsService();
 FeatureFlag.setKeybinding();
 
 Vue.prototype.$featureFlag = new FeatureFlag();
@@ -353,20 +351,6 @@ const app = new Vue({
                         data: {
                             title: "Error!",
                             message: `Could not retrieve capability. Server returned (${info.status}) ${info.statusText}.`
-                        }
-                    });
-                }
-            })
-            .then(() => connectionsService.get(capabilityIdParam))
-            .then(connections => this.communicationConnections = connections)
-            .catch(info => {
-                if (info.status != 200) {
-                    AlertDialog.open({
-                        template: document.getElementById("error-dialog-template"),
-                        container: document.getElementById("global-dialog-container"),
-                        data: {
-                            title: "Error!",
-                            message: `Could not retrieve capability communication connections. Server returned (${info.status}) ${info.statusText}.`
                         }
                     });
                 }

@@ -1,4 +1,6 @@
 using System.Threading.Tasks;
+using Blaster.WebApi.Features.Capabilities.Models;
+using Blaster.WebApi.Features.Channels;
 using Blaster.WebApi.Features.CommunicationChannels.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,18 +9,18 @@ namespace Blaster.WebApi.Features.CommunicationChannels
     [ApiController]
     public class ConnectionsApiController : ControllerBase
     {
-        private readonly IHaraldServiceClient _haraldServiceClient;
+        private readonly IHaraldClient _haraldClient;
 
-        public ConnectionsApiController(IHaraldServiceClient haraldServiceClient)
+        public ConnectionsApiController(IHaraldClient haraldClient)
         {
-            _haraldServiceClient = haraldServiceClient;
+            _haraldClient = haraldClient;
         }
 
         
         [HttpGet("api/capabilities/{id}/connections", Name = "GetChannelsByCapabilityId")]
         public async Task<ActionResult<ConnectionsResponse>> GetChannelsById(string id)
         {
-            var connectionsResponse = await _haraldServiceClient.GetConnectionsByCapabilityIdAsync(id);
+            var connectionsResponse = await _haraldClient.GetConnectionsByCapabilityId(id);
 
             return new ActionResult<ConnectionsResponse>(connectionsResponse);
         }
