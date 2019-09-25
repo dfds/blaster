@@ -28,25 +28,31 @@ namespace Blaster.WebApi.Features.Channels
             return _serializer.Deserialize<ChannelsResponse>(content);
         }
 
-        public async Task JoinChannel(string channelId, string channelName, string clientId)
+        public async Task JoinChannel(string channelId, string channelName, string channelType, string clientId, string clientName, string clientType)
         {
             var content = new StringContent(
-                content: _serializer.Serialize(new { ChannelId = channelId, ChannelName = channelName, ClientId = clientId}),
+                content: _serializer.Serialize(new { ChannelId = channelId, ChannelName = channelName, ChannelType = channelType, ClientId = clientId, ClientName = clientName, ClientType = clientType}),
                 encoding: Encoding.UTF8,
                 mediaType: "application/json"
             );
-            var response = await _client.PostAsync("/api/v1/channel/join", content);
+            var response = await _client.PostAsync("/api/v1/connections", content);
             response.EnsureSuccessStatusCode();
         }
         
-        public async Task LeaveChannel(string channelId, string clientId)
+        public async Task LeaveChannel(string channelId, string channelType, string clientId, string clientType)
         {
+            var query = HttpUtility.ParseQueryString(String.Empty);
+            query["clientType"] = clientType;
+            query["clientId"] = clientId;
+            query["channelType"] = channelType;
+            query["channelId"] = channelId;
+            
             var content = new StringContent(
-                content: _serializer.Serialize(new { ChannelId = channelId, ClientId = clientId}),
+                content: _serializer.Serialize(new { ChannelId = channelId, ClientId = clientId, ChannelType = channelType, ClientType = clientType}),
                 encoding: Encoding.UTF8,
                 mediaType: "application/json"
             );
-            var response = await _client.PostAsync("/api/v1/channel/leave", content);
+            var response = await _client.DeleteAsync($"/api/v1/connections?{query}");
             response.EnsureSuccessStatusCode();
         }
 

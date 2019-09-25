@@ -18,6 +18,9 @@ app.get("/api/v1/channels", (req, res) => {
         .then(data => res.send(data));
 });
 
+
+// The API contract is in a state of flux. This endpoint may be removed at some point.
+// This endpoint is similar to DELETE /api/v1/connections
 app.post("/api/v1/channel/leave", (req, res) => {
     const reqPayload = req.body;
 
@@ -60,6 +63,8 @@ app.post("/api/v1/channel/leave", (req, res) => {
         });
 });
 
+// The API contract is in a state of flux. This endpoint may be removed at some point.
+// This endpoint is similar to POST /api/v1/connections
 app.post("/api/v1/channel/join", (req, res) => {
     const reqPayload = req.body;
 
@@ -133,6 +138,96 @@ app.get("/api/v1/connections", (req, res) => {
             console.log("Error: " + err);
             res.status(500).json(err);
         });
+});
+
+// The API contract is in a state of flux. This endpoint may be removed at some point.
+// This endpoint is similar to POST /api/v1/channel/join
+app.post("/api/v1/connections", (req, res) => {
+    const reqPayload = req.body;
+
+    readFile("./connection-data.json")
+        .then(data => JSON.parse(data))
+        .then(data => {
+            const relation = data.items.find(rel => 
+                new String(rel.clientId).valueOf() === new String(reqPayload.clientId).valueOf()
+                &&
+                new String(rel.channelId).valueOf() === new String(reqPayload.channelId).valueOf()
+                );
+            
+            if (relation) {
+                return new Promise(resolve => {
+                    res
+                        .status(422)
+                        .send({message: `Capability with id ${reqPayload.clientId} has already joined Channel with id ${reqPayload.channelId}`});
+                    resolve();
+                });
+            } else {
+                const desiredRelations = data.items;
+                desiredRelations.push({clientId: reqPayload.clientId, clientName: reqPayload.clientName, clientType: reqPayload.clientType,
+                    channelId: reqPayload.channelId, channelName: reqPayload.channelName, channelType: reqPayload.channelType});
+
+                data.items = desiredRelations;
+
+                return Promise.resolve(serialize(data))
+                .then(json => writeFile("./connection-data.json", json))
+                .then(() => console.log(`Capability with id ${reqPayload.clientId} has joined Channel with id ${reqPayload.channelId}`))
+                .then(() => res.sendStatus(200));
+            }
+        })
+        .catch(err => {
+            console.log("Error: " + err);
+            res.status(500).json(err);
+        });    
+});
+
+// The API contract is in a state of flux. This endpoint may be removed at some point.
+// This endpoint is similar to POST /api/v1/channel/leave
+app.delete("/api/v1/connections", (req, res) => {
+    const queryParamClientType = req.query.clientType;
+    const queryParamClientId = req.query.clientId;
+    const queryParamChannelType = req.query.channelType;
+    const queryParamChannelId = req.query.channelId;
+
+    console.log(queryParamClientId);
+    console.log(queryParamChannelId);
+
+    readFile("./connection-data.json")
+        .then(data => JSON.parse(data))
+        .then(data => {
+            const relation = data.items.find(rel => 
+                new String(rel.clientId).valueOf() === new String(queryParamClientId).valueOf()
+                &&
+                new String(rel.channelId).valueOf() === new String(queryParamChannelId).valueOf()
+                );
+            
+            if (!relation) {
+                return new Promise(resolve => {
+                    res
+                        .status(422)
+                        .send({message: `Capability with id ${queryParamClientId} hasn't joined Channel with id ${queryParamChannelId}`});
+                    resolve();
+                });
+            } else {
+                const desiredRelations = data.items.filter(rel => 
+                    rel.clientId.valueOf() === relation.clientId.valueOf() 
+                    ?
+                    rel.channelId.valueOf() !== relation.channelId.valueOf()
+                    :
+                    true         
+                    );
+                
+                data.items = desiredRelations;
+
+                return Promise.resolve(serialize(data))
+                    .then(json => writeFile("./connection-data.json", json))
+                    .then(() => console.log(`Capability with id ${queryParamClientId} has left Channel with id ${queryParamChannelId}`))
+                    .then(() => res.sendStatus(200));
+            }
+        })
+        .catch(err => {
+            console.log("Error: " + err);
+            res.status(500).json(err);
+        });        
 })
 
 app.listen(port, () => {

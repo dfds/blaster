@@ -193,13 +193,13 @@ const app = new Vue({
             this.toggleShowEditCapability();
         },
         handleCapabilityJoinChannel: function(channel) {
-            channelService.join({clientId: this.capability.id, channelId: channel.id, channelName: channel.name})
+            connectionService.join({clientId: this.capability.id, channelId: channel.id, channelName: channel.name, channelType: channel.type})
                 .then(() => connectionService.getByCapabilityId(this.capability.id))
                 .then(data => this.connections = data)
                 .catch(err => console.log(JSON.stringify(err)));
         },
         handleCapabilityLeaveChannel: function(channel) {
-            channelService.leave({clientId: this.capability.id, channelId: channel.id})
+            connectionService.leave({clientId: this.capability.id, channelId: channel.id})
             .then(() => connectionService.getByCapabilityId(this.capability.id))
             .then(data => this.connections = data)
             .catch(err => console.log(JSON.stringify(err)));

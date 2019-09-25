@@ -14,9 +14,12 @@ export default class ChannelService {
             .then(data => data.items || []);
     }
 
+    // The API contract is in a state of flux. This endpoint may be removed at some point.
     join(payload) {
-        return this.client.post(`${this.baseUrl}/join`, payload);
+        return this.client.post(`${this.baseUrl}`, payload);
     }
+
+    // The API contract is in a state of flux. This endpoint may be removed at some point.
     leave(payload) {
         return this.client.post(`${this.baseUrl}/leave`, payload);
     }
