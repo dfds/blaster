@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities.Models;
 using Blaster.WebApi.Features.Channels;
-using Blaster.WebApi.Features.CommunicationChannels.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blaster.WebApi.Features.CommunicationChannels
