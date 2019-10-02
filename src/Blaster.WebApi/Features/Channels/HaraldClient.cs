@@ -22,7 +22,7 @@ namespace Blaster.WebApi.Features.Channels
 
         public async Task<ChannelsResponse> GetAllChannels()
         {
-            var response = await _client.GetAsync("/api/v1/channels");
+            var response = await _client.GetAsync("/api/v1/channels?channelType=slack");
             var content = await response.Content.ReadAsStringAsync();
 
             return _serializer.Deserialize<ChannelsResponse>(content);

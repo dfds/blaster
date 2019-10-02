@@ -23,6 +23,14 @@
             "channelType": "slack",
             "channelName": "AWMAGAWSH",
             "channelId": "5"
+        },
+        {
+            "clientType": "capability",
+            "clientName": "Team One",
+            "clientId": "0d03e3ad-2118-46b7-970e-0ca87b59a202",
+            "channelType": "slack",
+            "channelName": "Does this even work?",
+            "channelId": "6"
         }
     ]
 }

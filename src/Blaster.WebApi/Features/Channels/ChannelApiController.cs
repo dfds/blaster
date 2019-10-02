@@ -37,7 +37,7 @@ namespace Blaster.WebApi.Features.Channels
             return new NoContentResult();
         }
         
-        [HttpPost("leave", Name = "LeaveChannel")]
+        [HttpDelete("leave", Name = "LeaveChannel")]
         public async Task<IActionResult> Leave([FromBody] ChannelConnectionRequest channelConnectionRequest)
         {
             try
