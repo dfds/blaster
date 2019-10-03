@@ -53,4 +53,4 @@ spec:
             - name: BLASTER_AWS_JANITOR_API_URL
               value: http://aws-janitor
             - name: BLASTER_HARALD_API_URL
-              value: http://harald
+              value: http://harald.selfservice-herald-vbqkr.svc.cluster.local
