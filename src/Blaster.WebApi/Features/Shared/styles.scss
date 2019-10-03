@@ -70,6 +70,44 @@ $navbar-padding-horizontal: 10em;
     border-radius: 0;
 }
 
+.channelDropdown {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    max-height: 240px;
+    width: 240px;
+    background: #e6eaf7;
+    z-index: 999; // It's kinda hacky and I don't like it, not one bit.
+    overflow: auto;
+}
+
+.channel {
+    padding-left: 7px;
+    font-size: 1.2rem;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.channelhightlight {
+    &:hover {
+        background: #d9dce9;
+    }
+}
+
+.channelPicker {
+    width: 240px;
+}
+
+.channelInput {
+    width: 100%;
+
+    input {
+        width: 100%;
+    }
+}
+
 .topics {
     display: flex;
     margin-left: 35px;

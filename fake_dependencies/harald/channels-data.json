@@ -1,0 +1,29 @@
+{
+  "items": [
+    {
+        "type": "slack",
+        "name": "dev-excellence",
+        "id": "1"
+    },
+    {
+        "type": "slack",
+        "name": "ded-infrastructure",
+        "id": "2"
+    },
+    {
+        "type": "slack",
+        "name": "kubernetes",
+        "id": "3"
+    },
+    {
+        "type": "msteams",
+        "name": "DevEx Department - General",
+        "id": "4"
+    },
+    {
+        "type": "msteams",
+        "name": "DevEx Department - Infrastructure",
+        "id": "5"
+    }    
+  ] 
+}

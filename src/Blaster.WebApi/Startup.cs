@@ -3,6 +3,8 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities;
+using Blaster.WebApi.Features.Channels;
+using Blaster.WebApi.Features.CommunicationChannels;
 using Blaster.WebApi.Features.Frontpage;
 using Blaster.WebApi.Security;
 using CorrelationId;
@@ -40,6 +42,7 @@ namespace Blaster.WebApi
 
             /* configure each feature */
             ConfigureCapabilityFeature(services);
+            ConfigureHaraldFeature(services);
             ConfigureFrontpageFeature(services);
             //ConfigureTopicFeature(services);
         }
@@ -55,13 +58,22 @@ namespace Blaster.WebApi
                 options.ViewLocationExpanders.Add(new FeatureLocationExpander());
             });
         }
-
         private void ConfigureCapabilityFeature(IServiceCollection services)
         {
             services
                 .AddHttpClient<ICapabilityServiceClient, CapabilityServiceClient>(client =>
                 {
                     client.BaseAddress = new Uri(Configuration["BLASTER_CAPABILITYSERVICE_API_URL"]);
+                })
+                .AddHttpMessageHandler<CorrelationIdMessageHandler>();
+        }
+
+        private void ConfigureHaraldFeature(IServiceCollection services)
+        {
+            services
+                .AddHttpClient<IHaraldClient, HaraldClient>(client =>
+                {
+                    client.BaseAddress = new Uri(Configuration["BLASTER_HARALD_API_URL"]);
                 })
                 .AddHttpMessageHandler<CorrelationIdMessageHandler>();
         }

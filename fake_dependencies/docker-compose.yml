@@ -11,3 +11,8 @@ services:
       context: ./aws-janitor
     ports:
       - "50901:3000"
+  harald:
+    build:
+      context: ./harald
+    ports:
+      - "50902:3000"

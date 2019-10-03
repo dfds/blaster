@@ -112,6 +112,13 @@
                 </p>
             </div>
 
+        <!--- Communication channel section --->
+            <div class="container box" v-if="channelsEnabled">
+                <h1 class="title is-uppercase">Communication channels</h1>
+                <channel-picker :is_enabled="true" :capabilitychannels="channels" v-on:capability-join-channel="handleCapabilityJoinChannel" v-if="getMembershipStatusFor(capability.id) == 'member'"></channel-picker>
+                <channel-list :channels="channels" :can_edit="getMembershipStatusFor(capability.id) == 'member'" v-on:capability-leave-channel="handleCapabilityLeaveChannel"></channel-list>
+            </div>                          
+
             <capability-edit :enable="showEditCapability" :initialdata="capability" v-on:capability-edit-save="handleCapabilityEdit" v-on:capability-edit-close="toggleShowEditCapability()"></capability-edit>
 
             <div class="container box" v-if="topicsEnabled">

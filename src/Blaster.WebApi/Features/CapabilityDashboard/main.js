@@ -1,6 +1,8 @@
 import Vue from "vue";
 import ModelEditor from "modeleditor";
 import CapabilityService from "capabilityservice"
+import ConnectionService from "connectionservice";
+import ChannelService from "channelservice";
 import TopicService from "topicservice"
 import jq from "jquery";
 import { currentUser } from "userservice";
@@ -17,9 +19,12 @@ import TopicAddComponent from "./TopicAddComponent";
 import TopicEditComponent from "./TopicEditComponent";
 import MessageContractAddComponent from "./MessageContractAddComponent";
 import MessageContractEditComponent from "./MessageContractEditComponent";
+import {ChannelPickerComponent, ChannelMinimalComponent, ChannelListComponent} from "../Shared/components/Shared";
 
 const topicService = new TopicService();
 const capabilityService = new CapabilityService();
+const connectionService = new ConnectionService();
+const channelService = new ChannelService();
 FeatureFlag.setKeybinding();
 
 Vue.prototype.$featureFlag = new FeatureFlag();
@@ -39,7 +44,10 @@ const app = new Vue({
         showMessageContractEdit: false,
         messageContractEditData: null,
         topicEditData: null,
-        topicsEnabled: false
+        topicsEnabled: false,
+        channelsEnabled: false,
+        connections: [],
+        communicationConnections: null
     },
     components: {
         'topic': TopicComponent,
@@ -47,7 +55,10 @@ const app = new Vue({
         'topic-edit': TopicEditComponent,
         'message-contract-add': MessageContractAddComponent,
         'message-contract-edit': MessageContractEditComponent,
-        'capability-edit': CapabilityEditComponent
+        'capability-edit': CapabilityEditComponent,
+        'channel-picker': ChannelPickerComponent,
+        'channel-minimal': ChannelMinimalComponent,
+        'channel-list': ChannelListComponent
     },
     computed: {
         capabilityFound: function() {
@@ -78,6 +89,19 @@ const app = new Vue({
                 }
             }
             return msg;
+        },
+        channels: function() {
+            if (this.connections) {
+                return this.connections.map(ch => {
+                    return {
+                        type: ch.channelType,
+                        name: ch.channelName,
+                        id: ch.channelId
+                    }
+                })
+            } else {
+                return [];
+            }
         }
     },
     filters: {
@@ -163,6 +187,18 @@ const app = new Vue({
                 .then(data => this.capability = data)
                 .catch(err => console.log(JSON.stringify(err)));
             this.toggleShowEditCapability();
+        },
+        handleCapabilityJoinChannel: function(channel) {
+            connectionService.join({clientId: this.capability.id, clientType: "capability", clientName: this.capability.name, channelId: channel.id, channelName: channel.name, channelType: channel.type})
+                .then(() => connectionService.getByCapabilityId(this.capability.id))
+                .then(data => this.connections = data)
+                .catch(err => console.log(JSON.stringify(err)));
+        },
+        handleCapabilityLeaveChannel: function(channel) {
+            connectionService.leave({clientId: this.capability.id, channelId: channel.id})
+            .then(() => connectionService.getByCapabilityId(this.capability.id))
+            .then(data => this.connections = data)
+            .catch(err => console.log(JSON.stringify(err)));
         },
         handleMessageContractEdit: function(type, description, schema, topicId) {
             topicService.addOrUpdateMessageContract(topicId, type, {"description": description, "content": schema})
@@ -289,11 +325,21 @@ const app = new Vue({
     mounted: function () {
         const capabilityIdParam = new URLSearchParams(window.location.search).get('capabilityId');
         this.topicsEnabled = this.$featureFlag.flagExists("topics") ? this.$featureFlag.getFlag("topics").enabled : false;
-        //this.topicsEnabled = this.$featureFlag.getFlag("topics");
+        this.channelsEnabled = this.$featureFlag.flagExists("channels") ? this.$featureFlag.getFlag("channels").enabled : false;
+
         // TODO Handle no or empty capabilityId
         jq.ready
             .then(() => capabilityService.get(capabilityIdParam))
             .then(capability => this.capability = capability)
+            .then(capability => {
+                if(this.channelsEnabled === false){return;}
+                jq.ready
+                    .then(() => connectionService.getByCapabilityId(capability.id))
+                    .then((connections) => {
+                        this.connections = connections;
+                    })
+                    .done();
+            })
             .catch(info => {
                 if (info.status != 200) {
                     AlertDialog.open({
