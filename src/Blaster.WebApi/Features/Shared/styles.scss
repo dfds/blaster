@@ -78,6 +78,7 @@ $navbar-padding-horizontal: 10em;
     width: 240px;
     background: #e6eaf7;
     z-index: 999; // It's kinda hacky and I don't like it, not one bit.
+    overflow: auto;
 }
 
 .channel {
