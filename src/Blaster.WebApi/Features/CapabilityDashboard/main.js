@@ -332,6 +332,7 @@ const app = new Vue({
             .then(() => capabilityService.get(capabilityIdParam))
             .then(capability => this.capability = capability)
             .then(capability => {
+                if(this.channelsEnabled === false){return;}
                 jq.ready
                     .then(() => connectionService.getByCapabilityId(capability.id))
                     .then((connections) => {
