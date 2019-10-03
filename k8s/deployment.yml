@@ -49,8 +49,8 @@ spec:
               cpu: "200m"
           env:
             - name: BLASTER_CAPABILITYSERVICE_API_URL
-              value: http://capability-service
+              value: $(BLASTER_CAPABILITYSERVICE_API_URL)
             - name: BLASTER_AWS_JANITOR_API_URL
-              value: http://aws-janitor
+              value: $(BLASTER_AWS_JANITOR_API_URL)
             - name: BLASTER_HARALD_API_URL
-              value: http://harald.selfservice-herald-vbqkr.svc.cluster.local
+              value: $(BLASTER_HARALD_API_URL)
