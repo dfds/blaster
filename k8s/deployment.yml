@@ -52,5 +52,5 @@ spec:
               value: http://capability-service
             - name: BLASTER_AWS_JANITOR_API_URL
               value: http://aws-janitor
-            - name: BLASTER_TIKA_API_URL
-              value: http://tika
+            - name: BLASTER_HARALD_API_URL
+              value: http://harald
