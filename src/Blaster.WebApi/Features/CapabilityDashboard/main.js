@@ -102,6 +102,13 @@ const app = new Vue({
             } else {
                 return [];
             }
+        },
+        canLeaveCommunicationChannel: function() {
+            if (this.connections) {
+                return this.connections.length > 1;
+            } else {
+                return true;
+            }
         }
     },
     filters: {
