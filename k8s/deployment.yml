@@ -54,3 +54,17 @@ spec:
               value: $(BLASTER_AWS_JANITOR_API_URL)
             - name: BLASTER_HARALD_API_URL
               value: $(BLASTER_HARALD_API_URL)
+          livenessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 5
+            httpGet:
+              port: web
+              path: /
+          readinessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 60
+            timeoutSeconds: 5
+            httpGet:
+              port: web
+              path: /
