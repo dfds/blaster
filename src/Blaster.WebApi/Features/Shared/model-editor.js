@@ -30,9 +30,9 @@ export default class ModelEditor {
         const nameValidationRegex = new RegExp('^[A-Z][a-zA-Z0-9\\-]{2,254}$');
 
         if (input.val().match(nameValidationRegex) == null) {
-            capNameValid.css("color", "#f5426c");
+            capNameValid.css("color", "#be1e2d");
         } else {
-            capNameValid.css("color", "#33f58e");
+            capNameValid.css("color", "#5aa63b");
         }
     }
 

@@ -208,6 +208,23 @@ $navbar-padding-horizontal: 10em;
 
 }
 
-// #companylogo {
-//     max-height: 76px;
-// }
+.modal-card-title {
+    color: #4d4e4c;
+}
+
+.label {
+    color: #4d4e4c;
+}
+
+.field {
+    color: #4d4e4c;
+    p {
+        color: #4d4e4c;
+        a {
+            color: #1b5786;
+            &:hover {
+                color: #5087ac;
+            }
+        }
+    }
+}
