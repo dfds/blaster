@@ -45,7 +45,6 @@ const app = new Vue({
         messageContractEditData: null,
         topicEditData: null,
         topicsEnabled: false,
-        channelsEnabled: false,
         connections: [],
         communicationConnections: null
     },
@@ -332,14 +331,12 @@ const app = new Vue({
     mounted: function () {
         const capabilityIdParam = new URLSearchParams(window.location.search).get('capabilityId');
         this.topicsEnabled = this.$featureFlag.flagExists("topics") ? this.$featureFlag.getFlag("topics").enabled : false;
-        this.channelsEnabled = this.$featureFlag.flagExists("channels") ? this.$featureFlag.getFlag("channels").enabled : false;
 
         // TODO Handle no or empty capabilityId
         jq.ready
             .then(() => capabilityService.get(capabilityIdParam))
             .then(capability => this.capability = capability)
             .then(capability => {
-                if(this.channelsEnabled === false){return;}
                 jq.ready
                     .then(() => connectionService.getByCapabilityId(capability.id))
                     .then((connections) => {
