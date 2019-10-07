@@ -1,0 +1,117 @@
+name: $(Build.BuildId)
+
+# Triggers Pipeline only on Master
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+    - README.md
+    - LICENSE
+
+# Disables triggering Pipeline run at creation of every Pull Request
+pr: none
+
+# Global variables for the pipeline
+variables:
+  vmImage: 'ubuntu-latest'
+  k8s-service-connection: 'Kubernetes-Hellman'
+  kubernetes-namespace: 'selfservice'
+
+stages:
+# Continuous Integration steps
+- stage: CI
+  displayName: 'Continuous Integration'
+  # Validation jobs
+  jobs:
+  # Build jobs
+  - job: Build
+    pool: 
+      vmImage: $(vmImage)
+
+    steps:
+    - bash: |
+        set -eu -o pipefail
+        sudo pip install setuptools
+        sudo pip install awscli
+        export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY)
+        chmod +x ./pipeline.sh
+        ./pipeline.sh $(Build.BuildId) $(System.DefaultWorkingDirectory)
+      displayName: Pipeline Bash Script
+
+    - bash: |
+        set -eu -o pipefail
+        sudo pip install setuptools
+        sudo pip install awscli
+        export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY)
+        chmod +x ./pipeline-auth-proxy.sh
+        ./pipeline-auth-proxy.sh $(Build.BuildId) $(System.DefaultWorkingDirectory)
+      displayName: Auth Proxy Pipeline
+
+    - task: PublishTestResults@2
+      displayName: Publish Test Results
+      inputs:
+        testRunner: VSTest
+        testResultsFiles: testresults.trx
+        searchFolder: '$(System.DefaultWorkingDirectory)/output'
+      condition: succeededOrFailed()
+
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish code coverage'
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: '$(System.DefaultWorkingDirectory)/output/coverage.cobertura.xml'
+
+    - task: PublishBuildArtifacts@1
+      displayName: "Publish Artifact: manifests"
+      inputs:
+        PathtoPublish: k8s
+        ArtifactName: manifests
+        
+# Continuous Deployment steps
+- stage: CD
+  displayName: 'Continuous Deployment'
+  dependsOn: CI
+  # Run CD only if CI succeeds and if pipeline runs from Master branch
+  condition: and(succeeded('CI'), eq(variables['Build.SourceBranch'], 'refs/heads/master')) 
+
+  jobs:
+  - deployment: K8s
+    displayName: 'Deploy to Kubernetes'
+    pool: 
+      vmImage: $(vmImage)
+    environment: 'Hellman'
+
+    strategy: 
+      runOnce:
+        deploy:
+          steps:
+          # Download manifest from current artifacts pipeline
+          - download: current
+            artifact: manifests
+            displayName: 'Download Artifact: manifests'
+          
+          # Replace token values in yaml files with pipeline variables
+          - task: qetza.replacetokens.replacetokens-task.replacetokens@3
+            displayName: 'Replace tokens in yaml files'
+            inputs:
+              rootDirectory: '$(Pipeline.Workspace)/manifests/'
+              targetFiles: '*.yml'
+              tokenPrefix: '$('
+              tokenSuffix: ')'
+          
+          # Upload the modified Kubernetes manifests to current Pipeline for easy debugging
+          - publish: $(Pipeline.Workspace)/manifests/
+            artifact: deployed-manifests
+            displayName: 'Publish Artifact: manifests'
+
+          # Apply Kubernetes manifests
+          - task: Kubernetes@1
+            displayName: 'Apply manifests'
+            inputs:
+              connectionType: Kubernetes Service Connection
+              kubernetesServiceEndpoint: '$(k8s-service-connection)'
+              namespace: '$(kubernetes-namespace)'
+              command: apply
+              arguments: '-f $(Pipeline.Workspace)/manifests/'
