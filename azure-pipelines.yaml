@@ -15,9 +15,13 @@ pr: none
 
 # Global variables for the pipeline
 variables:
-  vmImage: 'ubuntu-latest'
-  k8s-service-connection: 'Kubernetes-Hellman'
-  kubernetes-namespace: 'selfservice'
+- group: 'AWS ECR-PUSH PROD'
+- name: 'vmImage'
+  value: 'ubuntu-latest'
+- name: 'k8s-service-connection'
+  value: 'Kubernetes-Hellman'
+- name: 'kubernetes-namespace'
+  value: 'selfservice'
 
 stages:
 # Continuous Integration steps
@@ -35,19 +39,21 @@ stages:
         set -eu -o pipefail
         sudo pip install setuptools
         sudo pip install awscli
-        export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY)
         chmod +x ./pipeline.sh
         ./pipeline.sh $(Build.BuildId) $(System.DefaultWorkingDirectory)
       displayName: Pipeline Bash Script
+      env:
+        AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
 
     - bash: |
         set -eu -o pipefail
         sudo pip install setuptools
         sudo pip install awscli
-        export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY)
         chmod +x ./pipeline-auth-proxy.sh
         ./pipeline-auth-proxy.sh $(Build.BuildId) $(System.DefaultWorkingDirectory)
       displayName: Auth Proxy Pipeline
+      env:
+        AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)      
 
     - task: PublishTestResults@2
       displayName: Publish Test Results
