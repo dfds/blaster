@@ -59,12 +59,12 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 5
             httpGet:
-              port: web
+              port: 80
               path: /
           readinessProbe:
             initialDelaySeconds: 5
             periodSeconds: 60
             timeoutSeconds: 5
             httpGet:
-              port: web
+              port: 80
               path: /
