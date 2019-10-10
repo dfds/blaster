@@ -34,7 +34,7 @@ const ChannelPickerComponent = Vue.component("channel-picker", {
             // Ain't pretty, but due to the nature of
             setTimeout(() => {
                 this.inputFocus = false;
-            }, 200);
+            }, 300);
         },
         onChannelClick: function(channel) {
             this.$emit('capability-join-channel', channel);
