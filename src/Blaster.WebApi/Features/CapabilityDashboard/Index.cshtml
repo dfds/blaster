@@ -32,7 +32,14 @@
                             v-if="getMembershipStatusFor(capability.id) == 'member'"
                             class="button is-small is-primary">
                             Edit
-                        </button>                          
+                        </button>
+                        <button
+                            type="button"
+                            v-on:click="toggleShowAbandonCapability()"
+                            v-if="getMembershipStatusFor(capability.id) == 'member' && capabilityAbandonEnabled"
+                            class="button is-small is-primary">
+                            Abandon
+                        </button>                                                    
                         <button
                             type="button"
                             class="button is-small is-primary"
@@ -120,6 +127,7 @@
             </div>                          
 
             <capability-edit :enable="showEditCapability" :initialdata="capability" v-on:capability-edit-save="handleCapabilityEdit" v-on:capability-edit-close="toggleShowEditCapability()"></capability-edit>
+            <capability-abandon :enable="showAbandonCapability" :capability="capability" v-on:capability-abandon-save="handleCapabilityAbandon" v-on:capability-abandon-close="toggleShowAbandonCapability()"></capability-abandon>
 
             <div class="container box" v-if="topicsEnabled">
                 <h1 class="title is-uppercase">Topics</h1>
