@@ -30,6 +30,11 @@ const CapabilityRetireComponent = Vue.component("capability-retire", {
                         <div class="form">
                             <div class="field">
                                 <h2 class="label">Are you quite certain you wish to retire <span style="text-decoration: underline; color: #be1e2d">{{ capability.name }}</span>?</h2>
+                                <p>
+                                The namespace(s) in Kubernetes coupled to this capability will be deleted.<br>
+                                The slack channels connected to this capability will be archived. <br>
+                                Please de-provision any resources in the AWS account coupled to this capability.
+                                </p>
                             </div>
                             <div class="field">
                                 <div class="control has-text-centered">
