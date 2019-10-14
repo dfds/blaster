@@ -8,7 +8,7 @@ import FeatureFlag from "featureflag";
 import TestCapabilitiesFiltered from './test-filter';
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import {isIE} from "../Shared/components/Shared";
+import {isIE, BannerComponent} from "../Shared/components/Shared";
 
 const capabilityService = new CapabilityService();
 FeatureFlag.setKeybinding();
@@ -29,6 +29,9 @@ const app = new Vue({
         showIEBanner: function() {
             return isIE();
         }
+    },
+    components: {
+        'banner': BannerComponent
     },
     methods: {
         newCapability: function() {
