@@ -29,7 +29,7 @@ module.exports = {
             connectionservice$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/connectionservice.js"),
             "keypattern-shortcut$": path.resolve(__dirname, "Blaster.WebApi/Features/Shared/keypattern_shortcut.js")
         },
-        extensions: [".js", ".scss"]
+        extensions: [".js", ".scss", ".css"]
     },
     devtool: 'source-map',
     plugins: [
