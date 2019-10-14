@@ -14,7 +14,7 @@ import "regenerator-runtime/runtime";
 
 // Components
 import CapabilityEditComponent from "./CapabilityEditComponent";
-import CapabilityAbandonComponent from "./CapabilityAbandonComponent";
+import CapabilityRetireComponent from "./CapabilityRetireComponent";
 import TopicComponent from "./TopicComponent";
 import TopicAddComponent from "./TopicAddComponent";
 import TopicEditComponent from "./TopicEditComponent";
@@ -40,14 +40,14 @@ const app = new Vue({
         contextRequested: false,
         topics: null,
         showEditCapability: false,
-        showAbandonCapability: false,
+        showRetireCapability: false,
         showAddTopic: false,
         showEditTopic: false,
         showMessageContractEdit: false,
         messageContractEditData: null,
         topicEditData: null,
         topicsEnabled: false,
-        capabilityAbandonEnabled: false,
+        capabilityRetireEnabled: false,
         connections: [],
         communicationConnections: null
     },
@@ -58,7 +58,7 @@ const app = new Vue({
         'message-contract-add': MessageContractAddComponent,
         'message-contract-edit': MessageContractEditComponent,
         'capability-edit': CapabilityEditComponent,
-        'capability-abandon': CapabilityAbandonComponent,
+        'capability-retire': CapabilityRetireComponent,
         'channel-picker': ChannelPickerComponent,
         'channel-minimal': ChannelMinimalComponent,
         'channel-list': ChannelListComponent
@@ -170,11 +170,11 @@ const app = new Vue({
                 this.showEditCapability = true;
             }
         },
-        toggleShowAbandonCapability: function() {
-            if (this.showAbandonCapability) {
-                this.showAbandonCapability = false;
+        toggleShowRetireCapability: function() {
+            if (this.showRetireCapability) {
+                this.showRetireCapability = false;
             } else {
-                this.showAbandonCapability = true;
+                this.showRetireCapability = true;
             }
         },        
         toggleShowEditTopic: function(topic) {
@@ -205,9 +205,9 @@ const app = new Vue({
                 .catch(err => console.log(JSON.stringify(err)));
             this.toggleShowEditCapability();
         },
-        handleCapabilityAbandon: function() {
-            console.log("Abandon Capability clicked.");
-            this.toggleShowAbandonCapability();
+        handleCapabilityRetire: function() {
+            console.log("Retire Capability clicked.");
+            this.toggleShowRetireCapability();
         },
         handleCapabilityJoinChannel: function(channel) {
             connectionService.join({clientId: this.capability.id, clientType: "capability", clientName: this.capability.name, channelId: channel.id, channelName: channel.name, channelType: channel.type})
@@ -346,7 +346,7 @@ const app = new Vue({
     mounted: function () {
         const capabilityIdParam = new URLSearchParams(window.location.search).get('capabilityId');
         this.topicsEnabled = this.$featureFlag.flagExists("topics") ? this.$featureFlag.getFlag("topics").enabled : false;
-        this.capabilityAbandonEnabled = this.$featureFlag.flagExists("capabilityabandon") ? this.$featureFlag.getFlag("capabilityabandon").enabled : false;
+        this.capabilityRetireEnabled = this.$featureFlag.flagExists("capabilityretire") ? this.$featureFlag.getFlag("capabilityretire").enabled : false;
 
         // TODO Handle no or empty capabilityId
         jq.ready

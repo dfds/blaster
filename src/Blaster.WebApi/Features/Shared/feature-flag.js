@@ -11,7 +11,7 @@ export default class FeatureFlag {
     setupFlags() {
          this.addFlag(new FlagTestFilter());
          this.addFlag(new FlagTopics());
-         this.addFlag(new FlagCapablityAbandon());
+         this.addFlag(new FlagCapablityRetire());
     }
 
     init() {
@@ -70,11 +70,11 @@ class FlagTopics extends Flag {
     }
 }
 
-class FlagCapablityAbandon extends Flag {
+class FlagCapablityRetire extends Flag {
     constructor() {
         super();
-        this.name = 'capabilityabandon';
-        this.description = "Show Capability abandon(soft delete) functionality on a Capability page";
+        this.name = 'capabilityretire';
+        this.description = "Show Capability retire(soft delete) functionality on a Capability page";
     }
 }
 
