@@ -32,7 +32,14 @@
                             v-if="getMembershipStatusFor(capability.id) == 'member'"
                             class="button is-small is-primary">
                             Edit
-                        </button>                          
+                        </button>
+                        <button
+                            type="button"
+                            v-on:click="toggleShowRetireCapability()"
+                            v-if="getMembershipStatusFor(capability.id) == 'member' && capabilityRetireEnabled"
+                            class="button is-small is-primary">
+                            Retire
+                        </button>                                                    
                         <button
                             type="button"
                             class="button is-small is-primary"
@@ -120,6 +127,7 @@
             </div>                          
 
             <capability-edit :enable="showEditCapability" :initialdata="capability" v-on:capability-edit-save="handleCapabilityEdit" v-on:capability-edit-close="toggleShowEditCapability()"></capability-edit>
+            <capability-retire :enable="showRetireCapability" :capability="capability" v-on:capability-retire-save="handleCapabilityRetire" v-on:capability-retire-close="toggleShowRetireCapability()"></capability-retire>
 
             <div class="container box" v-if="topicsEnabled">
                 <h1 class="title is-uppercase">Topics</h1>
