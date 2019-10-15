@@ -3,6 +3,7 @@ import FeatureFlag from "featureflag";
 import Cookies from "js-cookie";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
+import {isIE} from "../Shared/components/Shared";
 
 Vue.prototype.$featureFlag = new FeatureFlag();
 const app = new Vue({
@@ -14,6 +15,9 @@ const app = new Vue({
     computed: {
         hasFlags() {
             return (this.flags !== null);
+        },
+        showIEBanner: function() {
+            return isIE();
         }
     },   
     methods: {

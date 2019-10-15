@@ -20,7 +20,7 @@ import TopicAddComponent from "./TopicAddComponent";
 import TopicEditComponent from "./TopicEditComponent";
 import MessageContractAddComponent from "./MessageContractAddComponent";
 import MessageContractEditComponent from "./MessageContractEditComponent";
-import {ChannelPickerComponent, ChannelMinimalComponent, ChannelListComponent} from "../Shared/components/Shared";
+import {ChannelPickerComponent, ChannelMinimalComponent, ChannelListComponent, BannerComponent, isIE} from "../Shared/components/Shared";
 
 const topicService = new TopicService();
 const capabilityService = new CapabilityService();
@@ -61,11 +61,15 @@ const app = new Vue({
         'capability-retire': CapabilityRetireComponent,
         'channel-picker': ChannelPickerComponent,
         'channel-minimal': ChannelMinimalComponent,
-        'channel-list': ChannelListComponent
+        'channel-list': ChannelListComponent,
+        'banner': BannerComponent
     },
     computed: {
         capabilityFound: function() {
             return this.capability != null && this.capability.id != null
+        },
+        showIEBanner: function() {
+            return isIE();
         },
         isLegacyComputed: function () { // Determine if Capability is v1 or v2
             const isRootIdEmpty = (this.capability.rootId) ? (this.capability.rootId === "") : true;

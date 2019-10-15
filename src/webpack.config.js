@@ -6,6 +6,7 @@ module.exports = {
     entry: {
         main: "./Blaster.WebApi/Features/Shared/index.js",
         capabilities: "./Blaster.WebApi/Features/Capabilities/main.js",
+        frontpage: "./Blaster.WebApi/Features/Frontpage/main.js",
 //        topics: "./Blaster.WebApi/Features/Topic/main.js",
         capabilitydashboard: "./Blaster.WebApi/Features/CapabilityDashboard/main.js",
         featureflags: "./Blaster.WebApi/Features/FeatureFlag/main.js"
