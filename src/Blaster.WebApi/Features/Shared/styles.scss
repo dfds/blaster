@@ -44,6 +44,7 @@ $navbar-item-color: rgba(255, 255, 255,0.8);
 $navbar-item-hover-color: #5087AC;
 $navbar-item-hover-background-color: $group-blue;
 $navbar-padding-horizontal: 10em;
+$navbar-mobile-trigger: "all and (max-width: 1087px)";
 
 @import "~bulma/bulma";
 @import "~bulma-extensions/bulma-tooltip/src/sass/index";
@@ -71,6 +72,9 @@ $navbar-padding-horizontal: 10em;
 
 .navbar-mobile {
     align-self: flex-end;
+    @media #{$navbar-mobile-trigger} {
+        align-self: flex-start;
+    }
 }
 
 .banner {
@@ -92,6 +96,11 @@ $navbar-padding-horizontal: 10em;
     &.nav {
         display: flex;
         flex-direction: row;
+
+        @media #{$navbar-mobile-trigger} {
+            flex-direction: column;
+            flex-wrap: wrap;
+        }
     }
 }
 
