@@ -56,7 +56,10 @@ $navbar-mobile-trigger: "all and (max-width: 1087px)";
 .navbar-brand {
     height: 80px;
     display: flex;
-    flex: 1;
+
+    @media #{$navbar-mobile-trigger} {
+        flex: 1;
+    }
 
     .navbar-item {
         img {
