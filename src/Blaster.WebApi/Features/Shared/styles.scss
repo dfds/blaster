@@ -54,12 +54,23 @@ $navbar-padding-horizontal: 10em;
 
 .navbar-brand {
     height: 80px;
+    display: flex;
+    flex: 1;
 
     .navbar-item {
         img {
             max-height: 49px;
         }
     }
+}
+
+.navbar-burger {
+    width: 80px;
+    height: 80px;
+}
+
+.navbar-mobile {
+    align-self: flex-end;
 }
 
 .banner {
@@ -77,6 +88,11 @@ $navbar-padding-horizontal: 10em;
 
 .container {
     position: static;
+
+    &.nav {
+        display: flex;
+        flex-direction: row;
+    }
 }
 
 .button {
