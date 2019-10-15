@@ -210,7 +210,12 @@ const app = new Vue({
             this.toggleShowEditCapability();
         },
         handleCapabilityDelete: function() {
-            console.log("Delete Capability clicked.");
+            capabilityService.delete(this.capability.id)
+                .then(() => {
+                    return capabilityService.get(this.capability.id);
+                })
+                .then(data => this.capability = data)
+                .catch(err => console.log(JSON.stringify(err)));
             this.toggleShowDeleteCapability();
         },
         handleCapabilityJoinChannel: function(channel) {

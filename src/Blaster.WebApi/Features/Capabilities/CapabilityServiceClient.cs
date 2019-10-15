@@ -65,6 +65,15 @@ namespace Blaster.WebApi.Features.Capabilities
             return _serializer.Deserialize<Capability>(receivedContent);
         }
 
+        public async Task DeleteCapability(string capabilityId)
+        {
+            var response = await _client.DeleteAsync($"/api/v1/capabilities/{capabilityId}");
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new Exception($"Error! Capability was not deleted. Service returned ({response.StatusCode} - {response.ReasonPhrase})");
+            }
+        }
+
         public async Task UpdateCapability(string capabilityId, string name, string description)
         {
             var content = new StringContent(
