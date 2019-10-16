@@ -78,6 +78,21 @@ namespace Blaster.WebApi.Features.Capabilities
 
             return NoContent();
         }
+
+        [HttpDelete("{id}", Name = "DeleteCapability")]
+        public async Task<IActionResult> DeleteCapability(string id)
+        {
+            try
+            {
+                await _capabilityServiceClient.DeleteCapability(id);
+            }
+            catch (HttpRequestException)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
+        }
         
         [HttpPost("{id}/topics", Name = "CreateTopic")]
         public async Task<ActionResult<string>> CreateTopic(string id, [FromBody] Topic input)

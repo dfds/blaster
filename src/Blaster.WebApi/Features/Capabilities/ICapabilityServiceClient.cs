@@ -10,6 +10,7 @@ namespace Blaster.WebApi.Features.Capabilities
         Task<TopicsResponse> GetAllTopics();
         Task<Topic> GetTopic(string id);
         Task<Capability> CreateCapability(string name, string description);
+        Task DeleteCapability(string capabilityId);
         Task UpdateCapability(string capabilityId, string name, string description);
         Task CreateTopic(string title, string description, string capabilityId, bool isPrivate);
         Task UpdateTopic(string topicId, Topic input);

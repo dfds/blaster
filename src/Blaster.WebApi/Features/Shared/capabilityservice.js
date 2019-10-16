@@ -28,6 +28,10 @@ export default class CapabilityService {
         return this.client.put(`${this.baseUrl}/${capabilityId}`, capability);
     }
 
+    delete(capabilityId) {
+        return this.client.delete(`${this.baseUrl}/${capabilityId}`);
+    }
+
     join(capabilityId) {
         const payload = {
             email: currentUser.email
