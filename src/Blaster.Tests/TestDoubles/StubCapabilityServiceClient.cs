@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities;
 using Blaster.WebApi.Features.Capabilities.Models;
@@ -8,14 +9,22 @@ namespace Blaster.Tests.TestDoubles
     public class StubCapabilityServiceClient : ICapabilityServiceClient
     {
         private readonly Member _member;
-        private readonly Capability[] _capabilities;
+        private readonly List<Capability> _capabilities;
         private readonly Topic[] _topics;
         private readonly MessageContract[] _messageContracts;
 
         public StubCapabilityServiceClient(Member member = null, params Capability[] capabilities)
         {
+            if (capabilities.Any() == false)
+            {
+                _capabilities = new List<Capability>();
+            }
+            else
+            {
+                _capabilities = capabilities.ToList();
+            }
+
             _member = member;
-            _capabilities = capabilities;
             _topics = null;
             _messageContracts = null;
         }
@@ -24,7 +33,7 @@ namespace Blaster.Tests.TestDoubles
         {
             return Task.FromResult(new CapabilitiesResponse
             {
-                Items = _capabilities,
+                Items = _capabilities.ToArray(),
             });
         }
 
@@ -44,6 +53,14 @@ namespace Blaster.Tests.TestDoubles
         public Task<Capability> CreateCapability(string name, string description)
         {
             return Task.FromResult(_capabilities.First());
+        }
+
+        public Task DeleteCapability(string capabilityId)
+        {
+            var capabilityToDelete = _capabilities.Single(c => c.Id == capabilityId);
+            _capabilities.Remove(capabilityToDelete);
+            
+            return Task.CompletedTask;
         }
 
         public Task UpdateCapability(string capabilityId, string name, string description)

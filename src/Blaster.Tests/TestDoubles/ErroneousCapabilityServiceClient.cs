@@ -34,6 +34,11 @@ namespace Blaster.Tests.TestDoubles
             throw _error;
         }
 
+        public Task DeleteCapability(string capabilityId)
+        {
+            throw _error;
+        }
+
         public Task UpdateCapability(string capabilityId, string name, string description)
         {
             throw _error;
