@@ -212,11 +212,9 @@ const app = new Vue({
         handleCapabilityDelete: function() {
             capabilityService.delete(this.capability.id)
                 .then(() => {
-                    return capabilityService.get(this.capability.id);
+                    window.location.href = 'capabilities';
                 })
-                .then(data => this.capability = data)
                 .catch(err => console.log(JSON.stringify(err)));
-            this.toggleShowDeleteCapability();
         },
         handleCapabilityJoinChannel: function(channel) {
             connectionService.join({clientId: this.capability.id, clientType: "capability", clientName: this.capability.name, channelId: channel.id, channelName: channel.name, channelType: channel.type})
