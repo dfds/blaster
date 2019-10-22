@@ -158,6 +158,30 @@ app.delete("/api/v1/capabilities/:teamid/members/:memberemail", (req, res) => {
         });
 });
 
+app.delete("/api/v1/capabilities/:capabilityid", (req, res) => {
+    const capabilityid = req.params.capabilityid;
+
+    readFile("./capability-data.json")
+    .then(data => JSON.parse(data))
+    .then(capabilities => {
+        const capability = capabilities.find(cap => cap.id === capabilityid)
+        if (!capability) {
+            return new Promise(resolve => {
+                res
+                    .status(404)
+                    .send({message: `Capability with id: ${capabilityid} could not be found`});
+                resolve();
+            });
+        } else {
+            const desiredCapabilities = capabilities.filter(cap => cap.id !== capability.id);
+            return Promise.resolve(serialize(desiredCapabilities))
+            .then(json => writeFile("./capability-data.json", json))
+            .then(() => console.log(`Removed Capability ${capability.name}`))
+            .then(() => res.sendStatus(200));
+        }
+    });
+})
+
 app.get("/api/v1/capabilities/:capabilityid", (req, res) => {
     const capabilityid = req.params.capabilityid;
     readFile("./capability-data.json")
