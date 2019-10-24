@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.StaticFiles;
 using Prometheus;
 
 namespace Blaster.WebApi
@@ -97,13 +98,19 @@ namespace Blaster.WebApi
 
             app.UseForwardedHeadersAsBasePath();
             app.UseMetricServer();
-            app.UseStaticFiles();
             app.UseCorrelationId(new CorrelationIdOptions
             {
                 Header = "x-correlation-id",
                 UpdateTraceIdentifier = true,
                 IncludeInResponse = true,
                 UseGuidForCorrelationId = true
+            });
+            
+            FileExtensionContentTypeProvider fileExtensionContentTypeProvider = new FileExtensionContentTypeProvider();
+            fileExtensionContentTypeProvider.Mappings[".webmanifest"] = "application/manifest+json";
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                ContentTypeProvider = fileExtensionContentTypeProvider
             });
 
             app.UseMvc();
