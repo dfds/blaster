@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities.Models;
@@ -45,21 +46,23 @@ namespace Blaster.WebApi.Features.Capabilities
         [HttpPost("", Name = "CreateCapability")]
         public async Task<IActionResult> CreateCapability([FromBody] CapabilityInput input)
         {
+            Capability capability;
             try
             {
-                var capability = await _capabilityServiceClient.CreateCapability(input.Name, input.Description);
+                capability = await _capabilityServiceClient.CreateCapability(input.Name, input.Description);
 
-                var a = new CreatedAtRouteResult<Capability>(
-                    routeName: "GetCapabilityById",
-                    routeValues: new { id = capability.Id },
-                    value: capability
-                );
-                return a.Convert();
-            } catch (CapabilityValidationException tve) {
-                return BadRequest(new {
-                    Message = tve.Message
-                });
+            } catch (RecoverableUpstreamException tve)
+            {
+                return new ObjectResult(new {tve.Message}) { StatusCode = (int)tve.HttpStatusCode };
             }
+            
+            
+            var a = new CreatedAtRouteResult<Capability>(
+                routeName: "GetCapabilityById",
+                routeValues: new { id = capability.Id },
+                value: capability
+            );
+            return a.Convert();
         }
 
         // This method on purpose only updates "description" at the moment. Public access to updating all of a Capability is yet to be decided.
@@ -180,6 +183,22 @@ namespace Blaster.WebApi.Features.Capabilities
         
     }
 
+    
+    public class RecoverableUpstreamException : Exception
+    {
+        public RecoverableUpstreamException(
+            HttpStatusCode httpStatusCode, 
+            string message
+        )
+        {
+            HttpStatusCode = httpStatusCode;
+            Message = message;
+        }
+
+        public HttpStatusCode HttpStatusCode { get; }
+        public override string Message { get; }
+    }
+    
     public class CapabilityValidationException : Exception
     {
         public CapabilityValidationException(string message) : base(message)
