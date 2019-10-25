@@ -50,19 +50,20 @@ namespace Blaster.WebApi.Features.Capabilities
             try
             {
                 capability = await _capabilityServiceClient.CreateCapability(input.Name, input.Description);
-
             } catch (RecoverableUpstreamException tve)
             {
                 return new ObjectResult(new {tve.Message}) { StatusCode = (int)tve.HttpStatusCode };
             }
             
             
-            var a = new CreatedAtRouteResult<Capability>(
+            var createdAtRouteResultConverter = new CreatedAtRouteResultConverter<Capability>(
                 routeName: "GetCapabilityById",
                 routeValues: new { id = capability.Id },
                 value: capability
             );
-            return a.Convert();
+            
+            
+            return createdAtRouteResultConverter.Convert();
         }
 
         // This method on purpose only updates "description" at the moment. Public access to updating all of a Capability is yet to be decided.
