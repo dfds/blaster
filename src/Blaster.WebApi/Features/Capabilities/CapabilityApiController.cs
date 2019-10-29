@@ -18,7 +18,7 @@ namespace Blaster.WebApi.Features.Capabilities
             _capabilityServiceClient = capabilityServiceClient;
         }
 
-        [HttpGet("", Name = "GetAllCapabilities")]
+        [HttpGet(Name = "GetAllCapabilities")]
         public async Task<ActionResult<CapabilitiesResponse>> GetAll()
         {
             var capabilities = await _capabilityServiceClient.GetAll();
@@ -43,7 +43,7 @@ namespace Blaster.WebApi.Features.Capabilities
 
         }
 
-        [HttpPost("", Name = "CreateCapability")]
+        [HttpPost(Name = "CreateCapability")]
         public async Task<IActionResult> CreateCapability([FromBody] CapabilityInput input)
         {
             Capability capability;
