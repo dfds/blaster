@@ -60,6 +60,20 @@ const app = new Vue({
                                 setTimeout(function() {
                                     dialog.close();
                                 }, 15000);
+                            }  
+                            else if (err.status == 409) {
+                                const dialog = AlertDialog.open({
+                                    template: document.getElementById("error-dialog-template"),
+                                    container: jq(".dialog-container", editor.element),
+                                    data: {
+                                        title: "Conflict",
+                                        message: err.responseJSON.message
+                                    }
+                                });
+
+                                setTimeout(function() {
+                                    dialog.close();
+                                }, 15000);
                             }
                             else if (err.status != 200) {
                                 const dialog = AlertDialog.open({

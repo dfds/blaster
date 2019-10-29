@@ -52,9 +52,12 @@ namespace Blaster.WebApi.Features.Capabilities
             );
 
             var response = await _client.PostAsync("/api/v1/capabilities", content);
-            if (response.StatusCode == HttpStatusCode.BadRequest) {
+            if (response.StatusCode == HttpStatusCode.BadRequest || response.StatusCode == HttpStatusCode.Conflict) {
                 var errorObj = _serializer.Deserialize<ErrorObject>(await response.Content.ReadAsStringAsync());
-                throw new CapabilityValidationException(errorObj.Message);
+                throw new RecoverableUpstreamException(
+                    response.StatusCode,
+                    errorObj.Message
+                );
             }
             else if (response.StatusCode != HttpStatusCode.Created)
             {
