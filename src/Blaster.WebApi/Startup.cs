@@ -41,7 +41,7 @@ namespace Blaster.WebApi
             services.AddTransient<JsonSerializer>();
             services.AddTransient<UserHelper>();
 
-            /* configure each feature */
+            /* configure each feature. */
             ConfigureCapabilityFeature(services);
             ConfigureHaraldFeature(services);
             ConfigureFrontpageFeature(services);
