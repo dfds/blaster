@@ -4,6 +4,6 @@ export { currentUser as currentUser }
 
 export default class UserService {
     getCurrentUser() {
-        return currentUser;
+        return this.msal.account.userName ||  currentUser;
     }
 }
