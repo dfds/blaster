@@ -9,18 +9,10 @@ import msal from 'vue-msal'
 Vue.use(msal, {
     auth: {
         clientId: '91c38c20-4d2c-485d-80ac-a053619a02db',
-        requireAuthOnInitialize: true
+        requireAuthOnInitialize: false,
+        postLogoutRedirectUri: "http://localhost:5000"
     }
 });
-
-Vue.filter('normalizeMsalUserName',
-    function(value) {
-        if (!value) return '';
-
-        value = value.split(' ');
-
-        return value[1] + ' ' + value[0];
-    });
 
 FeatureFlag.setKeybinding();
 
@@ -40,15 +32,28 @@ const app = new Vue({
         'banner': BannerComponent
     },
     methods: {
-        getUser: function () {
-            let user = currentUser;
-            
-            if (this.$msal.isAuthenticated())
-            {
-                user = this.$msal.data.user;
+        getUserName: function () {
+            let userName = currentUser.email;
+
+            if (this.$msal.isAuthenticated()) {
+                userName = this.$msal.data.user.name.split(' ');
+                userName = userName[1] + ' ' + userName[0];
             }
-            
-            return user;
+
+            return userName;
+        },
+        signIn: function() {
+            if (!this.$msal.isAuthenticated()) {
+                this.$msal.signIn();
+            }
+        },
+        isAuthenticated: function () {
+            return this.$msal.isAuthenticated();
+        },
+        signOut: function () {
+            if (this.$msal.isAuthenticated()) {
+                this.$msal.signOut();
+            }
         }
     },
     filters: {

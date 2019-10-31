@@ -2,7 +2,6 @@
 {
     <script src="~/frontpage.bundle.js"></script>
 }
-@inject Blaster.WebApi.Security.UserHelper UserHelper
 
 <div id="frontpage-app" v-cloak>
     <banner v-if="showIEBanner" description="Internet Explorer is not a supported browser on the Self Service Portal. Certain functionality is quite likely to not work."></banner>
@@ -12,7 +11,7 @@
     <div class="container">
         <h1 class="title">Welcome</h1>
         <h2 class="subtitle">
-            Hello {{getUser().name | normalizeMsalUserName }}, and welcome to the Cloud Self Service portal.
+            Hello {{getUserName() }}, and welcome to the Cloud Self Service portal.
         </h2>
     </div>
 </section>

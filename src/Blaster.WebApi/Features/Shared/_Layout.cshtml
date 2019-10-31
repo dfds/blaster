@@ -58,7 +58,12 @@
 
                 <div class="navbar-end">
                     <div class="navbar-item">
-                        {{getUser().name | normalizeMsalUserName }}
+                        <a v-if="isAuthenticated()" v-on:click="signOut()">
+                            {{getUserName() }}
+                        </a>
+                        <a v-if="!isAuthenticated()" v-on:click="signIn()">
+                            {{getUserName() }}
+                        </a>
                     </div>
                 </div>
             </div>
