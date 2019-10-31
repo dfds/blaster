@@ -4,6 +4,14 @@ import FeatureFlag from "featureflag";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import {isIE, BannerComponent} from "../Shared/components/Shared";
+import msal from 'vue-msal'
+
+Vue.use(msal, {
+    auth: {
+        clientId: '91c38c20-4d2c-485d-80ac-a053619a02db',
+        requireAuthOnInitialize: true
+    }
+});
 
 FeatureFlag.setKeybinding();
 
