@@ -13,11 +13,20 @@ Vue.use(msal, {
     }
 });
 
+Vue.filter('normalizeMsalUserName',
+    function(value) {
+        if (!value) return '';
+
+        value = value.split(' ');
+
+        return value[1] + ' ' + value[0];
+    });
+
 FeatureFlag.setKeybinding();
 
 Vue.prototype.$featureFlag = new FeatureFlag();
 const app = new Vue({
-    el: "#frontpage-app",
+    el: "#app-container",
     data: {
         initializing: true,
         currentUser: currentUser
@@ -25,12 +34,22 @@ const app = new Vue({
     computed: {
         showIEBanner: function() {
             return isIE();
-        },
+        }
     },
     components: {
         'banner': BannerComponent
     },
     methods: {
+        getUser: function () {
+            let user = currentUser;
+            
+            if (this.$msal.isAuthenticated())
+            {
+                user = this.$msal.data.user;
+            }
+            
+            return user;
+        }
     },
     filters: {
     },
