@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using Blaster.Tests.Builders;
 using Blaster.Tests.TestDoubles;
 using Blaster.WebApi.Features.Capabilities;
@@ -77,19 +78,19 @@ namespace Blaster.Tests.Features.Capabilities
         }
 
         [Fact]
-        public async Task returns_badrequest_when_creating_new_capability_with_invalid_name()
+        public async Task returns_bad_request_when_creating_new_capability_with_invalid_name()
         {
             var expected = new CapabilityListItemBuilder().Build();
 
             var sut = new CapabilityApiControllerBuilder()
-                .WithCapabilityService(new ErroneousCapabilityServiceClient(new CapabilityValidationException("booo")))
+                .WithCapabilityService(new ErroneousCapabilityServiceClient(new RecoverableUpstreamException(HttpStatusCode.BadRequest, "I don't understand the syntax")))
                 .Build();
 
             var dummyInput = new CapabilityInput();
 
-            var result = await sut.CreateCapability(dummyInput);
+            var result = (ObjectResult) await sut.CreateCapability(dummyInput);
 
-            Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal((int)HttpStatusCode.BadRequest, result.StatusCode.Value);
         }
 
         [Fact]
