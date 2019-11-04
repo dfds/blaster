@@ -171,11 +171,15 @@ const app = new Vue({
                 .length > 0;
         },
         addTopicFlow: function() {
+            this.toggleShowAddTopic();
+
+            // To be removed for good.
+            /* 
             if (this.isReadyForTopicCreation) {
                 this.toggleShowAddTopic();
             } else {
                 this.toggleShowTopicPrefix();
-            }
+            } */
         },
         toggleShowTopicPrefix: function(prefixes) {
             if (this.showTopicPrefix) {
@@ -293,7 +297,7 @@ const app = new Vue({
 
             this.showAddTopic = false;
         },
-        editTopic: function(name, description, misc) {
+        editTopic: function(name, description, id, misc) {
             const payload = {name: name, description: description, nameMisc: misc};
 
             topicService.update(id, payload)

@@ -54,10 +54,9 @@ const TopicComponent = Vue.component("topic", {
     },
     template: `
         <div class="topic">
-            <h2 class="title" title="Click to expand" v-on:click="toggleShowData()" >{{ topicName(commonprefix, topic.nameMisc) }}</h2>
+            <h2 class="title" title="Click to expand" v-on:click="toggleShowData()" >{{ topic.name }}</h2>
             <div class="details" v-if="showData">
                 <span class="entry"><span class="entry-title">Description:</span> <p>{{ topic.description }}</p></span>
-                <span class="subtitle">"Message contracts":</span>
 
                 <div class="buttons is-right"> 
                     <button

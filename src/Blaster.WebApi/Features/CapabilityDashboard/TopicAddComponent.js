@@ -1,7 +1,7 @@
 import Vue from "vue";
 
 const TopicAddComponent = Vue.component("topic-add", {
-    props: ["enable", "commonprefix"],
+    props: ["enable", "capabilityname"],
     data: function() {
         return {
             topicDescription: "",
@@ -17,7 +17,7 @@ const TopicAddComponent = Vue.component("topic-add", {
         },
         topicName: function() {
             var name = "";
-            name = this.commonprefix;
+            name = this.toSnakeCase(this.capabilityname);
 
             if (this.isMiscInUse) {
                 name = name + "." + this.topicMisc;
@@ -29,6 +29,12 @@ const TopicAddComponent = Vue.component("topic-add", {
     methods: {
         disable: function() {
             this.enable = false;
+        },
+        toSnakeCase: function(input) {
+            return input.replace(/\W+/g, " ")
+            .split(/ |\B(?=[A-Z])/)
+            .map(word => word.toLowerCase())
+            .join('_');
         }
     },
     updated: function() {
@@ -52,7 +58,7 @@ const TopicAddComponent = Vue.component("topic-add", {
                             <div class="field">
                                 <label class="label">Name</label>
                                 <div style="display:flex; align-items: flex-end;">
-                                    {{commonprefix}}<span style="font-weight: 700;">.</span>
+                                    {{toSnakeCase(capabilityname)}}<span style="font-weight: 700;">.</span>
                                     <div style="display: flex; flex-direction: column; align-items: center;">
                                     <span style="font-weight: 700;">Name</span>
                                         <input style="width: 180px;" class="input" type="text" data-property="free" v-model="topicMisc">
