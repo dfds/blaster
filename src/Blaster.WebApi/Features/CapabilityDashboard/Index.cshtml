@@ -161,9 +161,6 @@
                 <div class="topics">
                     <div v-for="topic in capability.topics" :key="topic.id">
                         <topic :topic="topic" :commonprefix="capability.topicCommonPrefix"
-                        v-on:messagecontractadd-new="handleMessageContractAdd"
-                        v-on:messagecontractedit-close="toggleShowMessageContractEdit"
-                        v-on:messagecontract-delete="handleMessageContractDelete"
                         v-on:addtopic-close="toggleShowEditTopic"></topic>
                     </div>
                 </div>
