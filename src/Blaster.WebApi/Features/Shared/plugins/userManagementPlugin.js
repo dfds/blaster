@@ -6,7 +6,7 @@ Vue.use(msal, {
     auth: {
         clientId: '91c38c20-4d2c-485d-80ac-a053619a02db',
         requireAuthOnInitialize: false,
-        postLogoutRedirectUri: "http://localhost:5000"
+        redirectUri: "http://localhost:5000/"
     }
 });
 
