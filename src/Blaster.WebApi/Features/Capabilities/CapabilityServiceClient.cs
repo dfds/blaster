@@ -80,21 +80,24 @@ namespace Blaster.WebApi.Features.Capabilities
         public async Task UpdateCapability(string capabilityId, string name, string description)
         {
             var content = new StringContent(
-                content: _serializer.Serialize(new { Name = name, Description = description}),
+                content: _serializer.Serialize(new {Name = name, Description = description}),
                 encoding: Encoding.UTF8,
                 mediaType: "application/json"
             );
 
             var response = await _client.PutAsync($"/api/v1/capabilities/{capabilityId}", content);
-            if (response.StatusCode == HttpStatusCode.BadRequest) {
+            if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
                 var errorObj = _serializer.Deserialize<ErrorObject>(await response.Content.ReadAsStringAsync());
                 throw new CapabilityValidationException(errorObj.Message);
             }
             else if (response.StatusCode != HttpStatusCode.OK)
             {
-                throw new Exception($"Error! Capability was not updated in external service. Service returned ({response.StatusCode} - {response.ReasonPhrase})");
+                throw new Exception(
+                    $"Error! Capability was not updated in external service. Service returned ({response.StatusCode} - {response.ReasonPhrase})");
             }
-            
+        }
+
         public async Task SetCapabilityTopicCommonPrefix(string commonPrefix, string capabilityId)
         {
             var content = new StringContent(
