@@ -311,11 +311,7 @@ app.post("/api/v1/capabilities/:capabilityId/topics", (req, res) => {
         "description": newTopic.description,
         "id": new Date().getTime().toString(),
         "capabilityId": capabilityId,
-        "isPrivate": newTopic.isPrivate,
-        "messageContracts": [],
-        "nameBusinessArea": newTopic.nameBusinessArea,
-        "nameType": newTopic.nameType,
-        "nameMisc": newTopic.nameMisc
+        "isPrivate": newTopic.isPrivate
     }
 
     readFile("./topic-data.json")
@@ -397,7 +393,6 @@ app.put("/api/v1/topics/:topicId", (req, res) => {
             } else {
                 topic.name = topicInput.name === undefined ? topic.name : topicInput.name;
                 topic.description = topicInput.description === undefined ? topic.description : topicInput.description;
-                topic.nameMisc = topicInput.nameMisc === undefined ? topic.nameMisc : topicInput.nameMisc;
 
                 return Promise.resolve(serialize(data))
                 .then(json => writeFile("./topic-data.json", json))
@@ -410,6 +405,7 @@ app.put("/api/v1/topics/:topicId", (req, res) => {
         });
 });
 
+// TODO: Currently dead in the water. To be removed.
 app.get("/api/v1/topics/:topicId/messageContracts", (req, res) => {
     const topicId = req.params.topicId;
 
@@ -428,7 +424,7 @@ app.get("/api/v1/topics/:topicId/messageContracts", (req, res) => {
 });
 
 
-// TODO: Made obsolete in recent API contract revision, to be removed.
+// TODO: Currently dead in the water. To be removed.
 app.post("/api/v1/topics/:topicId/messageContracts", (req, res) => {
     const topicId = req.params.topicId;
     const newMessageContract = req.body;
@@ -458,7 +454,7 @@ app.post("/api/v1/topics/:topicId/messageContracts", (req, res) => {
         });
 });
 
-// TODO: Recent addition, make sure it's available in blaster
+// TODO: Currently dead in the water. To be removed.
 app.put("/api/v1/topics/:topicId/messageContracts/:messageContractType", (req, res) => {
     const topicId = req.params.topicId;
     const messageContractType = req.params.messageContractType;
@@ -499,6 +495,7 @@ app.put("/api/v1/topics/:topicId/messageContracts/:messageContractType", (req, r
 
 });
 
+// TODO: Currently dead in the water. To be removed.
 app.delete("/api/v1/topics/:topicId/messageContracts/:messageContractType", (req, res) => {
     const topicId = req.params.topicId;
     const messageContractType = req.params.messageContractType;

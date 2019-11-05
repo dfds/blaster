@@ -10,8 +10,7 @@
         ],
         "contexts": [],
         "Topics": [],
-        "RootId": "foo-1",
-        "topicCommonPrefix": "foo"
+        "RootId": "foo-1"
     },
     {
       "id": "2",
@@ -25,8 +24,7 @@
       "contexts": [],
       "Topics": [
         {"name" : "Foo"}
-      ],
-      "topicCommonPrefix": "baa"
+      ]
   },
   {
     "id": "3",
