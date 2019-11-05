@@ -117,13 +117,12 @@ namespace Blaster.WebApi.Features.Capabilities
             }
         }
         
-        public async Task CreateTopic(string name, string description, string capabilityId, bool isPrivate, string businessArea, string type, string misc)
+        public async Task CreateTopic(string name, string description, string capabilityId, bool isPrivate)
         {
             var content = new StringContent(
                 content: _serializer.Serialize(new
                 {
-                    Name = name, Description = description, IsPrivate = isPrivate, MessageContract = new MessageContract[0],
-                    NameBusinessArea = businessArea, NameType = type, NameMisc = misc
+                    Name = name, Description = description, IsPrivate = isPrivate, MessageContract = new MessageContract[0]
                 }),
                 encoding: Encoding.UTF8,
                 mediaType: "application/json"
@@ -138,8 +137,7 @@ namespace Blaster.WebApi.Features.Capabilities
             var reqContent = new StringContent(
                 content: _serializer.Serialize(new
                 {
-                    Description = input.Description, Name = input.Name, IsPrivate = input.IsPrivate,
-                    NameBusinessArea = input.NameBusinessArea, NameType = input.NameType, NameMisc = input.NameMisc
+                    Description = input.Description, Name = input.Name, IsPrivate = input.IsPrivate
                 }),
                 encoding: Encoding.UTF8,
                 mediaType: "application/json"

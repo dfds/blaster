@@ -35,8 +35,7 @@ app.post("/api/v1/capabilities", (req, res) => {
     const newTeam = Object.assign({
         id: new Date().getTime().toString(),
         members: [],
-        contexts: [],
-        topicCommonPrefix: ""
+        contexts: []
     }, req.body);
 
     const nameValidationMessage = "Name must be a string of length 3 to 255. consisting of only alphanumeric ASCII characters, starting with a capital letter. Hyphens is allowed.";

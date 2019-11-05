@@ -9,6 +9,5 @@
         public Member[] Members { get; set; }
         public Context[] Contexts { get; set; }
         public Topic[] Topics {get;set;}
-        public string TopicCommonPrefix { get; set; }
     }
 }
