@@ -61,8 +61,10 @@ const TopicComponent = Vue.component("topic", {
                 <div class="buttons is-right"> 
                     <button
                         type="button"
+                        v-if="false"
                         v-on:click="$emit('addtopic-close', topic)"
                         class="button is-small is-primary">
+                        <!-- Currently disabled due to major changes, and it being out of scope. -->
                         Edit Topic
                     </button>   
                 </div>

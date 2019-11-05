@@ -20,7 +20,7 @@ const TopicAddComponent = Vue.component("topic-add", {
             name = this.toSnakeCase(this.capabilityname);
 
             if (this.isMiscInUse) {
-                name = name + "." + this.topicMisc;
+                name = name + "." + this.toSnakeCase(this.topicMisc);
             }            
 
             return name;
