@@ -68,6 +68,17 @@ namespace Blaster.Tests.TestDoubles
             return Task.CompletedTask;
         }
 
+        public Task SetCapabilityTopicCommonPrefix(string commonPrefix, string capabilityId)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task CreateTopic(string title, string description, string capabilityId, bool isPrivate, string businessArea,
+            string type, string misc)
+        {
+            return Task.CompletedTask;
+        }
+
         public Task CreateTopic(string title, string description, string capabilityId, bool isPrivate)
         {
             return Task.CompletedTask;

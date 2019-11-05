@@ -44,6 +44,17 @@ namespace Blaster.Tests.TestDoubles
             throw _error;
         }
 
+        public Task SetCapabilityTopicCommonPrefix(string commonPrefix, string capabilityId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CreateTopic(string title, string description, string capabilityId, bool isPrivate, string businessArea,
+            string type, string misc)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task CreateTopic(string title, string description, string capabilityId, bool isPrivate)
         {
             throw _error;
