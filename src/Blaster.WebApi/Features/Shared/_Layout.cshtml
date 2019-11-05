@@ -74,13 +74,13 @@
 
 <script>
     window.basePath = "@Context.Request.PathBase";
-    window.currentUser = { email: "@UserHelper.CurrentUser.Email" };
+    window.currentUserRazor = { email: "@UserHelper.CurrentUser.Email" };
 
     (function() {
         var burger = document.querySelector('.burger');
         var menu = document.querySelector('#' + burger.dataset.target);
         burger.addEventListener('click',
-            function() {
+            function () {
                 burger.classList.toggle('is-active');
                 menu.classList.toggle('is-active');
             });

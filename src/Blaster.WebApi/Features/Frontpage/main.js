@@ -11,8 +11,7 @@ Vue.prototype.$featureFlag = new FeatureFlag();
 const app = new Vue({
     el: "#frontpage-app",
     data: {
-        initializing: true,
-        currentUser: currentUser
+        initializing: true
     },
     computed: {
         showIEBanner: function() {
@@ -26,7 +25,9 @@ const app = new Vue({
     },
     filters: {
     },
-    mounted: function () {
+    mounted: function() {
         this.initializing = false;
+
+        console.log(Vue);
     }
 });
