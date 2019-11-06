@@ -27,7 +27,5 @@ const app = new Vue({
     },
     mounted: function() {
         this.initializing = false;
-
-        console.log(Vue);
     }
 });

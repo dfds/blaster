@@ -58,10 +58,10 @@
             <div class="navbar-end">
                 <div v-cloak class="navbar-item">
                     <a v-if="isAuthenticated()" v-on:click="signOut()">
-                        {{getUserName() }}
+                        SignOut
                     </a>
                     <a v-if="!isAuthenticated()" v-on:click="signIn()">
-                        {{getUserName() }}
+                        SignIn
                     </a>
                 </div>
             </div>
