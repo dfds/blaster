@@ -3,3 +3,5 @@
 - We should consider seperating the frontend from the BFF.
 
 - Containerize blaster frontend.
+
+- Typescript!!! :)

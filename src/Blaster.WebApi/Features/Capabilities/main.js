@@ -112,7 +112,7 @@ const app = new Vue({
 
             const members = capability.members || [];
             return members
-                .filter(member => member.email.toLowerCase() == this.currentUser.email.toLowerCase())
+                .filter(member => member.email.toLowerCase() == this.getUserEmail().toLowerCase())
                 .length > 0;
         }
     },

@@ -1,5 +1,5 @@
 import HttpClient from "httpclient";
-import { currentUser } from "userservice";
+import * as UserService from "userservice";
 
 export default class CapabilityService {
     constructor() {

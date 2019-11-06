@@ -66,7 +66,7 @@ const app = new Vue({
     },
     computed: {
         capabilityFound: function() {
-            return this.capability != null && this.capability.id != null
+            return this.capability != null && this.capability.id != null;
         },
         showIEBanner: function() {
             return isIE();
@@ -124,8 +124,8 @@ const app = new Vue({
         }
     },
     methods: {
-        isCurrentUser: function(memberEmail) {
-            return this.currentUser.email.toLowerCase() === memberEmail.toLowerCase();
+        isCurrentUser: function (memberEmail) {
+            return this.getUserEmail().toLowerCase() === memberEmail.toLowerCase();
         },
         hasMembers: function(){
           const cap = this.capability;
@@ -155,13 +155,13 @@ const app = new Vue({
                 ? "added"
                 : "notadded";
         },
-        _isCurrentlyMemberOf: function(capability) {
+        _isCurrentlyMemberOf: function (capability) {
             if (!capability) {
                 return false;
             }
             const members = capability.members || [];
             return members
-                .filter(member => member.email.toLowerCase() == this.currentUser.email.toLowerCase())
+                .filter(member => member.email.toLowerCase() == this.getUserEmail().toLowerCase())
                 .length > 0;
         },
         toggleShowAddTopic: function() {
@@ -284,7 +284,7 @@ const app = new Vue({
         joinCapability: function() {
             this.membershipRequested = true;
             capabilityService.join(this.capability.id)
-                .then(() => this.capability.members.push({ email: this.currentUser.email }))
+                .then(() => this.capability.members.push({ email: this.getUserEmail() }))
                 .catch(err => console.log("error joining capability: " + JSON.stringify(err)))
                 .then(() => {
                         this.membershipRequested = false;
@@ -293,7 +293,7 @@ const app = new Vue({
         leaveCapability: function() {
             const capabilityId = this.capability.id;
             const capabilityName = this.capability.name;
-            const currentUserEmail = this.currentUser.email;
+            const currentUserEmail = this.getUserEmail();
 
             const editor = ModelEditor.open({
                 template: document.getElementById("leave-dialog-template"),

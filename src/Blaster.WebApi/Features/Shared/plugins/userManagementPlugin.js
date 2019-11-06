@@ -8,9 +8,13 @@ const UserManagementPlugin = {
             return userService.getCurrentUser();
         }
 
+        Vue.prototype.getUserEmail = function () {
+            return userService.getCurrentUserEmail();
+        }
+
         Vue.prototype.getUserName = function () {
             var user = this.getUser();
-            
+
             return (user) ? user.email || user.name.split(' ').reduce((a, b) => b + ' ' + a) : "guest";
         }
 

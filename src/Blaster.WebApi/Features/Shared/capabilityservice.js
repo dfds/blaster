@@ -1,5 +1,5 @@
 import HttpClient from "httpclient";
-import { currentUser } from "userservice";
+import * as UserService from "userservice";
 
 export default class CapabilityService {
     constructor() {
@@ -8,6 +8,7 @@ export default class CapabilityService {
 
         this.getAll = this.getAll.bind(this);
         this.add = this.add.bind(this);
+        this.userService = new UserService.default();
     }
 
     getAll() {
@@ -34,8 +35,8 @@ export default class CapabilityService {
 
     join(capabilityId) {
         const payload = {
-            email: currentUser.email
-        };
+            email: this.userService.getCurrentUserEmail()
+    };
 
         return this.client.post(`${this.baseUrl}/${capabilityId}/members`, payload);
     }
@@ -49,6 +50,6 @@ export default class CapabilityService {
     }
     
     leave(capabilityId) {
-        return this.client.delete(`${this.baseUrl}/${capabilityId}/members/${currentUser.email}`);
+        return this.client.delete(`${this.baseUrl}/${capabilityId}/members/${this.userService.getCurrentUserEmail()}`);
     }
 }

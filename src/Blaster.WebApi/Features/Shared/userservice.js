@@ -38,6 +38,12 @@ export default class UserService {
     getCurrentUser() {
         return (this.isAuthenticated()) ? this.data.user : window.currentUserRazor;
     }
+    
+    getCurrentUserEmail() {
+        var user = this.getCurrentUser();
+
+        return user.email || user.userName;
+    }
 
     isAuthenticated() {
         return !this.msalClient.isCallback(window.location.hash) && !!this.msalClient.getAccount();
