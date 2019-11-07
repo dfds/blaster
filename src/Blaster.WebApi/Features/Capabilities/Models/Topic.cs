@@ -9,7 +9,6 @@ namespace Blaster.WebApi.Features.Capabilities.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsPrivate { get; set; }
-        public IEnumerable<MessageContract> MessageContracts { get; set; }
     }
 }
 

@@ -97,7 +97,8 @@ namespace Blaster.WebApi.Features.Capabilities
 
             return NoContent();
         }
-        
+
+        // UPDATE API CONTRACT
         [HttpPost("{id}/topics", Name = "CreateTopic")]
         public async Task<ActionResult<string>> CreateTopic(string id, [FromBody] Topic input)
         {
@@ -205,6 +206,14 @@ namespace Blaster.WebApi.Features.Capabilities
         public CapabilityValidationException(string message) : base(message)
         {
 
+        }
+    }
+
+    public class CapabilityTopicValidationException : Exception
+    {
+        public CapabilityTopicValidationException(string message) : base(message)
+        {
+            
         }
     }
 

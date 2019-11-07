@@ -23,14 +23,19 @@ app.get("/api/v1/capabilities", (req, res) => {
         });
 });
 
+var setErrorMsg = (condition, message, messages, trigger) => {
+    if (condition) {
+        messages.push(message);
+        trigger = true;
+    }
+}
 
-
+// TODO: Update capability-service with this
 app.post("/api/v1/capabilities", (req, res) => {   
     const newTeam = Object.assign({
         id: new Date().getTime().toString(),
         members: [],
         contexts: []
-
     }, req.body);
 
     const nameValidationMessage = "Name must be a string of length 3 to 255. consisting of only alphanumeric ASCII characters, starting with a capital letter. Hyphens is allowed.";
@@ -69,6 +74,56 @@ app.post("/api/v1/capabilities", (req, res) => {
         .catch(err => {
             res.status(500).json(err);
         });
+});
+
+// TODO: Add to capability-service
+app.post("/api/v1/capabilities/:capabilityid/commonprefix", (req, res) => {
+    const capabilityid = req.params.capabilityid;
+    const payload = req.body;
+
+    readFile("./capability-data.json")
+    .then(data => JSON.parse(data))
+    .then(capabilities => {
+        const capability = capabilities.find(capability => capability.id == capabilityid);
+        if (!capability) {
+            return new Promise(resolve => {
+                res
+                    .status(404)
+                    .send({message: `Capability with id ${capabilityid} could not be found`});
+                resolve();
+            });
+        } else {
+            var triggerError = false;
+            var errorMessages = [];
+            setErrorMsg((payload.commonPrefix === ""), "Common prefix is empty", errorMessages, triggerError);
+            setErrorMsg((payload.commonPrefix.length > 32), "Common prefix length exceeds 32 characters", errorMessages, triggerError);
+
+            if (triggerError) {
+                var msg = "An error occurred:\n";
+                errorMessages.forEach(errorMsg => {
+                    msg = msg + errorMsg + "\n";
+                });
+                res
+                    .status(400)
+                    .send({message: msg});
+                resolve();
+            } else {
+                const commonPrefix_snake_case = payload.commonPrefix.replace(/\W+/g, " ")
+                    .split(/ |\B(?=[A-Z])/)
+                    .map(word => word.toLowerCase())
+                    .join('_');
+                capability.topicCommonPrefix = commonPrefix_snake_case;
+
+                return Promise.resolve(serialize(capabilities))
+                    .then(json => writeFile("./capability-data.json", json))
+                    .then(() => console.log(`Common topic prefix ${payload.commonPrefix} added to Capability ${capability.name}`))
+                    .then(() => res.sendStatus(204));
+            }
+        }
+    })
+    .catch(err => {
+        console.log("ERROR! " + JSON.stringify(err));
+    });
 });
 
 app.post("/api/v1/capabilities/:teamid/members", (req, res) => {
@@ -255,8 +310,7 @@ app.post("/api/v1/capabilities/:capabilityId/topics", (req, res) => {
         "description": newTopic.description,
         "id": new Date().getTime().toString(),
         "capabilityId": capabilityId,
-        "isPrivate": newTopic.isPrivate,
-        "messageContracts": []
+        "isPrivate": newTopic.isPrivate
     }
 
     readFile("./topic-data.json")
@@ -338,7 +392,6 @@ app.put("/api/v1/topics/:topicId", (req, res) => {
             } else {
                 topic.name = topicInput.name === undefined ? topic.name : topicInput.name;
                 topic.description = topicInput.description === undefined ? topic.description : topicInput.description;
-                topic.isPrivate = topicInput.isPrivate === undefined ? topic.isPrivate : topicInput.isPrivate;
 
                 return Promise.resolve(serialize(data))
                 .then(json => writeFile("./topic-data.json", json))
@@ -351,6 +404,7 @@ app.put("/api/v1/topics/:topicId", (req, res) => {
         });
 });
 
+// TODO: Currently dead in the water. To be removed.
 app.get("/api/v1/topics/:topicId/messageContracts", (req, res) => {
     const topicId = req.params.topicId;
 
@@ -369,7 +423,7 @@ app.get("/api/v1/topics/:topicId/messageContracts", (req, res) => {
 });
 
 
-// TODO: Made obsolete in recent API contract revision, to be removed.
+// TODO: Currently dead in the water. To be removed.
 app.post("/api/v1/topics/:topicId/messageContracts", (req, res) => {
     const topicId = req.params.topicId;
     const newMessageContract = req.body;
@@ -399,7 +453,7 @@ app.post("/api/v1/topics/:topicId/messageContracts", (req, res) => {
         });
 });
 
-// TODO: Recent addition, make sure it's available in blaster
+// TODO: Currently dead in the water. To be removed.
 app.put("/api/v1/topics/:topicId/messageContracts/:messageContractType", (req, res) => {
     const topicId = req.params.topicId;
     const messageContractType = req.params.messageContractType;
@@ -440,6 +494,7 @@ app.put("/api/v1/topics/:topicId/messageContracts/:messageContractType", (req, r
 
 });
 
+// TODO: Currently dead in the water. To be removed.
 app.delete("/api/v1/topics/:topicId/messageContracts/:messageContractType", (req, res) => {
     const topicId = req.params.topicId;
     const messageContractType = req.params.messageContractType;
@@ -475,4 +530,4 @@ app.delete("/api/v1/topics/:topicId/messageContracts/:messageContractType", (req
 
 app.listen(port, () => {
     console.log("Fake team service is listening on port " + port);
-});
+}); 

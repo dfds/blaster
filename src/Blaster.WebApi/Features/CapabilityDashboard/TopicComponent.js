@@ -1,7 +1,7 @@
 import Vue from "vue";
 
 const TopicComponent = Vue.component("topic", {
-    props: ["topic"],
+    props: ["topic", "commonprefix"],
     data: function() {
         return {
             showData: false,
@@ -37,63 +37,37 @@ const TopicComponent = Vue.component("topic", {
         forwardNewMessageContract: function(description, type, schema, topicId) {
             this.$emit("messagecontractadd-new", description, type, schema, topicId);
             this.toggleShowAddMessageContract();
-        }
+        },
+        topicName: function(commonPrefix, topicMisc) {
+            var name = "";
+            name = commonPrefix;
+
+            if (topicMisc !== "") {
+                name = name + "." + topicMisc;
+            }            
+
+            return name;            
+        },
     },
     computed: {
 
     },
     template: `
         <div class="topic">
-            <message-contract-add :enable="showMessageContract" :topicId="topic.id" v-on:messagecontractadd-new="forwardNewMessageContract" v-on:messagecontractadd-close="toggleShowAddMessageContract()"></message-contract-add>
             <h2 class="title" title="Click to expand" v-on:click="toggleShowData()" >{{ topic.name }}</h2>
             <div class="details" v-if="showData">
-                <span class="entry"><span class="entry-title">Private:</span> <div :class="this.getPublicStyling()">{{ this.getPublicText() }}</div></span>
                 <span class="entry"><span class="entry-title">Description:</span> <p>{{ topic.description }}</p></span>
-                <span class="subtitle">"Message contracts":</span>
 
-                <div class="buttons is-right">
+                <div class="buttons is-right"> 
                     <button
                         type="button"
-                        v-on:click="toggleShowAddMessageContract()"
-                        class="button is-small is-primary">
-                        Add Message contract
-                    </button>   
-
-                    <button
-                        type="button"
+                        v-if="false"
                         v-on:click="$emit('addtopic-close', topic)"
                         class="button is-small is-primary">
+                        <!-- Currently disabled due to major changes, and it being out of scope. -->
                         Edit Topic
                     </button>   
                 </div>
-
-                <div v-for="message_contract in topic.messageContracts" :key="message_contract.type" class="message-contract" style="margin-bottom: 40px;">
-                    <div>
-                        <p><span class="entry-title">Type:</span> {{ message_contract.type }}</p>
-                        <p><span class="entry-title">Description:</span> {{ message_contract.description }}</p>
-                    </div>
-                    <div class="block">
-                        <div class="schema" style="width: 100%;"><p style="word-wrap: break-word;">{{ message_contract.content }}</p></div>
-                    </div>
-
-                    <div class="block">
-                        <div class="buttons is-right" style="width: 100%;">
-                            <button
-                                type="button"
-                                v-on:click="$emit('messagecontractedit-close', message_contract, topic.id)"
-                                class="button is-small is-primary">
-                                Edit
-                            </button>   
-                            <button
-                                type="button"
-                                v-on:click="$emit('messagecontract-delete', topic.id, message_contract.type)"
-                                class="button is-small is-primary">
-                                Delete
-                            </button>   
-                        </div>                        
-                    </div>
-                    
-                </div>          
             </div>
         </div>
     `

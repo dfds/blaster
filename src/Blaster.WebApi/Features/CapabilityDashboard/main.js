@@ -18,6 +18,7 @@ import CapabilityDeleteComponent from "./CapabilityDeleteComponent";
 import TopicComponent from "./TopicComponent";
 import TopicAddComponent from "./TopicAddComponent";
 import TopicEditComponent from "./TopicEditComponent";
+import TopicPrefixComponent from "./TopicPrefixComponent";
 import MessageContractAddComponent from "./MessageContractAddComponent";
 import MessageContractEditComponent from "./MessageContractEditComponent";
 import {ChannelPickerComponent, ChannelMinimalComponent, ChannelListComponent, BannerComponent, isIE} from "../Shared/components/Shared";
@@ -43,6 +44,7 @@ const app = new Vue({
         showDeleteCapability: false,
         showAddTopic: false,
         showEditTopic: false,
+        showTopicPrefix: false,
         showMessageContractEdit: false,
         messageContractEditData: null,
         topicEditData: null,
@@ -55,6 +57,7 @@ const app = new Vue({
         'topic': TopicComponent,
         'topic-add': TopicAddComponent,
         'topic-edit': TopicEditComponent,
+        'topic-prefix': TopicPrefixComponent,
         'message-contract-add': MessageContractAddComponent,
         'message-contract-edit': MessageContractEditComponent,
         'capability-edit': CapabilityEditComponent,
@@ -83,6 +86,9 @@ const app = new Vue({
             var isLegacy = this.isLegacyComputed;
             var isJoined = this.isJoinedComputed;
             return !(isLegacy == false && isJoined == true);
+        },
+        isReadyForTopicCreation: function() {
+            return !((this.capability.topicCommonPrefix === "") || (this.capability.topicCommonPrefix === null));
         },
         disabledContextButtonReasonComputed: function() {
             var msg = "";
@@ -164,6 +170,27 @@ const app = new Vue({
                 .filter(member => member.email.toLowerCase() == this.currentUser.email.toLowerCase())
                 .length > 0;
         },
+        addTopicFlow: function() {
+            this.toggleShowAddTopic();
+
+            // To be removed for good.
+            /* 
+            if (this.isReadyForTopicCreation) {
+                this.toggleShowAddTopic();
+            } else {
+                this.toggleShowTopicPrefix();
+            } */
+        },
+        toggleShowTopicPrefix: function(prefixes) {
+            if (this.showTopicPrefix) {
+                this.topicEditData = null;
+                this.showTopicPrefix = false;
+            } else {
+                this.topicEditData = this.capability.topicPrefixes;
+                this.showTopicPrefix = true;
+            }
+            //this.showTopicPrefix = this.showTopicPrefix ? false : true;
+        },
         toggleShowAddTopic: function() {
             this.showAddTopic = this.showAddTopic ? false : true;
         },
@@ -202,6 +229,9 @@ const app = new Vue({
         },
         handleCapabilityEdit: function(capability) {
             capabilityService.update(this.capability.id, capability)
+        },
+        handleCapabilityTopicCommonPrefix: function(commonPrefix) {
+            capabilityService.setCommonPrefix({commonPrefix: commonPrefix}, this.capability.id)
                 .then(() => {
                     return capabilityService.get(this.capability.id);
                 })
@@ -227,6 +257,7 @@ const app = new Vue({
             .then(() => connectionService.getByCapabilityId(this.capability.id))
             .then(data => this.connections = data)
             .catch(err => console.log(JSON.stringify(err)));
+            this.toggleShowTopicPrefix();
         },
         handleMessageContractEdit: function(type, description, schema, topicId) {
             topicService.addOrUpdateMessageContract(topicId, type, {"description": description, "content": schema})
@@ -253,8 +284,8 @@ const app = new Vue({
                 .then(data => this.capability = data)
                 .catch(err => console.log(JSON.stringify(err)));
         },
-        addTopic: function(name, description, isPrivate) {
-            const payload = {name: name, description: description, isPrivate: isPrivate, messageContracts: []}
+        addTopic: function(name, description, misc) {
+            const payload = {name: name, description: description, nameMisc: misc}
 
             // TODO: Rework this to handle errors
             capabilityService.addTopic(payload, this.capability.id)
@@ -266,8 +297,8 @@ const app = new Vue({
 
             this.showAddTopic = false;
         },
-        editTopic: function(name, description, isPrivate, id) {
-            const payload = {name: name, description: description, isPrivate: isPrivate};
+        editTopic: function(name, description, id, misc) {
+            const payload = {name: name, description: description, nameMisc: misc};
 
             topicService.update(id, payload)
                 .then(() => {
@@ -354,6 +385,13 @@ const app = new Vue({
         const capabilityIdParam = new URLSearchParams(window.location.search).get('capabilityId');
         this.topicsEnabled = this.$featureFlag.flagExists("topics") ? this.$featureFlag.getFlag("topics").enabled : false;
         this.capabilityDeleteEnabled = this.$featureFlag.flagExists("capabilitydelete") ? this.$featureFlag.getFlag("capabilitydelete").enabled : false;
+
+        // Temporary
+        if (!this.topicsEnabled)
+        {
+            const featureflag_testFilter_queryParam = new URLSearchParams(window.location.search).get('ff_5HbsabxqTiUMazSDuz6qfUqQhHU5i4vi8nN6RU6xGiNYw3VkCQLUfewZ3ahbFGML');
+            this.topicsEnabled = featureflag_testFilter_queryParam !== null;
+        }
 
         // TODO Handle no or empty capabilityId
         jq.ready
