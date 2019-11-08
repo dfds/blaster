@@ -4,20 +4,14 @@ FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
 #Set container filesystem to /build (and create folder if it doesnt exist)
 WORKDIR /build
 
-# update 
-RUN apt-get update
-
-# install curl 
-RUN apt-get install curl
+# install dependencies 
+RUN apt-get update && apt-get install -y apt-utils && apt-get install -y curl
 
 # get install script and pass it to execute: 
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
 
-# and install node 
-RUN apt-get install nodejs
-
-# confirm that it was successful 
-RUN node -v
+# install node 
+RUN apt-get install nodejs && node -v
 
 # npm installs automatically 
 RUN npm -v
@@ -28,8 +22,10 @@ COPY ./src/package.json ./src/package.json
 COPY ./src/webpack.config.js ./src/webpack.config.js
 COPY ./src/Blaster.WebApi ./src/Blaster.WebApi
 
+WORKDIR /build/src
+
 #Build nmp dependencies
-RUN npm build
+RUN npm install && npm run-script build
 
 #Set workdir to current project folder
 WORKDIR /build/src/Blaster.WebApi
