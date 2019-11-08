@@ -17,7 +17,6 @@ RUN apt-get install nodejs && node -v
 RUN npm -v
 
 #Copy files to container file system.
-COPY ./src/auth-proxy ./src/auth-proxy
 COPY ./src/package.json ./src/package.json
 COPY ./src/webpack.config.js ./src/webpack.config.js
 COPY ./src/Blaster.WebApi ./src/Blaster.WebApi
@@ -41,6 +40,7 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:2.2 AS runtime
 WORKDIR /app
 
 #Copy binaries from publish container to final container
+COPY --from=build-env /build/src/Blaster.WebApi/wwwroot ./wwwroot
 COPY --from=build-env /build/out .
 
 # SSL

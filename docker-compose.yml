@@ -5,3 +5,8 @@ services:
     build:
       context: .
       dockerfile: src/Blaster.WebApi/Dockerfile
+
+  auth-proxy:
+    build:
+      context: .
+      dockerfile: src/auth-proxy/Dockerfile
