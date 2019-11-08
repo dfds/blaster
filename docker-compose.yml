@@ -5,8 +5,19 @@ services:
     build:
       context: .
       dockerfile: src/Blaster.WebApi/Dockerfile
+    networks:
+      development:
+        aliases:
+          - blaster
 
   auth-proxy:
     build:
       context: .
       dockerfile: src/auth-proxy/Dockerfile
+    networks:
+      development:
+        aliases:
+          - auth-proxy
+
+networks:
+  development:

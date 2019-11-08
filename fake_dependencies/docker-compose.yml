@@ -6,13 +6,29 @@ services:
       context: ./capability-service
     ports:
       - "50900:3000"
+    networks:
+      development:
+        aliases:
+          - capability-service
   aws-janitor:
     build: 
       context: ./aws-janitor
     ports:
       - "50901:3000"
+    networks:
+      development:
+        aliases:
+          - aws-janitor
   harald:
     build:
       context: ./harald
     ports:
       - "50902:3000"
+    networks:
+      development:
+        aliases:
+          - harald
+networks:
+  development:
+    external:
+      name: blaster_development
