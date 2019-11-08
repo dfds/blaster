@@ -3,7 +3,7 @@ const fs = require("fs");
 const util = require("util");
 const uuidv1 = require('uuid/v1');
 
-const port = process.env.port || 3000;
+const port = process.env.port || 50902;
 
 const app = express();
 app.use(express.json());

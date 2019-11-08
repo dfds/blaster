@@ -1,23 +1,26 @@
 version: "3"
 
 services:
-  blaster:
+  blaster.webapi:
     build: 
       context: ./
     ports:
-      - "5000:80"
+      - "4200:5000"
     depends_on:
       - header-injector-proxy
       - auth-proxy
       - capability-service
     environment: 
-      - BLASTER_CAPABILITYSERVICE_API_URL=http://capability-service:3000
-      - BLASTER_AWS_JANITOR_API_URL=http://aws-janitor:3000
+      - "BLASTER_CAPABILITYSERVICE_API_URL=http://capability-service:50900"
+      - "BLASTER_AWS_JANITOR_API_URL=http://aws-janitor:50901"
+      - "BLASTER_HARALD_API_URL=http://harald:50902"
+      - "ASPNETCORE_ENVIRONMENT=Development"
+      - "ASPNETCORE_URLS=http://+:5000"
   header-injector-proxy:
     build: 
       context: ./fake_dependencies/header-injector-proxy
     ports:
-      - "5002:50802"
+      - "50802:50802"
     depends_on:
       - auth-proxy
     environment:
@@ -26,21 +29,21 @@ services:
     build: 
       context: ./src/auth-proxy
     ports:
-      - "5001:50800"
+      - "50800:50800"
     environment:
-      - FORWARD_ADDRESS=blaster:80
+      - FORWARD_ADDRESS=blaster:4200
   capability-service:
     build: 
       context: ./fake_dependencies/capability-service
     ports:
-      - "50900:3000"
+      - "50900:50900"
   aws-janitor:
     build: 
       context: ./fake_dependencies/aws-janitor
     ports:
-      - "50901:3000"
+      - "50901:50901"
   tika:
     build: 
       context: ./fake_dependencies/tika
     ports:
-      - "50902:3000"
+      - "50902:50902"
