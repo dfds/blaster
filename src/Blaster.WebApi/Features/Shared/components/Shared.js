@@ -1,3 +1,5 @@
+import Vue from "vue";
+import UserManagementPlugin from "../plugins/userManagementPlugin";
 import ChannelPickerComponent from "./ChannelPickerComponent";
 import ChannelMinimalComponent from "./ChannelMinimalComponent";
 import ChannelListComponent from "./ChannelListComponent";
@@ -5,6 +7,17 @@ import ChannelDropdownComponent from "./ChannelDropdownComponent";
 import ChannelIconComponent from "./ChannelIconComponent";
 import ChannelInputComponent from "./ChannelInputComponent";
 import BannerComponent from "./BannerComponent";
+
+Vue.use(UserManagementPlugin);
+
+new Vue({
+    el: ".navbar",
+    computed: {
+        showIEBanner: function () {
+            return isIE();
+        }
+    }
+});
 
 function isIE()
 {

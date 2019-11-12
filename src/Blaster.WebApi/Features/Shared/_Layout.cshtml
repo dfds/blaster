@@ -28,7 +28,6 @@
     </script>
 </head>
 <body>
-    
 <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="container nav">
         <div style="display: flex; flex-direction: row;">
@@ -43,22 +42,27 @@
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
-                </a>        
+                </a>
             </div>
         </div>
-        
+
         <div id="menu" class="navbar-menu">
             <div class="navbar-start">
                 <a href="@Url.Action("Index", "Frontpage")" class="navbar-item">Home</a>
-                <a href="@Url.Action("Index", "Capability")" class="navbar-item">Capabilities</a>             
-                <a href="https://playbooks.dfds.cloud" class="navbar-item">Playbooks</a> 
+                <a href="@Url.Action("Index", "Capability")" class="navbar-item">Capabilities</a>
+                <a href="https://playbooks.dfds.cloud" class="navbar-item">Playbooks</a>
                 <a href="https://github.com/dfds" class="navbar-item">GitHub (Code examples)</a>
                 <a href="@Url.Action("SharedComponents", "Frontpage")" class="navbar-item">UI</a>
             </div>
 
             <div class="navbar-end">
-                <div class="navbar-item">
-                    @UserHelper.CurrentUser.Name
+                <div v-cloak class="navbar-item">
+                    <a v-if="isAuthenticated()" v-on:click="signOut()">
+                        Sign out {{getUserName()}}
+                    </a>
+                    <a v-if="!isAuthenticated()" v-on:click="signIn()">
+                        Sign in
+                    </a>
                 </div>
             </div>
         </div>
@@ -70,17 +74,18 @@
 
 <script>
     window.basePath = "@Context.Request.PathBase";
-    window.currentUser = { email: "@UserHelper.CurrentUser.Email"};
-    
+    window.currentUserRazor = { email: "@UserHelper.CurrentUser.Email" };
+
     (function() {
         var burger = document.querySelector('.burger');
-        var menu = document.querySelector('#'+burger.dataset.target);
-        burger.addEventListener('click', function() {
-            burger.classList.toggle('is-active');
-            menu.classList.toggle('is-active');
-        });
+        var menu = document.querySelector('#' + burger.dataset.target);
+        burger.addEventListener('click',
+            function () {
+                burger.classList.toggle('is-active');
+                menu.classList.toggle('is-active');
+            });
     })();
-    
+
 </script>
 
 <script src="~/main.bundle.js"></script>

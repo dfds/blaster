@@ -65,7 +65,7 @@ dotnet restore
 dotnet watch run
 
 # 2: webpack frontend
-cd src
+cd src/Blaster.WebApi
 npm start # runs webpack
 
 # 3: dependency fakes
