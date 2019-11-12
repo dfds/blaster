@@ -30,5 +30,3 @@ services:
           - harald
 networks:
   development:
-    external:
-      name: blaster_development
