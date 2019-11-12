@@ -25,7 +25,7 @@ services:
       context: ./src
       dockerfile: Dockerfile
     volumes:
-      - ./src/Blaster.WebApi:/Blaster.WebApi
+      - ./src/Blaster.WebApi:/Blaster.WebApi:rw
     networks:
       development:
         aliases:
