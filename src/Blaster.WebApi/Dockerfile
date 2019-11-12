@@ -7,7 +7,7 @@ WORKDIR /build
 # install dependencies 
 RUN apt-get update && apt-get install -y apt-utils && apt-get install -y curl
 
-# get install script and pass it to execute: 
+# get node.js install script and pass it to execute
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
 
 # install node 
@@ -43,12 +43,12 @@ WORKDIR /app
 COPY --from=build-env /build/src/Blaster.WebApi/wwwroot ./wwwroot
 COPY --from=build-env /build/out .
 
-# SSL
-ENV CAPABILITY_SERVICE_KAFKA_SSL_CA_LOCATION=/app/cert.pem
-
 RUN curl -o /tmp/rds-combined-ca-bundle.pem https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem \
     && mv /tmp/rds-combined-ca-bundle.pem /usr/local/share/ca-certificates/rds-combined-ca-bundle.crt \
     && update-ca-certificates
+	
+# SSL
+ENV CAPABILITY_SERVICE_KAFKA_SSL_CA_LOCATION=/app/cert.pem
 
 RUN curl -sS -o /app/cert.pem https://curl.haxx.se/ca/cacert.pem
 
