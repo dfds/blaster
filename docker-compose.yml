@@ -22,10 +22,10 @@ services:
           - blaster
   hot-reloader:
     build:
-      context: ./src
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: src/Dockerfile
     volumes:
-      - ./src/Blaster.WebApi:/Blaster.WebApi:rw
+      - ./src/Blaster.WebApi:/app/Blaster.WebApi:rw
     networks:
       development:
         aliases:

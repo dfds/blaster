@@ -1,8 +1,11 @@
-FROM node:12.13.0-alpine
+FROM node:latest
 
-COPY ./package.json ./package.json
-COPY ./webpack.config.js ./webpack.config.js
+WORKDIR app
 
-RUN npm install
+COPY ./src/package.json ./
+COPY ./src/webpack.config.js ./
+COPY ./src/.babelrc ./
 
-CMD ["npm", "run start:dev"]
+RUN npm install --no-progress --ignore-optional
+
+CMD npm start

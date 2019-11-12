@@ -43,10 +43,6 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-
   <!-- <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup> -->
