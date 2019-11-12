@@ -24,7 +24,7 @@ COPY ./src/Blaster.WebApi ./src/Blaster.WebApi
 WORKDIR /build/src
 
 #Build nmp dependencies
-RUN npm install && npm run-script build
+RUN npm install --silent && npm run-script build --silent
 
 #Set workdir to current project folder
 WORKDIR /build/src/Blaster.WebApi

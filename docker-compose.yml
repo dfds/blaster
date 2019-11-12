@@ -8,6 +8,8 @@ services:
       dockerfile: src/Blaster.WebApi/Dockerfile
     ports:
       - "4200:5000"
+    volumes:
+      - ./src/Blaster.WebApi/wwwroot:/app/wwwroot
     environment:
       - "BLASTER_CAPABILITYSERVICE_API_URL=http://capability-service:50900"
       - "BLASTER_AWS_JANITOR_API_URL=http://aws-janitor:50901"
@@ -18,7 +20,16 @@ services:
       development:
         aliases:
           - blaster
-
+  hot-reloader:
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    volumes:
+      - ./src/Blaster.WebApi:/Blaster.WebApi
+    networks:
+      development:
+        aliases:
+          - hot-reloader
 #  auth-proxy:
 #    hostname: auth-proxy
 #    build:
