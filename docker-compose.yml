@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: src/Blaster.WebApi/Dockerfile
     ports:
-      - "4200:5000"
+      - "4200:4200"
     volumes:
       - ./src/Blaster.WebApi/wwwroot:/app/wwwroot
     environment:
@@ -15,7 +15,7 @@ services:
       - "BLASTER_AWS_JANITOR_API_URL=http://aws-janitor:50901"
       - "BLASTER_HARALD_API_URL=http://harald:50902"
       - "ASPNETCORE_ENVIRONMENT=Development"
-      - "ASPNETCORE_URLS=http://+:5000"
+      - "ASPNETCORE_URLS=http://+:4200"
     networks:
       development:
         aliases:
@@ -28,8 +28,6 @@ services:
       - ./src/Blaster.WebApi:/app/Blaster.WebApi:rw
     networks:
       development:
-        aliases:
-          - hot-reloader
 #  auth-proxy:
 #    hostname: auth-proxy
 #    build:
@@ -46,3 +44,4 @@ services:
 
 networks:
   development:
+    external: true
