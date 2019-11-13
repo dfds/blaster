@@ -37,7 +37,11 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: "[name].css",
         })
-    ],
+	],
+    watchOptions: {
+	    aggregateTimeout: 300,
+	    poll: 1000
+    },
     module: {
         rules: [{
                 test: /\.js$/,
@@ -49,7 +53,7 @@ module.exports = {
                 use: [
                     MiniCssExtractPlugin.loader,
                     "css-loader",
-                    "sass-loader",
+                    "sass-loader"
                 ]
             },
             {

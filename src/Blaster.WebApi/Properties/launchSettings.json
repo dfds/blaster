@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:33677",
+      "applicationUrl": "http://localhost:4200",
       "sslPort": 0
     }
   },
@@ -22,13 +22,7 @@
     "Blaster.WebApi": {
       "commandName": "Project",
       "launchBrowser": true,
-      "environmentVariables": {
-        "BLASTER_CAPABILITYSERVICE_API_URL": "http://localhost:50900",
-        "BLASTER_AWS_JANITOR_API_URL": "http://localhost:50901",
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "BLASTER_HARALD_API_URL": "http://localhost:50902"
-      },
-      "applicationUrl": "http://localhost:5000"
+      "applicationUrl": "http://localhost:4200"
     }
   }
 }

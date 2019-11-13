@@ -1,7 +1,7 @@
 FROM node:alpine
 
 WORKDIR /app
-COPY ./ .
+COPY ./src/auth-proxy .
 
 RUN npm install
 

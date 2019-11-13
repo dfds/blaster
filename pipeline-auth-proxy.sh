@@ -15,7 +15,7 @@ restore_dependencies() {
 
 build_container_image() {
     echo "Building container image..."
-    docker build -t ${IMAGE_NAME} .
+    docker build -t ${IMAGE_NAME} ./src/Blaster.WebApi
 }
 
 push_container_image() {
