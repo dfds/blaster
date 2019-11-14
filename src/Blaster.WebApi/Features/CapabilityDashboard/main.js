@@ -5,7 +5,7 @@ import ConnectionService from "connectionservice";
 import ChannelService from "channelservice";
 import TopicService from "topicservice"
 import jq from "jquery";
-import { currentUser } from "userservice";
+import { UserService } from "userservice";
 import AlertDialog from "./alert-dialog";
 import FeatureFlag from "featureflag";
 import "core-js/features/url-search-params"
@@ -36,7 +36,7 @@ const app = new Vue({
     data: {
         capability: null,
         initializing: true,
-        currentUser: currentUser,
+        currentUser: new UserService().getCurrentUser(),
         membershipRequested: false,
         contextRequested: false,
         topics: null,

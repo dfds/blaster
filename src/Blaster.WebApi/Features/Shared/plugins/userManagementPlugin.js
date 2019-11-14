@@ -14,8 +14,16 @@ const UserManagementPlugin = {
 
         Vue.prototype.getUserName = function () {
             var user = this.getUser();
+            
+            if (user) {
+                if (user.email) {
+                    return user.email;
+                } else if (user.name) {
+                    return user.name.split(' ').reduce((a, b) => b + ' ' + a);
+                };
+            } 
 
-            return (user) ? user.email || user.name.split(' ').reduce((a, b) => b + ' ' + a) : "guest";
+            return "Guest";
         }
 
         Vue.prototype.isAuthenticated = function () {

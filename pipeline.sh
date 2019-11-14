@@ -20,13 +20,13 @@ clean_output_folder() {
 restore_dependencies() {
     echo "Restoring dependencies"
     npm install
-    dotnet restore Blaster.sln
+    dotnet restore ../Blaster.sln
 }
 
 build_projects() {
     echo "Building projects..."
     npm run build
-    dotnet build -c Release Blaster.sln
+    dotnet build -c Release ../Blaster.sln
 }
 
 run_tests() {
@@ -56,7 +56,7 @@ publish_binaries() {
 
 build_container_image() {
     echo "Building container image..."
-    docker build -t ${IMAGE_NAME} ./src/Blaster.WebApi
+    docker build -t ${IMAGE_NAME} -f ./src/Blaster.WebApi/Dockerfile .
 }
 
 push_container_image() {
