@@ -108,3 +108,5 @@ export default class UserService {
             errorCode === "login_required";
     }
 }
+
+export {UserService}

@@ -3,7 +3,7 @@ import CapabilityService from "capabilityservice"
 import AlertDialog from "./alert-dialog";
 import ModelEditor from "modeleditor";
 import jq from "jquery";
-import { currentUser } from "userservice";
+import { UserService } from "userservice";
 import FeatureFlag from "featureflag";
 import TestCapabilitiesFiltered from './test-filter';
 import "core-js/stable";
@@ -20,7 +20,7 @@ const app = new Vue({
         items: [],
         membershipRequests: [],
         initializing: true,
-        currentUser: currentUser
+        currentUser: new UserService().getCurrentUser()
     },
     computed: {
         hasCapabilities: function () {
