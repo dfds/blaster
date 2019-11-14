@@ -15,7 +15,7 @@ restore_dependencies() {
 
 build_container_image() {
     echo "Building container image..."
-    docker build -t ${IMAGE_NAME} ./src/Blaster.WebApi
+    docker build -t ${IMAGE_NAME} -f ./src/auth-proxy/Dockerfile .
 }
 
 push_container_image() {
@@ -35,9 +35,8 @@ push_container_image() {
 cd ./src/auth-proxy
 
 restore_dependencies
-build_container_image
-
 cd ../../
+build_container_image
 
 if [[ "${BUILD_NUMBER}" != "N/A" ]]; then
     push_container_image
