@@ -81,6 +81,7 @@ export default class UserService {
             //Always start with acquireTokenSilent to obtain a token in the signed in user from cache.
             var accessToken = this.msalClient.acquireTokenSilent(scopes).then(accessToken => {
                 this.data.accessToken = accessToken;
+                return accessToken;
             });
 
             return accessToken;
