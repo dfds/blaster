@@ -10,6 +10,7 @@ export default class HttpClient {
         this.delete = this.delete.bind(this);
         this.authEndpoints = new Map();
         this.init();
+        this.interceptRequestHandler = undefined;
     }
 
     authAddEndpoint(endpoint) {
@@ -65,6 +66,10 @@ export default class HttpClient {
         return axios.delete(this.createEndpointFrom(url));
     }
 
+    setInterceptRequestHandler(handler) {
+        this.interceptRequestHandler = handler;
+    }
+
     init() {
         let capabilitiesEndpoint = new ProtectedEndpoint();
         capabilitiesEndpoint.value = "/api/capabilities";
@@ -77,13 +82,13 @@ export default class HttpClient {
         this.authAddEndpoint(connectionsEndpoint);
 
         // Interceptors
-
         axios.interceptors.request.use(
             req => {
                 console.log(req.url + " has been hit");
                 if (this.authIsEndpointAuthed(req.url)) {
-                    // Put necessary logic here to fetch token if not already available locally.
-                    console.log("Needs auth");
+                    if (this.interceptRequestHandler) {
+                        this.interceptRequestHandler(req);
+                    }
                 }
                 return req;
             },

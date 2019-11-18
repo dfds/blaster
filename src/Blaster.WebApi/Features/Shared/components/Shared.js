@@ -8,7 +8,6 @@ import ChannelDropdownComponent from "./ChannelDropdownComponent";
 import ChannelIconComponent from "./ChannelIconComponent";
 import ChannelInputComponent from "./ChannelInputComponent";
 import BannerComponent from "./BannerComponent";
-import HttpClient from "../httpclient";
 
 Vue.use(UserManagementPlugin);
 Vue.use(HttpClientPlugin);
