@@ -11,7 +11,7 @@ export default class ChannelService {
     // Get public channels
     getAll() {
         return this.client.get(this.baseUrl + "s")
-            .then(data => data.items || []);
+            .then(data => data.data.items || []);
     }
 
     // The API contract is in a state of flux. This endpoint may be removed at some point.

@@ -123,7 +123,12 @@ const app = new Vue({
     },
     mounted: function () {
         jq.ready
-            .then(() => capabilityService.getAll())
+            .then(() => {
+                var x = capabilityService.getAll();
+
+                return jq.when(x);
+            })
+            .then(resp => resp.items)
             .then(capabilities => capabilities.forEach(capability => this.items.push(capability)))
             .then(() => {
                 if (!this.$featureFlag.getFlag("testfilter").enabled) {

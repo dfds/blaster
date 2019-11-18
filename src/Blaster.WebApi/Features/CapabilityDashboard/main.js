@@ -6,6 +6,7 @@ import ChannelService from "channelservice";
 import TopicService from "topicservice"
 import jq from "jquery";
 import { UserService } from "userservice";
+import {axios} from "httpclient";
 import AlertDialog from "./alert-dialog";
 import FeatureFlag from "featureflag";
 import "core-js/features/url-search-params"
@@ -30,6 +31,7 @@ const channelService = new ChannelService();
 FeatureFlag.setKeybinding();
 
 Vue.prototype.$featureFlag = new FeatureFlag();
+Vue.prototype.$http = axios;
 
 const app = new Vue({
     el: "#capabilitydashboard-app",
@@ -229,6 +231,12 @@ const app = new Vue({
         },
         handleCapabilityEdit: function(capability) {
             capabilityService.update(this.capability.id, capability)
+                .then(() => {
+                    return capabilityService.get(this.capability.id);
+                })
+                .then(data => this.capability = data)
+                .catch(err => console.log(JSON.stringify(err)));            
+            this.toggleShowEditCapability();
         },
         handleCapabilityTopicCommonPrefix: function(commonPrefix) {
             capabilityService.setCommonPrefix({commonPrefix: commonPrefix}, this.capability.id)
@@ -257,7 +265,6 @@ const app = new Vue({
             .then(() => connectionService.getByCapabilityId(this.capability.id))
             .then(data => this.connections = data)
             .catch(err => console.log(JSON.stringify(err)));
-            this.toggleShowTopicPrefix();
         },
         handleMessageContractEdit: function(type, description, schema, topicId) {
             topicService.addOrUpdateMessageContract(topicId, type, {"description": description, "content": schema})

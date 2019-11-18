@@ -13,12 +13,12 @@ export default class ConnectionService {
 
     getAll() {
         return this.client.get(this.baseUrl + "s")
-            .then(data => data.items || []);
+            .then(data => data.data.items || []);
     }
 
     getByCapabilityId(id) {
         return this.client.get(`/api/capabilities/${id}/connections`)
-            .then(data => data.items || []);
+            .then(data => data.data.items || []);
     }
 
     // The API contract is in a state of flux. This endpoint may be removed at some point.

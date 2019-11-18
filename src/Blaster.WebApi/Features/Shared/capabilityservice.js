@@ -13,12 +13,12 @@ export default class CapabilityService {
 
     getAll() {
         return this.client.get(this.baseUrl)
-            .then(data => data.items || []);
+            .then(data => data.data || []);
     }
 
     get(capabilityId) {
         return this.client.get(`${this.baseUrl}/${capabilityId}`)
-            .then(data => data || {});
+            .then(data => data.data || {});
     }
 
     add (capability) {

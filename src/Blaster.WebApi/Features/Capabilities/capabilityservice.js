@@ -11,8 +11,8 @@ export default class CapabilityService {
     }
 
     getAll() {
-        return this.client.get(this.baseUrl)
-            .then(data => data.items || []);
+        var x = this.client.get(this.baseUrl);
+        return x;
     }
 
     add (capability) {
