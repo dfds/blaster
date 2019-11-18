@@ -124,7 +124,7 @@
         <!--- Communication channel section --->
             <div class="container box">
                 <h1 class="title is-uppercase">Communication channels</h1>
-                <channel-picker :is_enabled="true" :capabilitychannels="channels" v-on:capability-join-channel="handleCapabilityJoinChannel" v-if="getMembershipStatusFor(capability.id) == 'member'"></channel-picker>
+                <channel-picker :is_enabled="true" :channelservice="getChannelService()" :capabilitychannels="channels" v-on:capability-join-channel="handleCapabilityJoinChannel" v-if="getMembershipStatusFor(capability.id) == 'member'"></channel-picker>
                 <channel-list :channels="channels" :can_edit="getMembershipStatusFor(capability.id) == 'member' && canLeaveCommunicationChannel" v-on:capability-leave-channel="handleCapabilityLeaveChannel"></channel-list>
             </div>                          
 

@@ -4,8 +4,8 @@ import "regenerator-runtime/runtime";
 import HttpClient from "httpclient";
 
 export default class ConnectionService {
-    constructor() {
-        this.client = new HttpClient();
+    constructor(httpClient) {
+        this.client = httpClient ? httpClient : new HttpClient();
         this.baseUrl = "api/connections";
 
         this.getAll = this.getAll.bind(this);

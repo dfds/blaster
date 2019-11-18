@@ -1,8 +1,8 @@
 import HttpClient from "httpclient";
 
 export default class ChannelService {
-    constructor() {
-        this.client = new HttpClient();
+    constructor(httpClient) {
+        this.client = httpClient ? httpClient : new HttpClient();
         this.baseUrl = "api/channel";
 
         this.getAll = this.getAll.bind(this);

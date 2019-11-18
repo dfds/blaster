@@ -4,10 +4,8 @@ import ChannelInputComponent from "./ChannelInputComponent";
 import ChannelDropdownComponent from "./ChannelDropdownComponent";
 import ChannelService from "channelservice";
 
-const channelService = new ChannelService();
-
 const ChannelPickerComponent = Vue.component("channel-picker", {
-    props: ["capabilitychannels", "is_enabled"],
+    props: ["capabilitychannels", "is_enabled", "channelservice"],
     components: {
         'channel-input': ChannelInputComponent,
         'channel-dropdown': ChannelDropdownComponent,
@@ -22,7 +20,7 @@ const ChannelPickerComponent = Vue.component("channel-picker", {
     },
     methods: {
         getChannels: function() {
-            channelService.getAll()
+            this.channelservice.getAll()
                 .then((items) => {
                     this.channels = items;
                 });

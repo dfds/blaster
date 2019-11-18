@@ -10,10 +10,11 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 import {isIE, BannerComponent} from "../Shared/components/Shared";
 
-const capabilityService = new CapabilityService();
+const capabilityService = new CapabilityService(Vue.prototype.$http);
 FeatureFlag.setKeybinding();
 
 Vue.prototype.$featureFlag = new FeatureFlag();
+
 const app = new Vue({
     el: "#capabilities-app",
     data: {

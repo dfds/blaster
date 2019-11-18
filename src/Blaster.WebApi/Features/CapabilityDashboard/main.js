@@ -6,7 +6,6 @@ import ChannelService from "channelservice";
 import TopicService from "topicservice"
 import jq from "jquery";
 import { UserService } from "userservice";
-import {axios} from "httpclient";
 import AlertDialog from "./alert-dialog";
 import FeatureFlag from "featureflag";
 import "core-js/features/url-search-params"
@@ -24,14 +23,13 @@ import MessageContractAddComponent from "./MessageContractAddComponent";
 import MessageContractEditComponent from "./MessageContractEditComponent";
 import {ChannelPickerComponent, ChannelMinimalComponent, ChannelListComponent, BannerComponent, isIE} from "../Shared/components/Shared";
 
-const topicService = new TopicService();
-const capabilityService = new CapabilityService();
-const connectionService = new ConnectionService();
-const channelService = new ChannelService();
+const topicService = new TopicService(Vue.prototype.$http);
+const capabilityService = new CapabilityService(Vue.prototype.$http);
+const connectionService = new ConnectionService(Vue.prototype.$http);
+const channelService = new ChannelService(Vue.prototype.$http);
 FeatureFlag.setKeybinding();
 
 Vue.prototype.$featureFlag = new FeatureFlag();
-Vue.prototype.$http = axios;
 
 const app = new Vue({
     el: "#capabilitydashboard-app",
@@ -142,6 +140,9 @@ const app = new Vue({
               return false;
 
           return true;
+        },
+        getChannelService: function () {
+            return channelService;
         },
         getMembershipStatusFor: function() {
             const isRequested = this.membershipRequested;

@@ -1,32 +1,5 @@
-import jq from "jquery";
-
 const baseUrl = `${window.basePath}`;
 const axios = require('axios').default.create();
-
-axios.interceptors.request.use(
-    req => {
-        const internalHttpClient = new HttpClient();
-        console.log(req.url + " has been hit");
-        if (internalHttpClient.authIsEndpointAuthed(req.url)) {
-            console.log("Needs auth");
-        }
-        return req;
-    },
-    err => {
-        console.log(err);
-        return err;
-    }
-)
-
-axios.interceptors.response.use(
-    resp => {
-        return resp;
-    },
-    err => {
-        console.log(err);
-        return err;
-    }
-)
 
 export default class HttpClient {
     constructor() {
@@ -102,14 +75,41 @@ export default class HttpClient {
         connectionsEndpoint.value = "/api/connections";
         connectionsEndpoint.matchRegex = '\/api\/connections\/?';
         this.authAddEndpoint(connectionsEndpoint);
+
+        // Interceptors
+
+        axios.interceptors.request.use(
+            req => {
+                console.log(req.url + " has been hit");
+                if (this.authIsEndpointAuthed(req.url)) {
+                    // Put necessary logic here to fetch token if not already available locally.
+                    console.log("Needs auth");
+                }
+                return req;
+            },
+            err => {
+                console.log(err);
+                return err;
+            }
+        )
+        
+        axios.interceptors.response.use(
+            resp => {
+                return resp;
+            },
+            err => {
+                console.log(err);
+                return err;
+            }
+        )
     }
 }
 
-export class ProtectedEndpoint {
+class ProtectedEndpoint {
     constructor() {
         this.value = "";
         this.matchRegex = "";
     }
 }
 
-export {HttpClient, axios}
+export {HttpClient, axios, ProtectedEndpoint}
