@@ -1,5 +1,4 @@
 import HttpClient from "httpclient";
-import * as UserService from "userservice";
 
 export default class CapabilityService {
     constructor() {

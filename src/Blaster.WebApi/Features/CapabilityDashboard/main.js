@@ -24,7 +24,7 @@ import MessageContractEditComponent from "./MessageContractEditComponent";
 import {ChannelPickerComponent, ChannelMinimalComponent, ChannelListComponent, BannerComponent, isIE} from "../Shared/components/Shared";
 
 const topicService = new TopicService(Vue.prototype.$http);
-const capabilityService = new CapabilityService(Vue.prototype.$http);
+const capabilityService = new CapabilityService(Vue.prototype.$http, Vue.prototype.$userService);
 const connectionService = new ConnectionService(Vue.prototype.$http);
 const channelService = new ChannelService(Vue.prototype.$http);
 FeatureFlag.setKeybinding();
@@ -36,7 +36,7 @@ const app = new Vue({
     data: {
         capability: null,
         initializing: true,
-        currentUser: new UserService().getCurrentUser(),
+        currentUser: Vue.prototype.$userService.getCurrentUser(),
         membershipRequested: false,
         contextRequested: false,
         topics: null,

@@ -10,7 +10,7 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 import {isIE, BannerComponent} from "../Shared/components/Shared";
 
-const capabilityService = new CapabilityService(Vue.prototype.$http);
+const capabilityService = new CapabilityService(Vue.prototype.$http, Vue.prototype.$userService);
 FeatureFlag.setKeybinding();
 
 Vue.prototype.$featureFlag = new FeatureFlag();
@@ -21,7 +21,7 @@ const app = new Vue({
         items: [],
         membershipRequests: [],
         initializing: true,
-        currentUser: new UserService().getCurrentUser()
+        currentUser: Vue.prototype.$userService.getCurrentUser()
     },
     computed: {
         hasCapabilities: function () {

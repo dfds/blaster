@@ -2,13 +2,13 @@ import HttpClient from "httpclient";
 import * as UserService from "userservice";
 
 export default class CapabilityService {
-    constructor(httpClient) {
+    constructor(httpClient, userService) {
         this.client = httpClient ? httpClient : new HttpClient();
         this.baseUrl = "api/capabilities";
 
         this.getAll = this.getAll.bind(this);
         this.add = this.add.bind(this);
-        this.userService = new UserService.default();
+        this.userService = userService ? userService : new UserService.default();
     }
 
     getAll() {

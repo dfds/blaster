@@ -29,6 +29,8 @@ export default class UserService {
 
         this.msalClient.handleRedirectCallback((error, response) => {
             console.log(error);
+            console.log("Handling redirect callback");
+            console.log(response);
 
             this.data.user = response.account;
         });

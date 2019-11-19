@@ -4,6 +4,8 @@ const UserManagementPlugin = {
     install(Vue, options) {
         var userService = new UserService.default();
 
+        Vue.prototype.$userService = userService;
+
         Vue.prototype.getUser = function () {
             return userService.getCurrentUser();
         }
