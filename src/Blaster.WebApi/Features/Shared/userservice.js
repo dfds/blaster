@@ -7,10 +7,27 @@ export default class UserService {
             configuration = {
                 auth: {
                     clientId: "91c38c20-4d2c-485d-80ac-a053619a02db",
-                    authority: "https://login.microsoftonline.com/common"
+                    authority: "https://login.microsoftonline.com/common",
+                    redirectUri: "http://localhost:4200/login"
+                },
+                cache: {
+                    cacheLocation: "localStorage",
+                    storeAuthStateInCookie: true
                 },
                 request: {
                     scopes: ["user.read"]
+                },
+                system: {
+                    logger: { // To be removed when merging to master.
+                        error: console.error,
+                        errorPii: console.error,
+                        info: console.log,
+                        infoPii: console.log,
+                        verbose: console.log,
+                        verbosePii: console.log,
+                        warning: console.warn,
+                        warningPii: console.warn
+                    }
                 }
             };
         }
@@ -24,6 +41,7 @@ export default class UserService {
 
         this.data = {
             accessToken: "",
+            //accessToken: {expiresOn: new Date()},
             user: this.msalClient.getAccount()
         };
 
@@ -46,6 +64,20 @@ export default class UserService {
         return user.email || user.userName;
     }
 
+    getCachedAccessToken() {
+        return new Promise((resolve, reject) => {
+            if (this.data.accessToken.expiresOn) {
+                const expiredTime = this.data.accessToken.expiresOn.getTime();
+                if (Date.now() < expiredTime) {
+                    resolve(this.data.accessToken);
+                } else {
+                    resolve(undefined);
+                }
+            }
+            resolve(undefined);
+        });
+    }
+
     isAuthenticated() {
         return !this.msalClient.isCallback(window.location.hash) && !!this.msalClient.getAccount();
     }
@@ -62,12 +94,12 @@ export default class UserService {
 
                     this.data.user = token.account;
                 });
+                return authPromise;
             }
             else {
                 this.data.user = this.msalClient.getAccount();
             }
         }
-
     }
 
     signOut() {

@@ -49,6 +49,10 @@ const UserManagementPlugin = {
                 return userService.acquireToken({scopes: scopes});
             }
         }
+
+        Vue.prototype.getCachedAccessToken = function () {
+            return userService.getCachedAccessToken();
+        }
     }
 };
 

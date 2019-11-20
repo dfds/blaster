@@ -87,7 +87,7 @@ export default class HttpClient {
                 console.log(req.url + " has been hit");
                 if (this.authIsEndpointAuthed(req.url)) {
                     if (this.interceptRequestHandler) {
-                        this.interceptRequestHandler(req);
+                        return this.interceptRequestHandler(req);
                     }
                 }
                 return req;
