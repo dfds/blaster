@@ -46,7 +46,7 @@ const UserManagementPlugin = {
 
         Vue.prototype.acquireToken = function (scopes) {
             if (userService.isAuthenticated()) {
-                return userService.acquireToken({ scopes: scopes });
+                return userService.acquireToken({scopes: scopes});
             }
         }
     }

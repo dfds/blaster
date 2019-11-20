@@ -77,6 +77,9 @@ export default class UserService {
     }
 
     acquireToken(scopes) {
+        if (scopes) {
+            scopes.authority = scopes.authority ? scopes.authority : this.msalConfiguration.auth.authority;
+        }
         scopes = scopes || this.msalConfiguration.request.scopes;
 
         try {

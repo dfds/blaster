@@ -10,13 +10,13 @@ const HttpClientPlugin = {
             Vue.prototype.$http.setInterceptRequestHandler((req) => {
                 console.log("Handling intercepted request");
                 if (!Vue.prototype.isAuthenticated()) {
-                    // Vue.prototype.signIn();
-                }
-
-                Vue.prototype.acquireToken(["user.read"])
+                    Vue.prototype.signIn();
+                } else {
+                    Vue.prototype.acquireToken(["user.read"])
                     .then(resp => {
                         console.log(resp);
                     });
+                }
             });
 
             if (options) {
