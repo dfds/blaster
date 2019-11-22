@@ -18,7 +18,7 @@ const HttpClientPlugin = {
                                 Vue.prototype.acquireToken(["user.read"])
                                 .then(resp => {
                                     console.log(resp);
-                                    req.headers.MsalAuthToken = resp.accessToken;
+                                    req.headers["X-Msal-Auth-Token"] = resp.accessToken;
                                     resolve(req)
                                 });
                             })
@@ -30,14 +30,14 @@ const HttpClientPlugin = {
                             if (resp) {
                                 console.log("Using cached token");
                                 console.log(resp);
-                                req.headers.MsalAuthToken = resp.accessToken;
+                                req.headers["X-Msal-Auth-Token"] = resp.accessToken;
                                 resolve(req)
                             } else { // Acquire new token
                                 console.log("Acquiring new token");
                                 Vue.prototype.acquireToken(["user.read"])
                                 .then(resp => {
                                     console.log(resp);
-                                    req.headers.MsalAuthToken = resp.accessToken;
+                                    req.headers["X-Msal-Auth-Token"] = resp.accessToken;
                                     resolve(req)
                                 });
                             }

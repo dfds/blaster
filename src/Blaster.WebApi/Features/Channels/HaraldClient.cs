@@ -76,5 +76,10 @@ namespace Blaster.WebApi.Features.Channels
         {
             return await GetAllConnections(null, null, id, null, null, null);
         }
+
+        public async Task ForwardHeader(string headerName, string headerValue)
+        {
+	        _client.DefaultRequestHeaders.Add(headerName, headerValue);
+        }
     }
 }

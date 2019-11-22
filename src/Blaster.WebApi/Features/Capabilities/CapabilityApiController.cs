@@ -3,11 +3,13 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities.Models;
+using Blaster.WebApi.Features.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blaster.WebApi.Features.Capabilities
 {
     [Route("api/capabilities")]
+    [ForwardHeader]
     [ApiController]
     public class CapabilityApiController : ControllerBase
     {
@@ -16,6 +18,12 @@ namespace Blaster.WebApi.Features.Capabilities
         public CapabilityApiController(ICapabilityServiceClient capabilityServiceClient)
         {
             _capabilityServiceClient = capabilityServiceClient;
+        }
+        public void ForwardHeaders()
+        {
+	        ForwardHeader.ForwardMsal(
+		        request: Request, 
+		        client: _capabilityServiceClient);
         }
 
         [HttpGet(Name = "GetAllCapabilities")]

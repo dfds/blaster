@@ -6,6 +6,7 @@ using Blaster.WebApi.Features.Capabilities;
 using Blaster.WebApi.Features.Channels;
 using Blaster.WebApi.Features.CommunicationChannels;
 using Blaster.WebApi.Features.Frontpage;
+using Blaster.WebApi.Features.Shared;
 using Blaster.WebApi.Security;
 using CorrelationId;
 using Microsoft.AspNetCore.Builder;
@@ -46,6 +47,7 @@ namespace Blaster.WebApi
             ConfigureHaraldFeature(services);
             ConfigureFrontpageFeature(services);
             //ConfigureTopicFeature(services);
+            services.AddScoped<ForwardHeader>();
         }
 
         protected virtual void ConfigureMvc(IServiceCollection services)

@@ -21,8 +21,14 @@
     },
     "Blaster.WebApi": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "applicationUrl": "http://localhost:4200"
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:4200",
+      "environmentVariables": {
+        "BLASTER_CAPABILITYSERVICE_API_URL": "http://localhost:50900",
+        "BLASTER_AWS_JANITOR_API_URL": "http://localhost:50901",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "BLASTER_HARALD_API_URL": "http://localhost:50902"
+      }
     }
   }
 }

@@ -270,6 +270,11 @@ namespace Blaster.WebApi.Features.Capabilities
 
             await _client.PostAsync($"/api/v1/capabilities/{capabilityId}/topics", content);
         }
+
+        public async Task ForwardHeader(string headerName, string headerValue)
+        {
+	        _client.DefaultRequestHeaders.Add(headerName, headerValue);
+        }
     }
 
     public class ServerReturnedUnexpectedResponseException : Exception

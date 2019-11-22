@@ -109,5 +109,10 @@ namespace Blaster.Tests.TestDoubles
         {
             throw _error;
         }
+
+        public Task ForwardHeader(string headerName, string headerValue)
+        {
+	        throw _error;
+        }
     }
 }

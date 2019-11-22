@@ -136,5 +136,10 @@ namespace Blaster.Tests.TestDoubles
         {
             return Task.CompletedTask;
         }
+
+        public Task ForwardHeader(string headerName, string headerValue)
+        {
+	        return Task.CompletedTask;
+        }
     }
 }
