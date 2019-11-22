@@ -84,7 +84,6 @@ export default class HttpClient {
         // Interceptors
         axios.interceptors.request.use(
             req => {
-                console.log(req.url + " has been hit");
                 if (this.authIsEndpointAuthed(req.url)) {
                     if (this.interceptRequestHandler) {
                         return this.interceptRequestHandler(req);

@@ -16,18 +16,6 @@ export default class UserService {
                 },
                 request: {
                     scopes: ["user.read"]
-                },
-                system: {
-                    logger: { // To be removed when merging to master.
-                        error: console.error,
-                        errorPii: console.error,
-                        info: console.log,
-                        infoPii: console.log,
-                        verbose: console.log,
-                        verbosePii: console.log,
-                        warning: console.warn,
-                        warningPii: console.warn
-                    }
                 }
             };
         }
@@ -46,10 +34,6 @@ export default class UserService {
         };
 
         this.msalClient.handleRedirectCallback((error, response) => {
-            console.log(error);
-            console.log("Handling redirect callback");
-            console.log(response);
-
             this.data.user = response.account;
         });
     }
