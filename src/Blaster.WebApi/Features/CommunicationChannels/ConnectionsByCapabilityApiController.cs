@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Blaster.WebApi.Features.CommunicationChannels
 {
-	[Route("")]
+	[Route("cbca")]
 	[ForwardHeader]
     [ApiController]
     public class ConnectionsApiController : ControllerBase
@@ -24,7 +24,7 @@ namespace Blaster.WebApi.Features.CommunicationChannels
 		        client: _haraldClient);
         }
         
-        [HttpGet("api/capabilities/{id}/connections", Name = "GetChannelsByCapabilityId")]
+        [HttpGet("/api/capabilities/{id}/connections", Name = "GetChannelsByCapabilityId")]
         public async Task<ActionResult<ConnectionsResponse>> GetChannelsById(string id)
         {
             var connectionsResponse = await _haraldClient.GetConnectionsByCapabilityId(id);

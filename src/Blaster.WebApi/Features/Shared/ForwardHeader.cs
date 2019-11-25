@@ -13,7 +13,7 @@ namespace Blaster.WebApi.Features.Shared
 	public class ForwardHeader : ActionFilterAttribute
 	{
 		public const string XMsalAuthTokenHeader = "X-Msal-Auth-Token";
-		public const string AuthorizationHeader = "Authorization";
+		public const string AuthorizationHeader = "authorization";
 		public static void Forward(HttpRequest request, IForwardingClient client, string headerName, string headerForwardedName, string prependedText = "")
 		{
 			StringValues authToken = StringValues.Empty;
