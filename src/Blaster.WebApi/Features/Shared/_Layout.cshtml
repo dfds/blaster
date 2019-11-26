@@ -38,7 +38,7 @@
             </div>
 
             <div class="navbar-mobile">
-                <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="menu">
+                <a role="button" class="navbar-burger burger" v-bind:class="{'is-active': isActive}" v-on:click="toggleActive()" aria-label="menu" aria-expanded="false" data-target="menu">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        <div id="menu" class="navbar-menu">
+        <div id="menu" class="navbar-menu" v-bind:class="{'is-active': isActive}">
             <div class="navbar-start">
                 <a href="@Url.Action("Index", "Frontpage")" class="navbar-item">Home</a>
                 <a href="@Url.Action("Index", "Capability")" class="navbar-item">Capabilities</a>
@@ -75,17 +75,6 @@
 <script>
     window.basePath = "@Context.Request.PathBase";
     window.currentUserRazor = { email: "@UserHelper.CurrentUser.Email" };
-
-    (function() {
-        var burger = document.querySelector('.burger');
-        var menu = document.querySelector('#' + burger.dataset.target);
-        burger.addEventListener('click',
-            function () {
-                burger.classList.toggle('is-active');
-                menu.classList.toggle('is-active');
-            });
-    })();
-
 </script>
 
 <script src="~/main.bundle.js"></script>

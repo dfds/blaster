@@ -16,8 +16,24 @@ new Vue({
         showIEBanner: function () {
             return isIE();
         }
+    },
+    methods: {
+        toggleActive: function () {
+            this.active = !this.active;
+        }
+    },
+    computed: {
+        isActive: function() {
+            return this.active;
+        }
+    },
+    data: {
+        active: false
     }
+    
 });
+
+
 
 function isIE()
 {
