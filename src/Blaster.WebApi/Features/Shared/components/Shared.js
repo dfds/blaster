@@ -19,7 +19,7 @@ new Vue({
     },
     methods: {
         toggleActive: function () {
-            this.active = this.active ? false : true;
+            this.active = !this.active;
         }
     },
     computed: {
