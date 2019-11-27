@@ -6,16 +6,15 @@ export default class UserService {
         if (!configuration) {
             configuration = {
                 auth: {
-                    clientId: "91c38c20-4d2c-485d-80ac-a053619a02db",
-                    authority: "https://login.microsoftonline.com/common",
-                    redirectUri: "http://localhost:4200/login"
+                    clientId: "91c38c20-4d2c-485d-80ac-a053619a02db"
+                    //redirectUri: "http://localhost:4200/login"
                 },
                 cache: {
                     cacheLocation: "localStorage",
                     storeAuthStateInCookie: true
                 },
                 request: {
-                    scopes: ["user.read"]
+                    scopes: ["user.read", "offline_access", "openid"]
                 }
             };
         }
@@ -96,31 +95,34 @@ export default class UserService {
         if (scopes) {
             scopes.authority = scopes.authority ? scopes.authority : this.msalConfiguration.auth.authority;
         }
+
         scopes = scopes || this.msalConfiguration.request.scopes;
 
-        try {
-            //Always start with acquireTokenSilent to obtain a token in the signed in user from cache.
-            var accessToken = this.msalClient.acquireTokenSilent(scopes).then(accessToken => {
-                this.data.accessToken = accessToken;
-                return accessToken;
-            });
+        var accessTokenPromise = this.msalClient.acquireTokenSilent(scopes).then(accessToken => {
+	        this.data.accessToken = accessToken;
 
-            return accessToken;
-        } catch (error) {
-            // Upon acquireTokenSilent failure (due to consent or interaction or login required ONLY)
-            // Call acquireTokenRedirect
-            if (this.requiresInteraction(error.errorCode)) {
-                (this.msalConfiguration.auth.redirectUri)
-                    ? this.msalClient.acquireTokenRedirect(request)
-                    : this.msalClient.acquireTokenPopup(request);
-            }
+	        return accessToken;
+        }).catch(err => {
+            if (this.requiresInteraction(err.errorCode)) {
+                if (this.msalConfiguration.auth.redirectUri) {
+                    this.msalClient.acquireTokenRedirect(scopes);
 
-            return false;
-        }
+                    return new Promise(function (resolve) { resolve({accessToken: ""})});
+                }
+                else {
+                    this.msalClient.acquireTokenPopup(scopes).then(response => {
+			            return response.accessToken;
+		            });
+	            }
+	        }
+        });
+
+        return accessTokenPromise;
     }
 
-    requiresInteraction(errorCode)
-    {
+    requiresInteraction(errorCode) {
+	    console.log(errorCode);
+
         if (!errorCode || !errorCode.length) {
             return false;
         }

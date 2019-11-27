@@ -13,10 +13,10 @@ const HttpClientPlugin = {
                         let result = Vue.prototype.signIn();
                         if (result) {
                             result.then(() => {
-                                Vue.prototype.acquireToken(["user.read"])
+                                Vue.prototype.acquireToken(["api://24420be9-46e5-4584-acd7-64850d2f2a03/access_as_user"])
                                 .then(resp => {
                                     req.headers["X-Msal-Auth-Token"] = resp.accessToken;
-                                    resolve(req)
+                                    resolve(req);
                                 });
                             })
                         }
@@ -27,10 +27,12 @@ const HttpClientPlugin = {
                                 req.headers["X-Msal-Auth-Token"] = resp.accessToken;
                                 resolve(req)
                             } else { // Acquire new token
-                                Vue.prototype.acquireToken(["user.read"])
-                                .then(resp => {
+                                Vue.prototype.acquireToken(["api://24420be9-46e5-4584-acd7-64850d2f2a03/access_as_user"])
+                                    .then(resp => {
+                                        console.log(resp)
+
                                     req.headers["X-Msal-Auth-Token"] = resp.accessToken;
-                                    resolve(req)
+                                    resolve(req);
                                 });
                             }
                         });
