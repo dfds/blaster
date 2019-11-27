@@ -45,7 +45,7 @@ const app = new Vue({
                 onClose: () => editor.close(),
                 onSave: (capabilityData) => {
                     return capabilityService.add(capabilityData)
-                        .then(capability => this.items.push(capability))
+                        .then(capability => this.items.push(capability.data))
                         .then(() => editor.close())
                         .catch(err => {
                             if (err.status == 400) {
