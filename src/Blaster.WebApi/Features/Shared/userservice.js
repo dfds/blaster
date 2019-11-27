@@ -120,8 +120,6 @@ export default class UserService {
     }
 
     requiresInteraction(errorCode) {
-	    console.log(errorCode);
-
         if (!errorCode || !errorCode.length) {
             return false;
         }
