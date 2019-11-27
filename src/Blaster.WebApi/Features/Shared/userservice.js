@@ -6,8 +6,8 @@ export default class UserService {
         if (!configuration) {
             configuration = {
                 auth: {
-                    clientId: "91c38c20-4d2c-485d-80ac-a053619a02db"
-                    //redirectUri: "http://localhost:4200/login"
+                    clientId: "91c38c20-4d2c-485d-80ac-a053619a02db",
+                    redirectUri: "http://localhost:4200/login"
                 },
                 cache: {
                     cacheLocation: "localStorage",
@@ -106,11 +106,10 @@ export default class UserService {
             if (this.requiresInteraction(err.errorCode)) {
                 if (this.msalConfiguration.auth.redirectUri) {
                     this.msalClient.acquireTokenRedirect(scopes);
-
                     return new Promise(function (resolve) { resolve({accessToken: ""})});
                 }
                 else {
-                    this.msalClient.acquireTokenPopup(scopes).then(response => {
+                    return this.msalClient.acquireTokenPopup(scopes).then(response => {
 			            return response.accessToken;
 		            });
 	            }

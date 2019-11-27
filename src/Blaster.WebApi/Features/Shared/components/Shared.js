@@ -8,9 +8,11 @@ import ChannelDropdownComponent from "./ChannelDropdownComponent";
 import ChannelIconComponent from "./ChannelIconComponent";
 import ChannelInputComponent from "./ChannelInputComponent";
 import BannerComponent from "./BannerComponent";
+import {InstallRequestMsalHandler} from "../plugins/HttpHandlers/RequestMsalHandler";
 
 Vue.use(UserManagementPlugin);
 Vue.use(HttpClientPlugin);
+InstallRequestMsalHandler(Vue);
 
 new Vue({
     el: ".navbar",
