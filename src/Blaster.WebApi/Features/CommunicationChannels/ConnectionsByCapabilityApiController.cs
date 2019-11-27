@@ -27,9 +27,16 @@ namespace Blaster.WebApi.Features.CommunicationChannels
         [HttpGet("/api/capabilities/{id}/connections", Name = "GetChannelsByCapabilityId")]
         public async Task<ActionResult<ConnectionsResponse>> GetChannelsById(string id)
         {
-            var connectionsResponse = await _haraldClient.GetConnectionsByCapabilityId(id);
+	        try
+	        {
+		        var connectionsResponse = await _haraldClient.GetConnectionsByCapabilityId(id);
 
-            return new ActionResult<ConnectionsResponse>(connectionsResponse);
+		        return new ActionResult<ConnectionsResponse>(connectionsResponse);
+	        }
+	        catch (UnauthroizedException ex)
+	        {
+		        return Unauthorized();
+	        }
         }
     }
 }

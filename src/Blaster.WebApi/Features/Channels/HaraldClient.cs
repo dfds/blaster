@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Blaster.WebApi.Features.Capabilities;
 using Blaster.WebApi.Features.Capabilities.Models;
+using Blaster.WebApi.Features.Shared;
 
 namespace Blaster.WebApi.Features.Channels
 {
@@ -23,6 +24,7 @@ namespace Blaster.WebApi.Features.Channels
         public async Task<ChannelsResponse> GetAllChannels()
         {
             var response = await _client.GetAsync("/api/v1/channels?channelType=slack");
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
             var content = await response.Content.ReadAsStringAsync();
 
             return _serializer.Deserialize<ChannelsResponse>(content);
@@ -36,7 +38,7 @@ namespace Blaster.WebApi.Features.Channels
                 mediaType: "application/json"
             );
             var response = await _client.PostAsync("/api/v1/connections", content);
-            response.EnsureSuccessStatusCode();
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
         }
         
         public async Task LeaveChannel(string channelId, string channelType, string clientId, string clientType)
@@ -53,7 +55,7 @@ namespace Blaster.WebApi.Features.Channels
                 mediaType: "application/json"
             );
             var response = await _client.DeleteAsync($"/api/v1/connections?{query}");
-            response.EnsureSuccessStatusCode();
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
         }
 
         public async Task<ConnectionsResponse> GetAllConnections(string clientName, string clientType, string clientId, string channelName, string channelType, string channelId)
@@ -68,6 +70,7 @@ namespace Blaster.WebApi.Features.Channels
             
             var response = await _client.GetAsync($"/api/v1/connections?{query}");
             var content = await response.Content.ReadAsStringAsync();
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
 
             return _serializer.Deserialize<ConnectionsResponse>(content);            
         }

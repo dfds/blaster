@@ -30,17 +30,24 @@ namespace Blaster.WebApi.Features.Connections
         [HttpGet("", Name = "GetAllConnections")]
         public async Task<ActionResult<ConnectionsResponse>> GetAll(string clientName, string clientType, string clientId, string channelName, string channelType, string channelId)
         {
-            var channels = await _haraldClient.GetAllConnections(channelId: channelId, 
-                channelName: channelName,
-                channelType: channelType,
-                clientId: clientId,
-                clientName: clientName,
-                clientType: clientType);
+	        try
+	        {
+		        var channels = await _haraldClient.GetAllConnections(channelId: channelId, 
+			        channelName: channelName,
+			        channelType: channelType,
+			        clientId: clientId,
+			        clientName: clientName,
+			        clientType: clientType);
 
-            return channels ?? new ConnectionsResponse()
-            {
-                Items = new Connection[0]
-            };
+		        return channels ?? new ConnectionsResponse()
+		        {
+			        Items = new Connection[0]
+		        };
+	        }
+	        catch (UnauthroizedException ex)
+	        {
+		        return Unauthorized();
+	        }
         }
         
         [HttpPost("", Name = "JoinChannelConnection")]
@@ -54,6 +61,10 @@ namespace Blaster.WebApi.Features.Connections
                     clientId: channelConnectionRequest.ClientId,
                     clientName: channelConnectionRequest.ClientName,
                     clientType: channelConnectionRequest.ClientType);
+            }
+            catch (UnauthroizedException ex)
+            {
+	            return Unauthorized();
             }
             catch (HttpRequestException)
             {
@@ -69,6 +80,10 @@ namespace Blaster.WebApi.Features.Connections
             try
             {
                 await _haraldClient.LeaveChannel(channelId: channelId, channelType: channelType, clientId: clientId, clientType: clientType);
+            }
+            catch (UnauthroizedException ex)
+            {
+	            return Unauthorized();
             }
             catch (HttpRequestException)
             {
