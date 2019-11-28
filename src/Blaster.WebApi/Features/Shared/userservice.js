@@ -7,7 +7,7 @@ export default class UserService {
             configuration = {
                 auth: {
                     clientId: "91c38c20-4d2c-485d-80ac-a053619a02db",
-                    redirectUri: "http://localhost:4200/login"
+                    redirectUri: "https://build.dfds.cloud/login"
                 },
                 cache: {
                     cacheLocation: "localStorage",
