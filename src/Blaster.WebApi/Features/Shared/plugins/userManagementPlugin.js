@@ -4,6 +4,8 @@ const UserManagementPlugin = {
     install(Vue, options) {
         var userService = new UserService.default();
 
+        Vue.prototype.$userService = userService;
+
         Vue.prototype.getUser = function () {
             return userService.getCurrentUser();
         }
@@ -44,8 +46,12 @@ const UserManagementPlugin = {
 
         Vue.prototype.acquireToken = function (scopes) {
             if (userService.isAuthenticated()) {
-                userService.acquireToken({ scopes: scopes });
+                return userService.acquireToken({scopes: scopes});
             }
+        }
+
+        Vue.prototype.getCachedAccessToken = function () {
+            return userService.getCachedAccessToken();
         }
     }
 };

@@ -3,11 +3,13 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities.Models;
+using Blaster.WebApi.Features.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blaster.WebApi.Features.Capabilities
 {
     [Route("api/capabilities")]
+    [ForwardHeader]
     [ApiController]
     public class CapabilityApiController : ControllerBase
     {
@@ -17,30 +19,46 @@ namespace Blaster.WebApi.Features.Capabilities
         {
             _capabilityServiceClient = capabilityServiceClient;
         }
+        public void ForwardHeaders()
+        {
+	        ForwardHeader.ForwardMsal(
+		        request: Request, 
+		        client: _capabilityServiceClient);
+        }
 
         [HttpGet(Name = "GetAllCapabilities")]
         public async Task<ActionResult<CapabilitiesResponse>> GetAll()
         {
-            var capabilities = await _capabilityServiceClient.GetAll();
+	        try
+	        {
+		        var capabilities = await _capabilityServiceClient.GetAll();
 
-            return capabilities ?? new CapabilitiesResponse
-            {
-                Items = new Capability[0]
-            };
+		        return capabilities ?? new CapabilitiesResponse {Items = new Capability[0]};
+	        }
+	        catch (UnauthroizedException ex)
+	        {
+		        return Unauthorized();
+	        }
         }
 
         [HttpGet("{id}", Name = "GetCapabilityById")]
         public async Task<ActionResult<Capability>> GetById(string id)
         {
-            var capability = await _capabilityServiceClient.GetById(id);
+	        try
+	        {
+		        var capability = await _capabilityServiceClient.GetById(id);
 
-            if (capability != null)
-            {
-                return new ActionResult<Capability>(capability);
-            }
+		        if (capability != null)
+		        {
+			        return new ActionResult<Capability>(capability);
+		        }
 
-            return new ActionResult<Capability>(NotFound());
-
+		        return new ActionResult<Capability>(NotFound());
+	        }
+	        catch (UnauthroizedException ex)
+	        {
+		        return Unauthorized();
+	        }
         }
 
         [HttpPost(Name = "CreateCapability")]
@@ -50,9 +68,10 @@ namespace Blaster.WebApi.Features.Capabilities
             try
             {
                 capability = await _capabilityServiceClient.CreateCapability(input.Name, input.Description);
-            } catch (RecoverableUpstreamException tve)
+            } 
+            catch (UnauthroizedException ex)
             {
-                return new ObjectResult(new {tve.Message}) { StatusCode = (int)tve.HttpStatusCode };
+	            return Unauthorized();
             }
             
             
@@ -61,8 +80,7 @@ namespace Blaster.WebApi.Features.Capabilities
                 routeValues: new { id = capability.Id },
                 value: capability
             );
-            
-            
+
             return createdAtRouteResultConverter.Convert();
         }
 
@@ -74,6 +92,10 @@ namespace Blaster.WebApi.Features.Capabilities
             {
                 var currentCapability = await _capabilityServiceClient.GetById(id);
                 await _capabilityServiceClient.UpdateCapability(id, currentCapability.Name, input.Description);
+            }
+            catch (UnauthroizedException ex)
+            {
+	            return Unauthorized();
             }
             catch (HttpRequestException)
             {
@@ -90,6 +112,10 @@ namespace Blaster.WebApi.Features.Capabilities
             {
                 await _capabilityServiceClient.DeleteCapability(id);
             }
+            catch (UnauthroizedException ex)
+            {
+	            return Unauthorized();
+            }
             catch (HttpRequestException)
             {
                 return BadRequest();
@@ -105,6 +131,10 @@ namespace Blaster.WebApi.Features.Capabilities
             try
             {
                 await _capabilityServiceClient.CreateTopic(input.Name, input.Description, id, input.IsPrivate);
+            }
+            catch (UnauthroizedException ex)
+            {
+	            return Unauthorized();
             }
             catch (HttpRequestException)
             {
@@ -131,6 +161,10 @@ namespace Blaster.WebApi.Features.Capabilities
 
                 return new ActionResult<Member>(NoContent());
             }
+            catch (UnauthroizedException ex)
+            {
+	            return Unauthorized();
+            }
             catch (AlreadyJoinedException)
             {
                 return new ActionResult<Member>(Conflict(new
@@ -147,6 +181,10 @@ namespace Blaster.WebApi.Features.Capabilities
             {
                 await _capabilityServiceClient.LeaveCapability(id, memberEmail);
                 return NoContent();                
+            }
+            catch (UnauthroizedException ex)
+            {
+	            return Unauthorized();
             }
             catch (UnknownCapabilityException)
             {
@@ -165,6 +203,10 @@ namespace Blaster.WebApi.Features.Capabilities
                 );
 
                 return new ActionResult<Capability>(NoContent());
+            }
+            catch (UnauthroizedException ex)
+            {
+	            return Unauthorized();
             }
             catch (ContextAlreadyAddedException)
             {

@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities.Models;
+using Blaster.WebApi.Features.Shared;
 
 namespace Blaster.WebApi.Features.Capabilities
 {
@@ -21,6 +22,7 @@ namespace Blaster.WebApi.Features.Capabilities
         public async Task<CapabilitiesResponse> GetAll()
         {
             var response = await _client.GetAsync("/api/v1/capabilities");
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
             var content = await response.Content.ReadAsStringAsync();
 
             return _serializer.Deserialize<CapabilitiesResponse>(content);
@@ -29,6 +31,7 @@ namespace Blaster.WebApi.Features.Capabilities
         public async Task<TopicsResponse> GetAllTopics()
         {
             var response = await _client.GetAsync("/api/v1/topics");
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
             var content = await response.Content.ReadAsStringAsync();
 
             return _serializer.Deserialize<TopicsResponse>(content);
@@ -37,8 +40,8 @@ namespace Blaster.WebApi.Features.Capabilities
         public async Task<Topic> GetTopic(string id)
         {
             var response = await _client.GetAsync($"/api/v1/topics/{id}");
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
             var content = await response.Content.ReadAsStringAsync();
-            response.EnsureSuccessStatusCode();
 
             return _serializer.Deserialize<Topic>(content);
         }
@@ -52,16 +55,11 @@ namespace Blaster.WebApi.Features.Capabilities
             );
 
             var response = await _client.PostAsync("/api/v1/capabilities", content);
-            if (response.StatusCode == HttpStatusCode.BadRequest || response.StatusCode == HttpStatusCode.Conflict) {
-                var errorObj = _serializer.Deserialize<ErrorObject>(await response.Content.ReadAsStringAsync());
-                throw new RecoverableUpstreamException(
-                    response.StatusCode,
-                    errorObj.Message
-                );
-            }
-            else if (response.StatusCode != HttpStatusCode.Created)
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
+
+            if (response.StatusCode != HttpStatusCode.Created)
             {
-                throw new Exception($"Error! Capability was not created in external service. Service returned ({response.StatusCode} - {response.ReasonPhrase})");
+	            throw new Exception($"Error! Capability was not created in external service. Service returned ({response.StatusCode} - {response.ReasonPhrase})");
             }
 
             var receivedContent = await response.Content.ReadAsStringAsync();
@@ -71,6 +69,7 @@ namespace Blaster.WebApi.Features.Capabilities
         public async Task DeleteCapability(string capabilityId)
         {
             var response = await _client.DeleteAsync($"/api/v1/capabilities/{capabilityId}");
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 throw new Exception($"Error! Capability was not deleted. Service returned ({response.StatusCode} - {response.ReasonPhrase})");
@@ -91,11 +90,7 @@ namespace Blaster.WebApi.Features.Capabilities
                 var errorObj = _serializer.Deserialize<ErrorObject>(await response.Content.ReadAsStringAsync());
                 throw new CapabilityValidationException(errorObj.Message);
             }
-            else if (response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new Exception(
-                    $"Error! Capability was not updated in external service. Service returned ({response.StatusCode} - {response.ReasonPhrase})");
-            }
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
         }
 
         public async Task SetCapabilityTopicCommonPrefix(string commonPrefix, string capabilityId)
@@ -111,10 +106,7 @@ namespace Blaster.WebApi.Features.Capabilities
                 var errorObj = _serializer.Deserialize<ErrorObject>(await response.Content.ReadAsStringAsync());
                 throw new CapabilityTopicValidationException(errorObj.Message);
             }
-            else if (response.StatusCode != HttpStatusCode.NoContent)
-            {
-                throw new Exception($"Error! Topic common prefix was not set. Service returned ({response.StatusCode} - {response.ReasonPhrase})");
-            }
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
         }
         
         public async Task CreateTopic(string name, string description, string capabilityId, bool isPrivate)
@@ -129,7 +121,7 @@ namespace Blaster.WebApi.Features.Capabilities
             );
 
             var response = await _client.PostAsync($"/api/v1/capabilities/{capabilityId}/topics", content);
-            response.EnsureSuccessStatusCode();
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
         }
 
         public async Task UpdateTopic(string topicId, Topic input)
@@ -145,7 +137,7 @@ namespace Blaster.WebApi.Features.Capabilities
 
             var response = await _client.PutAsync($"/api/v1/topics/{topicId}", reqContent);
             var content = await response.Content.ReadAsStringAsync();
-            response.EnsureSuccessStatusCode();
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
         }
 
         public async Task CreateMessageContract(string type, string description, string content, string topicId)
@@ -157,7 +149,7 @@ namespace Blaster.WebApi.Features.Capabilities
                 );
 
             var response = await _client.PostAsync($"/api/v1/topics/{topicId}/messageContracts", reqContent);
-            response.EnsureSuccessStatusCode();
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
         }
         
         public async Task AddUpdateMessageContract(string type, string topicId, MessageContractInput input)
@@ -169,20 +161,20 @@ namespace Blaster.WebApi.Features.Capabilities
             );
 
             var response = await _client.PutAsync($"/api/v1/topics/{topicId}/messageContracts/{type}", reqContent);
-            response.EnsureSuccessStatusCode();
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
         }
 
         public async Task RemoveMessageContract(string topicId, string type)
         {
             var response = await _client.DeleteAsync($"/api/v1/topics/{topicId}/messageContracts/{type}");
             var content = await response.Content.ReadAsStringAsync();
-            response.EnsureSuccessStatusCode();
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
         }
 
         public async Task<MessageContractsResponse> GetMessageContractsByTopicId(string topicId)
         {
             var response = await _client.GetAsync($"/api/v1/topics/{topicId}/messageContracts");
-            response.EnsureSuccessStatusCode();
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
 
             var content = await response.Content.ReadAsStringAsync();
 
@@ -192,10 +184,7 @@ namespace Blaster.WebApi.Features.Capabilities
         public async Task<Capability> GetById(string id)
         {
             var response = await _client.GetAsync($"/api/v1/capabilities/{id}");
-            if (response.IsSuccessStatusCode == false)
-            {
-                throw new Exception($"An error occured trying to reach {response.RequestMessage.RequestUri}, the http response code is {response.StatusCode}");
-            }
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
             var content = await response.Content.ReadAsStringAsync();
 
             return _serializer.Deserialize<Capability>(content);
@@ -217,10 +206,7 @@ namespace Blaster.WebApi.Features.Capabilities
                 throw new AlreadyJoinedException();
             }
 
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new ServerReturnedUnexpectedResponseException($"{response.StatusCode:D} - {response.ReasonPhrase}", responseBody);
-            }
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
         }
 
         public async Task LeaveCapability(string capabilityId, string memberEmail)
@@ -232,10 +218,7 @@ namespace Blaster.WebApi.Features.Capabilities
                 throw new UnknownCapabilityException();
             }
 
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new ServerReturnedUnexpectedResponseException($"{response.StatusCode:D} - {response.ReasonPhrase}", await response.Content.ReadAsStringAsync());
-            }
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
         }
 
         public async Task AddContext(string capabilityId, string contextName)
@@ -254,10 +237,7 @@ namespace Blaster.WebApi.Features.Capabilities
                 throw new ContextAlreadyAddedException();
             }
 
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new ServerReturnedUnexpectedResponseException($"{response.StatusCode:D} - {response.ReasonPhrase}", responseBody);
-            }
+            HttpResponseHelper.EnsureSuccessStatusCode(response);
         }
 
         public async Task AddTopic(string capabilityId, string topicName)
@@ -269,6 +249,11 @@ namespace Blaster.WebApi.Features.Capabilities
             );
 
             await _client.PostAsync($"/api/v1/capabilities/{capabilityId}/topics", content);
+        }
+
+        public async Task ForwardHeader(string headerName, string headerValue)
+        {
+	        _client.DefaultRequestHeaders.Add(headerName, headerValue);
         }
     }
 

@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities.Models;
+using Blaster.WebApi.Features.Shared;
 using Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal;
 
 namespace Blaster.WebApi.Features.Capabilities
 {
-    public interface ICapabilityServiceClient
+    public interface ICapabilityServiceClient : IForwardingClient
     {
         Task<CapabilitiesResponse> GetAll();
         Task<TopicsResponse> GetAllTopics();

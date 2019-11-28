@@ -1,8 +1,8 @@
 import HttpClient from "httpclient";
 
 export default class TopicService {
-    constructor() {
-        this.client = new HttpClient();
+    constructor(httpClient) {
+        this.client = httpClient ? httpClient : new HttpClient();
         this.baseUrl = "api/topics";
 
         this.getAll = this.getAll.bind(this);

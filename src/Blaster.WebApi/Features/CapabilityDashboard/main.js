@@ -23,10 +23,10 @@ import MessageContractAddComponent from "./MessageContractAddComponent";
 import MessageContractEditComponent from "./MessageContractEditComponent";
 import {ChannelPickerComponent, ChannelMinimalComponent, ChannelListComponent, BannerComponent, isIE} from "../Shared/components/Shared";
 
-const topicService = new TopicService();
-const capabilityService = new CapabilityService();
-const connectionService = new ConnectionService();
-const channelService = new ChannelService();
+const topicService = new TopicService(Vue.prototype.$http);
+const capabilityService = new CapabilityService(Vue.prototype.$http, Vue.prototype.$userService);
+const connectionService = new ConnectionService(Vue.prototype.$http);
+const channelService = new ChannelService(Vue.prototype.$http);
 FeatureFlag.setKeybinding();
 
 Vue.prototype.$featureFlag = new FeatureFlag();
@@ -36,7 +36,7 @@ const app = new Vue({
     data: {
         capability: null,
         initializing: true,
-        currentUser: new UserService().getCurrentUser(),
+        currentUser: Vue.prototype.$userService.getCurrentUser(),
         membershipRequested: false,
         contextRequested: false,
         topics: null,
@@ -141,6 +141,9 @@ const app = new Vue({
 
           return true;
         },
+        getChannelService: function () {
+            return channelService;
+        },
         getMembershipStatusFor: function() {
             const isRequested = this.membershipRequested;
             if (isRequested) {
@@ -229,6 +232,12 @@ const app = new Vue({
         },
         handleCapabilityEdit: function(capability) {
             capabilityService.update(this.capability.id, capability)
+                .then(() => {
+                    return capabilityService.get(this.capability.id);
+                })
+                .then(data => this.capability = data)
+                .catch(err => console.log(JSON.stringify(err)));            
+            this.toggleShowEditCapability();
         },
         handleCapabilityTopicCommonPrefix: function(commonPrefix) {
             capabilityService.setCommonPrefix({commonPrefix: commonPrefix}, this.capability.id)
@@ -257,7 +266,6 @@ const app = new Vue({
             .then(() => connectionService.getByCapabilityId(this.capability.id))
             .then(data => this.connections = data)
             .catch(err => console.log(JSON.stringify(err)));
-            this.toggleShowTopicPrefix();
         },
         handleMessageContractEdit: function(type, description, schema, topicId) {
             topicService.addOrUpdateMessageContract(topicId, type, {"description": description, "content": schema})

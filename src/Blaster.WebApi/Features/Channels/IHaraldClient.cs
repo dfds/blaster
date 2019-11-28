@@ -1,9 +1,10 @@
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities.Models;
+using Blaster.WebApi.Features.Shared;
 
 namespace Blaster.WebApi.Features.Channels
 {
-    public interface IHaraldClient
+    public interface IHaraldClient : IForwardingClient
     {
         Task<ChannelsResponse> GetAllChannels();
         Task JoinChannel(string channelId, string channelName, string channelType, string clientId, string clientName, string clientType);

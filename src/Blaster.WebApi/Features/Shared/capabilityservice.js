@@ -2,23 +2,23 @@ import HttpClient from "httpclient";
 import * as UserService from "userservice";
 
 export default class CapabilityService {
-    constructor() {
-        this.client = new HttpClient();
+    constructor(httpClient, userService) {
+        this.client = httpClient ? httpClient : new HttpClient();
         this.baseUrl = "api/capabilities";
 
         this.getAll = this.getAll.bind(this);
         this.add = this.add.bind(this);
-        this.userService = new UserService.default();
+        this.userService = userService ? userService : new UserService.default();
     }
 
     getAll() {
         return this.client.get(this.baseUrl)
-            .then(data => data.items || []);
+            .then(data => data.data || []);
     }
 
     get(capabilityId) {
         return this.client.get(`${this.baseUrl}/${capabilityId}`)
-            .then(data => data || {});
+            .then(data => data.data || {});
     }
 
     add (capability) {

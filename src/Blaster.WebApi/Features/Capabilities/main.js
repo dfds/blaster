@@ -10,17 +10,18 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 import {isIE, BannerComponent} from "../Shared/components/Shared";
 
-const capabilityService = new CapabilityService();
+const capabilityService = new CapabilityService(Vue.prototype.$http, Vue.prototype.$userService);
 FeatureFlag.setKeybinding();
 
 Vue.prototype.$featureFlag = new FeatureFlag();
+
 const app = new Vue({
     el: "#capabilities-app",
     data: {
         items: [],
         membershipRequests: [],
         initializing: true,
-        currentUser: new UserService().getCurrentUser()
+        currentUser: Vue.prototype.$userService.getCurrentUser()
     },
     computed: {
         hasCapabilities: function () {
@@ -44,7 +45,7 @@ const app = new Vue({
                 onClose: () => editor.close(),
                 onSave: (capabilityData) => {
                     return capabilityService.add(capabilityData)
-                        .then(capability => this.items.push(capability))
+                        .then(capability => this.items.push(capability.data))
                         .then(() => editor.close())
                         .catch(err => {
                             if (err.status == 400) {
@@ -123,7 +124,12 @@ const app = new Vue({
     },
     mounted: function () {
         jq.ready
-            .then(() => capabilityService.getAll())
+            .then(() => {
+                var x = capabilityService.getAll();
+
+                return jq.when(x);
+            })
+            .then(resp => resp.items)
             .then(capabilities => capabilities.forEach(capability => this.items.push(capability)))
             .then(() => {
                 if (!this.$featureFlag.getFlag("testfilter").enabled) {

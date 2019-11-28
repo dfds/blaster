@@ -1,6 +1,5 @@
-import jq from "jquery";
-
 const baseUrl = `${window.basePath}`;
+const axios = require('axios').default.create();
 
 export default class HttpClient {
     constructor() {
@@ -9,6 +8,26 @@ export default class HttpClient {
         this.post = this.post.bind(this);
         this.put = this.put.bind(this);
         this.delete = this.delete.bind(this);
+        this.authEndpoints = new Map();
+        this.init();
+        this.interceptRequestHandler = undefined;
+    }
+
+    authAddEndpoint(endpoint) {
+        this.authEndpoints.set(endpoint.value, endpoint);
+    }
+
+    // Not the most performant solution, but will suffice for now.
+    authIsEndpointAuthed(endpoint) {
+        for (let [key, val] of this.authEndpoints) {
+            if (endpoint.includes(key)) {
+                var reg = new RegExp(val.matchRegex);
+                if (reg.test(endpoint)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     createEndpointFrom(url) {
@@ -22,34 +41,79 @@ export default class HttpClient {
     }
 
     get(url) {
-        const endpoint = this.createEndpointFrom(url);
-        return jq.getJSON(endpoint);
+        return axios.get(this.createEndpointFrom(url));
     }
 
     post(url, data) {
-        return jq.ajax({
-            type: "POST",
+        return axios({
             url: this.createEndpointFrom(url),
-            dataType: "json",
-            contentType: "application/json",
+            method: 'post',
+            headers: {'Content-Type': 'application/json'},
             data: JSON.stringify(data)
         });
     }
 
     put(url, data) {
-        return jq.ajax({
-            type: "PUT",
+        return axios({
             url: this.createEndpointFrom(url),
-            dataType: "json",
-            contentType: "application/json",
+            method: 'put',
+            headers: {'Content-Type': 'application/json'},
             data: JSON.stringify(data)
         });
     }
 
     delete(url) {
-        return jq.ajax({
-            type: "DELETE",
-            url: this.createEndpointFrom(url)
-        });
+        return axios.delete(this.createEndpointFrom(url));
+    }
+
+    setInterceptRequestHandler(handler) {
+        this.interceptRequestHandler = handler;
+    }
+
+    init() {
+        let capabilitiesEndpoint = new ProtectedEndpoint();
+        capabilitiesEndpoint.value = "/api/capabilities";
+        capabilitiesEndpoint.matchRegex = '\/api\/capabilities\/?';
+        this.authAddEndpoint(capabilitiesEndpoint);
+
+        let connectionsEndpoint = new ProtectedEndpoint();
+        connectionsEndpoint.value = "/api/connections";
+        connectionsEndpoint.matchRegex = '\/api\/connections\/?';
+        this.authAddEndpoint(connectionsEndpoint);
+
+        // Interceptors
+        axios.interceptors.request.use(
+            req => {
+                if (this.authIsEndpointAuthed(req.url)) {
+                    if (this.interceptRequestHandler) {
+                        return this.interceptRequestHandler(req);
+                    }
+                }
+                return req;
+            },
+            err => {
+                console.log(err);
+                return err;
+            }
+        )
+        
+        axios.interceptors.response.use(
+            resp => {
+                return resp;
+            },
+            err => {
+                console.log(err);
+                return err;
+            }
+        )
     }
 }
+
+class ProtectedEndpoint {
+    constructor() {
+        this.value = "";
+        this.matchRegex = "";
+    }
+}
+
+export {HttpClient, axios, ProtectedEndpoint}

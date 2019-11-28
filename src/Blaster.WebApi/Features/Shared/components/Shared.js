@@ -1,5 +1,6 @@
 import Vue from "vue";
 import UserManagementPlugin from "../plugins/userManagementPlugin";
+import HttpClientPlugin from "../plugins/httpClientPlugin";
 import ChannelPickerComponent from "./ChannelPickerComponent";
 import ChannelMinimalComponent from "./ChannelMinimalComponent";
 import ChannelListComponent from "./ChannelListComponent";
@@ -7,8 +8,11 @@ import ChannelDropdownComponent from "./ChannelDropdownComponent";
 import ChannelIconComponent from "./ChannelIconComponent";
 import ChannelInputComponent from "./ChannelInputComponent";
 import BannerComponent from "./BannerComponent";
+import {InstallRequestMsalHandler} from "../plugins/HttpHandlers/RequestMsalHandler";
 
 Vue.use(UserManagementPlugin);
+Vue.use(HttpClientPlugin);
+InstallRequestMsalHandler(Vue);
 
 new Vue({
     el: ".navbar",

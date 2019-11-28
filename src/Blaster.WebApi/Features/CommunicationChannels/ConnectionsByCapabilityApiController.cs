@@ -1,10 +1,13 @@
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities.Models;
 using Blaster.WebApi.Features.Channels;
+using Blaster.WebApi.Features.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blaster.WebApi.Features.CommunicationChannels
 {
+	[Route("cbca")]
+	[ForwardHeader]
     [ApiController]
     public class ConnectionsApiController : ControllerBase
     {
@@ -14,14 +17,26 @@ namespace Blaster.WebApi.Features.CommunicationChannels
         {
             _haraldClient = haraldClient;
         }
-
+        public void ForwardHeaders()
+        {
+	        ForwardHeader.ForwardMsal(
+		        request: Request, 
+		        client: _haraldClient);
+        }
         
-        [HttpGet("api/capabilities/{id}/connections", Name = "GetChannelsByCapabilityId")]
+        [HttpGet("/api/capabilities/{id}/connections", Name = "GetChannelsByCapabilityId")]
         public async Task<ActionResult<ConnectionsResponse>> GetChannelsById(string id)
         {
-            var connectionsResponse = await _haraldClient.GetConnectionsByCapabilityId(id);
+	        try
+	        {
+		        var connectionsResponse = await _haraldClient.GetConnectionsByCapabilityId(id);
 
-            return new ActionResult<ConnectionsResponse>(connectionsResponse);
+		        return new ActionResult<ConnectionsResponse>(connectionsResponse);
+	        }
+	        catch (UnauthroizedException ex)
+	        {
+		        return Unauthorized();
+	        }
         }
     }
 }
