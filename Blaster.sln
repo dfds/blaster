@@ -9,15 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blaster.Tests", "src\Blaste
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{D5F92FC2-403B-4882-A544-89EB67C1B214}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "auth-proxy", "auth-proxy", "{2F09FAD0-7718-42D8-9B99-FD02C34C11BD}"
-	ProjectSection(SolutionItems) = preProject
-		src\auth-proxy\app.js = src\auth-proxy\app.js
-		src\auth-proxy\Dockerfile = src\auth-proxy\Dockerfile
-		src\auth-proxy\jwt-utilities.js = src\auth-proxy\jwt-utilities.js
-		src\auth-proxy\package.json = src\auth-proxy\package.json
-		src\auth-proxy\sink.js = src\auth-proxy\sink.js
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "fake_dependencies", "fake_dependencies", "{A1061BA0-BB28-4B41-8A20-8CD4201561E6}"
 	ProjectSection(SolutionItems) = preProject
 		fake_dependencies\docker-compose-with-auth-proxy.yml = fake_dependencies\docker-compose-with-auth-proxy.yml
