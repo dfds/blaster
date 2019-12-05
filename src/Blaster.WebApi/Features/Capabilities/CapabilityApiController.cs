@@ -35,7 +35,7 @@ namespace Blaster.WebApi.Features.Capabilities
 
 		        return capabilities ?? new CapabilitiesResponse {Items = new Capability[0]};
 	        }
-	        catch (UnauthroizedException ex)
+	        catch (UnauthroizedException)
 	        {
 		        return Unauthorized();
 	        }
@@ -55,7 +55,7 @@ namespace Blaster.WebApi.Features.Capabilities
 
 		        return new ActionResult<Capability>(NotFound());
 	        }
-	        catch (UnauthroizedException ex)
+	        catch (UnauthroizedException)
 	        {
 		        return Unauthorized();
 	        }
@@ -69,7 +69,7 @@ namespace Blaster.WebApi.Features.Capabilities
             {
 	            capability = await _capabilityServiceClient.CreateCapability(input.Name, input.Description);
             }
-            catch (UnauthroizedException ex)
+            catch (UnauthroizedException)
             {
 	            return Unauthorized();
             }
@@ -97,7 +97,7 @@ namespace Blaster.WebApi.Features.Capabilities
                 var currentCapability = await _capabilityServiceClient.GetById(id);
                 await _capabilityServiceClient.UpdateCapability(id, currentCapability.Name, input.Description);
             }
-            catch (UnauthroizedException ex)
+            catch (UnauthroizedException)
             {
 	            return Unauthorized();
             }
@@ -116,7 +116,7 @@ namespace Blaster.WebApi.Features.Capabilities
             {
                 await _capabilityServiceClient.DeleteCapability(id);
             }
-            catch (UnauthroizedException ex)
+            catch (UnauthroizedException)
             {
 	            return Unauthorized();
             }
@@ -136,7 +136,7 @@ namespace Blaster.WebApi.Features.Capabilities
             {
                 await _capabilityServiceClient.CreateTopic(input.Name, input.Description, id, input.IsPrivate);
             }
-            catch (UnauthroizedException ex)
+            catch (UnauthroizedException)
             {
 	            return Unauthorized();
             }
@@ -165,7 +165,7 @@ namespace Blaster.WebApi.Features.Capabilities
 
                 return new ActionResult<Member>(NoContent());
             }
-            catch (UnauthroizedException ex)
+            catch (UnauthroizedException)
             {
 	            return Unauthorized();
             }
@@ -186,7 +186,7 @@ namespace Blaster.WebApi.Features.Capabilities
                 await _capabilityServiceClient.LeaveCapability(id, memberEmail);
                 return NoContent();                
             }
-            catch (UnauthroizedException ex)
+            catch (UnauthroizedException)
             {
 	            return Unauthorized();
             }
@@ -208,7 +208,7 @@ namespace Blaster.WebApi.Features.Capabilities
 
                 return new ActionResult<Capability>(NoContent());
             }
-            catch (UnauthroizedException ex)
+            catch (UnauthroizedException)
             {
 	            return Unauthorized();
             }
