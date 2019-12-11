@@ -11,7 +11,7 @@ export default class UserService {
                 },
                 cache: {
                     cacheLocation: "localStorage",
-                    storeAuthStateInCookie: true
+                    storeAuthStateInCookie: false
                 },
                 request: {
                     scopes: ["user.read", "offline_access", "openid"]
