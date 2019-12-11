@@ -27,7 +27,7 @@
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "vue": "^2.6.10",
-    "webpack": "^4.30.0",
+    "webpack": "^4.41.2",
     "webpack-cli": "^3.3.1",
     "js-cookie": "^2.2.1",
     "msal": "^1.1.3"
