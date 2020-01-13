@@ -23,6 +23,9 @@ spec:
       containers:
         - name: blaster
           image: 579478677147.dkr.ecr.eu-central-1.amazonaws.com/ded/blaster:$(Build.BuildId)
+          ports:
+            - containerPort: 80
+              name: web
           resources:
             requests:
               memory: "64Mi"
