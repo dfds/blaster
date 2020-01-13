@@ -21,23 +21,6 @@ spec:
         department: devex
     spec:
       containers:
-        - name: auth-proxy
-          image: 579478677147.dkr.ecr.eu-central-1.amazonaws.com/ded/auth-proxy:$(Build.BuildId)
-          ports:
-            - containerPort: 3000
-              name: web
-          resources:
-            requests:
-              memory: "300Mi"
-              cpu: "100m"
-            limits:
-              memory: "500Mi"
-              cpu: "200m"
-          env:
-            - name: FORWARD_ADDRESS
-              value: localhost:80
-            - name: PORT
-              value: "3000"
         - name: blaster
           image: 579478677147.dkr.ecr.eu-central-1.amazonaws.com/ded/blaster:$(Build.BuildId)
           resources:
