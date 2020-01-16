@@ -93,18 +93,19 @@ $navbar-mobile-trigger: "all and (max-width: 1087px)";
     }
 }
 
+.nav {
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+
+    @media #{$navbar-mobile-trigger} {
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+}
+
 .container {
     position: static;
-
-    &.nav {
-        display: flex;
-        flex-direction: row;
-
-        @media #{$navbar-mobile-trigger} {
-            flex-direction: column;
-            flex-wrap: wrap;
-        }
-    }
 }
 
 .button {
