@@ -9,6 +9,7 @@ import ChannelIconComponent from "./ChannelIconComponent";
 import ChannelInputComponent from "./ChannelInputComponent";
 import BannerComponent from "./BannerComponent";
 import {InstallRequestMsalHandler} from "../plugins/HttpHandlers/RequestMsalHandler";
+import VueCountdown from '@chenfengyuan/vue-countdown';
 
 Vue.use(UserManagementPlugin);
 Vue.use(HttpClientPlugin);
@@ -24,15 +25,27 @@ new Vue({
     methods: {
         toggleActive: function () {
             this.active = !this.active;
+        },
+        generateCountdownTime: function() {
+            var now = new Date();
+            var newYear = new Date("2020", "02", "01");
+            return newYear - now;
         }
     },
     computed: {
         isActive: function() {
             return this.active;
+        },
+        time: function() {
+            return this.generateCountdownTime();
         }
     },
     data: {
         active: false
+    },
+    components: {
+        'sunset-countdown': VueCountdown,
+        'banner': BannerComponent
     }
     
 });

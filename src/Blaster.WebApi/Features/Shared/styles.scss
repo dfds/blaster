@@ -95,8 +95,18 @@ $navbar-mobile-trigger: "all and (max-width: 1087px)";
 
 .nav {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     margin: 0 auto;
+
+    .main {
+        display: flex;
+        flex-direction: row;
+
+        @media #{$navbar-mobile-trigger} {
+            flex-direction: column;
+            flex-wrap: wrap;
+        }
+    }
 
     @media #{$navbar-mobile-trigger} {
         flex-direction: column;
