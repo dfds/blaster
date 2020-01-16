@@ -26,9 +26,9 @@ new Vue({
         toggleActive: function () {
             this.active = !this.active;
         },
-        generateCountdownTime: function() {
+        generateCountdownTime: function(year, month, date) {
             var now = new Date();
-            var newYear = new Date("2020", "02", "01");
+            var newYear = new Date(year, month, date);
             return newYear - now;
         }
     },
@@ -37,7 +37,10 @@ new Vue({
             return this.active;
         },
         time: function() {
-            return this.generateCountdownTime();
+            return this.generateCountdownTime("2020", "02", "01");
+        },
+        time2: function() {
+            return this.generateCountdownTime("2020", "03", "01");
         }
     },
     data: {

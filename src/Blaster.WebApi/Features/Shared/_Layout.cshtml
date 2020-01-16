@@ -70,11 +70,19 @@
             </div>            
         </div>
 
-        <div style="margin: 0 auto; color: rgba(255, 255, 255, 0.8)">
-            <sunset-countdown :time="time">
-                <template slot-scope="props">Non-Prod sunset：{{ props.days }} days</template>
-            </sunset-countdown>      
-        </div>     
+        <div style="display: flex; flex-direction: row; margin: 0 auto;">
+            <div style="color: rgba(255, 255, 255, 0.8)">
+                <sunset-countdown :time="time">
+                    <template slot-scope="props">Non-Prod sunset：{{ props.days }} days</template>
+                </sunset-countdown>      
+            </div>          
+            <span style="margin-left: 5px; margin-right: 5px;">|</span>
+            <div style="color: rgba(255, 255, 255, 0.8)">
+                <sunset-countdown :time="time2">
+                    <template slot-scope="props">Prod sunset：{{ props.days }} days</template>
+                </sunset-countdown>      
+            </div>               
+        </div>   
     </div> 
 </nav>
 
