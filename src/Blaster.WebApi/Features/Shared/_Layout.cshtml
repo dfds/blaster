@@ -71,15 +71,15 @@
         </div>
 
         <div style="display: flex; flex-direction: row; margin: 0 auto;">
-            <div style="color: rgba(255, 255, 255, 0.8)">
+            <div>
                 <sunset-countdown :time="time">
-                    <template slot-scope="props">Non-Prod sunset：{{ props.days }} days</template>
+                    <template slot-scope="props"><a href="/img/sunset.png" style="color: rgba(255, 255, 255, 0.8)">Non-Prod sunset：{{ props.days }} days</a></template>
                 </sunset-countdown>      
             </div>          
             <span style="margin-left: 5px; margin-right: 5px;">|</span>
-            <div style="color: rgba(255, 255, 255, 0.8)">
+            <div>
                 <sunset-countdown :time="time2">
-                    <template slot-scope="props">Prod sunset：{{ props.days }} days</template>
+                    <template slot-scope="props"><a href="/img/sunset.png" style="color: rgba(255, 255, 255, 0.8)">Prod sunset：{{ props.days }} days</a></template>
                 </sunset-countdown>      
             </div>               
         </div>   
