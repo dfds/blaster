@@ -93,10 +93,12 @@ $navbar-mobile-trigger: "all and (max-width: 1087px)";
     }
 }
 
-.container {
-    position: static;
+.nav {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
 
-    &.nav {
+    .main {
         display: flex;
         flex-direction: row;
 
@@ -105,6 +107,34 @@ $navbar-mobile-trigger: "all and (max-width: 1087px)";
             flex-wrap: wrap;
         }
     }
+
+    @media #{$navbar-mobile-trigger} {
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+}
+
+.countdown {
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+
+    .divider {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    div span a {
+        color: rgba(255, 255, 255, 0.8);
+
+        &:hover {
+            color: #5087AC;
+        }
+    }
+}
+
+.container {
+    position: static;
 }
 
 .button {

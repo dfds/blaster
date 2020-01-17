@@ -29,47 +29,63 @@
 </head>
 <body>
 <nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="container nav">
-        <div style="display: flex; flex-direction: row;">
-            <div class="navbar-brand">
-                <a class="navbar-item" href="@Url.Action("Index", "Frontpage")">
-                    <img src="~/img/dfdslogo_large.png">
-                </a>
-            </div>
-
-            <div class="navbar-mobile">
-                <a role="button" class="navbar-burger burger" v-bind:class="{'is-active': isActive}" v-on:click="toggleActive()" aria-label="menu" aria-expanded="false" data-target="menu">
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                </a>
-            </div>
-        </div>
-
-        <div id="menu" class="navbar-menu" v-bind:class="{'is-active': isActive}">
-            <div class="navbar-start">
-                <a href="@Url.Action("Index", "Frontpage")" class="navbar-item">Home</a>
-                <a href="@Url.Action("Index", "Capability")" class="navbar-item">Capabilities</a>
-                <a href="https://playbooks.dfds.cloud" class="navbar-item">Playbooks</a>
-                <a href="https://github.com/dfds" class="navbar-item">GitHub (Code examples)</a>
-                <a href="@Url.Action("SharedComponents", "Frontpage")" class="navbar-item">UI</a>
-                <a href="https://dfdsit.statuspage.io" class="navbar-item">Status page</a>
-            </div>
-
-            <div class="navbar-end">
-                <div v-cloak class="navbar-item">
-                    <a v-if="isAuthenticated()" v-on:click="signOut()">
-                        Sign out {{getUserName()}}
+    <div class="nav">
+        <div class="main">
+            <div style="display: flex; flex-direction: row;">
+                <div class="navbar-brand">
+                    <a class="navbar-item" href="@Url.Action("Index", "Frontpage")">
+                        <img src="~/img/dfdslogo_large.png">
                     </a>
-                    <a v-if="!isAuthenticated()" v-on:click="signIn()">
-                        Sign in
+                </div>
+
+                <div class="navbar-mobile">
+                    <a role="button" class="navbar-burger burger" v-bind:class="{'is-active': isActive}" v-on:click="toggleActive()" aria-label="menu" aria-expanded="false" data-target="menu">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
                     </a>
                 </div>
             </div>
+
+            <div id="menu" class="navbar-menu" v-bind:class="{'is-active': isActive}">
+                <div class="navbar-start">
+                    <a href="@Url.Action("Index", "Frontpage")" class="navbar-item">Home</a>
+                    <a href="@Url.Action("Index", "Capability")" class="navbar-item">Capabilities</a>
+                    <a href="https://playbooks.dfds.cloud" class="navbar-item">Playbooks</a>
+                    <a href="https://github.com/dfds" class="navbar-item">GitHub (Code examples)</a>
+                    <a href="@Url.Action("SharedComponents", "Frontpage")" class="navbar-item">UI</a>
+                    <a href="https://dfdsit.statuspage.io" class="navbar-item">Status page</a>
+                </div>
+
+                <div class="navbar-end">
+                    <div v-cloak class="navbar-item">
+                        <a v-if="isAuthenticated()" v-on:click="signOut()">
+                            Sign out {{getUserName()}}
+                        </a>
+                        <a v-if="!isAuthenticated()" v-on:click="signIn()">
+                            Sign in
+                        </a>
+                    </div>
+                </div>
+            </div>            
         </div>
 
-    </div>
+        <div class="countdown">
+            <div>
+                <sunset-countdown :time="time">
+                    <template slot-scope="props"><a title="Click to get further information" href="/img/sunset.png">Non-Prod sunset：{{ props.days }} days</a></template>
+                </sunset-countdown>      
+            </div>          
+            <span class="divider">|</span>
+            <div>
+                <sunset-countdown :time="time2">
+                    <template slot-scope="props"><a title="Click to get further information" href="/img/sunset.png">Prod sunset：{{ props.days }} days</a></template>
+                </sunset-countdown>      
+            </div>               
+        </div>   
+    </div> 
 </nav>
+
 
 @RenderBody()
 
