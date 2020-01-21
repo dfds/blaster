@@ -28,7 +28,6 @@ const TopicAddComponent = Vue.component("topic-add", {
 					}
 				)
 				.then(r => {
-						console.log(r);
 						this.topicNamePreview = r.name;
 					}
 				);
@@ -54,9 +53,11 @@ const TopicAddComponent = Vue.component("topic-add", {
 						"dryrun": false
 					}
 				)
-				.then(r => {
-						console.log(r);
-						console.log("Awesome");
+				.then(() => {
+						this.$emit('topicAdded');
+						this.topicNameInput = "";
+						this.topicPartitions = 3;
+						this.topicDescription = "";
 					}
 				);
 		},
