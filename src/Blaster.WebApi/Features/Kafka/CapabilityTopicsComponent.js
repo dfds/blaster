@@ -50,8 +50,8 @@ const capabilityTopicsComponent = Vue.component("capabilityTopics", {
                         </button>
                 </div>
 
-          <!--      <topic-add :enable="showAddTopic"  v-on:addtopic-topic-created="topicCreated" v-on:addtopic-close="showCreateTopicFlow()"></topic-add>
-              -->  <div class="topics">
+                <topic-add :enable="showAddTopic" :capability-id="capabilityId"   v-on:addtopic-topic-created="topicCreated" v-on:addtopic-close="showCreateTopicFlow()"></topic-add>
+                <div class="topics">
                     <div v-for="topic in topics" :key="topic.id">
                         <topic :topic="topic"></topic>
                     </div>

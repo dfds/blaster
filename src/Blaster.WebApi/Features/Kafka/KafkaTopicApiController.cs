@@ -46,5 +46,24 @@ namespace Blaster.WebApi.Features.Capabilities
 				return Unauthorized();
 			}
 		}
+		
+		
+		[HttpPost("{id}/topics", Name = "AddTopic")]
+		public async Task<ActionResult<Topic>> AddTopic([FromRoute] string id, [FromBody] CreateTopicRequest input)
+		{
+			try
+			{
+				var returnTopic = await _KafkaServiceClient.CreateTopic(
+					capabilityId: id,
+					createTopicRequest: input
+				);
+
+				return new ActionResult<Topic>(returnTopic);
+			}
+			catch (UnauthroizedException)
+			{
+				return Unauthorized();
+			}
+		}
 	}
 }

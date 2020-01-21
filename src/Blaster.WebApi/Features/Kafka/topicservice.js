@@ -6,12 +6,15 @@ export default class TopicService {
         this.baseUrl = "api/topics";
     }
 
-    add(payload) {
-        return this.client.post(this.baseUrl, payload).then(data => data || {});
+    add(capabilityId, payload) {
+        return this.client
+			.post(`api/capabilities/${capabilityId}/topics`, payload)
+			.then(response => response.data || {});
     }
 
     getByCapabilityId(capabilityId) {
-        return this.client.get(`api/capabilities/${capabilityId}/topics`)
+        return this.client
+			.get(`api/capabilities/${capabilityId}/topics`)
             .then(response => response.data.items || []);
     }
 }
