@@ -1,7 +1,11 @@
 import Vue from "vue";
 
+import TopicService from "./topicservice";
+
 const TopicComponent = Vue.component("topic", {
 	props: ["topic", "commonprefix"],
+
+	
 	data: function() {
 		return {
 			showData: false,

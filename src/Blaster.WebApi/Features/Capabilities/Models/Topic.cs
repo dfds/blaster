@@ -8,7 +8,8 @@ namespace Blaster.WebApi.Features.Capabilities.Models
         public string CapabilityId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public bool IsPrivate { get; set; }
+        
+        public int Partitions { get; set; }
     }
 }
 

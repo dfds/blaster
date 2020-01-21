@@ -134,7 +134,7 @@ namespace Blaster.WebApi.Features.Capabilities
         {
             try
             {
-                await _capabilityServiceClient.CreateTopic(input.Name, input.Description, id, input.IsPrivate);
+                await _capabilityServiceClient.CreateTopic(input.Name, input.Description, id, true);
             }
             catch (UnauthroizedException)
             {
