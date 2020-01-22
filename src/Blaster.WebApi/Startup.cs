@@ -75,6 +75,7 @@ namespace Blaster.WebApi
         
         private void ConfigureKafkaFeature(IServiceCollection services)
         {
+	        var x = Configuration["BLASTER_CAPABILITYSERVICE_API_URL"];
 	        services
 		        .AddHttpClient<IKafkaServiceClient, KafkaServiceClient>(client =>
 		        {

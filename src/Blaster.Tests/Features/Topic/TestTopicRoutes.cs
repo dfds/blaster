@@ -37,6 +37,7 @@ namespace Blaster.Tests.Features.Topic
 
                 var client = clientBuilder
                     .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient())
+                    .WithService<IKafkaServiceClient>(new StubKafkaServiceClient())
                     .Build();
 
                 var dummyContent = new JsonContent(new {Name = "TestTopicRoutesCreation", Description = "Created during run of Tests", IsPrivate = true});
@@ -44,7 +45,7 @@ namespace Blaster.Tests.Features.Topic
                 var response = await client.PostAsync("/api/capabilities/1/topics", dummyContent);
 
                 Assert.Equal(
-                    expected: HttpStatusCode.NoContent,
+                    expected: HttpStatusCode.OK,
                     actual: response.StatusCode
                 );
             }
