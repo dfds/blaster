@@ -64,6 +64,10 @@ namespace Blaster.WebApi.Features.Capabilities
 			{
 				return Unauthorized();
 			}
+			catch (RecoverableUpstreamException ex)
+			{
+				return StatusCode((int)ex.HttpStatusCode, ex.Message);
+			}
 		}
 	}
 }

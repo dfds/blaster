@@ -114,6 +114,25 @@ $navbar-mobile-trigger: "all and (max-width: 1087px)";
     }
 }
 
+.generic-warning-box {
+    display: flex;
+    justify-content: center;
+    background-color: #ffbc57;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+    &.orange {
+        background-color: #ff9800;
+    }
+
+    &.red {
+        background-color: #be1e2d;
+        p {
+            color: #ffffff;
+        }
+    }
+}
+
 .countdown {
     display: flex;
     flex-direction: row;

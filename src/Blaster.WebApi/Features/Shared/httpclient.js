@@ -102,8 +102,11 @@ export default class HttpClient {
                 return resp;
             },
             err => {
+                var reject = new Promise((resolve, reject) => {
+                    reject(err);
+                });
                 console.log(err);
-                return err;
+                return reject;
             }
         )
     }

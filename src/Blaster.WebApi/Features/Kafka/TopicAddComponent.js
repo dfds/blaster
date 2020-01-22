@@ -1,5 +1,6 @@
 import Vue from "vue";
 import TopicService from "./topicservice";
+import GenericWarningBox from "../Shared/components/GenericWarningBox";
 
 const TopicAddComponent = Vue.component("topic-add", {
 	props: ["enable", "capabilityId"],
@@ -12,8 +13,12 @@ const TopicAddComponent = Vue.component("topic-add", {
 			topicPartitions: 0,
 			topicNamePreview: "",
 			topicName: "",
-			topicService: new TopicService()
+			topicService: new TopicService(),
+			err: null
 		}
+	},
+	components: {
+		'generic-warning-box': GenericWarningBox
 	},
 	watch: {
 		topicNameInput(value) {
@@ -28,9 +33,13 @@ const TopicAddComponent = Vue.component("topic-add", {
 					}
 				)
 				.then(r => {
-						this.topicNamePreview = r.name;
-					}
-				);
+					this.topicNamePreview = r.name;
+					this.err = null;
+				})
+				.catch(err => {
+					this.err = err;
+					this.topicNamePreview = "";
+				});
 		}
 	},
 	computed: {
@@ -102,6 +111,7 @@ const TopicAddComponent = Vue.component("topic-add", {
                                     <br />
                                     <div style="display: flex; flex-direction: row; font-size: 1.2rem;">{{ topicNamePreview }}</div>
                                 </div>
+																<generic-warning-box :err="err"></generic-warning-box>
                             </div>
                             <div class="field">
                                 <label class="label">Description</label>
