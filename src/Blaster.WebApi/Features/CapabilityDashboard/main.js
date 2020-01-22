@@ -16,12 +16,13 @@ import "regenerator-runtime/runtime";
 import CapabilityEditComponent from "./CapabilityEditComponent";
 import CapabilityDeleteComponent from "./CapabilityDeleteComponent";
 import TopicComponent from "./TopicComponent";
-import TopicAddComponent from "./TopicAddComponent";
 import TopicEditComponent from "./TopicEditComponent";
 import TopicPrefixComponent from "./TopicPrefixComponent";
 import MessageContractAddComponent from "./MessageContractAddComponent";
 import MessageContractEditComponent from "./MessageContractEditComponent";
 import {ChannelPickerComponent, ChannelMinimalComponent, ChannelListComponent, BannerComponent, isIE} from "../Shared/components/Shared";
+
+import CapabilityTopics from  "../Kafka/CapabilityTopicsComponent";
 
 const topicService = new TopicService(Vue.prototype.$http);
 const capabilityService = new CapabilityService(Vue.prototype.$http, Vue.prototype.$userService);
@@ -55,7 +56,6 @@ const app = new Vue({
     },
     components: {
         'topic': TopicComponent,
-        'topic-add': TopicAddComponent,
         'topic-edit': TopicEditComponent,
         'topic-prefix': TopicPrefixComponent,
         'message-contract-add': MessageContractAddComponent,
@@ -65,7 +65,8 @@ const app = new Vue({
         'channel-picker': ChannelPickerComponent,
         'channel-minimal': ChannelMinimalComponent,
         'channel-list': ChannelListComponent,
-        'banner': BannerComponent
+        'banner': BannerComponent,
+		'capability-topics': CapabilityTopics
     },
     computed: {
         capabilityFound: function() {

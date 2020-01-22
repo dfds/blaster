@@ -46,6 +46,7 @@ namespace Blaster.WebApi
             ConfigureCapabilityFeature(services);
             ConfigureHaraldFeature(services);
             ConfigureFrontpageFeature(services);
+            ConfigureKafkaFeature(services);
             //ConfigureTopicFeature(services);
             services.AddScoped<ForwardHeader>();
         }
@@ -71,6 +72,16 @@ namespace Blaster.WebApi
                 .AddHttpMessageHandler<CorrelationIdMessageHandler>();
         }
 
+        
+        private void ConfigureKafkaFeature(IServiceCollection services)
+        {
+	        services
+		        .AddHttpClient<IKafkaServiceClient, KafkaServiceClient>(client =>
+		        {
+			        client.BaseAddress = new Uri(Configuration["BLASTER_CAPABILITYSERVICE_API_URL"]);
+		        })
+		        .AddHttpMessageHandler<CorrelationIdMessageHandler>();
+        }
         private void ConfigureHaraldFeature(IServiceCollection services)
         {
             services

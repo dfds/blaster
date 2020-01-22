@@ -129,7 +129,7 @@ namespace Blaster.WebApi.Features.Capabilities
             var reqContent = new StringContent(
                 content: _serializer.Serialize(new
                 {
-                    Description = input.Description, Name = input.Name, IsPrivate = input.IsPrivate
+                    Description = input.Description, Name = input.Name, IsPrivate = true
                 }),
                 encoding: Encoding.UTF8,
                 mediaType: "application/json"

@@ -131,41 +131,8 @@
             <capability-edit :enable="showEditCapability" :initialdata="capability" v-on:capability-edit-save="handleCapabilityEdit" v-on:capability-edit-close="toggleShowEditCapability()"></capability-edit>
             <capability-delete :enable="showDeleteCapability" :capability="capability" v-on:capability-delete-save="handleCapabilityDelete" v-on:capability-delete-close="toggleShowDeleteCapability()"></capability-delete>
 
-            <div class="container box" v-if="topicsEnabled">
-                <h1 class="title is-uppercase">Topics</h1>
-
-                <div>
-                    <p>
-                         Listed below is the Kafka topics that are attached to this Capability.
-                    </p>
-                </div>
-                <br>
-
-                <div class="buttons is-right">
-                         <button
-                            type="button"
-                            v-on:click="addTopicFlow()"
-                            v-bind:class="{tooltip: !isJoinedComputed, 'is-tooltip-bottom': !isJoinedComputed, 'is-tooltip-multiline': !isJoinedComputed }"
-                            :disabled='!isJoinedComputed'
-                            data-tooltip="You haven't joined this Capability"
-                            class="button is-small is-primary">
-                            Add Topic
-                        </button>
-                </div>
-
-                <topic-add :enable="showAddTopic" :capabilityname="capability.name" v-on:addtopic-new-topic="addTopic" v-on:addtopic-close="toggleShowAddTopic()"></topic-add>
-                <topic-edit :enable="showEditTopic" :capabilityname="capability.name" :initialdata="topicEditData" v-on:edittopic-edit="editTopic" v-on:edittopic-close="toggleShowEditTopic()"></topic-edit>
-                <topic-prefix :enable="showTopicPrefix" :initialdata="capability.name" v-on:topicprefix-close="toggleShowTopicPrefix()" v-on:topicprefix-save="handleCapabilityTopicCommonPrefix"></topic-prefix>
-                <message-contract-edit :enable="showMessageContractEdit" :initialdata="messageContractEditData" v-on:messagecontractedit-edit="handleMessageContractEdit" v-on:messagecontractedit-close="toggleShowMessageContractEdit"></message-contract-edit>
-
-                <div class="topics">
-                    <div v-for="topic in capability.topics" :key="topic.id">
-                        <topic :topic="topic" :commonprefix="capability.topicCommonPrefix"
-                        v-on:addtopic-close="toggleShowEditTopic"></topic>
-                    </div>
-                </div>
-            </div>
-
+   			<capability-topics :topics-enabled="topicsEnabled" :capability-id="capability.id" :is-joined-computed="isJoinedComputed"></capability-topics>
+   			
         <!--- Summary section --->
             <div class="container box" style="display:none">
                 <h1 class="title is-uppercase">Capability summary</h1>

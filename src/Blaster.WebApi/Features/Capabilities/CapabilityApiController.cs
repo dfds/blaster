@@ -128,26 +128,7 @@ namespace Blaster.WebApi.Features.Capabilities
             return NoContent();
         }
 
-        // UPDATE API CONTRACT
-        [HttpPost("{id}/topics", Name = "CreateTopic")]
-        public async Task<ActionResult<string>> CreateTopic(string id, [FromBody] Topic input)
-        {
-            try
-            {
-                await _capabilityServiceClient.CreateTopic(input.Name, input.Description, id, input.IsPrivate);
-            }
-            catch (UnauthroizedException)
-            {
-	            return Unauthorized();
-            }
-            catch (HttpRequestException)
-            {
-                return new ActionResult<string>(BadRequest());
-            }
-            
-            return new ActionResult<string>(NoContent());
-        }
-
+   
         [HttpPost("{id}/members", Name = "JoinCapability")]
         public async Task<ActionResult<Member>> JoinCapability([FromRoute] string id, [FromBody] JoinCapabilityInput input)
         {
