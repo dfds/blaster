@@ -35,7 +35,7 @@ namespace Blaster.WebApi.Features.Capabilities
 			);
 
 			var response = await _client.PostAsync($"/api/v1/capabilities/{capabilityId}/topics", reqContent);
-			HttpResponseHelper.EnsureSuccessStatusCode(response);
+			await HttpResponseHelper.MapStatusCodeToException(response);
 			
 			var content = await response.Content.ReadAsStringAsync();
 
