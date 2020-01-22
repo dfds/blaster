@@ -16,7 +16,7 @@ const GenericWarningBoxComponent = Vue.component("generic-warning-box", {
     msg: function() {
       if (this.err) {
         if (this.statusCode >= 500 && this.statusCode <= 599) {
-          return `Internal Server Error! If there isn't already an open incident on <a href="https://dfdsit.statuspage.io/">dfdsit.statuspage.io</a> and it still persists after a five minute waiting period, please contact us on #dev-excellence or in-person.`;
+          return `Internal Server Error! If there isn't already an open incident on <a href="https://dfdsit.statuspage.io/">dfdsit.statuspage.io</a> and the error still persists after a five minute waiting period, please contact us on #dev-excellence or in-person.`;
         }
         return this.err.response.data.message;
       } else {
