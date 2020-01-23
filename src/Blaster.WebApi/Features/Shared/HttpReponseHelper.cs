@@ -25,7 +25,8 @@ namespace Blaster.WebApi.Features.Shared
 				throw new UnauthroizedException();
 			}
 
-			if (HttpStatusCode.Conflict == response.StatusCode)
+			if (HttpStatusCode.Conflict == response.StatusCode ||
+			    HttpStatusCode.UnprocessableEntity == response.StatusCode)
 			{
 				var payload = await response.Content.ReadAsStringAsync();
 				throw new RecoverableUpstreamException(response.StatusCode, payload);
