@@ -41,7 +41,7 @@ namespace Blaster.WebApi.Features.Capabilities
 
 				return new ActionResult<TopicsResponse>(NotFound());
 			}
-			catch (UnauthroizedException)
+			catch (UnauthorizedException)
 			{
 				return Unauthorized();
 			}
@@ -60,7 +60,7 @@ namespace Blaster.WebApi.Features.Capabilities
 
 				return new ActionResult<Topic>(returnTopic);
 			}
-			catch (UnauthroizedException)
+			catch (UnauthorizedException)
 			{
 				return Unauthorized();
 			}
