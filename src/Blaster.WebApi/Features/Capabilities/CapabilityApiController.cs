@@ -35,7 +35,7 @@ namespace Blaster.WebApi.Features.Capabilities
 
 		        return capabilities ?? new CapabilitiesResponse {Items = new Capability[0]};
 	        }
-	        catch (UnauthroizedException)
+	        catch (UnauthorizedException)
 	        {
 		        return Unauthorized();
 	        }
@@ -55,7 +55,7 @@ namespace Blaster.WebApi.Features.Capabilities
 
 		        return new ActionResult<Capability>(NotFound());
 	        }
-	        catch (UnauthroizedException)
+	        catch (UnauthorizedException)
 	        {
 		        return Unauthorized();
 	        }
@@ -69,7 +69,7 @@ namespace Blaster.WebApi.Features.Capabilities
             {
 	            capability = await _capabilityServiceClient.CreateCapability(input.Name, input.Description);
             }
-            catch (UnauthroizedException)
+            catch (UnauthorizedException)
             {
 	            return Unauthorized();
             }
@@ -97,7 +97,7 @@ namespace Blaster.WebApi.Features.Capabilities
                 var currentCapability = await _capabilityServiceClient.GetById(id);
                 await _capabilityServiceClient.UpdateCapability(id, currentCapability.Name, input.Description);
             }
-            catch (UnauthroizedException)
+            catch (UnauthorizedException)
             {
 	            return Unauthorized();
             }
@@ -116,7 +116,7 @@ namespace Blaster.WebApi.Features.Capabilities
             {
                 await _capabilityServiceClient.DeleteCapability(id);
             }
-            catch (UnauthroizedException)
+            catch (UnauthorizedException)
             {
 	            return Unauthorized();
             }
@@ -146,7 +146,7 @@ namespace Blaster.WebApi.Features.Capabilities
 
                 return new ActionResult<Member>(NoContent());
             }
-            catch (UnauthroizedException)
+            catch (UnauthorizedException)
             {
 	            return Unauthorized();
             }
@@ -167,7 +167,7 @@ namespace Blaster.WebApi.Features.Capabilities
                 await _capabilityServiceClient.LeaveCapability(id, memberEmail);
                 return NoContent();                
             }
-            catch (UnauthroizedException)
+            catch (UnauthorizedException)
             {
 	            return Unauthorized();
             }
@@ -189,7 +189,7 @@ namespace Blaster.WebApi.Features.Capabilities
 
                 return new ActionResult<Capability>(NoContent());
             }
-            catch (UnauthroizedException)
+            catch (UnauthorizedException)
             {
 	            return Unauthorized();
             }
@@ -203,51 +203,7 @@ namespace Blaster.WebApi.Features.Capabilities
         }
     }
 
-    public class AlreadyJoinedException : Exception
-    {
-    }
-
-    public class ContextAlreadyAddedException : Exception
-    {
-        
-    }
-
-    
-    public class RecoverableUpstreamException : Exception
-    {
-        public RecoverableUpstreamException(
-            HttpStatusCode httpStatusCode, 
-            string message
-        )
-        {
-            HttpStatusCode = httpStatusCode;
-            Message = message;
-        }
-
-        public HttpStatusCode HttpStatusCode { get; }
-        public override string Message { get; }
-    }
-    
-    public class CapabilityValidationException : Exception
-    {
-        public CapabilityValidationException(string message) : base(message)
-        {
-
-        }
-    }
-
-    public class CapabilityTopicValidationException : Exception
-    {
-        public CapabilityTopicValidationException(string message) : base(message)
-        {
-            
-        }
-    }
-
-    public class UnknownCapabilityException : Exception
-    {
-
-    }
+ 
 
     public class JoinCapabilityInput
     {

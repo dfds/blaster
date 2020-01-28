@@ -12,7 +12,7 @@ namespace Blaster.WebApi.Features.Shared
 		{
 			if (response.StatusCode == HttpStatusCode.Unauthorized)
 			{
-				throw new UnauthroizedException();
+				throw new UnauthorizedException();
 			}
 
 			response.EnsureSuccessStatusCode();
@@ -20,31 +20,17 @@ namespace Blaster.WebApi.Features.Shared
 
 		public static async Task MapStatusCodeToException(HttpResponseMessage response)
 		{
-			if (response.StatusCode == HttpStatusCode.Unauthorized)
+			switch (response.StatusCode)
 			{
-				throw new UnauthroizedException();
+				case HttpStatusCode.Unauthorized:
+					throw new UnauthorizedException();
+				case HttpStatusCode.Conflict:
+				case HttpStatusCode.UnprocessableEntity:
+				{
+					var payload = await response.Content.ReadAsStringAsync();
+					throw new RecoverableUpstreamException(response.StatusCode, payload);
+				}
 			}
-
-			if (HttpStatusCode.Conflict == response.StatusCode)
-			{
-				var payload = await response.Content.ReadAsStringAsync();
-				throw new RecoverableUpstreamException(response.StatusCode, payload);
-			}
-		}
-	}
-
-	public class UnauthroizedException : Exception
-	{
-		public UnauthroizedException()
-		{
-		}
-		
-		public UnauthroizedException(string message) : base(message)
-		{
-		}
-		
-		public UnauthroizedException(string message, Exception inner) : base(message, inner)
-		{
 		}
 	}
 }

@@ -1,9 +1,10 @@
-﻿using System.Net;
+using System.Net;
 using System.Threading.Tasks;
 using Blaster.Tests.Builders;
 using Blaster.Tests.TestDoubles;
 using Blaster.WebApi.Features.Capabilities;
 using Blaster.WebApi.Features.Capabilities.Models;
+using Blaster.WebApi.Features.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 

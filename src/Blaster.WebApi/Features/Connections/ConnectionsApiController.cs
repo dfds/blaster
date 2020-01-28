@@ -44,7 +44,7 @@ namespace Blaster.WebApi.Features.Connections
 			        Items = new Connection[0]
 		        };
 	        }
-	        catch (UnauthroizedException)
+	        catch (UnauthorizedException)
 	        {
 		        return Unauthorized();
 	        }
@@ -62,7 +62,7 @@ namespace Blaster.WebApi.Features.Connections
                     clientName: channelConnectionRequest.ClientName,
                     clientType: channelConnectionRequest.ClientType);
             }
-            catch (UnauthroizedException)
+            catch (UnauthorizedException)
             {
 	            return Unauthorized();
             }
@@ -81,7 +81,7 @@ namespace Blaster.WebApi.Features.Connections
             {
                 await _haraldClient.LeaveChannel(channelId: channelId, channelType: channelType, clientId: clientId, clientType: clientType);
             }
-            catch (UnauthroizedException)
+            catch (UnauthorizedException)
             {
 	            return Unauthorized();
             }

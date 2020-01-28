@@ -33,7 +33,7 @@ namespace Blaster.WebApi.Features.CommunicationChannels
 
 		        return new ActionResult<ConnectionsResponse>(connectionsResponse);
 	        }
-	        catch (UnauthroizedException ex)
+	        catch (UnauthorizedException ex)
 	        {
 		        return Unauthorized();
 	        }
