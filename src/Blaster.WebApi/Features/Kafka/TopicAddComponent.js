@@ -104,7 +104,7 @@ const TopicAddComponent = Vue.component("topic-add", {
                                 <div style="display:flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 20px; margin-bottom: 10px;">
                                     <h3 style="font-size: 1.2rem; font-weight: 700;">Preview of name</h3>
                                     <br />
-                                    <div style="display: flex; flex-direction: row; font-size: 1.2rem;">{{ topicNamePreview }}</div>
+                                    <div style="display: flex; flex-direction: row; font-size: 1.2rem; word-break: break-all;">{{ topicNamePreview }}</div>
                                 </div>
 								<generic-warning-box :err="err"></generic-warning-box>
                             </div>
