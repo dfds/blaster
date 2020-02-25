@@ -39,7 +39,8 @@ const capabilityTopicsComponent = Vue.component("capabilityTopics", {
 
 			<div>
 				<p>
-					Listed below is the Kafka topics that are attached to this Capability.
+					Listed below is the Kafka topics that are attached to this Capability.<br />
+					You are welcome to contact the development excellence department if you need a topic deleted.
 				</p>
 			</div>
 			<br>
