@@ -129,7 +129,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 							</div>
 							<div class="field">
 								<p>
-									Our recommendation for a no frills productions ready topic is partitions. <br />
+									Our recommendation for a no frills productions ready topic is 12 partitions.<br />
 									You are welcome to contact the development excellence department if you need a different partitions count than available in this ui. 
 								</p>
 							</div>
