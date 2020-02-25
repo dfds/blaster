@@ -102,7 +102,6 @@ const TopicAddComponent = Vue.component("topic-add", {
                                 <label class="label">Name</label>
                                 <div style="display:flex; align-items: flex-end;">
                                     <div style="display: flex; flex-direction: column; align-items: center;">
-                                    <span style="font-weight: 700;">Name</span>
                                         <input style="width: 180px;" class="input" type="text" data-property="free" v-model="topicNameInput">
                                     </div>
                                 </div>
@@ -111,7 +110,7 @@ const TopicAddComponent = Vue.component("topic-add", {
                                     <br />
                                     <div style="display: flex; flex-direction: row; font-size: 1.2rem;">{{ topicNamePreview }}</div>
                                 </div>
-																<generic-warning-box :err="err"></generic-warning-box>
+								<generic-warning-box :err="err"></generic-warning-box>
                             </div>
                             <div class="field">
                                 <label class="label">Description</label>
@@ -131,7 +130,13 @@ const TopicAddComponent = Vue.component("topic-add", {
 									<input type="radio" id="one" value="12" v-model="topicPartitions" :checked="checked">
 									<label for="two">12</label>
                                 </div>
-                            </div>
+							</div>
+							<div class="field">
+								<p>
+									Our recommendation for a no frills productions ready topic is partitions. <br />
+									You are welcome to contact the development excellence department if you need a different partitions count than available in this ui. 
+								</p>
+							</div>
                             <div class="field">
                                 <div class="control has-text-centered">
                                     <button class="button is-primary" data-behavior="save" v-on:click="saveTopic">Save</button>
