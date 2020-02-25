@@ -100,11 +100,7 @@ const TopicAddComponent = Vue.component("topic-add", {
                         <div class="form">
                             <div class="field">
                                 <label class="label">Name</label>
-                                <div style="display:flex; align-items: flex-end;">
-                                    <div style="display: flex; flex-direction: column; align-items: center;">
-                                        <input style="width: 180px;" class="input" type="text" data-property="free" v-model="topicNameInput">
-                                    </div>
-                                </div>
+									<input class="input" type="text" data-property="free" v-model="topicNameInput">
                                 <div style="display:flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 20px; margin-bottom: 10px;">
                                     <h3 style="font-size: 1.2rem; font-weight: 700;">Preview of name</h3>
                                     <br />
