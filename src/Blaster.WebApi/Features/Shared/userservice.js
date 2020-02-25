@@ -8,7 +8,7 @@ export default class UserService {
                 auth: {
                     clientId: "91c38c20-4d2c-485d-80ac-a053619a02db",
                     authority: "https://login.microsoftonline.com/73a99466-ad05-4221-9f90-e7142aa2f6c1",
-                    redirectUri: "https://build.dfds.cloud/login"
+                    redirectUri: "http://localhost:4200"
                 },
                 cache: {
                     cacheLocation: "localStorage",

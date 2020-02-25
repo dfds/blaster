@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using Blaster.Tests.Builders;
 using Blaster.Tests.TestDoubles;

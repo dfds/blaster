@@ -10,7 +10,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 		return {
 			topicDescription: "",
 			topicNameInput: "",
-			topicPartitions: 0,
+			topicPartitions: 12,
 			topicNamePreview: "",
 			topicName: "",
 			topicService: new TopicService(),
@@ -120,9 +120,16 @@ const TopicAddComponent = Vue.component("topic-add", {
                                 </div>
                             </div>
 						  	<div class="field">
-                                <label class="label">partitions</label>
-                                <div class="control">
-                                    <input class="input" type="text" placeholder="3" v-model="topicPartitions">
+									<label class="label">partitions</label>
+									<div class="control">
+									<input type="radio" id="one" value="1" v-model="topicPartitions" :checked="checked">
+									<label for="one">1</label>
+									<input type="radio" id="one" value="3" v-model="topicPartitions" :checked="checked">
+									<label for="two">2</label>
+									<input type="radio" id="one" value="6" v-model="topicPartitions" :checked="checked">
+									<label for="two">6</label>
+									<input type="radio" id="one" value="12" v-model="topicPartitions" :checked="checked">
+									<label for="two">12</label>
                                 </div>
                             </div>
                             <div class="field">
