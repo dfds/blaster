@@ -10,7 +10,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 		return {
 			topicDescription: "",
 			topicNameInput: "",
-			topicPartitions: 0,
+			topicPartitions: "12",
 			topicNamePreview: "",
 			topicName: "",
 			topicService: new TopicService(),
@@ -100,18 +100,13 @@ const TopicAddComponent = Vue.component("topic-add", {
                         <div class="form">
                             <div class="field">
                                 <label class="label">Name</label>
-                                <div style="display:flex; align-items: flex-end;">
-                                    <div style="display: flex; flex-direction: column; align-items: center;">
-                                    <span style="font-weight: 700;">Name</span>
-                                        <input style="width: 180px;" class="input" type="text" data-property="free" v-model="topicNameInput">
-                                    </div>
-                                </div>
+									<input class="input" type="text" data-property="free" v-model="topicNameInput">
                                 <div style="display:flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 20px; margin-bottom: 10px;">
                                     <h3 style="font-size: 1.2rem; font-weight: 700;">Preview of name</h3>
                                     <br />
-                                    <div style="display: flex; flex-direction: row; font-size: 1.2rem;">{{ topicNamePreview }}</div>
+                                    <div style="display: flex; flex-direction: row; font-size: 1.2rem; word-break: break-all;">{{ topicNamePreview }}</div>
                                 </div>
-																<generic-warning-box :err="err"></generic-warning-box>
+								<generic-warning-box :err="err"></generic-warning-box>
                             </div>
                             <div class="field">
                                 <label class="label">Description</label>
@@ -120,11 +115,24 @@ const TopicAddComponent = Vue.component("topic-add", {
                                 </div>
                             </div>
 						  	<div class="field">
-                                <label class="label">partitions</label>
-                                <div class="control">
-                                    <input class="input" type="text" placeholder="3" v-model="topicPartitions">
+									<label class="label">partitions</label>
+									<div class="control">
+									<input type="radio" id="one" value="1" v-model="topicPartitions" :checked="checked">
+									<label for="one">1</label>
+									<input type="radio" id="one" value="3" v-model="topicPartitions" :checked="checked">
+									<label for="two">2</label>
+									<input type="radio" id="one" value="6" v-model="topicPartitions" :checked="checked">
+									<label for="two">6</label>
+									<input type="radio" id="one" value="12" v-model="topicPartitions" :checked="checked">
+									<label for="two">12</label>
                                 </div>
-                            </div>
+							</div>
+							<div class="field">
+								<p>
+									Our recommendation for a no frills productions ready topic is 12 partitions.<br />
+									You are welcome to contact the development excellence department if you need a different partitions count than available in this ui. 
+								</p>
+							</div>
                             <div class="field">
                                 <div class="control has-text-centered">
                                     <button class="button is-primary" data-behavior="save" v-on:click="saveTopic">Save</button>
