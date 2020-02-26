@@ -10,7 +10,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 		return {
 			topicDescription: "",
 			topicNameInput: "",
-			topicPartitions: 12,
+			topicPartitions: "12",
 			topicNamePreview: "",
 			topicName: "",
 			topicService: new TopicService(),
