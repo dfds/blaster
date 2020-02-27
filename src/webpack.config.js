@@ -1,6 +1,7 @@
 const webpack = require("webpack");
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const {EnvironmentPlugin} = require("webpack");
 
 module.exports = {
     entry: {
@@ -37,7 +38,8 @@ module.exports = {
     plugins: [
         new MiniCssExtractPlugin({
             filename: "[name].css",
-        })
+        }),
+        new EnvironmentPlugin(["BLASTER_AUTH_REDIRECT_URI"])
 	],
     watchOptions: {
 	    aggregateTimeout: 300,
