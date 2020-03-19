@@ -121,8 +121,9 @@
                 </p>
                 </br>
                 <p>
-                    <a v-bind:href="'https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logEventViewer:group=/k8s/hellman/'+ capability.rootId" target="_blank">Cloudwatch</a></br>
-                    When asked to login please choose the account: dfds-logs (736359295931)
+                    <p>To access the logs for your namespace in AWS Cloudwatch please complete the following steps:</p>
+                    1. login to the AWS account account: dfds-logs (736359295931) though <a target="_blank" href="https://adfs.dfds.com/adfs/ls/IdpInitiatedSignOn.aspx">DFDS AWS login page</a></br>
+                    2. Access your logs in <a v-bind:href="'https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logEventViewer:group=/k8s/hellman/'+ capability.rootId" target="_blank">Cloudwatch</a>
                 </p>
                 </br>
                 <p>
