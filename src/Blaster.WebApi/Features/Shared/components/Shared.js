@@ -40,7 +40,7 @@ new Vue({
             return this.generateCountdownTime("2020", "02", "08");
         },
         time2: function() {
-            return this.generateCountdownTime("2020", "03", "01");
+            return this.generateCountdownTime("2020", "04", "01");
         }
     },
     data: {
