@@ -37,9 +37,6 @@ new Vue({
             return this.active;
         },
         time: function() {
-            return this.generateCountdownTime("2020", "02", "08");
-        },
-        time2: function() {
             return this.generateCountdownTime("2020", "04", "01");
         }
     },
