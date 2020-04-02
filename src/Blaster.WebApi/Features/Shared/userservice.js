@@ -44,8 +44,9 @@ export default class UserService {
 
     getCurrentUserEmail() {
         var user = this.getCurrentUser();
+        var email = user.email || user.userName;
 
-        return user.email.toLowerCase() || user.userName.toLowerCase();
+        return email.toLowerCase();
     }
 
     getCachedAccessToken() {
