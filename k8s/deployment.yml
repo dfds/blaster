@@ -9,7 +9,7 @@ metadata:
     app: blaster
     component: blaster
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: blaster
