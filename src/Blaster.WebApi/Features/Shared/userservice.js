@@ -23,7 +23,7 @@ export default class UserService {
         if (!configuration.auth.clientId) {
             throw new Error('auth.clientId is required');
         }
-        
+
         this.msalConfiguration = configuration;
         this.msalClient = new Msal.UserAgentApplication(this.msalConfiguration);
 
@@ -41,11 +41,11 @@ export default class UserService {
     getCurrentUser() {
         return (this.isAuthenticated()) ? this.data.user : window.currentUserRazor;
     }
-    
+
     getCurrentUserEmail() {
         var user = this.getCurrentUser();
 
-        return user.email || user.userName;
+        return user.email.toLowerCase() || user.userName.toLowerCase();
     }
 
     getCachedAccessToken() {
