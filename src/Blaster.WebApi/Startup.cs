@@ -126,7 +126,12 @@ namespace Blaster.WebApi
                 ContentTypeProvider = fileExtensionContentTypeProvider
             });
 
-            app.UseMvc();
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+	            endpoints.MapControllers();
+            });
         }
     }
 
