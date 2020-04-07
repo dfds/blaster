@@ -122,9 +122,9 @@ const TopicAddComponent = Vue.component("topic-add", {
 									<input type="radio" id="one" value="3" v-model="topicPartitions" :checked="checked">
 									<label for="three">3</label>
 									<input type="radio" id="one" value="6" v-model="topicPartitions" :checked="checked">
-									<label for="two">6</label>
+									<label for="six">6</label>
 									<input type="radio" id="one" value="12" v-model="topicPartitions" :checked="checked">
-									<label for="two">12</label>
+									<label for="twelve">12</label>
                                 </div>
 							</div>
 							<div class="field">
