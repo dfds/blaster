@@ -119,8 +119,8 @@ const TopicAddComponent = Vue.component("topic-add", {
 									<div class="control">
 									<input type="radio" id="one" value="1" v-model="topicPartitions" :checked="checked">
 									<label for="one">1</label>
-									<input type="radio" id="one" value="2" v-model="topicPartitions" :checked="checked">
-									<label for="two">2</label>
+									<input type="radio" id="one" value="3" v-model="topicPartitions" :checked="checked">
+									<label for="three">3</label>
 									<input type="radio" id="one" value="6" v-model="topicPartitions" :checked="checked">
 									<label for="two">6</label>
 									<input type="radio" id="one" value="12" v-model="topicPartitions" :checked="checked">
