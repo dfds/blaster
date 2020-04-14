@@ -7,6 +7,7 @@ namespace Blaster.WebApi.Features.Capabilities.Models
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public int Partitions { get; set; }
+		public int RetentionPeriodInDays { get; set; }
 		public bool DryRun { get; set; }
 	}
 }

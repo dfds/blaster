@@ -11,6 +11,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 			topicDescription: "",
 			topicNameInput: "",
 			topicPartitions: 12,
+			topicRetentionPeriodInDays: 7,
 			topicNamePreview: "",
 			topicName: "",
 			topicService: new TopicService(),
@@ -28,6 +29,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 					{
 						"name": value,
 						"partitions": this.topicPartitions,
+						"retentionPeriodInDays": this.topicRetentionPeriodInDays,
 						"description": this.topicDescription,
 						"dryrun": true
 					}
@@ -58,6 +60,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 					{
 						"name": this.topicNameInput,
 						"partitions": parseInt(this.topicPartitions, 10),
+						"retentionPeriodInDays": this.topicRetentionPeriodInDays,
 						"description": this.topicDescription,
 						"dryrun": false
 					}
@@ -66,6 +69,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 						this.$emit('topicAdded');
 						this.topicNameInput = "";
 						this.topicPartitions = 12;
+						this.topicRetentionPeriodInDays = 7;
 						this.topicDescription = "";
 					}
 				);
@@ -132,6 +136,19 @@ const TopicAddComponent = Vue.component("topic-add", {
 									Our recommendation for a no frills productions ready topic is 12 partitions.<br />
 									You are welcome to contact the development excellence department if you need a different partitions count than available in this ui. 
 								</p>
+							</div>
+							<div class="field">
+								<label class="label">retention period in days</label>
+								<div class="control">
+									<input type="radio" id="one" value="7" v-model="topicRetentionPeriodInDays">
+									<label for="three">7</label>
+									<input type="radio" id="one" value="31" v-model="topicRetentionPeriodInDays">
+									<label for="six">31</label>
+									<input type="radio" id="one" value="365" v-model="topicRetentionPeriodInDays">
+									<label for="twelve">365</label>
+									<input type="radio" id="one" value="-1" v-model="topicRetentionPeriodInDays">
+									<label for="twelve">Infinity</label>
+								</div>
 							</div>
                             <div class="field">
                                 <div class="control has-text-centered">
