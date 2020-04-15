@@ -55,12 +55,7 @@ namespace Blaster.WebApi.Features.Capabilities
             );
 
             var response = await _client.PostAsync("/api/v1/capabilities", content);
-            HttpResponseHelper.EnsureSuccessStatusCode(response);
-
-            if (response.StatusCode != HttpStatusCode.Created)
-            {
-	            throw new Exception($"Error! Capability was not created in external service. Service returned ({response.StatusCode} - {response.ReasonPhrase})");
-            }
+            await HttpResponseHelper.MapStatusCodeToException(response);
 
             var receivedContent = await response.Content.ReadAsStringAsync();
             return _serializer.Deserialize<Capability>(receivedContent);

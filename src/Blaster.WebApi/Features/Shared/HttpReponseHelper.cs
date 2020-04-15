@@ -1,8 +1,6 @@
-using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Blaster.WebApi.Features.Capabilities;
 
 namespace Blaster.WebApi.Features.Shared
 {
@@ -26,6 +24,7 @@ namespace Blaster.WebApi.Features.Shared
 					throw new UnauthorizedException();
 				case HttpStatusCode.Conflict:
 				case HttpStatusCode.UnprocessableEntity:
+				case HttpStatusCode.BadRequest:
 				{
 					var payload = await response.Content.ReadAsStringAsync();
 					throw new RecoverableUpstreamException(response.StatusCode, payload);
