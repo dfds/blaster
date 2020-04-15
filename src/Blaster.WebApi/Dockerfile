@@ -1,5 +1,5 @@
 #Setup build image
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 
 #Set container filesystem to /build (and create folder if it doesnt exist)
 WORKDIR /build
@@ -36,7 +36,7 @@ RUN dotnet restore
 RUN dotnet publish -c Release -o /build/out
 
 #Setup final container images.
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2 AS runtime
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
 WORKDIR /app
 
 #Copy binaries from publish container to final container

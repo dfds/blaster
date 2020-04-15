@@ -21,8 +21,9 @@
             <h1 class="title is-uppercase">Summary</h1>
             <div class="level">
                 <div class="level-left">
-                    <div class="level-item">
-                        <h2 class="subtitle">{{ capability.name }}</h2>
+                    <div>
+                        <h2>Name:</h2>
+                        <p>{{capability.name}}</p>
                     </div>
                 </div>
                 <!-- Right side -->
@@ -60,11 +61,22 @@
 
                 </div>
             </div>
-            <div>
-                <p>{{capability.description}}</p>
+            <div class="level">
+                <div class="level-left">
+                    <div>
+                        <h3>Description:</h3>
+                        <p>{{capability.description}}</p>
+                    </div>
+                </div>
+                <!-- Right side -->
+                <div class="level-right">  
+                    <div class="is-right">
+                        <h3>Capability root id:</h3>
+                        <p>{{ capability.rootId }}</p>
+                    </div>        
+                </div>
             </div>
             <div class="container" v-if="hasMembers()">
-                <br/>
                 <p>Members: </p>
                 <div class="level">
                     <div class="tags">
@@ -117,8 +129,18 @@
             <div class="container box">
                 <h1 class="title is-uppercase">LOGS</h1>
                 <p>
-                    Access all logs related to your namespace in <a target="_blank" href="https://search-dfds-prod-wtl5643bwepapwo3we76x7jkse.eu-central-1.es.amazonaws.com/_plugin/kibana/goto/2962a60ad16a0af78ae22f0e96c2c6c6">Kibana</a> or in <a target="_blank" href="https://cloud.humio.com/">Humio</a> (ask the GOTO-guy for a shared team login).
+                    Access all logs related to your namespace in:
                 </p>
+                </br>
+                <p>
+                    <p>To access the logs for your namespace in AWS Cloudwatch please complete the following steps:</p>
+                    1. login to the AWS account account: dfds-logs (736359295931) though <a target="_blank" href="https://adfs.dfds.com/adfs/ls/IdpInitiatedSignOn.aspx">DFDS AWS login page</a></br>
+                    2. Access your logs in <a v-bind:href="'https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logEventViewer:group=/k8s/hellman/'+ capability.rootId" target="_blank">Cloudwatch</a>
+                </p>
+                </br>
+                <p>
+                    <a target="_blank" href="https://cloud.humio.com/">Humio</a></br>
+                    Ask the GOTO-guy for a shared team login.
                 </p>
             </div>
 

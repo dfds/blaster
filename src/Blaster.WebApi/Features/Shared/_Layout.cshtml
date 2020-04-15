@@ -73,12 +73,6 @@
         <div class="countdown">
             <div>
                 <sunset-countdown :time="time">
-                    <template slot-scope="props"><a title="Click to get further information" href="/img/sunset.png">Non-Prod sunset：{{ props.days }} days</a></template>
-                </sunset-countdown>
-            </div>
-            <span class="divider">|</span>
-            <div>
-                <sunset-countdown :time="time2">
                     <template slot-scope="props"><a title="Click to get further information" href="/img/sunset.png">Prod sunset：{{ props.days }} days</a></template>
                 </sunset-countdown>
             </div>
