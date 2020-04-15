@@ -1,7 +1,11 @@
 {
   "name": "src",
   "version": "1.0.0",
-  "description": "",
+  "description": "Frontend UI for DFDS selfservice platform",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dfds/blaster"
+  },
   "main": "index.js",
   "scripts": {
     "start": "webpack --watch --hot --mode development",
