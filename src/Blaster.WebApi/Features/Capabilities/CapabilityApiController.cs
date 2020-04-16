@@ -67,15 +67,16 @@ namespace Blaster.WebApi.Features.Capabilities
             Capability capability;
             try
             {
+	            
 	            capability = await _capabilityServiceClient.CreateCapability(input.Name, input.Description);
             }
             catch (UnauthorizedException)
             {
 	            return Unauthorized();
             }
-            catch (RecoverableUpstreamException tve)
+            catch (RecoverableUpstreamException ex)
             {
-	            return new ObjectResult(new {tve.Message}) { StatusCode = (int)tve.HttpStatusCode };
+	            return StatusCode((int)ex.HttpStatusCode, ex.Message);
             }
             
             

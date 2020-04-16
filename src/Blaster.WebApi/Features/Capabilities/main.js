@@ -48,48 +48,19 @@ const app = new Vue({
                         .then(capability => this.items.push(capability.data))
                         .then(() => editor.close())
                         .catch(err => {
-                            if (err.status == 400) {
-                                const dialog = AlertDialog.open({
-                                    template: document.getElementById("error-dialog-template"),
-                                    container: jq(".dialog-container", editor.element),
-                                    data: {
-                                        title: "Validation issue",
-                                        message: err.responseJSON.message
-                                    }
-                                });
+                            const dialog = AlertDialog.open({
+                                template: document.getElementById("error-dialog-template"),
+                                container: jq(".dialog-container", editor.element),
+                                data: {
+                                    title: "Error",
+                                    message: err.response.data.message
+                                }
+                            });
 
-                                setTimeout(function() {
-                                    dialog.close();
-                                }, 15000);
-                            }  
-                            else if (err.status == 409) {
-                                const dialog = AlertDialog.open({
-                                    template: document.getElementById("error-dialog-template"),
-                                    container: jq(".dialog-container", editor.element),
-                                    data: {
-                                        title: "Conflict",
-                                        message: err.responseJSON.message
-                                    }
-                                });
+                            setTimeout(function() {
+                                dialog.close();
+                            }, 15000);
 
-                                setTimeout(function() {
-                                    dialog.close();
-                                }, 15000);
-                            }
-                            else if (err.status != 200) {
-                                const dialog = AlertDialog.open({
-                                    template: document.getElementById("error-dialog-template"),
-                                    container: jq(".dialog-container", editor.element),
-                                    data: {
-                                        title: "Error!",
-                                        message: `Unable to save capability. Server returned (${err.status}) ${err.statusText}.`
-                                    }
-                                });
-
-                                setTimeout(function() {
-                                    dialog.close();
-                                }, 3000);
-                            }
                         });
                 }
             });
