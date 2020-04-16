@@ -23,15 +23,20 @@ const TopicAddComponent = Vue.component("topic-add", {
 	},
 	watch: {
 		topicNameInput(value) {
+      var configurations = {
+        "retention.ms": parseInt(this.topicRetentionPeriodInDays, 10)
+      };
+
 			this.topicService
 				.add(
 					this.capabilityId,
 					{
 						"name": value,
-						"partitions": this.topicPartitions,
-						"retentionPeriodInDays": this.topicRetentionPeriodInDays,
+						"partitions": parseInt(this.topicPartitions, 10),
+						"retentionPeriodInDays": parseInt(this.topicRetentionPeriodInDays, 10),
 						"description": this.topicDescription,
-						"dryrun": true
+            "dryrun": true,
+            "configurations": configurations
 					}
 				)
 				.then(r => {
@@ -60,7 +65,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 					{
 						"name": this.topicNameInput,
 						"partitions": parseInt(this.topicPartitions, 10),
-						"retentionPeriodInDays": this.topicRetentionPeriodInDays,
+						"retentionPeriodInDays": parseInt(this.topicRetentionPeriodInDays, 10),
 						"description": this.topicDescription,
 						"dryrun": false
 					}
@@ -140,14 +145,14 @@ const TopicAddComponent = Vue.component("topic-add", {
 							<div class="field">
 								<label class="label">retention period in days</label>
 								<div class="control">
-									<input type="radio" id="one" value="7" v-model="topicRetentionPeriodInDays">
-									<label for="three">7</label>
-									<input type="radio" id="one" value="31" v-model="topicRetentionPeriodInDays">
-									<label for="six">31</label>
-									<input type="radio" id="one" value="365" v-model="topicRetentionPeriodInDays">
-									<label for="twelve">365</label>
+									<input type="radio" id="one" value="604800000" v-model="topicRetentionPeriodInDays">
+									<label for="seven">7</label>
+									<input type="radio" id="one" value="2678400000" v-model="topicRetentionPeriodInDays">
+									<label for="thirtyone">31</label>
+									<input type="radio" id="one" value="31536000000" v-model="topicRetentionPeriodInDays">
+									<label for="threehundredandsixtyfive">365</label>
 									<input type="radio" id="one" value="-1" v-model="topicRetentionPeriodInDays">
-									<label for="twelve">Infinity</label>
+									<label for="infinite">Infinity</label>
 								</div>
 							</div>
                             <div class="field">
