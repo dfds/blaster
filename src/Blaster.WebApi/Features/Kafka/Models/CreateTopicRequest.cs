@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Blaster.WebApi.Features.Capabilities.Models
 {
@@ -9,5 +10,6 @@ namespace Blaster.WebApi.Features.Capabilities.Models
 		public int Partitions { get; set; }
 		public long RetentionPeriodInDays { get; set; }
 		public bool DryRun { get; set; }
+		public Dictionary<string, object> Configurations { get; set; }
 	}
 }
