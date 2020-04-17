@@ -59,6 +59,10 @@ const TopicAddComponent = Vue.component("topic-add", {
 	},
 	methods: {
 		saveTopic: function () {
+      var configurations = {
+        "retention.ms": parseInt(this.topicRetentionPeriodInDays, 10)
+      };
+
 			this.topicService
 				.add(
 					this.capabilityId,
@@ -67,7 +71,8 @@ const TopicAddComponent = Vue.component("topic-add", {
 						"partitions": parseInt(this.topicPartitions, 10),
 						"retentionPeriodInDays": parseInt(this.topicRetentionPeriodInDays, 10),
 						"description": this.topicDescription,
-						"dryrun": false
+            "dryrun": false,
+            "configurations": configurations
 					}
 				)
 				.then(() => {
