@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities.Models;
 using Blaster.WebApi.Features.Shared;
@@ -53,6 +55,18 @@ namespace Blaster.WebApi.Features.Capabilities
 		{
 			try
 			{
+				var configurations = new Dictionary<string, object>();
+				if (input.Configurations != null)
+				{
+					foreach (var (key, value) in input.Configurations)
+					{
+						var jsonElement = (JsonElement)value;
+						configurations[key] = JsonObjectTools.GetValueFromJsonElement(jsonElement);
+					}
+				}
+
+				input.Configurations = configurations;
+				
 				var returnTopic = await _KafkaServiceClient.CreateTopic(
 					capabilityId: id,
 					createTopicRequest: input

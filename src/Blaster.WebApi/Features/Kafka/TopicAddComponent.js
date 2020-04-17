@@ -11,6 +11,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 			topicDescription: "",
 			topicNameInput: "",
 			topicPartitions: 12,
+			topicRetentionPeriodInDays: 7,
 			topicNamePreview: "",
 			topicName: "",
 			topicService: new TopicService(),
@@ -22,14 +23,20 @@ const TopicAddComponent = Vue.component("topic-add", {
 	},
 	watch: {
 		topicNameInput(value) {
+      var configurations = {
+        "retention.ms": parseInt(this.topicRetentionPeriodInDays, 10)
+      };
+
 			this.topicService
 				.add(
 					this.capabilityId,
 					{
 						"name": value,
-						"partitions": this.topicPartitions,
+						"partitions": parseInt(this.topicPartitions, 10),
+						"retentionPeriodInDays": parseInt(this.topicRetentionPeriodInDays, 10),
 						"description": this.topicDescription,
-						"dryrun": true
+            "dryrun": true,
+            "configurations": configurations
 					}
 				)
 				.then(r => {
@@ -52,20 +59,27 @@ const TopicAddComponent = Vue.component("topic-add", {
 	},
 	methods: {
 		saveTopic: function () {
+      var configurations = {
+        "retention.ms": parseInt(this.topicRetentionPeriodInDays, 10)
+      };
+
 			this.topicService
 				.add(
 					this.capabilityId,
 					{
 						"name": this.topicNameInput,
 						"partitions": parseInt(this.topicPartitions, 10),
+						"retentionPeriodInDays": parseInt(this.topicRetentionPeriodInDays, 10),
 						"description": this.topicDescription,
-						"dryrun": false
+            "dryrun": false,
+            "configurations": configurations
 					}
 				)
 				.then(() => {
 						this.$emit('topicAdded');
 						this.topicNameInput = "";
 						this.topicPartitions = 12;
+						this.topicRetentionPeriodInDays = 7;
 						this.topicDescription = "";
 					}
 				);
@@ -132,6 +146,19 @@ const TopicAddComponent = Vue.component("topic-add", {
 									Our recommendation for a no frills productions ready topic is 12 partitions.<br />
 									You are welcome to contact the development excellence department if you need a different partitions count than available in this ui. 
 								</p>
+							</div>
+							<div class="field">
+								<label class="label">retention period in days</label>
+								<div class="control">
+									<input type="radio" id="one" value="604800000" v-model="topicRetentionPeriodInDays">
+									<label for="seven">7</label>
+									<input type="radio" id="one" value="2678400000" v-model="topicRetentionPeriodInDays">
+									<label for="thirtyone">31</label>
+									<input type="radio" id="one" value="31536000000" v-model="topicRetentionPeriodInDays">
+									<label for="threehundredandsixtyfive">365</label>
+									<input type="radio" id="one" value="-1" v-model="topicRetentionPeriodInDays">
+									<label for="infinite">Infinity</label>
+								</div>
 							</div>
                             <div class="field">
                                 <div class="control has-text-centered">
