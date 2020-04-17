@@ -11,7 +11,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 			topicDescription: "",
 			topicNameInput: "",
 			topicPartitions: 12,
-			topicRetentionPeriodInDays: 7,
+			topicRetentionPeriodInDays: 604800000,
 			topicNamePreview: "",
 			topicName: "",
 			topicService: new TopicService(),
@@ -79,7 +79,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 						this.$emit('topicAdded');
 						this.topicNameInput = "";
 						this.topicPartitions = 12;
-						this.topicRetentionPeriodInDays = 7;
+						this.topicRetentionPeriodInDays = 604800000;
 						this.topicDescription = "";
 					}
 				);
@@ -131,13 +131,13 @@ const TopicAddComponent = Vue.component("topic-add", {
 						  	<div class="field">
 									<label class="label">partitions</label>
 									<div class="control">
-									<input type="radio" id="one" value="1" v-model="topicPartitions" :checked="checked">
+									<input type="radio" id="one" value="1" v-model="topicPartitions" >
 									<label for="one">1</label>
-									<input type="radio" id="one" value="3" v-model="topicPartitions" :checked="checked">
+									<input type="radio" id="one" value="3" v-model="topicPartitions" >
 									<label for="three">3</label>
-									<input type="radio" id="one" value="6" v-model="topicPartitions" :checked="checked">
+									<input type="radio" id="one" value="6" v-model="topicPartitions" >
 									<label for="six">6</label>
-									<input type="radio" id="one" value="12" v-model="topicPartitions" :checked="checked">
+									<input type="radio" id="one" value="12" v-model="topicPartitions">
 									<label for="twelve">12</label>
                                 </div>
 							</div>
