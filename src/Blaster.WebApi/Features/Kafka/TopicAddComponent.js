@@ -114,9 +114,22 @@ const TopicAddComponent = Vue.component("topic-add", {
                         <div class="form">
                             <div class="field">
                                 <label class="label">Name</label>
-									<input class="input" type="text" data-property="free" v-model="topicNameInput">
+
+                                <p style="margin-bottom: 5px;">
+                                  The following characters are allowed in Topic names:
+                                  <ul style="list-style-type:disc; margin-left: 30px;">
+                                    <li>a-Z</li>
+                                    <li>0-9</li>
+                                    <li>-</li>
+                                  </ul>
+                                  <br />
+                                  Everything else will be corrected on your behalf. Max characters including the automatically appended prefix is 55 characters.
+                                </p>
+
+									              <input class="input" type="text" data-property="free" v-model="topicNameInput">
                                 <div style="display:flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 20px; margin-bottom: 10px;">
                                     <h3 style="font-size: 1.2rem; font-weight: 700;">Preview of name</h3>
+
                                     <br />
                                     <div style="display: flex; flex-direction: row; font-size: 1.2rem; word-break: break-all;">{{ topicNamePreview }}</div>
                                 </div>
@@ -161,6 +174,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 								</div>
 							</div>
                             <div class="field">
+                                <p style="margin-bottom: 10px;">Provisioning of a Topic does typically take five minutes.</p>
                                 <div class="control has-text-centered">
                                     <button class="button is-primary" data-behavior="save" v-on:click="saveTopic">Save</button>
                                     <button class="button is-info" aria-label="close" data-behavior="close" v-on:click="$emit('addtopic-close')">Cancel</button>
