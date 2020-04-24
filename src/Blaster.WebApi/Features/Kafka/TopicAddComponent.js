@@ -7,15 +7,19 @@ const TopicAddComponent = Vue.component("topic-add", {
 	mounted: function () {
 	},
 	data: function () {
-		return {
-			topicDescription: "",
-			topicNameInput: "",
-			topicPartitions: 12,
-			topicRetentionPeriodInMs: 604800000,
-			topicNamePreview: "",
-			topicName: "",
-			topicService: new TopicService(),
-			err: null
+		return this.getInitData();
+  },
+  updated: function () {
+		if (!this.enable) {
+      var initData = this.getInitData();
+			this.topicDescription = initData.topicDescription;
+      this.topicMisc = initData.topicMisc;
+			this.topicNameInput = initData.topicNameInput;
+			this.topicPartitions = initData.topicPartitions;
+			this.topicRetentionPeriodInMs = initData.topicRetentionPeriodInMs;
+			this.topicNamePreview = initData.topicNamePreview;
+      this.topicName = initData.topicName;
+      this.err = initData.err;
 		}
 	},
 	components: {
@@ -92,13 +96,19 @@ const TopicAddComponent = Vue.component("topic-add", {
 				.split(/ |\B(?=[A-Z])/)
 				.map(word => word.toLowerCase())
 				.join('_');
-		}
-	},
-	updated: function () {
-		if (!this.enable) {
-			this.topicDescription = "";
-			this.topicMisc = "";
-		}
+    },
+    getInitData: function() {
+      return {
+        topicDescription: "",
+        topicNameInput: "",
+        topicPartitions: 12,
+        topicRetentionPeriodInMs: 604800000,
+        topicNamePreview: "",
+        topicName: "",
+        topicService: new TopicService(),
+        err: null
+      }
+    }
 	},
 	template: `
         <div class="modal" v-bind:class="{'is-active': this.isEnabledStyling}">
