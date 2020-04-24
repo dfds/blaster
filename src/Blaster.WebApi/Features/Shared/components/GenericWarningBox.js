@@ -50,7 +50,7 @@ const GenericWarningBoxComponent = Vue.component("generic-warning-box", {
 	},
   template: `
     <div v-if="activeError" class="generic-warning-box" v-bind:class="[color]">
-      <p style="word-wrap: anywhere" v-html="msg"></p>
+      <p style="word-break: break-all;" v-html="msg"></p>
     </div>
     `
 })
