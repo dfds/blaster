@@ -11,15 +11,16 @@ const TopicAddComponent = Vue.component("topic-add", {
   },
   updated: function () {
 		if (!this.enable) {
-      var initData = this.getInitData();
+      		var initData = this.getInitData();
 			this.topicDescription = initData.topicDescription;
-      this.topicMisc = initData.topicMisc;
+      		this.topicMisc = initData.topicMisc;
 			this.topicNameInput = initData.topicNameInput;
 			this.topicPartitions = initData.topicPartitions;
 			this.topicRetentionPeriodInMs = initData.topicRetentionPeriodInMs;
 			this.topicNamePreview = initData.topicNamePreview;
-      this.topicName = initData.topicName;
-      this.err = initData.err;
+      		this.topicName = initData.topicName;
+			this.err = initData.err;
+			this.topicAvailability = initData.topicAvailability;  
 		}
 	},
 	components: {
@@ -39,8 +40,9 @@ const TopicAddComponent = Vue.component("topic-add", {
 						"partitions": parseInt(this.topicPartitions, 10),
 						"retentionPeriodInDays": parseInt(this.topicRetentionPeriodInMs, 10),
 						"description": this.topicDescription,
-            "dryrun": true,
-            "configurations": configurations
+						"dryrun": true,
+						"configurations": configurations,
+						"availability" : this.topicAvailability
 					}
 				)
 				.then(r => {
@@ -75,8 +77,9 @@ const TopicAddComponent = Vue.component("topic-add", {
 						"partitions": parseInt(this.topicPartitions, 10),
 						"retentionPeriodInDays": parseInt(this.topicRetentionPeriodInMs, 10),
 						"description": this.topicDescription,
-            "dryrun": false,
-            "configurations": configurations
+            			"dryrun": false,
+            			"configurations": configurations,
+						"availability" : this.topicAvailability
 					}
 				)
 				.then(() => {
@@ -85,6 +88,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 						this.topicPartitions = 12;
 						this.topicRetentionPeriodInMs = 604800000;
 						this.topicDescription = "";
+						this.topicAvailability = "private";
 					}
 				);
 		},
@@ -105,8 +109,9 @@ const TopicAddComponent = Vue.component("topic-add", {
         topicRetentionPeriodInMs: 604800000,
         topicNamePreview: "",
         topicName: "",
-        topicService: new TopicService(),
-        err: null
+		topicAvailability: "private",
+		topicService: new TopicService(),
+		err: null
       }
     }
 	},
@@ -136,7 +141,7 @@ const TopicAddComponent = Vue.component("topic-add", {
                                   Everything else will be corrected on your behalf. Max characters including the automatically appended prefix is 55 characters.
                                 </p>
 
-									              <input class="input" type="text" data-property="free" v-model="topicNameInput">
+								<input class="input" type="text" data-property="free" v-model="topicNameInput">
                                 <div style="display:flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 20px; margin-bottom: 10px;">
                                     <h3 style="font-size: 1.2rem; font-weight: 700;">Preview of name</h3>
 
@@ -150,10 +155,28 @@ const TopicAddComponent = Vue.component("topic-add", {
                                 <div class="control">
                                     <input class="input" type="text" placeholder="Description" data-property="description" v-model="topicDescription">
                                 </div>
-                            </div>
+							</div>
+							<div class="field">
+								<label class="label">Availability</label>
+								<div class="control">
+									<input type="radio" id="availabilityPrivate" value="private" v-model="topicAvailability" >
+									<label>Private</label>
+									<input type="radio" id="availabilityPublic" value="public" v-model="topicAvailability" >
+									<label>Public</label>
+								</div>
+							</div>
+							<div class="field">
+								<p>
+									Private topics can only be written to and read from the capability creating them.<br />
+									Public topics can be written to from the capability creating them and read from all capabilities within DFDS.
+								</p>
+								<p>
+									Availability can not be changed after creation of a topic. 
+								</p>
+							</div>
 						  	<div class="field">
-									<label class="label">Partitions</label>
-									<div class="control">
+								<label class="label">Partitions</label>
+								<div class="control">
 									<input type="radio" id="one" value="1" v-model="topicPartitions" >
 									<label for="one">1</label>
 									<input type="radio" id="one" value="3" v-model="topicPartitions" >
