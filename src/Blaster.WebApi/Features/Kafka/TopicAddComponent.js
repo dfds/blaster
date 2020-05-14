@@ -120,7 +120,10 @@ const TopicAddComponent = Vue.component("topic-add", {
 						this.topicDescription = "";
 						this.topicAvailability = "private";
 					}
-				);
+        )
+        .catch(err => {
+					this.err = err;
+        });
 		},
 		disable: function () {
 			this.enable = false;
