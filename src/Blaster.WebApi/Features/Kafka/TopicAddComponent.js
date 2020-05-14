@@ -56,31 +56,33 @@ const TopicAddComponent = Vue.component("topic-add", {
     },
     
     topicAvailability(value) {
-      var configurations = {
-        "retention.ms": parseInt(this.topicRetentionPeriodInMs, 10)
-      };
-
-			this.topicService
-				.add(
-					this.capabilityId,
-					{
-						"name": this.topicNameInput,
-						"partitions": parseInt(this.topicPartitions, 10),
-						"retentionPeriodInDays": parseInt(this.topicRetentionPeriodInMs, 10),
-						"description": this.topicDescription,
-						"dryrun": true,
-						"configurations": configurations,
-						"availability" : this.topicAvailability
-					}
-				)
-				.then(r => {
-					this.topicNamePreview = r.name;
-					this.err = null;
-				})
-				.catch(err => {
-					this.err = err;
-					this.topicNamePreview = "";
-				});
+      if (this.topicNameInput.valueOf() !== "".valueOf()) {
+        var configurations = {
+          "retention.ms": parseInt(this.topicRetentionPeriodInMs, 10)
+        };
+  
+        this.topicService
+          .add(
+            this.capabilityId,
+            {
+              "name": this.topicNameInput,
+              "partitions": parseInt(this.topicPartitions, 10),
+              "retentionPeriodInDays": parseInt(this.topicRetentionPeriodInMs, 10),
+              "description": this.topicDescription,
+              "dryrun": true,
+              "configurations": configurations,
+              "availability" : this.topicAvailability
+            }
+          )
+          .then(r => {
+            this.topicNamePreview = r.name;
+            this.err = null;
+          })
+          .catch(err => {
+            this.err = err;
+            this.topicNamePreview = "";
+          });
+      }
     }
 	},
 	computed: {
