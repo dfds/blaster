@@ -9,7 +9,6 @@ import ChannelIconComponent from "./ChannelIconComponent";
 import ChannelInputComponent from "./ChannelInputComponent";
 import BannerComponent from "./BannerComponent";
 import {InstallRequestMsalHandler} from "../plugins/HttpHandlers/RequestMsalHandler";
-import VueCountdown from '@chenfengyuan/vue-countdown';
 
 Vue.use(UserManagementPlugin);
 Vue.use(HttpClientPlugin);
@@ -44,7 +43,6 @@ new Vue({
         active: false
     },
     components: {
-        'sunset-countdown': VueCountdown,
         'banner': BannerComponent
     }
     
