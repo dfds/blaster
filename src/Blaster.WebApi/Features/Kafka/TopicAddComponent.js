@@ -115,7 +115,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 				.then(() => {
 						this.$emit('topicAdded');
 						this.topicNameInput = "";
-						this.topicPartitions = 12;
+						this.topicPartitions = 1;
 						this.topicRetentionPeriodInMs = 604800000;
 						this.topicDescription = "";
 						this.topicAvailability = "private";
@@ -138,7 +138,7 @@ const TopicAddComponent = Vue.component("topic-add", {
       return {
         topicDescription: "",
         topicNameInput: "",
-        topicPartitions: 12,
+        topicPartitions: 1,
         topicRetentionPeriodInMs: 604800000,
         topicNamePreview: "",
         topicName: "",
@@ -216,7 +216,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 									<label for="three">3</label>
 									<input type="radio" id="one" value="6" v-model="topicPartitions" >
 									<label for="six">6</label>
-									<input type="radio" id="one" value="12" v-model="topicPartitions">
+									<input type="radio" id="one" value="12" v-model="topicPartitions" disabled>
 									<label for="twelve">12</label>
                                 </div>
 							</div>
