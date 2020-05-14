@@ -53,7 +53,35 @@ const TopicAddComponent = Vue.component("topic-add", {
 					this.err = err;
 					this.topicNamePreview = "";
 				});
-		}
+    },
+    
+    topicAvailability(value) {
+      var configurations = {
+        "retention.ms": parseInt(this.topicRetentionPeriodInMs, 10)
+      };
+
+			this.topicService
+				.add(
+					this.capabilityId,
+					{
+						"name": this.topicNameInput,
+						"partitions": parseInt(this.topicPartitions, 10),
+						"retentionPeriodInDays": parseInt(this.topicRetentionPeriodInMs, 10),
+						"description": this.topicDescription,
+						"dryrun": true,
+						"configurations": configurations,
+						"availability" : this.topicAvailability
+					}
+				)
+				.then(r => {
+					this.topicNamePreview = r.name;
+					this.err = null;
+				})
+				.catch(err => {
+					this.err = err;
+					this.topicNamePreview = "";
+				});
+    }
 	},
 	computed: {
 		isEnabledStyling: function () {
@@ -109,9 +137,9 @@ const TopicAddComponent = Vue.component("topic-add", {
         topicRetentionPeriodInMs: 604800000,
         topicNamePreview: "",
         topicName: "",
-		topicAvailability: "private",
-		topicService: new TopicService(),
-		err: null
+        topicAvailability: "private",
+        topicService: new TopicService(),
+        err: null
       }
     }
 	},
