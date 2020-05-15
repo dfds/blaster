@@ -115,7 +115,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 				.then(() => {
 						this.$emit('topicAdded');
 						this.topicNameInput = "";
-						this.topicPartitions = 12;
+						this.topicPartitions = 1;
 						this.topicRetentionPeriodInMs = 604800000;
 						this.topicDescription = "";
 						this.topicAvailability = "private";
@@ -138,7 +138,7 @@ const TopicAddComponent = Vue.component("topic-add", {
       return {
         topicDescription: "",
         topicNameInput: "",
-        topicPartitions: 12,
+        topicPartitions: 1,
         topicRetentionPeriodInMs: 604800000,
         topicNamePreview: "",
         topicName: "",
@@ -216,14 +216,11 @@ const TopicAddComponent = Vue.component("topic-add", {
 									<label for="three">3</label>
 									<input type="radio" id="one" value="6" v-model="topicPartitions" >
 									<label for="six">6</label>
-									<input type="radio" id="one" value="12" v-model="topicPartitions">
-									<label for="twelve">12</label>
-                                </div>
+                </div>
 							</div>
 							<div class="field">
-								<p>
-									Our recommendation for a no frills productions ready topic is 12 partitions.<br />
-									You are welcome to contact the development excellence department if you need a different partitions count than available in this ui. 
+                <p>
+                  A single partition can support a very high load. You should normally only use more partitions if you need concurrent handling and/or lower latency.
 								</p>
 							</div>
 							<div class="field">
