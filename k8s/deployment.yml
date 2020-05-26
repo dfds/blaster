@@ -19,6 +19,7 @@ spec:
         app: blaster
         project: selfservice
         department: devex
+        logging_dfds_cloud_format_json: "true"
     spec:
       priorityClassName: selfservice
       containers:
