@@ -49,7 +49,6 @@ const app = new Vue({
         showMessageContractEdit: false,
         messageContractEditData: null,
         topicEditData: null,
-        topicsEnabled: false,
         capabilityDeleteEnabled: false,
         connections: [],
         communicationConnections: null
@@ -392,15 +391,7 @@ const app = new Vue({
     },
     mounted: function () {
         const capabilityIdParam = new URLSearchParams(window.location.search).get('capabilityId');
-        this.topicsEnabled = this.$featureFlag.flagExists("topics") ? this.$featureFlag.getFlag("topics").enabled : false;
         this.capabilityDeleteEnabled = this.$featureFlag.flagExists("capabilitydelete") ? this.$featureFlag.getFlag("capabilitydelete").enabled : false;
-
-        // Temporary
-        if (!this.topicsEnabled)
-        {
-            const featureflag_testFilter_queryParam = new URLSearchParams(window.location.search).get('ff_5HbsabxqTiUMazSDuz6qfUqQhHU5i4vi8nN6RU6xGiNYw3VkCQLUfewZ3ahbFGML');
-            this.topicsEnabled = featureflag_testFilter_queryParam !== null;
-        }
 
         // TODO Handle no or empty capabilityId
         jq.ready
