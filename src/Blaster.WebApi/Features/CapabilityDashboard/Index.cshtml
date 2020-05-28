@@ -154,7 +154,7 @@
             <capability-edit :enable="showEditCapability" :initialdata="capability" v-on:capability-edit-save="handleCapabilityEdit" v-on:capability-edit-close="toggleShowEditCapability()"></capability-edit>
             <capability-delete :enable="showDeleteCapability" :capability="capability" v-on:capability-delete-save="handleCapabilityDelete" v-on:capability-delete-close="toggleShowDeleteCapability()"></capability-delete>
 
-   			<capability-topics :topics-enabled="topicsEnabled" :capability-id="capability.id" :is-joined-computed="isJoinedComputed"></capability-topics>
+   			<capability-topics :capability-id="capability.id" :is-joined-computed="isJoinedComputed"></capability-topics>
    			
         <!--- Summary section --->
             <div class="container box" style="display:none">

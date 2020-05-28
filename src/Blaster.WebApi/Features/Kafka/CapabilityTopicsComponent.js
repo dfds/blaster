@@ -4,11 +4,9 @@ import TopicAddComponent from "./TopicAddComponent"
 import TopicService from "./topicservice";
 
 const capabilityTopicsComponent = Vue.component("capabilityTopics", {
-	props: ["topicsEnabled", "capabilityId", "isJoinedComputed"],
+	props: ["capabilityId", "isJoinedComputed"],
 	mounted: function () {
-		if (this.topicsEnabled) {
 			this.loadTopics();
-		}
 	},
 	data: function () {
 		return {
@@ -34,7 +32,7 @@ const capabilityTopicsComponent = Vue.component("capabilityTopics", {
 		'topic-add': TopicAddComponent
 	},
 	template: `
-		<div class="container box" v-if="topicsEnabled">
+		<div class="container box">
 			<h1 class="title is-uppercase">Topics</h1>
 
 			<div>
