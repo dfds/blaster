@@ -59,9 +59,12 @@
 
                 <div class="navbar-end">
                     <div v-cloak class="navbar-item">
-                        <a v-if="isAuthenticated()" v-on:click="signOut()">
-                            Sign out {{getUserName()}}
-                        </a>
+                        <div v-if="isAuthenticated()" class="login">
+                          <span style="text-overflow: ellipsis; overflow: hidden;">{{getUserName()}}</span>
+                          <a v-on:click="signOut()">
+                              Sign out
+                          </a>
+                        </div>
                         <a v-if="!isAuthenticated()" v-on:click="signIn()">
                             Sign in
                         </a>

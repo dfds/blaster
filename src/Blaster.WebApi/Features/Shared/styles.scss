@@ -68,6 +68,22 @@ $navbar-mobile-trigger: "all and (max-width: 1087px)";
     }
 }
 
+.navbar-end {
+  .navbar-item {
+    .login {
+      width: 100px;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      white-space: nowrap;
+
+      @media #{$navbar-mobile-trigger} {
+        width: auto;
+      }
+    }
+  }
+}
+
 .navbar-burger {
     width: 80px;
     height: 80px;
