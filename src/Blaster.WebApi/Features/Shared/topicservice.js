@@ -1,11 +1,13 @@
 import HttpClient from "httpclient";
+import * as UserService from "userservice";
 
 export default class TopicService {
-    constructor(httpClient) {
+    constructor(httpClient, userService) {
         this.client = httpClient ? httpClient : new HttpClient();
         this.baseUrl = "api/topics";
 
         this.getAll = this.getAll.bind(this);
+        this.userService = userService ? userService : new UserService.default();
     }
 
     add(payload) {
@@ -14,7 +16,7 @@ export default class TopicService {
 
     getAll() {
         return this.client.get(this.baseUrl)
-            .then(data => data.items || []);
+            .then(data => data.data.items || []);
     }
 
     getById(topicId) {

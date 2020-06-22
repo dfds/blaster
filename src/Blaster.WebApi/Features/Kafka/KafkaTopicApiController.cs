@@ -49,6 +49,26 @@ namespace Blaster.WebApi.Features.Capabilities
 			}
 		}
 		
+		[HttpGet("/api/topics", Name = "GetAll")]
+		public async Task<ActionResult<TopicsResponse>> GetAll()
+		{
+			try
+			{
+				var topicsResponse = await _KafkaServiceClient.GetAll();
+
+				if (topicsResponse != null)
+				{
+					return new ActionResult<TopicsResponse>(topicsResponse);
+				}
+
+				return new ActionResult<TopicsResponse>(NotFound());
+			}
+			catch (UnauthorizedException)
+			{
+				return Unauthorized();
+			}
+		}
+		
 		
 		[HttpPost("{id}/topics", Name = "AddTopic")]
 		public async Task<ActionResult<Topic>> AddTopic([FromRoute] string id, [FromBody] CreateTopicRequest input)
