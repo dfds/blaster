@@ -1,0 +1,36 @@
+@section Scripts
+{
+    <script src="~/topics.bundle.js"></script>
+}
+
+<div id="topic-app" v-cloak>
+    <banner v-if="showIEBanner" description="Internet Explorer is not a supported browser on the Self Service Portal. Certain functionality is quite likely to not work."></banner>
+    <section class="section">
+      <div class="topics-main">
+        <div class="topics-content">
+          <h1 class="title">Public topics</h1>
+
+          <Datatable :value="tablesData.data" :filters="filters" class="p-datatable-responsive" :auto-layout=true>
+            <template #loading>
+                Loading customers data. Please wait.
+            </template>    
+            <Column header="Capability" :sortable="true" sort-field="capability.name" filter-field="capability.name" filter-match-mode="contains">
+              <template #body="slotProps">
+                <a :href="'/capabilitydashboard?capabilityId=' + slotProps.data.capability.id">{{slotProps.data.capability.name}}</a>
+              </template>
+              <template #filter>
+                  <InputText type="text" v-model="filters['capability.name']" class="p-column-filter" placeholder="Search by name"/>
+              </template>              
+            </Column>
+            <Column field="topicName" header="Topic name" :sortable="true" filter-match-mode="contains">
+              <template #filter>
+                  <InputText type="text" v-model="filters['topicName']" class="p-column-filter" placeholder="Search by Topic name"/>
+              </template>              
+            </Column>
+            <Column field="description" header="Description"></Column>
+          </Datatable>
+        </div>
+      </div>
+    </section>
+
+</div>

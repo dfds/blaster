@@ -39,6 +39,11 @@
   "dependencies": {
     "axios": "^0.19.0",
     "core-js": "^3.2.1",
-    "regenerator-runtime": "^0.13.3"
+    "primeicons": "^4.0.0",
+    "primevue": "^2.0.0-rc.1",
+    "regenerator-runtime": "^0.13.3",
+    "vue-loader": "^15.9.2",
+    "vue-tables-2": "^2.0.30",
+    "vue-template-compiler": "2.6.10"
   }
 }

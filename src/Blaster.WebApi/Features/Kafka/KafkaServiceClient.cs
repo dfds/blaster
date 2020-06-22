@@ -27,6 +27,15 @@ namespace Blaster.WebApi.Features.Capabilities
 			return _serializer.Deserialize<TopicsResponse>(content);
 		}
 
+		public async Task<TopicsResponse> GetAll()
+		{
+			var response = await _client.GetAsync($"/api/v1/topics");
+			HttpResponseHelper.EnsureSuccessStatusCode(response);
+			var content = await response.Content.ReadAsStringAsync();
+
+			return _serializer.Deserialize<TopicsResponse>(content);
+		}
+
 		public async Task<Topic> CreateTopic(string capabilityId, CreateTopicRequest createTopicRequest)
 		{
 			var reqContent = new StringContent(

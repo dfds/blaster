@@ -76,6 +76,11 @@ export default class HttpClient {
         capabilitiesEndpoint.matchRegex = '\/api\/capabilities\/?';
         this.authAddEndpoint(capabilitiesEndpoint);
 
+        let topicsEndpoint = new ProtectedEndpoint();
+        capabilitiesEndpoint.value = "/api/topics";
+        capabilitiesEndpoint.matchRegex = '\/api\/topics\/?';
+        this.authAddEndpoint(topicsEndpoint);
+
         let connectionsEndpoint = new ProtectedEndpoint();
         connectionsEndpoint.value = "/api/connections";
         connectionsEndpoint.matchRegex = '\/api\/connections\/?';

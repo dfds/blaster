@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Blaster.WebApi.Features.Capabilities
 {
-    [Route("api/topics")]
+    [Route("api/defunct/topics")]
     [ApiController]
     public class TopicApiController : ControllerBase
     {

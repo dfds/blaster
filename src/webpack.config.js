@@ -2,6 +2,7 @@ const webpack = require("webpack");
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const {EnvironmentPlugin} = require("webpack");
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
     entry: {
@@ -9,7 +10,7 @@ module.exports = {
         capabilities: "./Blaster.WebApi/Features/Capabilities/main.js",
         frontpage: "./Blaster.WebApi/Features/Frontpage/main.js",
         login: "./Blaster.WebApi/Features/Login/main.js",
-//        topics: "./Blaster.WebApi/Features/Topic/main.js",
+        topics: "./Blaster.WebApi/Features/Topics/main.js",
         capabilitydashboard: "./Blaster.WebApi/Features/CapabilityDashboard/main.js",
         featureflags: "./Blaster.WebApi/Features/FeatureFlag/main.js"
 //        topicdetails: "./Blaster.WebApi/Features/TopicDetails/main.js",
@@ -32,14 +33,15 @@ module.exports = {
             connectionservice$: path.resolve(__dirname, "Blaster.WebApi/Features/Shared/connectionservice.js"),
             "keypattern-shortcut$": path.resolve(__dirname, "Blaster.WebApi/Features/Shared/keypattern_shortcut.js")
         },
-        extensions: [".js", ".scss", ".css"]
+        extensions: [".js", ".scss", ".css", ".vue"]
     },
     devtool: 'source-map',
     plugins: [
         new MiniCssExtractPlugin({
             filename: "[name].css",
         }),
-        new EnvironmentPlugin(["BLASTER_AUTH_REDIRECT_URI"])
+        new EnvironmentPlugin(["BLASTER_AUTH_REDIRECT_URI"]),
+        new VueLoaderPlugin()
 	],
     watchOptions: {
 	    aggregateTimeout: 300,
@@ -59,6 +61,13 @@ module.exports = {
                     "sass-loader"
                 ]
             },
+
+            { test: /\.vue?$/, use:[
+                {
+                    loader: "vue-loader"
+                }
+            ] },
+
             {
                 test: /\.(eot|woff|ttf|woff2)$/,
                 use: [{

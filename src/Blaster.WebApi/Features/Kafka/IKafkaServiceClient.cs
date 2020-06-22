@@ -7,6 +7,7 @@ namespace Blaster.WebApi.Features.Capabilities
 	public interface IKafkaServiceClient : IForwardingClient
 	{
 		Task<TopicsResponse> GetByCapabilityId(string capabilityId);
+		Task<TopicsResponse> GetAll();
 
 		Task<Topic> CreateTopic(string capabilityId, CreateTopicRequest createTopicRequest);
 	}

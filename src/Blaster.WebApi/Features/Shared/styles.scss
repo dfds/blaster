@@ -48,6 +48,8 @@ $navbar-mobile-trigger: "all and (max-width: 1087px)";
 
 @import "~bulma/bulma";
 @import "~bulma-extensions/bulma-tooltip/src/sass/index";
+@import "~primeicons/primeicons.css";
+@import "~primevue/resources/themes/saga-blue/theme.css";
 
 [v-cloak] {
     display: none;
@@ -66,6 +68,22 @@ $navbar-mobile-trigger: "all and (max-width: 1087px)";
             max-height: 49px;
         }
     }
+}
+
+.navbar-end {
+  .navbar-item {
+    .login {
+      width: 100px;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      white-space: nowrap;
+
+      @media #{$navbar-mobile-trigger} {
+        width: auto;
+      }
+    }
+  }
 }
 
 .navbar-burger {
@@ -317,4 +335,20 @@ $navbar-mobile-trigger: "all and (max-width: 1087px)";
             }
         }
     }
+}
+
+.topics-main {
+  width: 968px;
+  margin-left:auto;
+  margin-right:auto;
+
+  .topics-content {
+    display: flex;
+    flex-direction: column;
+    //justify-content: center;
+
+    table {
+      width: 100%;
+    }
+  }
 }
