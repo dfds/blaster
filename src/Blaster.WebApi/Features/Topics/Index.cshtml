@@ -9,9 +9,7 @@
       <div class="topics-main">
         <div class="topics-content">
           <h1 class="title">Public topics</h1>
-          <!--<v-client-table :data="tablesData.data" :columns="tablesData.columns"></v-client-table>-->
 
-          <a href="/capabilitydashboard?capabilityId=1"></a>
           <Datatable :value="tablesData.data" :filters="filters">
             <template #loading>
                 Loading customers data. Please wait.
