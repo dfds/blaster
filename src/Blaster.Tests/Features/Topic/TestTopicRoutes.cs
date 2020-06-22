@@ -17,6 +17,7 @@ namespace Blaster.Tests.Features.Topic
             {
                 var client = clientBuilder
                     .WithService<ICapabilityServiceClient>(new StubCapabilityServiceClient())
+                    .WithService<IKafkaServiceClient>(new StubKafkaServiceClient())
                     .Build();
 
                 var response = await client.GetAsync("/api/topics");

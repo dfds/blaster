@@ -17,6 +17,11 @@ namespace Blaster.Tests.TestDoubles
 			return Task.FromResult(new TopicsResponse());
 		}
 
+		public Task<TopicsResponse> GetAll()
+		{
+			return Task.FromResult(new TopicsResponse());
+		}
+
 		public Task<Topic> CreateTopic(string capabilityId, CreateTopicRequest createTopicRequest)
 		{
 			return Task.FromResult(new Topic());
