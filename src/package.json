@@ -44,6 +44,6 @@
     "regenerator-runtime": "^0.13.3",
     "vue-loader": "^15.9.2",
     "vue-tables-2": "^2.0.30",
-    "vue-template-compiler": "2.6.10"
+    "vue-template-compiler": "^2.6.10"
   }
 }
