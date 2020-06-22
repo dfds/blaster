@@ -346,5 +346,9 @@ $navbar-mobile-trigger: "all and (max-width: 1087px)";
     display: flex;
     flex-direction: column;
     //justify-content: center;
+
+    table {
+      width: 100%;
+    }
   }
 }

@@ -10,7 +10,7 @@
         <div class="topics-content">
           <h1 class="title">Public topics</h1>
 
-          <Datatable :value="tablesData.data" :filters="filters">
+          <Datatable :value="tablesData.data" :filters="filters" class="p-datatable-responsive" :auto-layout=true>
             <template #loading>
                 Loading customers data. Please wait.
             </template>    

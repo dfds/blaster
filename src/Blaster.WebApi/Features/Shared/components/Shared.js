@@ -9,6 +9,9 @@ import ChannelIconComponent from "./ChannelIconComponent";
 import ChannelInputComponent from "./ChannelInputComponent";
 import BannerComponent from "./BannerComponent";
 import {InstallRequestMsalHandler} from "../plugins/HttpHandlers/RequestMsalHandler";
+import FeatureFlag from "featureflag";
+
+Vue.prototype.$featureFlag = new FeatureFlag();
 
 Vue.use(UserManagementPlugin);
 Vue.use(HttpClientPlugin);
@@ -40,10 +43,14 @@ new Vue({
         }
     },
     data: {
-        active: false
+        active: false,
+        showPublicTopics: false
     },
     components: {
         'banner': BannerComponent
+    },
+    mounted: function() {
+      this.showPublicTopics = this.$featureFlag.flagExists("publictopicspage") ? this.$featureFlag.getFlag("publictopicspage").enabled : false;
     }
     
 });
