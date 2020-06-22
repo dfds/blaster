@@ -68,6 +68,12 @@ const app = new Vue({
 
           topics.forEach(t => {
             var cap = this.getCapabilityById(t.capabilityId);
+
+            if (cap == undefined) 
+            {
+              cap = {name: "DELETED", id: "DELETED"}
+            }
+
             var tableTopic = {
               capability: {name: cap.name, id: cap.id},
               description: t.description,
