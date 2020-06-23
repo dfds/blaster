@@ -43,14 +43,10 @@ new Vue({
         }
     },
     data: {
-        active: false,
-        showPublicTopics: false
+        active: false
     },
     components: {
         'banner': BannerComponent
-    },
-    mounted: function() {
-      this.showPublicTopics = this.$featureFlag.flagExists("publictopicspage") ? this.$featureFlag.getFlag("publictopicspage").enabled : false;
     }
     
 });
