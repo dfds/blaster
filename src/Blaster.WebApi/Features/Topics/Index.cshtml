@@ -16,6 +16,7 @@
             </template>    
             <Column header="Capability" :sortable="true" sort-field="capability.name" filter-field="capability.name" filter-match-mode="contains">
               <template #body="slotProps">
+                <span class="p-column-title">Name</span>
                 <a :href="'/capabilitydashboard?capabilityId=' + slotProps.data.capability.id">{{slotProps.data.capability.name}}</a>
               </template>
               <template #filter>
@@ -23,11 +24,20 @@
               </template>              
             </Column>
             <Column field="topicName" header="Topic name" :sortable="true" filter-match-mode="contains">
+              <template #body="slotProps">
+                <span class="p-column-title">Topic Name</span>
+                <span>{{slotProps.data.topicName}}</span>
+              </template>            
               <template #filter>
                   <InputText type="text" v-model="filters['topicName']" class="p-column-filter" placeholder="Search by Topic name"/>
               </template>              
             </Column>
-            <Column field="description" header="Description"></Column>
+            <Column field="description" header="Description">
+              <template #body="slotProps">
+                <span class="p-column-title">Description</span>
+                {{slotProps.data.description}}
+              </template>               
+            </Column>
           </Datatable>
         </div>
       </div>

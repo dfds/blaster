@@ -87,10 +87,19 @@ const app = new Vue({
         })
         .then(filteredTopics => {
           // Filter so it only shows public topics
-          this.tablesData.data = filteredTopics.filter(t => {
+          return filteredTopics.filter(t => {
             var firstFourChars = t.topicName.substring(0, 4);
             return firstFourChars.valueOf() === "pub.";
           });
+        })
+        .then(filteredTopics => {
+          filteredTopics.sort(function(a, b) {
+            var name_a = a.topicName.toUpperCase();
+            var name_b = b.topicName.toUpperCase();
+
+            return (name_a < name_b) ? -1 : (name_a > name_b) ? 1 : 0;
+          })
+          this.tablesData.data = filteredTopics;
         });
     }
 })
