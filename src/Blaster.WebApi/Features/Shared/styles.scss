@@ -343,6 +343,10 @@ $navbar-mobile-trigger: "all and (max-width: 1087px)";
   margin-left:auto;
   margin-right:auto;
 
+  @media #{$navbar-mobile-trigger} {
+    width: 100%;
+  }
+
   .topics-content {
     display: flex;
     flex-direction: column;
@@ -364,6 +368,10 @@ $navbar-mobile-trigger: "all and (max-width: 1087px)";
       .p-datatable-thead > tr > th,
       .p-datatable-tfoot > tr > td {
           display: none !important;
+      }
+
+      .p-datatable-tbody > tr {
+        background-color: rgb(231, 231, 231);
       }
 
       .p-datatable-tbody > tr > td {
