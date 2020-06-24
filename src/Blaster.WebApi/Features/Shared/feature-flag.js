@@ -10,9 +10,7 @@ export default class FeatureFlag {
 
     setupFlags() {
          this.addFlag(new FlagTestFilter());
-         this.addFlag(new FlagTopics());
          this.addFlag(new FlagCapablityDelete());
-         this.addFlag(new FlagPublicTopicsPage());
     }
 
     init() {
@@ -61,22 +59,6 @@ class FlagTestFilter extends Flag {
         this.name = 'testfilter';
         this.description = "Show Capabilities that are deemed \"tests\"";
     }
-}
-
-class FlagTopics extends Flag {
-    constructor() {
-        super();
-        this.name = 'topics';
-        this.description = "Show Topic functionality on a Capability page";
-    }
-}
-
-class FlagPublicTopicsPage extends Flag {
-  constructor() {
-    super();
-    this.name = 'publictopicspage';
-    this.description = 'Enables menu button for public topics page';
-  }
 }
 
 class FlagCapablityDelete extends Flag {
