@@ -27,9 +27,9 @@ namespace Blaster.WebApi.Features.Frontpage
         [HttpGet("/downloads/kubeconfig")]
         public async Task<IActionResult> DownloadKubeConfig()
         {
-            var defaultKubeConfig = await _client.GetDefaultKubeConfig();
+            var kubeConfigS3Url = "https://dfds-oxygen-k8s-public.s3-eu-west-1.amazonaws.com/kubeconfig/hellman-saml.config";
 
-            return File(defaultKubeConfig.Content, defaultKubeConfig.ContentType, defaultKubeConfig.FileName);
+            return Redirect(kubeConfigS3Url);
         }
     }
 }
