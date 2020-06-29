@@ -177,7 +177,7 @@ const app = new Vue({
             this.toggleShowAddTopic();
 
             // To be removed for good.
-            /* 
+            /*
             if (this.isReadyForTopicCreation) {
                 this.toggleShowAddTopic();
             } else {
@@ -210,7 +210,7 @@ const app = new Vue({
             } else {
                 this.showDeleteCapability = true;
             }
-        },        
+        },
         toggleShowEditTopic: function(topic) {
             if (this.showEditTopic) {
                 this.topicEditData = null;
@@ -236,7 +236,7 @@ const app = new Vue({
                     return capabilityService.get(this.capability.id);
                 })
                 .then(data => this.capability = data)
-                .catch(err => console.log(JSON.stringify(err)));            
+                .catch(err => console.log(JSON.stringify(err)));
             this.toggleShowEditCapability();
         },
         handleCapabilityTopicCommonPrefix: function(commonPrefix) {
@@ -328,6 +328,12 @@ const app = new Vue({
                 .then(() => {
                         this.membershipRequested = false;
                 });
+            const editor = ModelEditor.open({
+                template: document.getElementById("joined-capability-dialog-template"),
+                data: {
+                },
+                onClose: () => editor.close(),
+            });
         },
         leaveCapability: function() {
             const capabilityId = this.capability.id;
