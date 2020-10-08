@@ -113,3 +113,10 @@ The call flow from user to Blaster goes through an AWS ALB for authentication. T
                 |             |
                 +-------------+
 ```
+
+
+## Deployment prerequisites
+
+With the change to scoped Kubernetes service connections during deploment, certain manifests have been moved out of the *k8s* directory and moved to the *k8s_initial* directory.
+
+The manifests within *k8s_initial* will have to be run manually or with a different service connection due to elevated rights.
