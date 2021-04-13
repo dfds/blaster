@@ -21,7 +21,7 @@ const capabilityTopicsComponent = Vue.component("capabilityTopics", {
           }
         });
 
-        this.clusters = onlyClustersInUse;
+        this.clustersViewData = onlyClustersInUse;
       });
 	},
 	data: function () {
@@ -29,6 +29,7 @@ const capabilityTopicsComponent = Vue.component("capabilityTopics", {
 			showAddTopic: false,
 			topics: [],
       clusters: [],
+      clustersViewData: [],
       topicsViewData: new Map(),
       abandonedTopics: []
 		}
@@ -106,16 +107,16 @@ const capabilityTopicsComponent = Vue.component("capabilityTopics", {
 			<topic-add :enable="showAddTopic" :clusters="clusters" :capability-id="capabilityId" v-on:topicAdded="topicCreated"
 					   v-on:addtopic-close="showCreateTopicFlow()"></topic-add>
 			<div class="topics">
-        <div v-for="cluster in clusters" :key="cluster.id">
-          {{cluster.name}} <span v-if="cluster.clusterId !== undefined">({{cluster.clusterId}})</span>
+        <div v-for="cluster in clustersViewData" :key="cluster.id">
+          <h1 class="title">{{cluster.name}} <span v-if="cluster.clusterId !== undefined">({{cluster.clusterId}})</span></h1>
 
           <div v-for="topic in topicsViewData.get(cluster.id)" :key="topic.id">
 					  <topic :topic="topic"></topic>
 				  </div>
 
         </div>
-        <div>
-          Abandoned (no matching Cluster)
+        <div v-if="abandonedTopics.length !== 0">
+          <h1 class="title"><span style="color: #be1e2d">Abandoned</span> (no matching Cluster)</h1>
 
           <div v-for="topic in abandonedTopics" :key="topic.id">
             <topic :topic="topic" :abandoned="true"></topic>

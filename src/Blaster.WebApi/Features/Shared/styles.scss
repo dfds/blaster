@@ -219,12 +219,13 @@ $navbar-mobile-trigger: "all and (max-width: 1087px)";
 
 .topics {
     display: flex;
-    margin-left: 35px;
+    margin-left: 15px;
     flex-direction: column;
 }
 
-.topics > * {
+.topic > * {
     margin-bottom: 15px;
+    margin-left: 10px;
 }
 
 .topic {
