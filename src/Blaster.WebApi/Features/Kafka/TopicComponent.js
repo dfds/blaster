@@ -3,7 +3,7 @@ import Vue from "vue";
 import TopicService from "./topicservice";
 
 const TopicComponent = Vue.component("topic", {
-	props: ["topic", "commonprefix"],
+	props: ["topic", "commonprefix", "abandoned"],
 
 	
 	data: function() {
@@ -61,7 +61,8 @@ const TopicComponent = Vue.component("topic", {
             <h2 class="title" title="Click to expand" v-on:click="toggleShowData()" >{{ topic.name }}</h2>
             <div class="details" v-if="showData">
                 <span class="entry"><span class="entry-title">Description:</span> <p>{{ topic.description }}</p></span>
-				<span class="entry"><span class="entry-title">Partitions:</span> <p>{{ topic.partitions }}</p></span>
+				        <span class="entry"><span class="entry-title">Partitions:</span> <p>{{ topic.partitions }}</p></span>
+				        <span class="entry"><span class="entry-title">Cluster UUID:</span> <p>{{ topic.kafkaClusterId }}</p></span>
 
 			</div>
         </div>

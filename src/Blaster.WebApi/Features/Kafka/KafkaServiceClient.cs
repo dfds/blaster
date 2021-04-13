@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,15 @@ namespace Blaster.WebApi.Features.Capabilities
 			return _serializer.Deserialize<TopicsResponse>(content);
 		}
 
+		public async Task<IEnumerable<KafkaCluster>> GetAllClusters()
+		{
+			var response = await _client.GetAsync($"/api/v1/kafka/cluster");
+			HttpResponseHelper.EnsureSuccessStatusCode(response);
+			var content = await response.Content.ReadAsStringAsync();
+
+			return _serializer.Deserialize<IEnumerable<KafkaCluster>>(content);
+		}
+		
 		public async Task<Topic> CreateTopic(string capabilityId, CreateTopicRequest createTopicRequest)
 		{
 			var reqContent = new StringContent(

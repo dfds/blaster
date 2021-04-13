@@ -6,12 +6,31 @@ import TopicService from "./topicservice";
 const capabilityTopicsComponent = Vue.component("capabilityTopics", {
 	props: ["capabilityId", "isJoinedComputed"],
 	mounted: function () {
-			this.loadTopics();
+      this.loadClusters()
+      .then(() => {
+        return this.loadTopics();
+      })
+      .then(() => {
+        this.topicsViewData = this.getTopicsByCluster();
+      })
+      .then(() => {
+        var onlyClustersInUse = [];
+        this.clusters.forEach(cluster => {
+          if (this.topicsViewData.has(cluster.id)) {
+            onlyClustersInUse.push(cluster);
+          }
+        });
+
+        this.clusters = onlyClustersInUse;
+      });
 	},
 	data: function () {
 		return {
 			showAddTopic: false,
-			topics: []
+			topics: [],
+      clusters: [],
+      topicsViewData: new Map(),
+      abandonedTopics: []
 		}
 	},
 	methods: {
@@ -20,8 +39,37 @@ const capabilityTopicsComponent = Vue.component("capabilityTopics", {
 		},
 		loadTopics() {
 			let topicService = new TopicService();
-			topicService.getByCapabilityId(this.capabilityId).then(data => this.topics = data);
+			return topicService.getByCapabilityId(this.capabilityId).then(data => this.topics = data);
 		},
+    loadClusters() {
+			let topicService = new TopicService();
+      return topicService.getClusters().then(data => this.clusters = data);
+    },
+    getTopicsByCluster() {
+      var sorted = new Map();
+
+      this.clusters.forEach(cluster => {
+        sorted.set(cluster.id, []);
+      });
+
+      this.topics.forEach(topic => {
+        if (sorted.has(topic.kafkaClusterId)) {
+          sorted.get(topic.kafkaClusterId).push(topic);
+        } else
+        {
+          this.abandonedTopics.push(topic);
+        }
+      });
+
+      // Check if "sorted" has a cluster listed with no topics, if so, remove it from viewing.
+      for (let [key, value] of sorted.entries()) {
+        if (value.length === 0) {
+          sorted.delete(key);
+        }
+      }
+
+      return sorted;
+    },
 		topicCreated() {
 			this.showAddTopic = false;
 			this.loadTopics();
@@ -55,12 +103,24 @@ const capabilityTopicsComponent = Vue.component("capabilityTopics", {
 				</button>
 			</div>
 
-			<topic-add :enable="showAddTopic" :capability-id="capabilityId" v-on:topicAdded="topicCreated"
+			<topic-add :enable="showAddTopic" :clusters="clusters" :capability-id="capabilityId" v-on:topicAdded="topicCreated"
 					   v-on:addtopic-close="showCreateTopicFlow()"></topic-add>
 			<div class="topics">
-				<div v-for="topic in topics" :key="topic.id">
-					<topic :topic="topic"></topic>
-				</div>
+        <div v-for="cluster in clusters" :key="cluster.id">
+          {{cluster.name}} <span v-if="cluster.clusterId !== undefined">({{cluster.clusterId}})</span>
+
+          <div v-for="topic in topicsViewData.get(cluster.id)" :key="topic.id">
+					  <topic :topic="topic"></topic>
+				  </div>
+
+        </div>
+        <div>
+          Abandoned (no matching Cluster)
+
+          <div v-for="topic in abandonedTopics" :key="topic.id">
+            <topic :topic="topic" :abandoned="true"></topic>
+          </div>                  
+        </div>
 			</div>
 		</div>
 	`
