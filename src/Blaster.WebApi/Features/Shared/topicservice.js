@@ -29,6 +29,12 @@ export default class TopicService {
             .then(data => data.items || []);
     }
 
+    getClusters() {
+      return this.client
+        .get(`api/kafka/cluster`)
+        .then(response => response.data || []);
+    }
+
     update(topicId, payload) {
         return this.client.put(`${this.baseUrl}/${topicId}`, payload);
     }

@@ -32,6 +32,12 @@
                   <InputText type="text" v-model="filters['topicName']" class="p-column-filter" placeholder="Search by Topic name"/>
               </template>              
             </Column>
+            <Column field="clusterId" header="ClusterId">
+              <template #body="slotProps">
+                <span class="p-column-title">Cluster</span>
+                <span :title="slotProps.data.clusterName">{{slotProps.data.clusterId}}</span>
+              </template>               
+            </Column>
             <Column field="description" header="Description">
               <template #body="slotProps">
                 <span class="p-column-title">Description</span>
