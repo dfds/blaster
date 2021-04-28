@@ -50,7 +50,14 @@ const app = new Vue({
         return this.capabilityData.find(cap => capabilityId.valueOf() == cap.id.valueOf());
       },
       getClusterById: function(clusterId) {
-        return this.clusters.get(clusterId);
+        var x = this.clusters.get(clusterId);
+        if (x === undefined) {
+          x = {
+            "name": "",
+            "clusterId": ""
+          };
+        }
+        return x;
       }
     },
     mounted: function() {
