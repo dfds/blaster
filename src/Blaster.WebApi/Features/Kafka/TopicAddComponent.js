@@ -3,7 +3,7 @@ import TopicService from "./topicservice";
 import GenericWarningBox from "../Shared/components/GenericWarningBox";
 
 const TopicAddComponent = Vue.component("topic-add", {
-	props: ["enable", "capabilityId"],
+	props: ["enable", "capabilityId", "clusters"],
 	mounted: function () {
 	},
 	data: function () {
@@ -20,7 +20,8 @@ const TopicAddComponent = Vue.component("topic-add", {
 			this.topicNamePreview = initData.topicNamePreview;
       		this.topicName = initData.topicName;
 			this.err = initData.err;
-			this.topicAvailability = initData.topicAvailability;  
+			this.topicAvailability = initData.topicAvailability;
+      this.topicCluster = initData.topicCluster;
 		}
 	},
 	components: {
@@ -42,7 +43,8 @@ const TopicAddComponent = Vue.component("topic-add", {
 						"description": this.topicDescription,
 						"dryrun": true,
 						"configurations": configurations,
-						"availability" : this.topicAvailability
+						"availability" : this.topicAvailability,
+            "kafkaClusterId": this.topicCluster
 					}
 				)
 				.then(r => {
@@ -71,7 +73,8 @@ const TopicAddComponent = Vue.component("topic-add", {
               "description": this.topicDescription,
               "dryrun": true,
               "configurations": configurations,
-              "availability" : this.topicAvailability
+              "availability" : this.topicAvailability,
+              "kafkaClusterId": this.topicCluster
             }
           )
           .then(r => {
@@ -101,7 +104,8 @@ const TopicAddComponent = Vue.component("topic-add", {
               "description": this.topicDescription,
               "dryrun": true,
               "configurations": configurations,
-              "availability" : this.topicAvailability
+              "availability" : this.topicAvailability,
+              "kafkaClusterId": this.topicCluster
             }
           )
           .then(r => {
@@ -113,7 +117,39 @@ const TopicAddComponent = Vue.component("topic-add", {
             this.topicNamePreview = "";
           });
       }
-    }
+    },
+
+    topicCluster(value) {
+      if (this.topicNameInput.valueOf() !== "".valueOf()) {
+        var configurations = {
+          "retention.ms": parseInt(this.topicRetentionPeriodInMs, 10)
+        };
+  
+        this.topicService
+          .add(
+            this.capabilityId,
+            {
+              "name": this.topicNameInput,
+              "partitions": parseInt(this.topicPartitions, 10),
+              "retentionPeriodInDays": parseInt(this.topicRetentionPeriodInMs, 10),
+              "description": this.topicDescription,
+              "dryrun": true,
+              "configurations": configurations,
+              "availability" : this.topicAvailability,
+              "kafkaClusterId": this.topicCluster
+            }
+          )
+          .then(r => {
+            this.topicNamePreview = r.name;
+            this.err = null;
+          })
+          .catch(err => {
+            this.err = err;
+            this.topicNamePreview = "";
+          });
+      }
+    }    
+
 	},
 	computed: {
 		isEnabledStyling: function () {
@@ -137,9 +173,10 @@ const TopicAddComponent = Vue.component("topic-add", {
 						"partitions": parseInt(this.topicPartitions, 10),
 						"retentionPeriodInDays": parseInt(this.topicRetentionPeriodInMs, 10),
 						"description": this.topicDescription,
-            			"dryrun": false,
-            			"configurations": configurations,
-						"availability" : this.topicAvailability
+            "dryrun": false,
+            "configurations": configurations,
+						"availability" : this.topicAvailability,
+            "kafkaClusterId": this.topicCluster
 					}
 				)
 				.then(() => {
@@ -149,6 +186,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 						this.topicRetentionPeriodInMs = 604800000;
 						this.topicDescription = "";
 						this.topicAvailability = "private";
+            this.topicCluster = "";
 					}
         )
         .catch(err => {
@@ -174,6 +212,7 @@ const TopicAddComponent = Vue.component("topic-add", {
         topicName: "",
         topicAvailability: "private",
         topicService: new TopicService(),
+        topicCluster: "",
         err: null
       }
     }
@@ -228,6 +267,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 									<label>Public</label>
 								</div>
 							</div>
+
 							<div class="field">
 								<p>
 									Private topics can only be written to and read from the capability creating them.<br />
@@ -236,6 +276,19 @@ const TopicAddComponent = Vue.component("topic-add", {
 								<p>
 									Availability can not be changed after creation of a topic. 
 								</p>
+
+
+                <div class="field">
+								<label class="label">Cluster</label>
+								<div class="select">
+                  <select name="cluster" required v-model="topicCluster">
+                    <option disabled selected value> -- select a cluster -- </option>
+                    <option v-for="cluster in clusters" :key="cluster.id" :disabled="cluster.enabled ? false : true" :value="cluster.id">{{cluster.name}} ({{cluster.clusterId}})</option>
+                  </select>
+								</div>
+							</div>
+
+
 							</div>
 						  	<div class="field">
 								<label class="label">Partitions</label>

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Blaster.WebApi.Features.Capabilities;
 using Blaster.WebApi.Features.Capabilities.Models;
@@ -20,6 +22,11 @@ namespace Blaster.Tests.TestDoubles
 		public Task<TopicsResponse> GetAll()
 		{
 			return Task.FromResult(new TopicsResponse());
+		}
+		
+		public Task<IEnumerable<KafkaCluster>> GetAllClusters()
+		{
+			return Task.FromResult(new List<KafkaCluster>().AsEnumerable());
 		}
 
 		public Task<Topic> CreateTopic(string capabilityId, CreateTopicRequest createTopicRequest)

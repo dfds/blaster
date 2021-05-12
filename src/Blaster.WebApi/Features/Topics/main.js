@@ -37,16 +37,27 @@ const app = new Vue({
     },
     data: {
       tablesData: {
-        columns: ['capability', 'topicName', 'description'],
+        columns: ['capability', 'topicName', 'clusterId', 'description'],
         data: []
       },
       filters: {},
       password: "",
-      capabilityData: []
+      capabilityData: [],
+      clusters: {}
     },
     methods: {
       getCapabilityById: function(capabilityId) {
         return this.capabilityData.find(cap => capabilityId.valueOf() == cap.id.valueOf());
+      },
+      getClusterById: function(clusterId) {
+        var x = this.clusters.get(clusterId);
+        if (x === undefined) {
+          x = {
+            "name": "",
+            "clusterId": ""
+          };
+        }
+        return x;
       }
     },
     mounted: function() {
@@ -57,6 +68,18 @@ const app = new Vue({
         })
         .then(caps => {
           this.capabilityData = caps.items;
+        })
+        .then(() => {
+          var clusters =topicService.getClusters();
+
+          return jq.when(clusters);
+        })
+        .then(clusters => {
+          var map = new Map();
+          clusters.forEach(cluster => {
+            map.set(cluster.id, cluster);
+          });
+          this.clusters = map;
         })
         .then(() => {
           var topics = topicService.getAll();
@@ -77,7 +100,9 @@ const app = new Vue({
             var tableTopic = {
               capability: {name: cap.name, id: cap.id},
               description: t.description,
-              topicName: t.name
+              topicName: t.name,
+              clusterId: this.getClusterById(t.kafkaClusterId).clusterId,
+              clusterName: this.getClusterById(t.kafkaClusterId).name
             };
 
             payload.push(tableTopic);

@@ -17,4 +17,10 @@ export default class TopicService {
 			.get(`api/capabilities/${capabilityId}/topics`)
             .then(response => response.data.items || []);
     }
+
+    getClusters() {
+      return this.client
+        .get(`api/kafka/cluster`)
+        .then(response => response.data || []);
+    }
 }

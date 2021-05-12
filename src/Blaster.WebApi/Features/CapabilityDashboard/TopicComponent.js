@@ -1,7 +1,7 @@
 import Vue from "vue";
 
 const TopicComponent = Vue.component("topic", {
-    props: ["topic", "commonprefix"],
+    props: ["topic", "commonprefix", "abandoned"],
     data: function() {
         return {
             showData: false,
@@ -54,7 +54,7 @@ const TopicComponent = Vue.component("topic", {
     },
     template: `
         <div class="topic">
-            <h2 class="title" title="Click to expand" v-on:click="toggleShowData()" >{{ topic.name }}</h2>
+            <h2 class="title" title="Click to expand" v-on:click="toggleShowData()" >{{ topic.name }} <span v-if="this.abandoned">{{ topic.kafkaClusterId }}</span></h2>
             <div class="details" v-if="showData">
                 <span class="entry"><span class="entry-title">Description:</span> <p>{{ topic.description }}</p></span>
 
