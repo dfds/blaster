@@ -4,152 +4,150 @@ import GenericWarningBox from "../Shared/components/GenericWarningBox";
 
 const TopicAddComponent = Vue.component("topic-add", {
 	props: ["enable", "capabilityId", "clusters"],
-	mounted: function () {
-	},
+	mounted: function () {},
 	data: function () {
 		return this.getInitData();
-  },
-  updated: function () {
+	},
+	updated: function () {
 		if (!this.enable) {
-      		var initData = this.getInitData();
+			var initData = this.getInitData();
 			this.topicDescription = initData.topicDescription;
-      		this.topicMisc = initData.topicMisc;
+			this.topicMisc = initData.topicMisc;
 			this.topicNameInput = initData.topicNameInput;
 			this.topicPartitions = initData.topicPartitions;
 			this.topicRetentionPeriodInMs = initData.topicRetentionPeriodInMs;
 			this.topicNamePreview = initData.topicNamePreview;
-      		this.topicName = initData.topicName;
+			this.topicName = initData.topicName;
 			this.err = initData.err;
 			this.topicAvailability = initData.topicAvailability;
-      this.topicCluster = initData.topicCluster;
+			this.topicCluster = initData.topicCluster;
 		}
 	},
 	components: {
-		'generic-warning-box': GenericWarningBox
+		"generic-warning-box": GenericWarningBox,
 	},
 	watch: {
 		topicNameInput(value) {
-      var configurations = {
-        "retention.ms": parseInt(this.topicRetentionPeriodInMs, 10)
-      };
+			var configurations = {
+				"retention.ms": parseInt(this.topicRetentionPeriodInMs, 10),
+			};
 
 			this.topicService
-				.add(
-					this.capabilityId,
-					{
-						"name": value,
-						"partitions": parseInt(this.topicPartitions, 10),
-						"retentionPeriodInDays": parseInt(this.topicRetentionPeriodInMs, 10),
-						"description": this.topicDescription,
-						"dryrun": true,
-						"configurations": configurations,
-						"availability" : this.topicAvailability,
-            "kafkaClusterId": this.topicCluster
-					}
-				)
-				.then(r => {
+				.add(this.capabilityId, {
+					name: value,
+					partitions: parseInt(this.topicPartitions, 10),
+					retentionPeriodInDays: parseInt(
+						this.topicRetentionPeriodInMs,
+						10
+					),
+					description: this.topicDescription,
+					dryrun: true,
+					configurations: configurations,
+					availability: this.topicAvailability,
+					kafkaClusterId: this.topicCluster,
+				})
+				.then((r) => {
 					this.topicNamePreview = r.name;
 					this.err = null;
 				})
-				.catch(err => {
+				.catch((err) => {
 					this.err = err;
 					this.topicNamePreview = "";
 				});
-    },
+		},
 
-    topicDescription(value) {
-      if (this.topicNameInput.valueOf() !== "".valueOf()) {
-        var configurations = {
-          "retention.ms": parseInt(this.topicRetentionPeriodInMs, 10)
-        };
-  
-        this.topicService
-          .add(
-            this.capabilityId,
-            {
-              "name": this.topicNameInput,
-              "partitions": parseInt(this.topicPartitions, 10),
-              "retentionPeriodInDays": parseInt(this.topicRetentionPeriodInMs, 10),
-              "description": this.topicDescription,
-              "dryrun": true,
-              "configurations": configurations,
-              "availability" : this.topicAvailability,
-              "kafkaClusterId": this.topicCluster
-            }
-          )
-          .then(r => {
-            this.topicNamePreview = r.name;
-            this.err = null;
-          })
-          .catch(err => {
-            this.err = err;
-            this.topicNamePreview = "";
-          });
-      }
-    },
-    
-    topicAvailability(value) {
-      if (this.topicNameInput.valueOf() !== "".valueOf()) {
-        var configurations = {
-          "retention.ms": parseInt(this.topicRetentionPeriodInMs, 10)
-        };
-  
-        this.topicService
-          .add(
-            this.capabilityId,
-            {
-              "name": this.topicNameInput,
-              "partitions": parseInt(this.topicPartitions, 10),
-              "retentionPeriodInDays": parseInt(this.topicRetentionPeriodInMs, 10),
-              "description": this.topicDescription,
-              "dryrun": true,
-              "configurations": configurations,
-              "availability" : this.topicAvailability,
-              "kafkaClusterId": this.topicCluster
-            }
-          )
-          .then(r => {
-            this.topicNamePreview = r.name;
-            this.err = null;
-          })
-          .catch(err => {
-            this.err = err;
-            this.topicNamePreview = "";
-          });
-      }
-    },
+		topicDescription(value) {
+			if (this.topicNameInput.valueOf() !== "".valueOf()) {
+				var configurations = {
+					"retention.ms": parseInt(this.topicRetentionPeriodInMs, 10),
+				};
 
-    topicCluster(value) {
-      if (this.topicNameInput.valueOf() !== "".valueOf()) {
-        var configurations = {
-          "retention.ms": parseInt(this.topicRetentionPeriodInMs, 10)
-        };
-  
-        this.topicService
-          .add(
-            this.capabilityId,
-            {
-              "name": this.topicNameInput,
-              "partitions": parseInt(this.topicPartitions, 10),
-              "retentionPeriodInDays": parseInt(this.topicRetentionPeriodInMs, 10),
-              "description": this.topicDescription,
-              "dryrun": true,
-              "configurations": configurations,
-              "availability" : this.topicAvailability,
-              "kafkaClusterId": this.topicCluster
-            }
-          )
-          .then(r => {
-            this.topicNamePreview = r.name;
-            this.err = null;
-          })
-          .catch(err => {
-            this.err = err;
-            this.topicNamePreview = "";
-          });
-      }
-    }    
+				this.topicService
+					.add(this.capabilityId, {
+						name: this.topicNameInput,
+						partitions: parseInt(this.topicPartitions, 10),
+						retentionPeriodInDays: parseInt(
+							this.topicRetentionPeriodInMs,
+							10
+						),
+						description: this.topicDescription,
+						dryrun: true,
+						configurations: configurations,
+						availability: this.topicAvailability,
+						kafkaClusterId: this.topicCluster,
+					})
+					.then((r) => {
+						this.topicNamePreview = r.name;
+						this.err = null;
+					})
+					.catch((err) => {
+						this.err = err;
+						this.topicNamePreview = "";
+					});
+			}
+		},
 
+		topicAvailability(value) {
+			if (this.topicNameInput.valueOf() !== "".valueOf()) {
+				var configurations = {
+					"retention.ms": parseInt(this.topicRetentionPeriodInMs, 10),
+				};
+
+				this.topicService
+					.add(this.capabilityId, {
+						name: this.topicNameInput,
+						partitions: parseInt(this.topicPartitions, 10),
+						retentionPeriodInDays: parseInt(
+							this.topicRetentionPeriodInMs,
+							10
+						),
+						description: this.topicDescription,
+						dryrun: true,
+						configurations: configurations,
+						availability: this.topicAvailability,
+						kafkaClusterId: this.topicCluster,
+					})
+					.then((r) => {
+						this.topicNamePreview = r.name;
+						this.err = null;
+					})
+					.catch((err) => {
+						this.err = err;
+						this.topicNamePreview = "";
+					});
+			}
+		},
+
+		topicCluster(value) {
+			if (this.topicNameInput.valueOf() !== "".valueOf()) {
+				var configurations = {
+					"retention.ms": parseInt(this.topicRetentionPeriodInMs, 10),
+				};
+
+				this.topicService
+					.add(this.capabilityId, {
+						name: this.topicNameInput,
+						partitions: parseInt(this.topicPartitions, 10),
+						retentionPeriodInDays: parseInt(
+							this.topicRetentionPeriodInMs,
+							10
+						),
+						description: this.topicDescription,
+						dryrun: true,
+						configurations: configurations,
+						availability: this.topicAvailability,
+						kafkaClusterId: this.topicCluster,
+					})
+					.then((r) => {
+						this.topicNamePreview = r.name;
+						this.err = null;
+					})
+					.catch((err) => {
+						this.err = err;
+						this.topicNamePreview = "";
+					});
+			}
+		},
 	},
 	computed: {
 		isEnabledStyling: function () {
@@ -161,61 +159,61 @@ const TopicAddComponent = Vue.component("topic-add", {
 	},
 	methods: {
 		saveTopic: function () {
-      var configurations = {
-        "retention.ms": parseInt(this.topicRetentionPeriodInMs, 10)
-      };
+			var configurations = {
+				"retention.ms": parseInt(this.topicRetentionPeriodInMs, 10),
+			};
 
 			this.topicService
-				.add(
-					this.capabilityId,
-					{
-						"name": this.topicNameInput,
-						"partitions": parseInt(this.topicPartitions, 10),
-						"retentionPeriodInDays": parseInt(this.topicRetentionPeriodInMs, 10),
-						"description": this.topicDescription,
-            "dryrun": false,
-            "configurations": configurations,
-						"availability" : this.topicAvailability,
-            "kafkaClusterId": this.topicCluster
-					}
-				)
+				.add(this.capabilityId, {
+					name: this.topicNameInput,
+					partitions: parseInt(this.topicPartitions, 10),
+					retentionPeriodInDays: parseInt(
+						this.topicRetentionPeriodInMs,
+						10
+					),
+					description: this.topicDescription,
+					dryrun: false,
+					configurations: configurations,
+					availability: this.topicAvailability,
+					kafkaClusterId: this.topicCluster,
+				})
 				.then(() => {
-						this.$emit('topicAdded');
-						this.topicNameInput = "";
-						this.topicPartitions = 1;
-						this.topicRetentionPeriodInMs = 604800000;
-						this.topicDescription = "";
-						this.topicAvailability = "private";
-            this.topicCluster = "";
-					}
-        )
-        .catch(err => {
+					this.$emit("topicAdded");
+					this.topicNameInput = "";
+					this.topicPartitions = 1;
+					this.topicRetentionPeriodInMs = 604800000;
+					this.topicDescription = "";
+					this.topicAvailability = "private";
+					this.topicCluster = "";
+				})
+				.catch((err) => {
 					this.err = err;
-        });
+				});
 		},
 		disable: function () {
 			this.enable = false;
 		},
 		toSnakeCase: function (input) {
-			return input.replace(/\W+/g, " ")
+			return input
+				.replace(/\W+/g, " ")
 				.split(/ |\B(?=[A-Z])/)
-				.map(word => word.toLowerCase())
-				.join('_');
-    },
-    getInitData: function() {
-      return {
-        topicDescription: "",
-        topicNameInput: "",
-        topicPartitions: 1,
-        topicRetentionPeriodInMs: 604800000,
-        topicNamePreview: "",
-        topicName: "",
-        topicAvailability: "private",
-        topicService: new TopicService(),
-        topicCluster: "",
-        err: null
-      }
-    }
+				.map((word) => word.toLowerCase())
+				.join("_");
+		},
+		getInitData: function () {
+			return {
+				topicDescription: "",
+				topicNameInput: "",
+				topicPartitions: 1,
+				topicRetentionPeriodInMs: 604800000,
+				topicNamePreview: "",
+				topicName: "",
+				topicAvailability: "private",
+				topicService: new TopicService(),
+				topicCluster: "",
+				err: null,
+			};
+		},
 	},
 	template: `
         <div class="modal" v-bind:class="{'is-active': this.isEnabledStyling}">
@@ -332,8 +330,8 @@ const TopicAddComponent = Vue.component("topic-add", {
             </div>
             <button class="modal-close is-large" aria-label="close"></button>
         </div>
-    `
-})
+    `,
+});
 
 export default TopicAddComponent;
-export {TopicAddComponent};
+export { TopicAddComponent };
