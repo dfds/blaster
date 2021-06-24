@@ -8,7 +8,7 @@ WORKDIR /build
 RUN apt-get update && apt-get install -y apt-utils && apt-get install -y curl
 
 # get node.js install script and pass it to execute
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
 
 # install node 
 RUN apt-get install nodejs && node -v
@@ -24,7 +24,7 @@ COPY ./src/Blaster.WebApi ./src/Blaster.WebApi
 WORKDIR /build/src
 
 #Build nmp dependencies
-RUN npm install --silent && npm run-script build --silent
+RUN npm install && npm run-script build
 
 #Set workdir to current project folder
 WORKDIR /build/src/Blaster.WebApi
