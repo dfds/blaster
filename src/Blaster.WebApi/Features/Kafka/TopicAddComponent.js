@@ -303,7 +303,7 @@ const TopicAddComponent = Vue.component("topic-add", {
 							</div>
 							<div class="field">
                 <p>
-                  A single partition can support a very high load. You should normally only use more partitions if you need concurrent handling and/or lower latency.
+                  A single partition can support a very high load. You should consider carefully how many partitions you need to handle your workloads or reach out to CloudEngineering for a chat.
 								</p>
 							</div>
 							<div class="field">
