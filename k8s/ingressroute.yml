@@ -10,7 +10,7 @@ spec:
   - kind: Rule
     match: Host(`internal.hellman.oxygen.dfds.cloud`) && PathPrefix(`/blaster`)
     middlewares:
-    - name: internal.hellman.oxygen.dfds.cloud/blaster
+    - name: blaster-internal
       namespace: $(kubernetes-namespace)
     priority: 0
     services:
@@ -32,7 +32,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   creationTimestamp: null
-  name: internal.hellman.oxygen.dfds.cloud/blaster
+  name: blaster-internal
   namespace: $(kubernetes-namespace)
 spec:
   stripPrefix:
