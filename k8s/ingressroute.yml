@@ -1,0 +1,40 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  creationTimestamp: null
+  name: blaster
+  namespace: $(kubernetes-namespace)
+spec:
+  entryPoints: []
+  routes:
+  - kind: Rule
+    match: Host(`internal.hellman.oxygen.dfds.cloud`) && PathPrefix(`/blaster`)
+    middlewares:
+    - name: internal.hellman.oxygen.dfds.cloud/blaster
+      namespace: $(kubernetes-namespace)
+    priority: 0
+    services:
+    - kind: Service
+      name: blaster
+      namespace: $(kubernetes-namespace)
+      port: 80
+  - kind: Rule
+    match: Host(`build.dfds.cloud`)
+    middlewares: []
+    priority: 0
+    services:
+    - kind: Service
+      name: blaster
+      namespace: $(kubernetes-namespace)
+      port: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  creationTimestamp: null
+  name: internal.hellman.oxygen.dfds.cloud/blaster
+  namespace: $(kubernetes-namespace)
+spec:
+  stripPrefix:
+    prefixes:
+    - /blaster
