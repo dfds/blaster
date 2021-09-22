@@ -40,7 +40,9 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: "[name].css",
         }),
-        new EnvironmentPlugin(["BLASTER_AUTH_REDIRECT_URI"]),
+        new EnvironmentPlugin({
+          BLASTER_AUTH_REDIRECT_URI: "https://build.dfds.cloud/login"
+        }),
         new VueLoaderPlugin()
 	],
     watchOptions: {
