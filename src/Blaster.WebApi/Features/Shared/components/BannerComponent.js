@@ -12,7 +12,7 @@ const BannerComponent = Vue.component("banner", {
     },
     template: `
         <div class="banner" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
-            <p>{{ description }}</p>
+            <p v-html="description"></p>
         </div>
     `
 });
