@@ -51,7 +51,14 @@ new Vue({
     
 });
 
-
+function isFF() {
+  const ua = window.navigator.userAgent.toLowerCase();
+  if (ua.indexOf('firefox') > -1) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 function isIE()
 {
@@ -71,4 +78,4 @@ function isIE()
     }
 }
 
-export {BannerComponent, ChannelPickerComponent, ChannelListComponent, ChannelMinimalComponent, ChannelDropdownComponent, ChannelIconComponent, ChannelInputComponent, isIE};
+export {BannerComponent, ChannelPickerComponent, ChannelListComponent, ChannelMinimalComponent, ChannelDropdownComponent, ChannelIconComponent, ChannelInputComponent, isIE, isFF};
