@@ -2,7 +2,7 @@ import Vue from "vue";
 import FeatureFlag from "featureflag";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import { isIE, BannerComponent } from "../Shared/components/Shared";
+import { isIE, isFF, BannerComponent } from "../Shared/components/Shared";
 
 FeatureFlag.setKeybinding();
 
@@ -16,7 +16,10 @@ const app = new Vue({
     computed: {
         showIEBanner: function() {
             return isIE();
-        }
+        },
+        showFFBanner: function() {
+            return isFF();
+      }        
     },
     components: {
         'banner': BannerComponent
