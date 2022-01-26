@@ -42,6 +42,15 @@ const TopicComponent = Vue.component("topic", {
 			this.$emit("messagecontractadd-new", description, type, schema, topicId);
 			this.toggleShowAddMessageContract();
 		},
+    containsConfigurationKey: function(key) {
+      if (this.topic.configurations) {
+        if (this.topic.configurations[key]) {
+          return true;
+        }
+      }
+
+      return false;
+    },
 		topicName: function(commonPrefix, topicMisc) {
 			var name = "";
 			name = commonPrefix;
@@ -63,6 +72,7 @@ const TopicComponent = Vue.component("topic", {
                 <span class="entry"><span class="entry-title">Description:</span> <p>{{ topic.description }}</p></span>
 				        <span class="entry"><span class="entry-title">Partitions:</span> <p>{{ topic.partitions }}</p></span>
 				        <span class="entry"><span class="entry-title">Cluster UUID:</span> <p>{{ topic.kafkaClusterId }}</p></span>
+				        <span v-if="containsConfigurationKey('retention.ms')" class="entry"><span class="entry-title">'retention.ms':</span> <p>{{ topic.configurations["retention.ms"] }}</p></span>
 
 			</div>
         </div>
