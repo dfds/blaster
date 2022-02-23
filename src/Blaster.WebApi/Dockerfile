@@ -1,6 +1,9 @@
 #Setup build image
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 
+ARG BLASTER_AUTH_REDIRECT_URI
+ENV BLASTER_AUTH_REDIRECT_URI $BLASTER_AUTH_REDIRECT_URI
+
 #Set container filesystem to /build (and create folder if it doesnt exist)
 WORKDIR /build
 
