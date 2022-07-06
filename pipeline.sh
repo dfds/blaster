@@ -56,7 +56,7 @@ publish_binaries() {
 
 build_container_image() {
     echo "Building container image..."
-    docker build -t ${IMAGE_NAME} -f ./src/Blaster.WebApi/Dockerfile .
+    docker buildx build --platform linux/amd64,linux/arm64 -t ${IMAGE_NAME} -f ./src/Blaster.WebApi/Dockerfile .
 }
 
 push_container_image() {
@@ -66,11 +66,18 @@ push_container_image() {
     account_id=$(aws sts get-caller-identity --output text --query 'Account')
     image_name="${account_id}.dkr.ecr.${REGION}.amazonaws.com/ded/${IMAGE_NAME}:${BUILD_NUMBER}"
 
-    echo "Tagging container image..."
-    docker tag ${IMAGE_NAME}:latest ${image_name}
+    #echo "Tagging container image..."
+    #docker tag ${IMAGE_NAME}:latest ${image_name}
 
     echo "Pushing container image to ECR..."
-    docker push ${image_name}
+    docker buildx build --platform linux/amd64,linux/arm64 -t ${image_name} -f ./src/Blaster.WebApi/Dockerfile --push .  
+}
+
+docker-buildx-setup() {
+    echo "Docker setup..."
+    docker run --privileged --rm tonistiigi/binfmt --install all
+	docker buildx create --name mutiarchbuilder --use
+	docker buildx inspect --bootstrap
 }
 
 clean_output_folder
@@ -84,6 +91,7 @@ publish_binaries
 
 cd ..
 
+docker-buildx-setup
 build_container_image
 
 if [[ "${BUILD_NUMBER}" != "N/A" ]]; then
