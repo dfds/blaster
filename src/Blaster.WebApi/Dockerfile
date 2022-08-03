@@ -52,5 +52,16 @@ ENV CAPABILITY_SERVICE_KAFKA_SSL_CA_LOCATION=/app/cert.pem
 
 RUN curl -sS -o /app/cert.pem https://curl.haxx.se/ca/cacert.pem
 
+#Non-root user settings
+ARG USERNAME=blaster
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME 
+
+
+USER $USERNAME
+
 #Run dotnet executable
 ENTRYPOINT ["dotnet", "Blaster.WebApi.dll"]
