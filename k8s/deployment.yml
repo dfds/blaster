@@ -25,6 +25,11 @@ spec:
       containers:
         - name: blaster
           image: 579478677147.dkr.ecr.eu-central-1.amazonaws.com/ded/blaster:$(Build.BuildId)
+          securityContext:
+            runAsUser: 10001
+            runAsGroup: 3000
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
           ports:
             - containerPort: 80
               name: web
