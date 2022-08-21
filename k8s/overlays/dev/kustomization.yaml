@@ -1,0 +1,60 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+bases:
+- ../../base
+patchesJson6902:
+# Replace namespace values in all manifests with 'selfservice'
+- patch: |-
+    - op: replace
+      path: /metadata/namespace
+      value:
+        selfservice
+  target:
+    group: apps
+    kind: Deployment
+    name: blaster
+    version: v1
+- patch: |-
+    - op: replace
+      path: /metadata/namespace
+      value:
+        selfservice
+  target:
+    kind: Service
+    name: blaster
+    version: v1
+- patch: |-
+    - op: replace
+      path: /metadata/namespace
+      value:
+        selfservice
+  target:
+    group: traefik.containo.us
+    kind: IngressRoute
+    name: blaster
+    version: v1alpha1
+- patch: |-
+    - op: replace
+      path: /metadata/namespace
+      value:
+        selfservice
+  target:
+    group: traefik.containo.us
+    kind: Middleware
+    name: blaster-internal
+    version: v1alpha1
+# Patch IngressRoute rules
+# - patch: |-
+#     - op: remove
+#       path: /spec/routes/0
+#   target:
+#     group: traefik.containo.us
+#     kind: IngressRoute
+#     name: blaster
+#     version: v1alpha1
+patchesStrategicMerge:
+- deployment.yaml
+resources:
+  - ingressroute.yaml
+  - namespace.yaml
+  - priorityclass.yaml

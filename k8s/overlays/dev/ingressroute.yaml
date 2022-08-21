@@ -1,0 +1,15 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: blaster-dev
+  namespace: selfservice
+spec:
+  routes:
+  - kind: Rule
+    match: Host(`localhost`)
+    priority: 0
+    services:
+    - kind: Service
+      name: blaster
+      namespace: $(kubernetes-namespace)
+      port: 80

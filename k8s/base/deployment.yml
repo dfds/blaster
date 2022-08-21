@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blaster
+  namespace: $(kubernetes-namespace)
+  labels:
+    project: selfservice
+    department: devex
+    app: blaster
+    component: blaster
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: blaster
+  template:
+    metadata:
+      labels:
+        app: blaster
+        project: selfservice
+        department: devex
+        logging_dfds_cloud_format_json: "true"
+    spec:
+      priorityClassName: selfservice
+      containers:
+        - name: blaster
+          image: 579478677147.dkr.ecr.eu-central-1.amazonaws.com/ded/blaster:$(Build.BuildId)
+          ports:
+            - containerPort: 80
+              name: web
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
+          env:
+            - name: BLASTER_CAPABILITYSERVICE_API_URL
+              value: $(BLASTER_CAPABILITYSERVICE_API_URL)
+            - name: BLASTER_AWS_JANITOR_API_URL
+              value: $(BLASTER_AWS_JANITOR_API_URL)
+            - name: BLASTER_HARALD_API_URL
+              value: $(BLASTER_HARALD_API_URL)
+          livenessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 5
+            httpGet:
+              port: 80
+              path: /
+          readinessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 60
+            timeoutSeconds: 5
+            httpGet:
+              port: 80
+              path: /

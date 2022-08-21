@@ -1,0 +1,21 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: blaster
+  namespace: $(kubernetes-namespace)
+spec:
+  template:
+    spec:
+      containers:
+      - name: blaster
+        image: localhost/blaster:dev
+        env:
+          - name: BLASTER_CAPABILITYSERVICE_API_URL
+            value: http://capability-service
+          - name: BLASTER_AWS_JANITOR_API_URL
+            value: http://aws-janitor
+          - name: BLASTER_HARALD_API_URL
+            value: http://harald
+          - name: BLASTER_AUTH_REDIRECT_URI
+            value: http://localhost:4200/login
