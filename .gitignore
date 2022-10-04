@@ -427,3 +427,4 @@ my-stuff/
 # Miscellaneous
 # (Could also fix script to put testresult.trx in the right folder )
 testresult.trx 
+.dccache
