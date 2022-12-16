@@ -231,17 +231,28 @@ $navbar-mobile-trigger: "all and (max-width: 1087px)";
 .topic {
     display: flex;
     flex-direction: column;
+    border-top: 1px dashed #ccc;
+    padding-top: 1rem;
 
     h2 {
-        width: max-content;
         &.title {
             font-size: 1.6rem;
+            font-weight: normal;
         }
 
         &:hover {
             cursor: pointer;
             color: #5087AC;
         }
+
+        .status {
+            float: right;
+            font-size: 1rem;
+            top: 0.4rem;
+            position: relative;
+        }
+
+        clear: both;
     }
 
     .details {

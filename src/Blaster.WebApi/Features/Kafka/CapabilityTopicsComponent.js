@@ -6,23 +6,8 @@ import TopicService from "./topicservice";
 const capabilityTopicsComponent = Vue.component("capabilityTopics", {
 	props: ["capabilityId", "isJoinedComputed"],
 	mounted: function () {
-      this.loadClusters()
-      .then(() => {
-        return this.loadTopics();
-      })
-      .then(() => {
-        this.topicsViewData = this.getTopicsByCluster();
-      })
-      .then(() => {
-        var onlyClustersInUse = [];
-        this.clusters.forEach(cluster => {
-          if (this.topicsViewData.has(cluster.id)) {
-            onlyClustersInUse.push(cluster);
-          }
-        });
-
-        this.clustersViewData = onlyClustersInUse;
-      });
+      this.loadAll();
+	  setInterval(() => this.loadAll(), 5*1000);
 	},
 	data: function () {
 		return {
@@ -38,13 +23,32 @@ const capabilityTopicsComponent = Vue.component("capabilityTopics", {
 		showCreateTopicFlow: function () {
 			this.showAddTopic = this.showAddTopic ? false : true;
 		},
+		loadAll() {
+			this.loadClusters()
+			.then(() => {
+			  return this.loadTopics();
+			})
+			.then(() => {
+			  this.topicsViewData = this.getTopicsByCluster();
+			})
+			.then(() => {
+			  var onlyClustersInUse = [];
+			  this.clusters.forEach(cluster => {
+				if (this.topicsViewData.has(cluster.id)) {
+				  onlyClustersInUse.push(cluster);
+				}
+			  });
+	  
+			  this.clustersViewData = onlyClustersInUse;
+			});
+		},
 		loadTopics() {
 			let topicService = new TopicService();
 			return topicService.getByCapabilityId(this.capabilityId).then(data => this.topics = data);
 		},
-    loadClusters() {
+	    loadClusters() {
 			let topicService = new TopicService();
-      return topicService.getClusters().then(data => this.clusters = data);
+    	  return topicService.getClusters().then(data => this.clusters = data);
     },
     getTopicsByCluster() {
       var sorted = new Map();

@@ -39,7 +39,7 @@ const TopicComponent = Vue.component("topic", {
 			this.showMessageContract = this.showMessageContract ? false : true;
 		},
 		forwardNewMessageContract: function(description, type, schema, topicId) {
-			this.$emit("messagecontractadd-new", description, type, schema, topicId);
+			this.$emit("messagecontractadd-new", description, type, schema, topicId);	
 			this.toggleShowAddMessageContract();
 		},
     containsConfigurationKey: function(key) {
@@ -63,16 +63,21 @@ const TopicComponent = Vue.component("topic", {
 		},
 	},
 	computed: {
-
+		status: function() {
+			var result = this.topic.status;
+			if (result === "provisioned") {
+				result = "";
+			}
+			return result;
+		}
 	},
 	template: `
         <div class="topic">
-            <h2 class="title" title="Click to expand" v-on:click="toggleShowData()" >{{ topic.name }}</h2>
+            <h2 class="title" title="Click to expand" v-on:click="toggleShowData()" >{{ topic.name }} <span class="status"> {{ status }} </span> </h2>
             <div class="details" v-if="showData">
                 <span class="entry"><span class="entry-title">Description:</span> <p>{{ topic.description }}</p></span>
 				        <span class="entry"><span class="entry-title">Partitions:</span> <p>{{ topic.partitions }}</p></span>
-				        <span class="entry"><span class="entry-title">Cluster UUID:</span> <p>{{ topic.kafkaClusterId }}</p></span>
-				        <span v-if="containsConfigurationKey('retention.ms')" class="entry"><span class="entry-title">'retention.ms':</span> <p>{{ topic.configurations["retention.ms"] }}</p></span>
+				        <span v-if="containsConfigurationKey('retention.ms')" class="entry"><span class="entry-title">Retention:</span> <p>{{ topic.configurations["retention.ms"] }} ms</p></span>
 
 			</div>
         </div>
