@@ -29,6 +29,10 @@ services:
     networks:
       development:
 
-networks:
-  development:
-    external: true
+  fake-capability-service:
+    build: ./fake_dependencies/capability-service-v2
+    ports:
+      - 5050:5051
+    volumes:
+      - ./fake_dependencies/capability-service-v2/FakeCapabilityService.App:/app
+    command: "watch --no-hot-reload -- run --no-launch-profile"
