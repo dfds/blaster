@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
+using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Blaster.WebApi
 {
@@ -17,14 +14,14 @@ namespace Blaster.WebApi
     {
         public static int Main(string[] args)
         {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                .Enrich.FromLogContext()
-                .WriteTo.Console(new CompactJsonFormatter())
-                .CreateLogger();
-            
-            try
+	        var loggerConfiguration = new LoggerConfiguration();
+	        ApplyDefaultLoggingSetupTo(loggerConfiguration);
+
+	        Log.Logger = loggerConfiguration
+		        .WriteTo.Console(new CompactJsonFormatter())
+		        .CreateLogger();
+
+			try
             {
                 Log.Information("Starting host");
                 CreateWebHostBuilder(args).Build().Run();
@@ -41,11 +38,29 @@ namespace Blaster.WebApi
             }
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost
-                .CreateDefaultBuilder(args)
-                .UseSerilog()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseStartup<Startup>();
+        private static void ApplyDefaultLoggingSetupTo(LoggerConfiguration loggerConfiguration)
+        {
+	        loggerConfiguration
+			        .Enrich.FromLogContext()
+			        .MinimumLevel.Information()
+			        .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+		        ;
+        }
+
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        {
+	        return WebHost
+		        .CreateDefaultBuilder(args)
+		        .UseSerilog((context, configuration) =>
+		        {
+			        ApplyDefaultLoggingSetupTo(configuration);
+			        if (context.HostingEnvironment.IsDevelopment())
+			        {
+				        configuration.WriteTo.Console(theme: AnsiConsoleTheme.Code);
+			        }
+		        })
+		        .UseContentRoot(Directory.GetCurrentDirectory())
+		        .UseStartup<Startup>();
+        }
     }
 }
