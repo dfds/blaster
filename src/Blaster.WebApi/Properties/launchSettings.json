@@ -9,25 +9,16 @@
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "BLASTER_CAPABILITYSERVICE_API_URL": "http://localhost:50900",
-        "BLASTER_AWS_JANITOR_API_URL": "http://localhost:50901",
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "BLASTER_HARALD_API_URL": "http://localhost:50902"
-      }
-    },
     "Blaster.WebApi": {
       "commandName": "Project",
       "launchBrowser": false,
       "applicationUrl": "http://localhost:4200",
       "environmentVariables": {
-        "BLASTER_CAPABILITYSERVICE_API_URL": "http://localhost:50900",
+        "BLASTER_CAPABILITYSERVICE_API_URL": "http://localhost:5050",
         "BLASTER_AWS_JANITOR_API_URL": "http://localhost:50901",
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "BLASTER_HARALD_API_URL": "http://localhost:50902"
+        "BLASTER_HARALD_API_URL": "http://localhost:5050",
+        "BLASTER_AUTH_REDIRECT_URI": "http://localhost:4200/login"
       }
     }
   }

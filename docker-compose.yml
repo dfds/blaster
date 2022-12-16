@@ -1,33 +1,29 @@
 version: '3.4'
 
 services:
-  blaster.webapi:
-    hostname: blaster
-    build:
-      context: .
-      dockerfile: src/Blaster.WebApi/Dockerfile
-    ports:
-      - "4200:4200"
-    volumes:
-      - ./src/Blaster.WebApi/wwwroot:/app/wwwroot
-    environment:
-      - "BLASTER_CAPABILITYSERVICE_API_URL=http://capability-service:50900"
-      - "BLASTER_AWS_JANITOR_API_URL=http://aws-janitor:50901"
-      - "BLASTER_HARALD_API_URL=http://harald:50902"
-      - "ASPNETCORE_ENVIRONMENT=Development"
-      - "ASPNETCORE_URLS=http://+:4200"
-    networks:
-      development:
-        aliases:
-          - blaster
+  # blaster.webapi:
+  #   build:
+  #     context: .
+  #     dockerfile: src/Blaster.WebApi/Dockerfile
+  #   ports:
+  #     - "4200:4200"
+  #   volumes:
+  #     - ./src/Blaster.WebApi/wwwroot:/app/wwwroot
+  #   environment:
+  #     - "BLASTER_CAPABILITYSERVICE_API_URL=http://capability-service:50900"
+  #     - "BLASTER_AWS_JANITOR_API_URL=http://aws-janitor:50901"
+  #     - "BLASTER_HARALD_API_URL=http://harald:50902"
+  #     - "ASPNETCORE_ENVIRONMENT=Development"
+  #     - "ASPNETCORE_URLS=http://+:4200"
+
   hot-reloader:
     build:
       context: .
       dockerfile: src/Dockerfile
     volumes:
       - ./src/Blaster.WebApi:/app/Blaster.WebApi:rw
-    networks:
-      development:
+    environment:
+      - BLASTER_AUTH_REDIRECT_URI=http://localhost:4200/login
 
   fake-capability-service:
     build: ./fake_dependencies/capability-service-v2
