@@ -9,7 +9,7 @@ metadata:
     app: blaster
     component: blaster
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: blaster
@@ -56,15 +56,3 @@ spec:
             httpGet:
               port: 80
               path: /
-        - name: httpecho
-          image: mendhak/http-https-echo
-          ports:
-            - containerPort: 8080
-              name: echoweb
-          resources:
-            requests:
-              memory: "64Mi"
-              cpu: "100m"
-            limits:
-              memory: "128Mi"
-              cpu: "200m"
