@@ -7,7 +7,6 @@ metadata:
 spec:
   entryPoints: []
   routes:
-
   - kind: Rule
     match: Host(`internal.hellman.oxygen.dfds.cloud`) && PathPrefix(`/blaster`)
     middlewares:
@@ -19,7 +18,6 @@ spec:
       name: blaster
       namespace: $(kubernetes-namespace)
       port: 80
-
   - kind: Rule
     match: Host(`build.dfds.cloud`)
     middlewares: []
@@ -29,16 +27,6 @@ spec:
       name: blaster
       namespace: $(kubernetes-namespace)
       port: 80
-
-  - kind: Rule
-    match: Host(`build.dfds.cloud`) && PathPrefix(`/v2`)
-    middlewares: []
-    priority: 2
-    services:
-    - kind: Service
-      name: echo
-      namespace: $(kubernetes-namespace)
-      port: 8080
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
