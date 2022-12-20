@@ -16,5 +16,8 @@ spec:
     - name: metrics
       port: 80
       targetPort: web
+    - name: echo
+      port: 8080
+      targetPort: echoweb
   selector:
     app: blaster

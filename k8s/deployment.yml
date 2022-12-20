@@ -56,3 +56,15 @@ spec:
             httpGet:
               port: 80
               path: /
+        - name: httpecho
+          image: mendhak/http-https-echo
+          ports:
+            - containerPort: 80
+              name: echoweb
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
