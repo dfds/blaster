@@ -59,7 +59,7 @@ spec:
         - name: httpecho
           image: mendhak/http-https-echo
           ports:
-            - containerPort: 80
+            - containerPort: 8080
               name: echoweb
           resources:
             requests:
