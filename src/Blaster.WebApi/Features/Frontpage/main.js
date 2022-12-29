@@ -19,7 +19,7 @@ const app = new Vue({
         },
         showFFBanner: function() {
             return isFF();
-      }        
+      }
     },
     components: {
         'banner': BannerComponent

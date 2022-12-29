@@ -56,3 +56,8 @@ spec:
             httpGet:
               port: 80
               path: /
+        {{- if .Values.hotreload.enabled }}
+        - name: blaster-hotreload
+          image: "{{ .Values.hotreload.image.repository}}:{{ .Values.hotreload.image.tag }}"
+          imagePullPolicy: {{ .Values.hotreload.image.pullPolicy }}
+        {{- end }}

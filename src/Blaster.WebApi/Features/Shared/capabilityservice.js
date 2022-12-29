@@ -52,7 +52,7 @@ export default class CapabilityService {
     setCommonPrefix(payload, capabilityId) {
         return this.client.post(`${this.baseUrl}/${capabilityId}/commonprefix`, payload);
     }
-    
+
     leave(capabilityId) {
         return this.client.delete(`${this.baseUrl}/${capabilityId}/members/${this.userService.getCurrentUserEmail()}`);
     }

@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+helmGlobals:
+  chartHome: ../..
+helmCharts:
+  - releaseName: blaster
+    name: chart
+    namespace: selfservice
+    valuesInline:
+      image:
+        repository: ce/blaster
+        tag: "latest"
+      blaster:
+        capabilityServiceApiUrl: "http://capability-service"
+        awsJanitorApiUrl: "http://aws-janitor"
+        haraldApiUrl: "http://harald"
+      ingress:
+        enabled: true
