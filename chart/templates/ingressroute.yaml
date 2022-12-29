@@ -1,0 +1,47 @@
+{{- if .Values.ingress.enabled -}}
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "blaster.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- with .Values.global.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end}}
+    app: {{ include "blaster.fullname" . }}
+    component: blaster
+spec:
+  entryPoints: []
+  routes: # todo, make routes configurable via Helm Values
+  - kind: Rule
+    match: Host(`internal.hellman.oxygen.dfds.cloud`) && PathPrefix(`/blaster`)
+    middlewares:
+    - name: {{ include "blaster.fullname" . }}-internal
+      namespace: {{ .Release.Namespace }}
+    priority: 0
+    services:
+    - kind: Service
+      name: blaster
+      namespace: {{ .Release.Namespace }}
+      port: 80
+  - kind: Rule
+    match: Host(`build.dfds.cloud`)
+    middlewares: []
+    priority: 0
+    services:
+    - kind: Service
+      name: blaster
+      namespace: {{ .Release.Namespace }}
+      port: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ include "blaster.fullname" . }}-internal
+  namespace: {{ .Release.Namespace }}
+spec:
+  stripPrefix:
+    prefixes:
+    - /blaster
+{{- end }}

@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "blaster.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- with .Values.global.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end}}
+    app: {{ include "blaster.fullname" . }}
+    component: blaster
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "blaster.fullname" . }}
+  template:
+    metadata:
+      labels:
+        {{- with .Values.global.labels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end}}
+        app: {{ include "blaster.fullname" . }}
+        logging_dfds_cloud_format_json: "true"
+    spec:
+      {{- if .Values.priorityClass.enabled }}
+      priorityClassName: {{ .Values.priorityClass.name }}
+      {{- end }}
+      containers:
+        - name: blaster
+          image: "{{ .Values.image.repository}}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 80
+              name: web
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: BLASTER_CAPABILITYSERVICE_API_URL
+              value: {{ .Values.blaster.capabilityServiceApiUrl }}
+            - name: BLASTER_AWS_JANITOR_API_URL
+              value: {{ .Values.blaster.awsJanitorApiUrl }}
+            - name: BLASTER_HARALD_API_URL
+              value: {{ .Values.blaster.haraldApiUrl }}
+          livenessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 5
+            httpGet:
+              port: 80
+              path: /
+          readinessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 60
+            timeoutSeconds: 5
+            httpGet:
+              port: 80
+              path: /
