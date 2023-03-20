@@ -41,7 +41,15 @@ stages:
         packageType: sdk
         version: 3.1.100
         installationPath: $(Agent.ToolsDirectory)/dotnet
-        
+    - task: NodeTool@0
+      inputs:
+        versionSource: 'spec' # 'spec' | 'fromFile'. Required. Source of version. Default: spec.
+        versionSpec: '14.x' # string. Optional. Use when versionSource = spec. Version Spec. Default: 6.x.
+        #versionFilePath: # string. Optional. Use when versionSource = fromFile. Path to the .nvmrc file.
+        #checkLatest: false # boolean. Check for Latest Version. Default: false.
+        #force32bit: false # boolean. Use 32 bit version on x64 agents. Default: false.
+
+
     - bash: |
         set -eu -o pipefail
         sudo pip install setuptools
