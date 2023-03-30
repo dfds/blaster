@@ -26,8 +26,49 @@
 
         gtag('config', 'UA-137017735-1');
     </script>
+    <style>
+        .v2splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #e08800;
+            font-weight: bold;
+            color: white;
+            padding: 0.5rem;
+            text-align: center;
+            z-index: 9999;
+            font-size: 0.75rem;
+
+            opacity: 0;
+            animation: fadein 2s ease-in-out 2s forwards;
+        }
+
+        @@keyframes fadein {
+            from { opacity: 0 }
+            to { opacity: 1 }
+        }
+
+        .v2button {
+            border: 1px solid white;
+            padding: 0.25rem;
+            border-radius: 6px;
+            color: #e08800;
+            background-color: white;
+        }
+
+        .v2button:hover {
+            background-color: #e08800;
+            color: white;
+        }
+    </style>
 </head>
 <body>
+
+<div class="v2splash">
+    Hey! Feeling lucky? Why don't you try out the v2 experience...? Head on over to... <a class="v2button" href="https://build.dfds.cloud/v2">the v2</a>
+</div>
+
 <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="nav">
         <div class="main">

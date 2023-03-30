@@ -89,44 +89,10 @@ const capabilityTopicsComponent = Vue.component("capabilityTopics", {
 			<h1 class="title is-uppercase">Topics</h1>
 
 			<div>
-				<p>
-					Listed below is the Kafka topics that are attached to this Capability.<br />
-					You are welcome to contact the development excellence department if you need a topic deleted.
-				</p>
-			</div>
-			<br>
-
-			<div class="buttons is-right">
-				<button
-					type="button"
-					v-on:click="showCreateTopicFlow()"
-					v-bind:class="{tooltip: !isJoinedComputed, 'is-tooltip-bottom': !isJoinedComputed, 'is-tooltip-multiline': !isJoinedComputed }"
-					:disabled='!isJoinedComputed'
-					data-tooltip="You haven't joined this Capability"
-					class="button is-small is-primary">
-					Add Topic
-				</button>
+				<strong>We have moved!</strong> Topics are now available as part of the v2 experience at <a href="https://build.dfds.cloud/v2">https://build.dfds.cloud/v2</a>
 			</div>
 
-			<topic-add :enable="showAddTopic" :clusters="clusters" :capability-id="capabilityId" v-on:topicAdded="topicCreated"
-					   v-on:addtopic-close="showCreateTopicFlow()"></topic-add>
-			<div class="topics">
-        <div v-for="cluster in clustersViewData" :key="cluster.id">
-          <h1 class="title">{{cluster.name}} <span v-if="cluster.clusterId !== undefined">({{cluster.clusterId}})</span></h1>
-
-          <div v-for="topic in topicsViewData.get(cluster.id)" :key="topic.id">
-					  <topic :topic="topic"></topic>
-				  </div>
-
-        </div>
-        <div v-if="abandonedTopics.length !== 0">
-          <h1 class="title"><span style="color: #be1e2d">Abandoned</span> (no matching Cluster)</h1>
-
-          <div v-for="topic in abandonedTopics" :key="topic.id">
-            <topic :topic="topic" :abandoned="true"></topic>
-          </div>                  
-        </div>
-			</div>
+			<br />
 		</div>
 	`
 })
